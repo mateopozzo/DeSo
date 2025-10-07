@@ -1,15 +1,13 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
  */
-
 package ddb.deso;
 
 /**
  *
  * @author mat
  */
-public class DeSo {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
+public enum TipoDoc {
+    DNI,LE,CI,PASAPORTE,OTRO
 }
