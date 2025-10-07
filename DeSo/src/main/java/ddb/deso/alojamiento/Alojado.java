@@ -9,5 +9,5 @@ package ddb.deso.alojamiento;
  * @author mat
  */
 public class Alojado {
-    
+    private DatosAlojado datos;
 }
