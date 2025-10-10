@@ -8,6 +8,6 @@ package ddb.deso.alojamiento;
  *
  * @author mat
  */
-public abstract class Alojado {
-    private DatosAlojado datos;
+public class Huesped extends Alojado{
+    private String razon_social;
 }
