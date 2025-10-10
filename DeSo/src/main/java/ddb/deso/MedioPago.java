@@ -1,0 +1,5 @@
+package ddb.deso;
+
+public enum MedioPago {
+    EFECTIVO, MONEDAEXTRANJERA, TARJETA_CREDITO, TARJETA_DEBITO, CHEQUE
+}
