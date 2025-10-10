@@ -5,14 +5,15 @@
 package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoDoc;
+import java.util.List;
 
 /**
  *
  * @author mat
  */
 public interface DatosCheckIn {
-    void crearDatosResidencia(CheckIn datosCheckIn);
-    void actualizarDatosResidenciado(CheckIn datosCheckIn);
-    void eliminarDatosResidencia(CheckIn datosCheckIn);
-    DatosCheckIn buscarDatosResidencia(String documento, TipoDoc tipo);
+    void crearDatosCheckIn(DatosCheckIn datosCheckIn);
+    void actualizarDatosCheckIn(DatosCheckIn datosCheckIn);
+    void eliminarDatosCheckIn(DatosCheckIn datosCheckIn);
+    List<DatosCheckIn> listarDatosCheckIn(String documento, TipoDoc tipo);
 }
