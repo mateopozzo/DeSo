@@ -17,4 +17,10 @@ public class DatosCheckOut {
         this.fecha_hora_iout = fecha_hora_iout;
     }
     
+    public Date getFecha_hora_iout() {
+        return fecha_hora_iout;
+    }
+    public void setFecha_hora_iout(Date fecha_hora_iout) {
+        this.fecha_hora_iout = fecha_hora_iout;
+    }
 }

@@ -10,4 +10,21 @@ package ddb.deso.alojamiento;
  */
 public abstract class Alojado {
     private DatosAlojado datos;
+
+    public void setDatos(DatosAlojado datos) {
+        this.datos = datos;
+    }
+    public DatosAlojado getDatos() {
+        return datos;
+    }
+    public void checkIn(Alojado alojado) {
+        
+    }
+    public void checkOut(Alojado alojado) {
+        
+    }
+    public boolean esMayor() {
+        return this.getDatos().getEdad() >= 18; 
+        
+    }
 }
