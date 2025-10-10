@@ -6,7 +6,7 @@ package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoFactura;
 import ddb.deso.contabilidad.Factura;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +16,6 @@ public interface FacturaDAO {
     void crearFactura(Factura fatura);
     void actualizarFactura(Factura fatura);
     void eliminarFactura(Factura fatura);
-    ArrayList<Factura> listarFacturas();
+    List<Factura> listarFacturas();
     Factura buscarPorNumero(int nroFactora, TipoFactura tipo);
 }
