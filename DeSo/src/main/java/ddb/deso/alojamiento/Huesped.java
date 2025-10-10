@@ -11,3 +11,4 @@ package ddb.deso.alojamiento;
 public class Huesped extends Alojado{
     private String razon_social;
 }
+
