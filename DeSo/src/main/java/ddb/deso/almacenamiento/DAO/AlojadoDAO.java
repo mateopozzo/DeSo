@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.DAO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.TipoDoc;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,6 +15,6 @@ public interface AlojadoDAO {
     void crearAlojado(Alojado alojado);
     void actualizarAlojado(Alojado alojado);
     void eliminarAlojado(Alojado alojado);
-    ArrayList<Alojado> listarAlojados();
+    List<Alojado> listarAlojados();
     Alojado buscarPorDNI(String documento, TipoDoc tipo);
 }

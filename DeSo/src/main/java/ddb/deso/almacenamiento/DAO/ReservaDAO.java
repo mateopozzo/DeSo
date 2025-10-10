@@ -8,7 +8,7 @@ import ddb.deso.alojamiento.Huesped;
 import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,15 +18,15 @@ public interface ReservaDAO {
     void crearReserva(Reserva reserva);
     void actualizar(Reserva reserva);
     void eliminar(Reserva reserva);
-    ArrayList<Reserva> listar();
+    List<Reserva> listar();
     
     //  Devuelve las instancias de reserva que ocurren durante la fecha
-    Reserva listarPorFecha(LocalDate fecha);
+    List<Reserva> listarPorFecha(LocalDate fecha);
     
-    ArrayList<Estadia> listarPorHuesped(Huesped huesped);
+    List<Estadia> listarPorHuesped(Huesped huesped);
     
     //  devuelve todas las estadias del huesped que ocupo durante la fecha
-    ArrayList<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
+    List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
     
     
 }

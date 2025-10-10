@@ -6,7 +6,7 @@ package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoHab;
 import ddb.deso.habitaciones.Habitacion;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,7 +16,7 @@ public interface HabitacionDAO {
     void crearHabitacion(Habitacion habitacion);
     void actualizarHabitacion(Habitacion habitacion);
     void eliminarHabitacion(Habitacion habitacion);
-    ArrayList<Habitacion> listar();
-    ArrayList<Habitacion> listarPorTipo(TipoHab tipoHabitacion);
+    List<Habitacion> listar();
+    List<Habitacion> listarPorTipo(TipoHab tipoHabitacion);
     Habitacion buscarPorNumero(int numero);
 }

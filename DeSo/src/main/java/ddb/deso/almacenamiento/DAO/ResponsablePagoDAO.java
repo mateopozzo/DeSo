@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.contabilidad.ResponsablePago;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,6 +15,6 @@ public interface ResponsablePagoDAO {
     void crearResponsablePago(ResponsablePago responsablePago);
     void actualizarAlojado(ResponsablePago responsablePago);
     void eliminarAlojado(ResponsablePago responsablePago);
-    ArrayList<ResponsablePago> listarResponsablePago();
+    List<ResponsablePago> listarResponsablePago();
     ResponsablePago buscarPorCUIT(String CUIT);
 }

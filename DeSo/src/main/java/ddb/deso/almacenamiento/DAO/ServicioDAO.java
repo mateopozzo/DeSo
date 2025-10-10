@@ -6,7 +6,7 @@ package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoServicio;
 import ddb.deso.habitaciones.Servicio;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,5 +17,5 @@ public interface ServicioDAO {
     void crearServicio(TipoServicio tipoServicio);
     void actualizarServicio(Servicio servicio);
     void eliminarServicio(Servicio servicio);
-    ArrayList<Servicio> listar();
+    List<Servicio> listar();
 }
