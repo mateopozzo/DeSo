@@ -17,5 +17,17 @@ public class DatosContacto {
         this.email = email;
     }
     
+    public void setTelefono(long telefono) {
+        this.telefono = telefono;
+    }
+    public long getTelefono() {
+        return telefono;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getEmail() {
+        return email;
+    }
     
 }
