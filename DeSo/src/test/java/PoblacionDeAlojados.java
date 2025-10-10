@@ -1,5 +1,5 @@
 
-import ddb.deso.TipoDoc;
+import ddb.deso.*;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.DatosAlojado;
@@ -8,14 +8,13 @@ import ddb.deso.alojamiento.DatosPersonales;
 import ddb.deso.alojamiento.DatosResidencia;
 import ddb.deso.alojamiento.Huesped;
 import java.util.Date;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
 /**
- * Clase dedicada a la prueba de operaciones de clase alojado y sus clases descendientes
+ * Clase para prueba de clase {@link Alojado} y clases descendientes
  * 
  * @author mat
  */

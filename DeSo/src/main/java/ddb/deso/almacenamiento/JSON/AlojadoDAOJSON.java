@@ -9,6 +9,7 @@ import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import ddb.deso.alojamiento.Huesped;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -83,14 +84,14 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         
         try(FileReader archivoJSON = new FileReader(RUTA_ARCHIVO_JSON_ALOJADOS)){
             Gson gson = new Gson();
-            java.lang.reflect.Type listType = new TypeToken<List<Alojado>>(){}.getType();
+            java.lang.reflect.Type listType = new TypeToken<ArrayList<Huesped>>(){}.getType();
             listaAlojadosRetorno = gson.fromJson(archivoJSON, listType);
             if(listaAlojadosRetorno==null)
                 listaAlojadosRetorno = new ArrayList<>();
         } catch(IOException e) {
             e.printStackTrace();
         }
-        return (ArrayList<Alojado>) listaAlojadosRetorno;
+        return listaAlojadosRetorno;
     }
     
     @Override
