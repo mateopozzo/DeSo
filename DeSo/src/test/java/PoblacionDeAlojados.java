@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import ddb.deso.*;
+=======
+import ddb.deso.TipoDoc;
+>>>>>>> e3dc27ab692399d3bfe8476305487623d55af8e6
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.DatosAlojado;
@@ -8,13 +12,21 @@ import ddb.deso.alojamiento.DatosPersonales;
 import ddb.deso.alojamiento.DatosResidencia;
 import ddb.deso.alojamiento.Huesped;
 import java.util.Date;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3dc27ab692399d3bfe8476305487623d55af8e6
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
 /**
+<<<<<<< HEAD
  * Clase para prueba de clase {@link Alojado} y clases descendientes
+=======
+ * Clase dedicada a la prueba de operaciones de clase alojado y sus clases descendientes
+>>>>>>> e3dc27ab692399d3bfe8476305487623d55af8e6
  * 
  * @author mat
  */
