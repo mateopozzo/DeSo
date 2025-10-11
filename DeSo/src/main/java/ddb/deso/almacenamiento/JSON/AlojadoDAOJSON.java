@@ -8,8 +8,13 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import ddb.deso.alojamiento.Huesped;
+import ddb.deso.alojamiento.Invitado;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,15 +84,20 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      */
     @Override
     public List<Alojado> listarAlojados(){
-        List<Alojado> listaAlojadosRetorno=null;
+        List<Alojado> listaAlojadosRetorno=new ArrayList<>();;
         System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         
         try(FileReader archivoJSON = new FileReader(RUTA_ARCHIVO_JSON_ALOJADOS)){
             Gson gson = new Gson();
-            java.lang.reflect.Type listType = new TypeToken<ArrayList<Huesped>>(){}.getType();
-            listaAlojadosRetorno = gson.fromJson(archivoJSON, listType);
-            if(listaAlojadosRetorno==null)
-                listaAlojadosRetorno = new ArrayList<>();
+            JsonArray arregloEnArchivoJSON = JsonParser.parseReader(archivoJSON).getAsJsonArray();
+            for(JsonElement elementoJSON: arregloEnArchivoJSON){
+                JsonObject objetoJSON = elementoJSON.getAsJsonObject();
+                if(objetoJSON.has("razon_social")){
+                    listaAlojadosRetorno.add(gson.fromJson(objetoJSON, Huesped.class));
+                } else {
+                    listaAlojadosRetorno.add(gson.fromJson(objetoJSON, Invitado.class));
+                }
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }
