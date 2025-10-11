@@ -21,12 +21,12 @@ public class DatosPersonales {
     private String nacionalidad;
     private String posicionIva;
     private String ocupacion;
-    private long nroDoc;
+    private String nroDoc;
     private TipoDoc tipoDoc;
-    private long CUIT;
+    private String CUIT;
     private Date fechanac;
 
-    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, long nroDoc, TipoDoc tipoDoc, long CUIT, Date fechanac) {
+    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, String nroDoc, TipoDoc tipoDoc, String CUIT, Date fechanac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
@@ -67,10 +67,10 @@ public class DatosPersonales {
     public void setOcupacion(String ocupacion) {
         this.ocupacion = ocupacion;
     }
-    public long getNroDoc() {
+    public String getNroDoc() {
         return nroDoc;
     }
-    public void setNroDoc(long nroDoc) {
+    public void setNroDoc(String nroDoc) {
         this.nroDoc = nroDoc;
     }
     public TipoDoc getTipoDoc() {
@@ -79,10 +79,10 @@ public class DatosPersonales {
     public void setTipoDoc(TipoDoc tipoDoc) {
         this.tipoDoc = tipoDoc;
     }
-    public long getCUIT() {
+    public String getCUIT() {
         return CUIT;
     }
-    public void setCUIT(long CUIT) {
+    public void setCUIT(String CUIT) {
         this.CUIT = CUIT;
     }
     public Date getFechanac() {

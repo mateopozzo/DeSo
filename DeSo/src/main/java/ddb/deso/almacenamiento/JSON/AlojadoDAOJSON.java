@@ -19,6 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -69,12 +70,25 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
+    /**
+     * Actualiza la instancia de Alojado guardada en json bajo suposicion de que Documento y TipoDoc son inmutables
+     *
+     * @param alojado actualizado
+     * 
+     */
     @Override
     public void actualizarAlojado(Alojado alojado){
+        String documento = alojado.getDatos().getDatos_personales().getNroDoc();
+        TipoDoc tipo = alojado.getDatos().getDatos_personales().getTipoDoc();
+        Alojado remover = this.buscarPorDNI(documento, tipo);
+        eliminarAlojado(remover);
+        this.crearAlojado(alojado);
     }
     
     @Override
     public void eliminarAlojado(Alojado alojado){
+        List<Alojado> listaAlojados = this.listarAlojados();
+        listaAlojados.remove(alojado);
     }
     
     /**
@@ -104,8 +118,23 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         return listaAlojadosRetorno;
     }
     
+    /**
+     * Busca algun alojado que coincida con el parametro
+     * Se puede analizar optimizacion con hash o set ordenado.
+     *
+     * @param numero de documento y tipo
+     * @return una {@link Alojado}
+     */
     @Override
     public Alojado buscarPorDNI(String documento, TipoDoc tipo){
-        return new Alojado() {};
+        List<Alojado> listaAlojados = listarAlojados();
+        for(Alojado alojadoPersistente: listaAlojados){
+            String documentoInstancia = alojadoPersistente.getDatos().getDatos_personales().getNroDoc();
+            TipoDoc tipoDocumentoInstancia = alojadoPersistente.getDatos().getDatos_personales().getTipoDoc();
+            if(documentoInstancia.equals(documento) && tipoDocumentoInstancia.equals(tipo)){
+                return alojadoPersistente;
+            }
+        }
+        return null;
     }
 }

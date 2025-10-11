@@ -9,35 +9,42 @@ package ddb.deso.alojamiento;
  * @author mat
  */
 public class DatosAlojado {
-    private DatosContacto   contacto;
-    private DatosResidencia residencia;
-    private DatosPersonales huesped;   
+    private DatosContacto   datos_contacto;
+    private DatosResidencia datos_residencia;
+    private DatosPersonales datos_personales;   
     
-    public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales huesped) {
-        this.contacto = contacto;
-        this.residencia = residencia;
-        this.huesped = huesped;
+    public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
+        this.datos_contacto = contacto;
+        this.datos_residencia = residencia;
+        this.datos_personales = personales;
     }
-    public DatosContacto getContacto() {
-        return contacto;
+
+    public DatosContacto getDatos_contacto() {
+        return datos_contacto;
     }
-    public void setContacto(DatosContacto contacto) {
-        this.contacto = contacto;
+
+    public DatosResidencia getDatos_residencia() {
+        return datos_residencia;
     }
-    public DatosResidencia getResidencia() {
-        return residencia;
+
+    public DatosPersonales getDatos_personales() {
+        return datos_personales;
     }
-    public void setResidencia(DatosResidencia residencia) {
-        this.residencia = residencia;
+
+    public void setDatos_contacto(DatosContacto datos_contacto) {
+        this.datos_contacto = datos_contacto;
     }
-    public DatosPersonales getHuesped() {
-        return huesped;
+
+    public void setDatos_residencia(DatosResidencia datos_residencia) {
+        this.datos_residencia = datos_residencia;
     }
-    public void setHuesped(DatosPersonales huesped) {
-        this.huesped = huesped;
+
+    public void setDatos_personales(DatosPersonales datos_personales) {
+        this.datos_personales = datos_personales;
     }
+    
     public int getEdad() {
-        return this.huesped.getEdad();
+        return this.datos_personales.getEdad();
     }
     
 }

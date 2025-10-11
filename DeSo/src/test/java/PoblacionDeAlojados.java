@@ -30,7 +30,7 @@ public class PoblacionDeAlojados {
     public Alojado crearUnHuesped(){
         DatosResidencia dr = new DatosResidencia("3a", "villa anonima", "cordoba", "vieja argentina", "mefalta", 432, (long)5, "304"); 
         DatosContacto dc = new DatosContacto(4742205, "polimorfismo@herencia.encap");
-        DatosPersonales dp = new DatosPersonales("knapsack", "estado transicion", "mundo", "extremo centro", "stalker profesional", 1234532, TipoDoc.PASAPORTE, 13857, new Date());
+        DatosPersonales dp = new DatosPersonales("knapsack", "estado transicion", "mundo", "extremo centro", "stalker profesional", "1234532", TipoDoc.PASAPORTE, "21-231-13857", new Date());
         DatosAlojado da = new DatosAlojado(dc,dr,dp);
         Huesped x = new Huesped();
         x.setRazon_social("la razon de la vida");
@@ -41,7 +41,7 @@ public class PoblacionDeAlojados {
     public Alojado crearUnInvitado(){
         DatosResidencia dr = new DatosResidencia("yo", "soy", "un", "invitado!", "mefalta", 432, (long)5, "sopa"); 
         DatosContacto dc = new DatosContacto(4742205, "polimorfismo@herencia.encap");
-        DatosPersonales dp = new DatosPersonales("asdf", "estado dfgh", "mundo", "no se", "badmington", 1234532, TipoDoc.PASAPORTE, 13857, new Date());
+        DatosPersonales dp = new DatosPersonales("asdf", "estado dfgh", "mundo", "no se", "badmington", "1234f.45", TipoDoc.PASAPORTE, "20-13857-12", new Date());
         DatosAlojado da = new DatosAlojado(dc,dr,dp);
         Invitado x = new Invitado();
         x.setDatos(da);
