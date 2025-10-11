@@ -10,4 +10,9 @@ package ddb.deso.alojamiento;
  */
 public class Huesped extends Alojado{
     private String razon_social;
+
+    public void setRazon_social(String razon_social) {
+        this.razon_social = razon_social;
+    }
+    
 }

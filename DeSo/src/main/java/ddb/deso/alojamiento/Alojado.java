@@ -24,7 +24,6 @@ public abstract class Alojado {
         
     }
     public boolean esMayor() {
-        return this.getDatos().getEdad() >= 18; 
-        
+        return this.getDatos().getEdad() >= 18;
     }
 }

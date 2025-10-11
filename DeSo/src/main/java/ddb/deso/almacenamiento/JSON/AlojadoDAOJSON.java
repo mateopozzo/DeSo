@@ -8,12 +8,18 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import ddb.deso.alojamiento.Huesped;
+import ddb.deso.alojamiento.Invitado;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -64,12 +70,25 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
+    /**
+     * Actualiza la instancia de Alojado guardada en json bajo suposicion de que Documento y TipoDoc son inmutables
+     *
+     * @param alojado actualizado
+     * 
+     */
     @Override
     public void actualizarAlojado(Alojado alojado){
+        String documento = alojado.getDatos().getDatos_personales().getNroDoc();
+        TipoDoc tipo = alojado.getDatos().getDatos_personales().getTipoDoc();
+        Alojado remover = this.buscarPorDNI(documento, tipo);
+        eliminarAlojado(remover);
+        this.crearAlojado(alojado);
     }
     
     @Override
     public void eliminarAlojado(Alojado alojado){
+        List<Alojado> listaAlojados = this.listarAlojados();
+        listaAlojados.remove(alojado);
     }
     
     /**
@@ -79,23 +98,43 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      */
     @Override
     public List<Alojado> listarAlojados(){
-        List<Alojado> listaAlojadosRetorno=null;
+        List<Alojado> listaAlojadosRetorno=new ArrayList<>();;
         System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         
         try(FileReader archivoJSON = new FileReader(RUTA_ARCHIVO_JSON_ALOJADOS)){
             Gson gson = new Gson();
-            java.lang.reflect.Type listType = new TypeToken<ArrayList<Huesped>>(){}.getType();
-            listaAlojadosRetorno = gson.fromJson(archivoJSON, listType);
-            if(listaAlojadosRetorno==null)
-                listaAlojadosRetorno = new ArrayList<>();
+            JsonArray arregloEnArchivoJSON = JsonParser.parseReader(archivoJSON).getAsJsonArray();
+            for(JsonElement elementoJSON: arregloEnArchivoJSON){
+                JsonObject objetoJSON = elementoJSON.getAsJsonObject();
+                if(objetoJSON.has("razon_social")){
+                    listaAlojadosRetorno.add(gson.fromJson(objetoJSON, Huesped.class));
+                } else {
+                    listaAlojadosRetorno.add(gson.fromJson(objetoJSON, Invitado.class));
+                }
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }
         return listaAlojadosRetorno;
     }
     
+    /**
+     * Busca algun alojado que coincida con el parametro
+     * Se puede analizar optimizacion con hash o set ordenado.
+     *
+     * @param numero de documento y tipo
+     * @return una {@link Alojado}
+     */
     @Override
     public Alojado buscarPorDNI(String documento, TipoDoc tipo){
-        return new Alojado() {};
+        List<Alojado> listaAlojados = listarAlojados();
+        for(Alojado alojadoPersistente: listaAlojados){
+            String documentoInstancia = alojadoPersistente.getDatos().getDatos_personales().getNroDoc();
+            TipoDoc tipoDocumentoInstancia = alojadoPersistente.getDatos().getDatos_personales().getTipoDoc();
+            if(documentoInstancia.equals(documento) && tipoDocumentoInstancia.equals(tipo)){
+                return alojadoPersistente;
+            }
+        }
+        return null;
     }
 }
