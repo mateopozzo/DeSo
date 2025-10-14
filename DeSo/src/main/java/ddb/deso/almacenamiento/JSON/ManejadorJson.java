@@ -29,6 +29,12 @@ public class ManejadorJson<T> {
         this.clase = clase;
     }
     
+    public ManejadorJson(Gson gson, Path path, Class<T> clase) {
+        this.gson = gson;
+        this.path = path;
+        this.clase = clase;
+    }
+    
     public List<T> listar() throws IOException {
         try (FileReader lector = new FileReader(path.toFile())) {
             JsonArray jsonArray = JsonParser.parseReader(lector).getAsJsonArray();

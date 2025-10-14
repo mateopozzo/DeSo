@@ -7,21 +7,10 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.alojamiento.Invitado;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,8 +25,10 @@ import java.util.List;
  * @author mat
  */
 public class AlojadoDAOJSON implements AlojadoDAO {
-
+    private ManejadorJson manejador;
     public AlojadoDAOJSON() {
+         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
+         System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
     }
     /**
      * El archivo que contiene los datos se guarda en la carpeta <b>data</b> en el directorio raiz del proyecto
@@ -50,7 +41,6 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      * @param listaAlojados es lista de Entidades de {@link Alojado} a persistir
      */
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
-        ManejadorJson manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
         try {
             manejador.escribir(listaAlojados);
         } catch (IOException ex) {
@@ -90,6 +80,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     public void eliminarAlojado(AlojadoDTO alojado){
         List<AlojadoDTO> listaAlojados = this.listarAlojados();
         listaAlojados.remove(alojado);
+        escribirListaEnArchivo(listaAlojados);
     }
     
     /**
@@ -100,9 +91,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     @Override
     public List<AlojadoDTO> listarAlojados(){
         List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();;
-        System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         
-        ManejadorJson manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
         try {
             listaAlojadosRetorno = manejador.listar();
         } catch (IOException ex) {
