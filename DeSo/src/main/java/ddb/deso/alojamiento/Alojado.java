@@ -9,5 +9,5 @@ package ddb.deso.alojamiento;
  * @author mat
  */
 public abstract class Alojado {
-    private DatosAlojado datos;
+    protected DatosAlojado datos; //ver si mantenemos encapsulamiento o lo dejamos asi
 }

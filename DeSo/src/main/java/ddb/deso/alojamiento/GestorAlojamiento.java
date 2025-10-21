@@ -1,71 +1,224 @@
-/*
+   /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ddb.deso.alojamiento;
+import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+
+import ddb.deso.TipoDoc;
 /**
  *
  * @author mat
  */
 public class GestorAlojamiento {
 
+
+    private List<Huesped> huespedes = new LinkedList<>();
+
+    
+
+    public boolean dniExiste(Long dni, TipoDoc tipo) {
+        for (Huesped h : huespedes) {
+            DatosPersonales dp = h.getDatos().getDatosPersonales();
+            
+            if (dp.getNroDoc().equals(dni) && dp.getTipoDoc().equals(tipo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+ 
+    private static TipoDoc convertirTipoDoc(String opcion) {
+        switch (opcion) {
+            case "1": return TipoDoc.DNI;
+            case "2": return TipoDoc.CI;
+            case "3": return TipoDoc.LE;
+            case "4": return TipoDoc.PASAPORTE;
+            case "5": return TipoDoc.OTRO;
+            default:
+               return null;
+        }
+    }
+
+
+
 public void darDeAltaHuesped(){
 
-   Huesped h=new Huesped();
+
    Scanner entrada = new Scanner(System.in);
-
-   System.out.println("Apellido:");String apellido = entrada.nextLine();
+   boolean b=true;
+   while(b){
+   System.out.println("Apellido:");
+   String apellido = entrada.nextLine();
    
-   System.out.println("Nombre:");String nombre = entrada.nextLine();
+   System.out.println("Nombre:");
+   String nombre = entrada.nextLine();
 
-   System.out.println("Tipo de documento:");String tipo_documento = entrada.nextLine();
+     // Menú para elegir tipo de documento
+            System.out.println("Seleccione tipo de documento:");
+            System.out.println("1. DNI");
+            System.out.println("2. CI");
+            System.out.println("3. LE");
+            System.out.println("4. PASAPORTE");
+            System.out.println("5. OTRO");
+            String opcion = entrada.nextLine();
+            TipoDoc tipoDoc = convertirTipoDoc(opcion);
 
-System.out.println("Numero de documento:");String num_documento = entrada.nextLine();
+System.out.println("Numero de documento:");
+String num_documento = entrada.nextLine();
 
-System.out.println("Cuit:");String cuit = entrada.nextLine(); //no obligatorio
+System.out.println("Cuit:");
+String cuit = entrada.nextLine(); //no obligatorio
 
-System.out.println("Posicion frente al IVA:");String iva = entrada.nextLine();
+System.out.println("Posicion frente al IVA:");
+String iva = entrada.nextLine();
 
-System.out.println("Fecha de Nacimiento:");String fecha_nacimiento = entrada.nextLine();
+//!
+System.out.println("Fecha de Nacimiento:");
+System.out.println("AÑO:");
+String ano = entrada.nextLine();
+System.out.println("MES:");
+String mes = entrada.nextLine();
+System.out.println("DIA:");
+String dia = entrada.nextLine();
 
+LocalDate fecha_nacimiento= LocalDate.of
+(Integer.parseInt(ano),
+Integer.parseInt(mes),
+Integer.parseInt(dia));
 
 System.out.println("Direccion:");
-System.out.println("Calle:"); String calle = entrada.nextLine();
+System.out.println("Calle:");
+ String calle = entrada.nextLine();
 
-System.out.println("Numero:"); String numero = entrada.nextLine();
+System.out.println("Numero:");
+ String numero = entrada.nextLine();
 
-System.out.println("Departamento:"); String departamento = entrada.nextLine();
+System.out.println("Departamento:");
+ String departamento = entrada.nextLine();
 
-System.out.println("Piso:"); String piso = entrada.nextLine();
+System.out.println("Piso:");
+ String piso = entrada.nextLine();
 
-System.out.println("Codigo:"); String codigo = entrada.nextLine();
+System.out.println("Codigo:");
+ String codigo = entrada.nextLine();
 
-System.out.println("postal:"); String postal = entrada.nextLine();
+System.out.println("postal:");
+String postal = entrada.nextLine();
 
-System.out.println("Localidad:"); String localidad = entrada.nextLine();
+System.out.println("Localidad:");
+String localidad = entrada.nextLine();
 
-System.out.println("Provincia:"); String provincia = entrada.nextLine();
+System.out.println("Provincia:");
+String provincia = entrada.nextLine();
 
-System.out.println("Pais:"); String pais = entrada.nextLine();
+System.out.println("Pais:");
+String pais = entrada.nextLine();
 
+
+
+System.out.println("Telefono:"); 
+String telefono = entrada.nextLine();
+
+System.out.println("Email:"); 
+String email = entrada.nextLine(); //no obligatorio
+
+System.out.println("Ocupacion:"); 
+String ocupacion = entrada.nextLine();
+
+System.out.println("Nacionalidad");
+String nacionalidad = entrada.nextLine();
+
+//ver si lo pongo dsp e comprobar si estan vacios
 DatosResidencia dr= new DatosResidencia(calle,departamento 
 ,localidad,provincia,pais,numero,piso,postal);
 
-
-System.out.println("Telefono:"); String telefono = entrada.nextLine();
-
-System.out.println("Email:"); String email = entrada.nextLine(); //no obligatorio
-
-System.out.println("Ocupacion:"); String ocupacion = entrada.nextLine();
-
-System.out.println("Nacionalidad"); String nacionalidad = entrada.nextLine();
-
-/*System.out.println("SIGUIENTE O CANCELAR  "); String boton = entrada.nextLine();
-if (siguiente){} */
+ 
+//Huesped h=new Huesped(null);
+String boton="-1";
 
 
-}
+      while(!(boton.equals("1")||boton.equals("2"))){
+         System.out.println("Presione 1 para SIGUIENTE o 2 para CANCELAR" );
+         boton=entrada.nextLine();
+         
+
+         if(boton.equals("2")){
+            
+            String boton3="-1";
+            while(!(boton3.equals("1")||boton3.equals("2"))){
+            
+               System.out.println("¿Desea canclear el alta de huesped?");
+               System.out.println("SI (1) o NO (2) ");
+               boton3=entrada.nextLine();
+            }
+            if(boton3.equals("1")){
+               return;//sale del bucle principal y el CU termina
+            }
+            else if (boton3.equals("2")){
+               boton="1";
+            }
+
+         }
+
+      }
+
+      if(boton.equals("1")){
+            //faltan datos
+         if (apellido.isEmpty()  || nombre.isEmpty()   || tipoDoc==null || 
+             num_documento.isEmpty()    || fecha_nacimiento == null    || calle.isEmpty()   || 
+             localidad.isEmpty() || provincia.isEmpty() || pais.isEmpty()|| telefono.isEmpty()
+             || iva.isEmpty() || ocupacion.isEmpty()|| nacionalidad.isEmpty()) 
+             {
+                System.out.println("\n ERROR: Faltan datos obligatorios.");
+                continue;
+            }
+
+            long tel = telefono.isEmpty() ? 0 : Long.parseLong(telefono);
+            Long nroDoc = Long.parseLong(num_documento);
+            Long cuitInt = cuit.isEmpty() ? 0 : Long.parseLong(cuit);
+            
+            DatosContacto dc=new DatosContacto(tel, email);
+
+            DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
+            nroDoc, tipoDoc,cuitInt , fecha_nacimiento);
+
+            DatosAlojado da = new DatosAlojado(dc,dr,dp);
+       
+            Huesped h= new Huesped(da);
+
+      
+         if(dniExiste(nroDoc, tipoDoc)){
+         String boton2= "-1";
+            while(!(boton2.equals("1")||boton2.equals("2"))){
+            System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
+            System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
+            boton2= entrada.nextLine();
+            }
+            if(boton2.equals("2")) continue;
+         }
+         
+         huespedes.add(h);
+         System.out.print("El Huésped " + h.datos.getDatosPersonales().getNombre() + " " + 
+         h.datos.getDatosPersonales().getApellido()  + " se ha cargado correctamente.");
+         String boton4 = "-1";
+            while(!(boton4.equals("1")||boton4.equals("2"))){
+               System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
+               boton4 = entrada.nextLine();
+            }
+            if (boton4.equals("2")) b = false;
 
 
-}
+      }
+      
+   }//while
+
+
+}//metodo
+
+
+}//

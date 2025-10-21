@@ -5,6 +5,8 @@
 package ddb.deso.alojamiento;
 
 import ddb.deso.TipoDoc;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -20,9 +22,9 @@ public class DatosPersonales {
     private long nroDoc;
     private TipoDoc tipoDoc;
     private long CUIT;
-    private Date fechanac;
+    private LocalDate fechanac;
 
-    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, long nroDoc, TipoDoc tipoDoc, long CUIT, Date fechanac) {
+    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, long nroDoc, TipoDoc tipoDoc, long CUIT, LocalDate fechanac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
@@ -33,6 +35,55 @@ public class DatosPersonales {
         this.CUIT = CUIT;
         this.fechanac = fechanac;
     }
-    
-    
+      // Getters
+    public String getNombre() {
+        return nombre;
+    }
+
+
+    public String getApellido() {
+        return apellido;
+    }
+
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+
+    public String getPosicionIva() {
+        return posicionIva;
+    }
+
+
+    public String getOcupacion() {
+        return ocupacion;
+    }
+
+
+    public Long getNroDoc() {
+        return nroDoc;
+    }
+
+
+    public TipoDoc getTipoDoc() {
+        return tipoDoc;
+    }
+
+
+    public long getCUIT() {
+        return CUIT;
+    }
+
+
+    public LocalDate getFechanac() {
+        return fechanac;
+    }
+
+
+   
+
+
 }
+
+    
