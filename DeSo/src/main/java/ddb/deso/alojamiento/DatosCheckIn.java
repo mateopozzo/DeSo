@@ -17,4 +17,11 @@ public class DatosCheckIn {
         this.fecha_hora_in = fecha_hora_in;
     }
     
+    public Date getFecha_hora_in() {
+        return fecha_hora_in;
+    }
+    public void setFecha_hora_in(Date fecha_hora_in) {
+        this.fecha_hora_in = fecha_hora_in;
+    }
+    
 }

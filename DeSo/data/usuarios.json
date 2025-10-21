@@ -1,0 +1,4 @@
+[
+  { "nombre": "admin", "contrasenia": "admin123", "permisos": 9 },
+  { "nombre": "conserje",  "contrasenia": "conserje123",  "permisos": 6 }
+]
