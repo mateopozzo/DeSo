@@ -14,11 +14,11 @@ public class DatosResidencia {
     private String localidad;
     private String prov;
     private String pais;
-    private int nro_calle;
-    private long piso;
+    private String nro_calle;
+    private String piso;
     private String cod_post;
 
-    public DatosResidencia(String calle, String depto, String localidad, String prov, String pais, int nro_calle, long piso, String cod_post) {
+    public DatosResidencia(String calle, String depto, String localidad, String prov, String pais, String nro_calle, String piso, String cod_post) {
         this.calle = calle;
         this.depto = depto;
         this.localidad = localidad;

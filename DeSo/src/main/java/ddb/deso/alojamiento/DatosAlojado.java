@@ -9,6 +9,28 @@ package ddb.deso.alojamiento;
  * @author mat
  */
 public class DatosAlojado {
+<<<<<<< HEAD
+    private DatosContacto   contacto;
+    private DatosResidencia residencia;
+    private DatosPersonales huesped;   
+
+    public  DatosAlojado(DatosContacto dc, DatosResidencia dr, DatosPersonales dp){
+        this.contacto=dc;
+        this.residencia=dr;
+        this.huesped=dp;
+    }
+    public DatosContacto getDatosContacto(){
+        return this.contacto;
+    }
+   
+    public DatosResidencia getDatosResidencia(){
+        return this.residencia;
+    }
+   
+    public DatosPersonales getDatosPersonales(){
+        return this.huesped;
+    }
+=======
     private DatosContacto   datos_contacto;
     private DatosResidencia datos_residencia;
     private DatosPersonales datos_personales;   
@@ -47,4 +69,7 @@ public class DatosAlojado {
         return this.datos_personales.getEdad();
     }
     
+>>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 }
+
+
