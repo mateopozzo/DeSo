@@ -13,9 +13,9 @@ import java.util.List;
  * @author mat
  */
 public interface FacturaDAO {
-    void crearFactura(Factura fatura);
-    void actualizarFactura(Factura fatura);
-    void eliminarFactura(Factura fatura);
-    List<Factura> listarFacturas();
-    Factura buscarPorNumero(int nroFactora, TipoFactura tipo);
+    void crearFactura(FacturaDTO factura);
+    void actualizarFactura(FacturaDTO factura);
+    void eliminarFactura(FacturaDTO fatura);
+    List<FacturaDTO> listarFacturas();
+    FacturaDTO buscarPorNumero(int nroFactora, TipoFactura tipo);
 }
