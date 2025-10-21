@@ -15,7 +15,7 @@ public class DeSo {
         System.out.println("Hello World!");       
         PoblacionDeAlojados asdf = new PoblacionDeAlojados();
         asdf.guardarAlojadoEInvitado();
-        asdf.mostrarSiEsHuesped();
+        asdf.borrarTodo();
     }
     
 }

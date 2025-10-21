@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package ddb.deso.almacenamiento.DAO;
-import ddb.deso.alojamiento.Alojado;
 import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import java.util.List;
 
 /**
@@ -12,9 +12,9 @@ import java.util.List;
  * @author mat
  */
 public interface AlojadoDAO {
-    void crearAlojado(Alojado alojado);
-    void actualizarAlojado(Alojado alojado);
-    void eliminarAlojado(Alojado alojado);
-    List<Alojado> listarAlojados();
-    Alojado buscarPorDNI(String documento, TipoDoc tipo);
+    void crearAlojado(AlojadoDTO alojado);
+    void actualizarAlojado(AlojadoDTO alojado);
+    void eliminarAlojado(AlojadoDTO alojado);
+    List<AlojadoDTO> listarAlojados();
+    AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo);
 }

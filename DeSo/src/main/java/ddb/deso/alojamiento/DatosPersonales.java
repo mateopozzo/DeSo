@@ -4,9 +4,15 @@
  */
 package ddb.deso.alojamiento;
 
+<<<<<<< HEAD
+import ddb.deso.TipoDoc;
+
+import java.time.LocalDate;
+=======
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+>>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 import java.util.Date;
 
 import ddb.deso.TipoDoc;
@@ -23,10 +29,17 @@ public class DatosPersonales {
     private String ocupacion;
     private String nroDoc;
     private TipoDoc tipoDoc;
+<<<<<<< HEAD
+    private long CUIT;
+    private LocalDate fechanac;
+
+    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, long nroDoc, TipoDoc tipoDoc, long CUIT, LocalDate fechanac) {
+=======
     private String CUIT;
     private Date fechanac;
 
     public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, String nroDoc, TipoDoc tipoDoc, String CUIT, Date fechanac) {
+>>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
@@ -37,6 +50,57 @@ public class DatosPersonales {
         this.CUIT = CUIT;
         this.fechanac = fechanac;
     }
+<<<<<<< HEAD
+      // Getters
+    public String getNombre() {
+        return nombre;
+    }
+
+
+    public String getApellido() {
+        return apellido;
+    }
+
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+
+    public String getPosicionIva() {
+        return posicionIva;
+    }
+
+
+    public String getOcupacion() {
+        return ocupacion;
+    }
+
+
+    public Long getNroDoc() {
+        return nroDoc;
+    }
+
+
+    public TipoDoc getTipoDoc() {
+        return tipoDoc;
+    }
+
+
+    public long getCUIT() {
+        return CUIT;
+    }
+
+
+    public LocalDate getFechanac() {
+        return fechanac;
+    }
+
+
+   
+
+
+=======
     public String getNombre() {
         return nombre;
     }
@@ -98,4 +162,7 @@ public class DatosPersonales {
         return Period.between(nacimiento, hoy).getYears();
     }
     
+>>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 }
+
+    
