@@ -7,7 +7,7 @@ package ddb.deso.almacenamiento.DTO;
 import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Huesped;
 import ddb.deso.alojamiento.Invitado;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -26,8 +26,8 @@ public class AlojadoDTO {
     private String localidad;
     private String prov;
     private String pais;
-    private int nro_calle;
-    private long piso;
+    private String nro_calle;
+    private String piso;
     private String cod_post;
     // Persona
     private String nombre;
@@ -38,7 +38,7 @@ public class AlojadoDTO {
     private String nroDoc;
     private TipoDoc tipoDoc;
     private String CUIT;
-    private Date fechanac;
+    private LocalDate fechanac;
     // Si es huesped
     private String razon_social;
 
@@ -138,11 +138,11 @@ public class AlojadoDTO {
         return pais;
     }
 
-    public int getNro_calle() {
+    public String getNro_calle() {
         return nro_calle;
     }
 
-    public long getPiso() {
+    public String getPiso() {
         return piso;
     }
 
@@ -182,7 +182,7 @@ public class AlojadoDTO {
         return CUIT;
     }
 
-    public Date getFechanac() {
+    public LocalDate getFechanac() {
         return fechanac;
     }
 
@@ -214,11 +214,11 @@ public class AlojadoDTO {
         this.pais = pais;
     }
 
-    public void setNro_calle(int nro_calle) {
+    public void setNro_calle(String nro_calle) {
         this.nro_calle = nro_calle;
     }
 
-    public void setPiso(long piso) {
+    public void setPiso(String piso) {
         this.piso = piso;
     }
 
@@ -258,7 +258,7 @@ public class AlojadoDTO {
         this.CUIT = CUIT;
     }
 
-    public void setFechanac(Date fechanac) {
+    public void setFechanac(LocalDate fechanac) {
         this.fechanac = fechanac;
     }
     /**

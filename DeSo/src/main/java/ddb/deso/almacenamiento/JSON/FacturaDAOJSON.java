@@ -11,5 +11,4 @@ import ddb.deso.almacenamiento.DAO.FacturaDAO;
  * @author mat
  */
 public class FacturaDAOJSON implements FacturaDAO {
-    
 }

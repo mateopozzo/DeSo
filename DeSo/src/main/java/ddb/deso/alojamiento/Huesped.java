@@ -19,17 +19,23 @@ import ddb.deso.TipoDoc;
 public class Huesped extends Alojado{
 
     private String razon_social;
-<<<<<<< HEAD
     //private List <Huesped> huespedes= new LinkedList<>();
    // private Map<Long,TipoDoc> dniMap= new HashMap<>();
 
 
     public  Huesped (DatosAlojado da){
-    this.datos=da;
+        this.datos=da;
     }
-   public DatosAlojado getDatos(){
-    return this.datos;
-   }
+    public DatosAlojado getDatos(){
+        return this.datos; 
+    }
+    public void setRazon_social(String razon_social) {
+        this.razon_social = razon_social;
+    }
+
+    public String getRazon_social() {
+        return razon_social;
+    }
 /* 
 
 
@@ -44,13 +50,7 @@ public class Huesped extends Alojado{
     this.dniMap.put(dni,tipo);
 =======
 
-    public void setRazon_social(String razon_social) {
-        this.razon_social = razon_social;
-    }
-
-    public String getRazon_social() {
-        return razon_social;
-    }
+    
     
 >>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 }

@@ -4,15 +4,11 @@
  */
 package ddb.deso.alojamiento;
 
-<<<<<<< HEAD
 import ddb.deso.TipoDoc;
-
 import java.time.LocalDate;
-=======
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 import java.util.Date;
 
 import ddb.deso.TipoDoc;
@@ -29,17 +25,10 @@ public class DatosPersonales {
     private String ocupacion;
     private String nroDoc;
     private TipoDoc tipoDoc;
-<<<<<<< HEAD
-    private long CUIT;
+    private String CUIT;
     private LocalDate fechanac;
 
-    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, long nroDoc, TipoDoc tipoDoc, long CUIT, LocalDate fechanac) {
-=======
-    private String CUIT;
-    private Date fechanac;
-
-    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, String nroDoc, TipoDoc tipoDoc, String CUIT, Date fechanac) {
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
+    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, String nroDoc, TipoDoc tipoDoc, String CUIT, LocalDate fechanac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
@@ -50,57 +39,7 @@ public class DatosPersonales {
         this.CUIT = CUIT;
         this.fechanac = fechanac;
     }
-<<<<<<< HEAD
-      // Getters
-    public String getNombre() {
-        return nombre;
-    }
-
-
-    public String getApellido() {
-        return apellido;
-    }
-
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-
-    public String getPosicionIva() {
-        return posicionIva;
-    }
-
-
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-
-    public Long getNroDoc() {
-        return nroDoc;
-    }
-
-
-    public TipoDoc getTipoDoc() {
-        return tipoDoc;
-    }
-
-
-    public long getCUIT() {
-        return CUIT;
-    }
-
-
-    public LocalDate getFechanac() {
-        return fechanac;
-    }
-
-
-   
-
-
-=======
+ 
     public String getNombre() {
         return nombre;
     }
@@ -149,20 +88,19 @@ public class DatosPersonales {
     public void setCUIT(String CUIT) {
         this.CUIT = CUIT;
     }
-    public Date getFechanac() {
+    public LocalDate getFechanac() {
         return fechanac;
     }
-    public void setFechanac(Date fechanac) {
+    public void setFechanac(LocalDate fechanac) {
         this.fechanac = fechanac;
     }
      public int getEdad() {
         if (fechanac == null) return 0;
-        LocalDate nacimiento = fechanac.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        //LocalDate nacimiento = fechanac.atStartOfDay(ZoneId.systemDefault()).toInstant();
         LocalDate hoy = LocalDate.now();
-        return Period.between(nacimiento, hoy).getYears();
+        return Period.between(fechanac, hoy).getYears();
     }
     
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 }
 
     

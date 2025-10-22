@@ -49,11 +49,11 @@ public class DatosResidencia {
         this.pais = pais;
     }
 
-    public void setNro_calle(int nro_calle) {
+    public void setNro_calle(String nro_calle) {
         this.nro_calle = nro_calle;
     }
 
-    public void setPiso(long piso) {
+    public void setPiso(String piso) {
         this.piso = piso;
     }
 
@@ -81,11 +81,11 @@ public class DatosResidencia {
         return pais;
     }
 
-    public int getNro_calle() {
+    public String getNro_calle() {
         return nro_calle;
     }
 
-    public long getPiso() {
+    public String getPiso() {
         return piso;
     }
 

@@ -22,7 +22,7 @@ public class GestorAlojamiento {
 
     public boolean dniExiste(Long dni, TipoDoc tipo) {
         for (Huesped h : huespedes) {
-            DatosPersonales dp = h.getDatos().getDatosPersonales();
+            DatosPersonales dp = h.getDatos().getDatos_personales();
             
             if (dp.getNroDoc().equals(dni) && dp.getTipoDoc().equals(tipo)) {
                 return true;
@@ -185,7 +185,7 @@ String boton="-1";
             DatosContacto dc=new DatosContacto(tel, email);
 
             DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
-            nroDoc, tipoDoc,cuitInt , fecha_nacimiento);
+            nroDoc.toString(), tipoDoc,cuitInt.toString() , fecha_nacimiento);
 
             DatosAlojado da = new DatosAlojado(dc,dr,dp);
        
@@ -203,8 +203,8 @@ String boton="-1";
          }
          
          huespedes.add(h);
-         System.out.print("El Huésped " + h.datos.getDatosPersonales().getNombre() + " " + 
-         h.datos.getDatosPersonales().getApellido()  + " se ha cargado correctamente.");
+         System.out.print("El Huésped " + h.datos.getDatos_personales().getNombre() + " " + 
+         h.datos.getDatos_personales().getApellido()  + " se ha cargado correctamente.");
          String boton4 = "-1";
             while(!(boton4.equals("1")||boton4.equals("2"))){
                System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
