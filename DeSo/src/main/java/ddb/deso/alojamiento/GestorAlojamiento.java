@@ -215,8 +215,8 @@ public class GestorAlojamiento {
 
     }//metodo
 
-
     public void buscarHuesped (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc){
+        List<Huesped> encontrados = new ArrayList<>();
 
         // Si no encuentra resultados, llama a CU: Dar alta huesped -> Fin CU
         // Si no selecciona a nadie, llama a CU: Dar alta huesped -> Fin CU
