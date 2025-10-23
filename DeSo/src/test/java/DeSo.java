@@ -12,10 +12,9 @@ import ddb.deso.*;
  */
 public class DeSo {
     public static void main(String[] args) {
-        System.out.println("Hello World!");       
-        PoblacionDeAlojados asdf = new PoblacionDeAlojados();
-        asdf.guardarAlojadoEInvitado();
-        asdf.borrarTodo();
+        System.out.println("asdf\n");
+        TestsFacturaDAO f = new TestsFacturaDAO();
+        f.buscarF();
     }
     
 }

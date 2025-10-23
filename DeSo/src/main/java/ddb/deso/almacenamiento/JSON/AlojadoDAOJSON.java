@@ -25,15 +25,16 @@ import java.util.List;
  * @author mat
  */
 public class AlojadoDAOJSON implements AlojadoDAO {
-    private ManejadorJson manejador;
-    public AlojadoDAOJSON() {
-         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
-         System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
-    }
     /**
-     * El archivo que contiene los datos se guarda en la carpeta <b>data</b> en el directorio raiz del proyecto
+     * Ruta archivo que contiene los datos se guarda en la carpeta <b>data</b> en el directorio raiz del proyecto
      */
     private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("data").resolve("Alojado.json").toString();
+    private ManejadorJson manejador;
+    public AlojadoDAOJSON() {
+        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
+        //System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
+    }
+    
     
     /**
      * Escribe lista completa en JSON
@@ -45,8 +46,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
             manejador.escribir(listaAlojados);
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
-        
+        } 
     }
     
     /**
