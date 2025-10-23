@@ -216,11 +216,55 @@ public class GestorAlojamiento {
     }//metodo
 
     public void buscarHuesped (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc){
-        List<Huesped> encontrados = new ArrayList<>();
+        /* Recibe los paŕametros de búsqueda y busca sobre los JSON
+        Cuando los encuentra, los va colando en encontrados
+        Si no encuentra coincidencias, encontrados is empty y se ejecuta darDeAltaHuesped() -> Fin CU
 
-        // Si no encuentra resultados, llama a CU: Dar alta huesped -> Fin CU
-        // Si no selecciona a nadie, llama a CU: Dar alta huesped -> Fin CU
-        // Cuando selecciona a alguien, llama a CU: Modificar huesped -> Fin CU
+        Si encuentra, se muestra del 1 al inf la cantidad de coincidencias
+        Usuario ingresa opción input_user y se parsea a un int seleccion
+        Se busca en la lista quien es el huesped seleccion+1 y se almacena
+        Se llama a modificarHuesped() con la instancia de huesped_seleccionado -> Fin CU
+        */
+
+        List<Huesped> encontrados;
+        encontrados = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        Huesped huesped_seleccionado;
+        String input_user;
+        int seleccion=-1;
+
+        // BUSQUEDA EN JSON
+
+        if (encontrados.isEmpty()) {
+            System.out.println("No se encontraron coincidencias de búsqueda.");
+            scanner.close();
+            darDeAltaHuesped();
+            // FIN DE CASO DE USO
+        }
+        else {
+            input_user = scanner.nextLine();
+            seleccion = Integer.parseInt(input_user);
+
+            // Control de selección válida, loopea hasta que haya seleccionado un nro. de la grilla
+            while (seleccion<0 || seleccion>encontrados.size()) {
+                System.out.println("La opción no es válida. Intente nuevamente.");
+                input_user = scanner.nextLine();
+                seleccion = Integer.parseInt(input_user);
+            }
+
+            scanner.close();
+        }
+
+        if (seleccion<=encontrados.size() && seleccion>0) {
+            huesped_seleccionado = encontrados.get(seleccion-1);
+            System.out.println("Huesped seleccionado con éxito.");
+
+            if (huesped_seleccionado != null){
+                modificarHuesped(huesped_seleccionado);
+                // FIN DE CASO DE USO
+            }
+        }
+
     }
 
 }
