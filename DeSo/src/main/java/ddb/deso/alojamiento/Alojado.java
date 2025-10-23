@@ -10,8 +10,10 @@ package ddb.deso.alojamiento;
  */
 public abstract class Alojado {
 
-    protected DatosAlojado datos; //ver si mantenemos encapsulamiento o lo dejamos asi
-    public void setDatos(DatosAlojado datos) {
+    protected DatosAlojado datos;
+
+    // esto está raris - revisar
+    public void setDatos(DatosAlojado datos){
         this.datos = datos;
     }
     public DatosAlojado getDatos() {

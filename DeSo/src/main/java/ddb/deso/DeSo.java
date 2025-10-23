@@ -9,8 +9,7 @@ import ddb.deso.alojamiento.GestorAlojamiento;
 public class DeSo {
     public static void main(String[] args) {
         System.out.println("Hello World!");
-GestorAlojamiento ga=new GestorAlojamiento();
-ga.darDeAltaHuesped();
-
+        GestorAlojamiento ga=new GestorAlojamiento();
+        ga.darDeAltaHuesped();
     }
 }
