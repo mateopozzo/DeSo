@@ -7,12 +7,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.Scanner;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import ddb.deso.TipoDoc;
 /**
  *
@@ -22,7 +18,7 @@ public class GestorAlojamiento {
 
     private List<Huesped> huespedes = new LinkedList<>();
 
-    public boolean dniExiste(Long dni, TipoDoc tipo) {
+    public boolean dniExiste(String dni, TipoDoc tipo) {
         for (Huesped h : huespedes) {
             DatosPersonales dp = h.getDatos().getDatos_personales();
             
@@ -215,8 +211,8 @@ public class GestorAlojamiento {
 
     }//metodo
 
-    public void buscarHuesped (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc){
-        /* Recibe los paŕametros de búsqueda y busca sobre los JSON
+    public void buscarHuesped (CriteriosBusq criterios_busq){
+        /* Recibe los paŕametros de búsqueda en criterios (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc) y busca sobre los JSON
         Cuando los encuentra, los va colando en encontrados
         Si no encuentra coincidencias, encontrados is empty y se ejecuta darDeAltaHuesped() -> Fin CU
 
@@ -233,7 +229,7 @@ public class GestorAlojamiento {
         String input_user;
         int seleccion=-1;
 
-        // BUSQUEDA EN JSON
+        // BUSQUEDA EN JSON -> Llamo al DAO -> Busca en la BDD -> Crea los DTO -> DTO devuelve lista a DAO -> DAO devuelve lista a gestor
 
         if (encontrados.isEmpty()) {
             System.out.println("No se encontraron coincidencias de búsqueda.");
@@ -265,6 +261,42 @@ public class GestorAlojamiento {
             }
         }
 
+    }
+
+    private boolean cumpleCriterio (Huesped huesped, CriteriosBusq criterio) {
+        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
+        String apellido_b = criterio.getApellido();
+        String nombres_b = criterio.getNombre();
+        TipoDoc tipoDoc_b = criterio.getTipoDoc();
+        String nroDoc_b = criterio.getNroDoc();
+
+        // Atributos reales del huesped
+        DatosPersonales datos_h = huesped.getDatos().getDatos_personales();
+
+        String apellido_h = datos_h.getApellido();
+        String nombre_h = datos_h.getNombre();
+        TipoDoc tipoDoc_h = datos_h.getTipoDoc();
+        String nroDoc_h = datos_h.getNroDoc();
+
+        if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
+            return false;
+        }
+        if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
+            return false;
+        }
+        if (no_es_vacio(tipoDoc_b.toString()) && !tipoDoc_h.equals(tipoDoc_b)) {
+            return false;
+        }
+        if (no_es_vacio(nroDoc_b) && !tipoDoc_h.equals(tipoDoc_b)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean no_es_vacio (String contenido){
+        boolean flag = (contenido==null || contenido.isEmpty());
+        return !flag;
     }
 
 }
