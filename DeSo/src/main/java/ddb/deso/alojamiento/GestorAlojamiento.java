@@ -1,7 +1,7 @@
 package ddb.deso.alojamiento;
-
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -255,6 +255,7 @@ public class GestorAlojamiento {
         cargar_criterios (nombre, apellido, tipoDoc, num_documento, criterios_busq);
 
         // BÚSQUEDA EN JSON: Llamo al DAO -> Busca en la BDD -> Crea los DTO -> Devuelve lista de DTO a DAO -> DAO devuelve lista a gestor
+        // Por algún motivo no lo puedo importar -> encontrados = buscarHuespedDAO(criterios_busq);
 
         if (encontrados.isEmpty()) {
             System.out.println("No se encontraron coincidencias de búsqueda.");
@@ -300,38 +301,6 @@ public class GestorAlojamiento {
         if (no_es_vacio(num_documento)){
             criterio.setNroDoc(num_documento);
         }
-    }
-
-    // Esto es laburo del DAO y probablemente no deba ir acá
-    private boolean cumpleCriterio (Huesped huesped, CriteriosBusq criterio) {
-        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
-        String apellido_b = criterio.getApellido();
-        String nombres_b = criterio.getNombre();
-        TipoDoc tipoDoc_b = criterio.getTipoDoc();
-        String nroDoc_b = criterio.getNroDoc();
-
-        // Atributos reales del huesped
-        DatosPersonales datos_h = huesped.getDatos().getDatos_personales();
-
-        String apellido_h = datos_h.getApellido();
-        String nombre_h = datos_h.getNombre();
-        TipoDoc tipoDoc_h = datos_h.getTipoDoc();
-        String nroDoc_h = datos_h.getNroDoc();
-
-        if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
-            return false;
-        }
-        if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
-            return false;
-        }
-        if (no_es_vacio(tipoDoc_b.toString()) && !tipoDoc_h.equals(tipoDoc_b)) {
-            return false;
-        }
-        if (no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b)) {
-            return false;
-        }
-
-        return true;
     }
 
     private boolean no_es_vacio (String contenido){

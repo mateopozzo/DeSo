@@ -8,39 +8,42 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.alojamiento.DatosPersonales;
+import ddb.deso.alojamiento.Huesped;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * Esta clase implementa la interfaz DAO para:
- * <ul>
- *   <li>Creacion</li>
- *   <li>Modificacion</li>
- *   <li>Eliminacion</li>
- *   <li>Listado</li>
- * </ul>
- * de la clase abtracta Alojado en el sistema usando libreria GSON.
- * @author mat
+/*
+ Esta clase implementa la interfaz DAO para:
+ <ul>
+    <li>Creación</li>
+    <li>Modificación</li>
+    <li>Eliminación</li>
+    <li>Listado</li>
+ </ul>
+ de la clase abstracta Alojado en el sistema usando libreria GSON.
+ @author mat
  */
+
 public class AlojadoDAOJSON implements AlojadoDAO {
-    /**
-     * Ruta archivo que contiene los datos se guarda en la carpeta <b>data</b> en el directorio raiz del proyecto
-     */
+    // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
     private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("data").resolve("Alojado.json").toString();
     private ManejadorJson manejador;
+
     public AlojadoDAOJSON() {
         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
         //System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
     }
     
-    
-    /**
-     * Escribe lista completa en JSON
-     * 
-     * @param listaAlojados es lista de Entidades de {@link Alojado} a persistir
+    /*
+     Escribe lista completa en JSON
+     listaAlojados es una lista de entidades de Alojado a persistir
      */
+
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
         try {
             manejador.escribir(listaAlojados);
@@ -49,11 +52,11 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         } 
     }
     
-    /**
-     * Crea un nuevo registro de {@link Alojado} y lo guarda en el archivo JSON.
-     *
-     * @param alojado el objeto a almacenar
+    /*
+     Crea un nuevo registro de alojado y lo guarda en el archivo JSON
+     Alojado es el objeto a guardar
      */
+
     @Override
     public void crearAlojado(AlojadoDTO alojado){
         List<AlojadoDTO> listaAlojados = listarAlojados();
@@ -61,12 +64,8 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
-    /**
-     * Actualiza la instancia de Alojado guardada en json bajo suposicion de que Documento y TipoDoc son inmutables
-     *
-     * @param alojado actualizado
-     * 
-     */
+    // Actualiza la instancia de alojado guardada en JSON suponiendo que documento y TipoDoc son inmutables
+
     @Override
     public void actualizarAlojado(AlojadoDTO alojado){
         String documento = alojado.getNroDoc();
@@ -83,11 +82,11 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
-    /**
-     * Devuelve la lista completa de alojados almacenados.
-     *
-     * @return una lista {@link Alojado}
+    /*
+     Devuelve la lista completa de alojados almacenados.
+     @return una lista {@link Alojado}
      */
+
     @Override
     public List<AlojadoDTO> listarAlojados(){
         List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();
@@ -99,6 +98,53 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         }
         
         return listaAlojadosRetorno;
+    }
+
+    public List<AlojadoDTO> buscarHuespedDAO (CriteriosBusq criterios_busq){
+        // Tengo la lista de todos los alojados del archivo Alojado.JSON
+        List<AlojadoDTO> lista_alojados = listarAlojados();
+        List<AlojadoDTO> encontrados = new ArrayList<>();
+
+        for(AlojadoDTO un_alojado: lista_alojados) {
+            if (cumpleCriterio(un_alojado, criterios_busq)){
+                encontrados.add(un_alojado);
+            }
+        }
+        return encontrados;
+    }
+
+    private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
+        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
+        String apellido_b = criterio.getApellido();
+        String nombres_b = criterio.getNombre();
+        TipoDoc tipoDoc_b = criterio.getTipoDoc();
+        String nroDoc_b = criterio.getNroDoc();
+        
+
+        String apellido_h = alojado_DTO.getApellido();
+        String nombre_h = alojado_DTO.getNombre();
+        TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
+        String nroDoc_h = alojado_DTO.getNroDoc();
+
+        if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
+            return false;
+        }
+        if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
+            return false;
+        }
+        if (no_es_vacio(tipoDoc_b.toString()) && !tipoDoc_h.equals(tipoDoc_b)) {
+            return false;
+        }
+        if (no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean no_es_vacio (String contenido){
+        boolean flag = (contenido==null || contenido.isEmpty());
+        return !flag;
     }
     
     /*

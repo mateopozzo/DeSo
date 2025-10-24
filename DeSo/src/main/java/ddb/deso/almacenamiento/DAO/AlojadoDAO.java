@@ -13,6 +13,7 @@ public interface AlojadoDAO {
     void crearAlojado(AlojadoDTO alojado);
     void actualizarAlojado(AlojadoDTO alojado);
     void eliminarAlojado(AlojadoDTO alojado);
+    List<AlojadoDTO> buscarHuespedDAO(CriteriosBusq criterios);
     List<AlojadoDTO> listarAlojados();
     AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo);
 }
