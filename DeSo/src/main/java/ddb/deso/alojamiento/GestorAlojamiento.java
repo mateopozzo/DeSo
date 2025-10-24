@@ -183,7 +183,7 @@ public class GestorAlojamiento {
                 Huesped h= new Huesped(da);
 
 
-             if(dniExiste(nroDoc, tipoDoc)){
+             if(dniExiste(nroDoc.toString(), tipoDoc)){
              String boton2= "-1";
                 while(!(boton2.equals("1")||boton2.equals("2"))){
                 System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
