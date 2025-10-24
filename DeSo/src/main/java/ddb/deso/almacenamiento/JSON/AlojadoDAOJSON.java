@@ -90,7 +90,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      */
     @Override
     public List<AlojadoDTO> listarAlojados(){
-        List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();;
+        List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();
         
         try {
             listaAlojadosRetorno = manejador.listar();
@@ -101,13 +101,14 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         return listaAlojadosRetorno;
     }
     
-    /**
-     * Busca algun alojado que coincida con el parametro
-     * Se puede analizar optimizacion con hash o set ordenado.
-     *
-     * @param numero de documento y tipo
-     * @return una {@link Alojado}
+    /*
+     Busca algún alojado que coincida con el parámetro
+     Se puede analizar optimización con hash o set ordenado.
+
+     @param número de documento y tipo
+     @return una {@link Alojado}
      */
+
     @Override
     public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo){
         List<AlojadoDTO> listaAlojados = listarAlojados();

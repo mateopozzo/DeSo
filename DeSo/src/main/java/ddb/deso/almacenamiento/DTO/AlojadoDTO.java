@@ -261,6 +261,7 @@ public class AlojadoDTO {
     public void setFechanac(LocalDate fechanac) {
         this.fechanac = fechanac;
     }
+
     /**
      * Metodo provisto por ide
      * 
