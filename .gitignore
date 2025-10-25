@@ -1,14 +1,6 @@
 /DeSo/target/
 /DeSo/src/main/java/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
 /DeSo/main/java/src/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
-/.idea/.gitignore
-/.idea/compiler.xml
-/.idea/DeSo.iml
-/.idea/encodings.xml
-/.idea/jarRepositories.xml
-/.idea/material_theme_project_new.xml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/dictionaries/project.xml
-/.idea/vcs.xml
-/.idea/inspectionProfiles/Project_Default.xml
+/.idea/
+/.vscode/
+/.target/
