@@ -262,6 +262,7 @@ public class GestorAlojamiento {
             // Si presionó un número, entonces voy a modificar huesped
             else {
                 try {
+                    seleccion = Integer.parseInt(input_user);
                     // Si la selección está dentro del rango, lo busco en mi lista
                     if (seleccion<=encontrados.size() && seleccion>0) {
                         huesped_seleccionado = encontrados.get(seleccion-1);
