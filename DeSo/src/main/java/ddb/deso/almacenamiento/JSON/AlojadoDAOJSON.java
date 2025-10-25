@@ -63,7 +63,8 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         listaAlojados.add(alojado);
         escribirListaEnArchivo(listaAlojados);
     }
-    
+
+    // REVISAR ESTO --------------
     // Actualiza la instancia de alojado guardada en JSON suponiendo que documento y TipoDoc son inmutables
 
     @Override
@@ -100,6 +101,13 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         return listaAlojadosRetorno;
     }
 
+    /*
+    Busco todos los alojados con listarAlojados y los guardo en una lista de DTO
+    Inicializo otra lista vacía de DTO llamada encontrados
+    Por cada alojado, llamo a cumpleCriterio. Si es verdad, lo agrego a encontrados
+    */
+
+    @Override
     public List<AlojadoDTO> buscarHuespedDAO (CriteriosBusq criterios_busq){
         // Tengo la lista de todos los alojados del archivo Alojado.JSON
         List<AlojadoDTO> lista_alojados = listarAlojados();
@@ -112,6 +120,13 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         }
         return encontrados;
     }
+
+    /*
+    Recibo una instancia de AlojadoDTO y un criterio de búsqueda
+    Si el criterio fue definido, pero no coinciden los atributos, retorno falso
+    Si el criterio fue definido y coincide, no entra a ningún if y devuelve true
+    Si el criterio no fue definido, no se evalúa la segunda condición
+    */
 
     private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
         // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq

@@ -1,7 +1,7 @@
 package ddb.deso.alojamiento;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -12,8 +12,17 @@ import java.util.Scanner;
 // @author mat
 
 public class GestorAlojamiento {
-
+    private final AlojadoDAO alojadoDAO;
     private List<Huesped> huespedes = new LinkedList<>();
+
+    /*
+    Inyección de dependencias porque si no no me deja importar el metodo del DAO
+    Inyección por constructor: final, la dependencia es explícita, ayuda al testing
+    */
+
+    public GestorAlojamiento(AlojadoDAO alojadoDAO) {
+        this.alojadoDAO = alojadoDAO;
+    }
 
     public boolean dniExiste(String dni, TipoDoc tipo) {
         for (Huesped h : huespedes) {
@@ -24,17 +33,6 @@ public class GestorAlojamiento {
             }
         }
         return false;
-    }
-
-    private static TipoDoc convertirTipoDoc(String opcion) {
-        return switch (opcion) {
-            case "1" -> TipoDoc.DNI;
-            case "2" -> TipoDoc.CI;
-            case "3" -> TipoDoc.LE;
-            case "4" -> TipoDoc.PASAPORTE;
-            case "5" -> TipoDoc.OTRO;
-            default -> null;
-        };
     }
 
     public void darDeAltaHuesped(){
@@ -48,15 +46,8 @@ public class GestorAlojamiento {
        System.out.println("Nombre:");
        String nombre = entrada.nextLine();
 
-         // Menú para elegir tipo de documento
-       System.out.println("Seleccione tipo de documento:");
-       System.out.println("1. DNI");
-       System.out.println("2. CI");
-       System.out.println("3. LE");
-       System.out.println("4. PASAPORTE");
-       System.out.println("5. OTRO");
-       String opcion = entrada.nextLine();
-       TipoDoc tipoDoc = convertirTipoDoc(opcion);
+       // Menú para elegir tipo de documento
+       TipoDoc tipoDoc = menuTipoDoc();
 
        System.out.println("Numero de documento:");
        String num_documento = entrada.nextLine();
@@ -202,10 +193,10 @@ public class GestorAlojamiento {
 
           }
 
-       }//while
+       } // while
 
 
-    }//método
+    } // metodo
 
     public void buscarHuesped (CriteriosBusq criterios_busq){
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
@@ -220,7 +211,6 @@ public class GestorAlojamiento {
         */
 
         List<AlojadoDTO> encontrados;
-        encontrados = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         AlojadoDTO huesped_seleccionado;
         String input_user;
@@ -238,15 +228,7 @@ public class GestorAlojamiento {
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
 
-        System.out.println("Seleccione tipo de documento:");
-        System.out.println("1. DNI");
-        System.out.println("2. CI");
-        System.out.println("3. LE");
-        System.out.println("4. PASAPORTE");
-        System.out.println("5. OTRO");
-
-        String tipo_doc = scanner.nextLine();
-        TipoDoc tipoDoc = convertirTipoDoc(tipo_doc);
+        TipoDoc tipoDoc = menuTipoDoc();
 
         System.out.println("Ingrese el número de documento: ");
         String num_documento = scanner.nextLine();
@@ -255,7 +237,7 @@ public class GestorAlojamiento {
         cargar_criterios (nombre, apellido, tipoDoc, num_documento, criterios_busq);
 
         // BÚSQUEDA EN JSON: Llamo al DAO -> Busca en la BDD -> Crea los DTO -> Devuelve lista de DTO a DAO -> DAO devuelve lista a gestor
-        // Por algún motivo no lo puedo importar -> encontrados = buscarHuespedDAO(criterios_busq);
+        encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
 
         if (encontrados.isEmpty()) {
             System.out.println("No se encontraron coincidencias de búsqueda.");
@@ -267,25 +249,34 @@ public class GestorAlojamiento {
             System.out.println("Ingrese el número de huesped que desea seleccionar.");
             System.out.println("Si no desea seleccionar alguno, presione ENTER y luego 1. (SIGUIENTE)");
             input_user = scanner.nextLine();
-            seleccion = Integer.parseInt(input_user);
-            System.out.println("Presione 1 para SIGUIENTE");
-            // Que lea el input, lo guarde sea enter o nro. If nro, llamo a modificar. If enter, llamo a dar alta
+
+            // Si presionó ENTER, entonces voy a dar de alta huesped
+            if (input_user.trim().isEmpty()) {
+                System.out.println("Presione 1 para SIGUIENTE");
+                String siguiente = scanner.nextLine();
+                if ("1".equals(siguiente)) {
+                    darDeAltaHuesped();
+                    // FIN DE CASO DE USO
+                }
+            }
+            // Si presionó un número, entonces voy a modificar huesped
+            else {
+                try {
+                    // Si la selección está dentro del rango, lo busco en mi lista
+                    if (seleccion<=encontrados.size() && seleccion>0) {
+                        huesped_seleccionado = encontrados.get(seleccion-1);
+                        System.out.println("Huesped seleccionado con éxito.");
+                        if (huesped_seleccionado != null){
+                            // modificarHuesped(huesped_seleccionado);
+                            // FIN DE CASO DE USO
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Entrada inválida. Debe ser un número o ENTER.");
+                }
+            }
             scanner.close();
         }
-
-        if (seleccion<=encontrados.size() && seleccion>0) {
-            huesped_seleccionado = encontrados.get(seleccion-1);
-            System.out.println("Huesped seleccionado con éxito.");
-            if (huesped_seleccionado != null){
-                // modificarHuesped(huesped_seleccionado);
-                // FIN DE CASO DE USO
-            }
-        }
-
-        else {
-            darDeAltaHuesped();
-        }
-
     }
 
     private void cargar_criterios (String nombre, String apellido, TipoDoc tipoDoc, String num_documento, CriteriosBusq criterio) {
@@ -306,6 +297,31 @@ public class GestorAlojamiento {
     private boolean no_es_vacio (String contenido){
         boolean flag = (contenido==null || contenido.isEmpty());
         return !flag;
+    }
+
+    private TipoDoc menuTipoDoc(){
+        System.out.println("Seleccione tipo de documento:");
+        System.out.println("1. DNI");
+        System.out.println("2. CI");
+        System.out.println("3. LE");
+        System.out.println("4. PASAPORTE");
+        System.out.println("5. OTRO");
+
+        TipoDoc tipoDoc;
+
+        Scanner scanner = new Scanner(System.in);
+        String opcion = scanner.nextLine();
+
+        switch (opcion) {
+            case "2" -> tipoDoc =TipoDoc.CI;
+            case "3" -> tipoDoc =TipoDoc.LE;
+            case "4" -> tipoDoc =TipoDoc.PASAPORTE;
+            case "5" -> tipoDoc =TipoDoc.OTRO;
+            default -> tipoDoc = TipoDoc.DNI;
+        };
+
+        scanner.close();
+        return tipoDoc;
     }
 
 }
