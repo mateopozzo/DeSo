@@ -17,7 +17,15 @@ public class DatosCheckIn {
     public DatosCheckIn(LocalDate fecha_hora_in) {
         this.fecha_hora_in = fecha_hora_in;
     }
-    
+
+    public long getId() {
+        return idCheckIn;
+    }
+
+    public void setId(long idCheckIn) {
+        this.idCheckIn = idCheckIn;
+    }
+
     public LocalDate getFecha_hora_in() {
         return fecha_hora_in;
     }

@@ -15,18 +15,25 @@ public class DatosAlojado {
     private DatosContacto   datos_contacto;
     private DatosResidencia datos_residencia;
     private DatosPersonales datos_personales;   
-    private List<DatosCheckIn> datos_check_in;
-    private List<DatosCheckOut> datos_check_out;
+    private List<Long> id_check_in;
+    private List<Long> id_check_out;
     
     public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
-        datos_check_out =new ArrayList<DatosCheckOut>();
-        datos_check_in = new ArrayList<DatosCheckIn>();
+        id_check_in =new ArrayList<Long>();
+        id_check_out = new ArrayList<Long>();
         this.datos_contacto = contacto;
         this.datos_residencia = residencia;
         this.datos_personales = personales;
     }
     
-    public nuevoCheckIn(DatosCheckIn){
+    public void nuevoCheckIn(DatosCheckIn check_in){
+        id_check_in.add(check_in.getId());
+    }
+    public void nuevoCheckOut(DatosCheckIn check_out){
+        id_check_in.add(check_out.getId());
+    }
+    public boolean ocupoHabitacion(){
+        return ((id_check_in.size()>0)||(id_check_out.size()>0));
     }
 
     public DatosContacto getDatos_contacto() {
