@@ -2,10 +2,7 @@ package ddb.deso;
 
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.GestorAlojamiento;
-import ddb.deso.login.presentacion.InterfazLogin;
-
-import java.util.List;
-import java.util.Scanner;
+import ddb.deso.presentacion.InterfazLogin;
 
 /**
  *
