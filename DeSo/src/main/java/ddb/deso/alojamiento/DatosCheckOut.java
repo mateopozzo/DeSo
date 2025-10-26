@@ -4,23 +4,24 @@
  */
 package ddb.deso.alojamiento;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-/**
+/** 
  *
  * @author mat
  */
 public class DatosCheckOut {
-    Date fecha_hora_out;
+    LocalDate fecha_hora_out;
+    long idCheckOut;
 
-    public DatosCheckOut(Date fecha_hora_out) {
+    public DatosCheckOut(LocalDate fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
     }
     
-    public Date getFecha_hora_out() {
+    public LocalDate getFecha_hora_out() {
         return fecha_hora_out;
     }
-    public void setFecha_hora_iout(Date fecha_hora_out) {
+    public void setFecha_hora_iout(LocalDate fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_iout;
     }
 }

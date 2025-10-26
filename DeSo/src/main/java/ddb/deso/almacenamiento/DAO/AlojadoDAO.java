@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AlojadoDAO {
     void crearAlojado(AlojadoDTO alojado);
-    void actualizarAlojado(AlojadoDTO alojado);
+    void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo);
     void eliminarAlojado(AlojadoDTO alojado);
     List<AlojadoDTO> buscarHuespedDAO(CriteriosBusq criterios);
     List<AlojadoDTO> listarAlojados();

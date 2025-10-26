@@ -65,15 +65,12 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     }
 
     // REVISAR ESTO --------------
-    // Actualiza la instancia de alojado guardada en JSON suponiendo que documento y TipoDoc son inmutables
+    // Actualiza la instancia de alojado guardada en JSON
 
     @Override
-    public void actualizarAlojado(AlojadoDTO alojado){
-        String documento = alojado.getNroDoc();
-        TipoDoc tipo = alojado.getTipoDoc();
-        AlojadoDTO remover = this.buscarPorDNI(documento, tipo);
-        eliminarAlojado(remover);
-        this.crearAlojado(alojado);
+    public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
+        eliminarAlojado(alojadoPrev);
+        this.crearAlojado(alojadoNuevo  );
     }
     
     @Override

@@ -21,7 +21,7 @@
   [*@jjuligrassi*](https://github.com/jjuligrassi)
 
 
-- POZZO, Mateo
+- POZZO GALDÓN, Mateo
 
   mateopozzogaldon@gmail.com
 
@@ -47,7 +47,7 @@
 
 **Lenguaje:** Java 17+, JDK 21
 
-**IDE:** VSCode (Felipe, Julieta, Lautaro), Apache NetBeans (Mateo) , IntelliJ IDEA (Gael)
+**IDE:** VSCode (Felipe, Julieta, Lautaro), IntelliJ IDEA (Gael, Mateo)
 
 **Build tool:** Maven
 
