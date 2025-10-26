@@ -2,27 +2,44 @@
 ## Autores 
 - ANTUÑA, Felipe
 
+    feliantuna@gmail.com
+
     [*@felipeantuna*](https://github.com/felipeantuna)
+
 
 - BECKMANN, Francisco
 
+  franbeckmann@gmail.com
+
   [*@franbeckmann*](https://github.com/franbeckmann)
+
 
 - GRASSI, Julieta
 
+  jjulietagrassi@gmail.com
+
   [*@jjuligrassi*](https://github.com/jjuligrassi)
+
 
 - POZZO, Mateo
 
-    [*@mateopozzo*](https://github.com/mateopozzo)
+  mateopozzogaldon@gmail.com
+
+  [*@mateopozzo*](https://github.com/mateopozzo)
+
 
 - SUÁREZ, Gael
 
-    [*@gbelletti*](https://github.com/gbelletti)
+  gaelbelletti@gmail.com
+
+  [*@gbelletti*](https://github.com/gbelletti)
+
 
 - ZEBALLOS, Lautaro
 
-    [*@lau2214*](https://github.com/lau2214)
+  lgzeballos1@gmail.com
+
+  [*@lau2214*](https://github.com/lau2214)
 
 ----
 
