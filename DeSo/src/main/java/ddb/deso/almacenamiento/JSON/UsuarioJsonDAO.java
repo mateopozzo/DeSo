@@ -1,4 +1,4 @@
-package ddb.deso.login.dao;
+package ddb.deso.almacenamiento.JSON;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import ddb.deso.almacenamiento.DAO.UsuarioDAO;
 import ddb.deso.login.Usuario;
 
 public class UsuarioJsonDAO implements UsuarioDAO {
