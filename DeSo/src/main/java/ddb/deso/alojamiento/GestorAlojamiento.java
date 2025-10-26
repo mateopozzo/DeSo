@@ -183,15 +183,15 @@ public class GestorAlojamiento {
                 Huesped h= new Huesped(da);
 
 
-             if(dniExiste(nroDoc, tipoDoc)){
-             String boton2= "-1";
-                while(!(boton2.equals("1")||boton2.equals("2"))){
-                System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
-                System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
-                boton2= entrada.nextLine();
-                }
-                if(boton2.equals("2")) continue;
-             }
+//             if(dniExiste(nroDoc, tipoDoc)){
+//             String boton2= "-1";
+//                while(!(boton2.equals("1")||boton2.equals("2"))){
+//                System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
+//                System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
+//                boton2= entrada.nextLine();
+//                }
+//                if(boton2.equals("2")) continue;
+//             }
 
              huespedes.add(h);
              System.out.print("El Huésped " + h.datos.getDatos_personales().getNombre() + " " +
@@ -256,7 +256,7 @@ public class GestorAlojamiento {
             System.out.println("Huesped seleccionado con éxito.");
 
             if (huesped_seleccionado != null){
-                modificarHuesped(huesped_seleccionado);
+                //modificarHuesped(huesped_seleccionado);
                 // FIN DE CASO DE USO
             }
         }
@@ -264,7 +264,7 @@ public class GestorAlojamiento {
     }
 
     private boolean cumpleCriterio (Huesped huesped, CriteriosBusq criterio) {
-        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
+        // Criterios de búsqueda que pueden o no estar  covacíos -> Hechosn clase plantilla CriteriosBusq
         String apellido_b = criterio.getApellido();
         String nombres_b = criterio.getNombre();
         TipoDoc tipoDoc_b = criterio.getTipoDoc();

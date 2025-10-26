@@ -11,16 +11,16 @@ import java.util.Date;
  * @author mat
  */
 public class DatosCheckOut {
-    Date fecha_hora_iout;
+    Date fecha_hora_out;
 
-    public DatosCheckOut(Date fecha_hora_iout) {
-        this.fecha_hora_iout = fecha_hora_iout;
+    public DatosCheckOut(Date fecha_hora_out) {
+        this.fecha_hora_out = fecha_hora_out;
     }
     
-    public Date getFecha_hora_iout() {
-        return fecha_hora_iout;
+    public Date getFecha_hora_out() {
+        return fecha_hora_out;
     }
-    public void setFecha_hora_iout(Date fecha_hora_iout) {
-        this.fecha_hora_iout = fecha_hora_iout;
+    public void setFecha_hora_iout(Date fecha_hora_out) {
+        this.fecha_hora_out = fecha_hora_iout;
     }
 }
