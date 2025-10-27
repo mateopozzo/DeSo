@@ -2,12 +2,12 @@ package ddb.deso.alojamiento;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.presentacion.InterfazDarBaja;
 
+import java.nio.MappedByteBuffer;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 // @author mat
 
@@ -19,6 +19,8 @@ public class GestorAlojamiento {
     Inyección de dependencias porque si no no me deja importar el metodo del DAO
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
+
+    public GestorAlojamiento() {}
 
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
@@ -323,6 +325,70 @@ public class GestorAlojamiento {
 
         scanner.close();
         return tipoDoc;
+    }
+
+    private AlojadoDTO encontrarPrimerOcurrenciaDTO(List<AlojadoDTO> listaDTO, AlojadoDTO comparadorAlojadoDTO){
+        if(listaDTO.isEmpty()){
+            return null;
+        } else {
+            return  listaDTO.stream()
+                    .filter(dto -> dto.equals(comparadorAlojadoDTO))
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    private boolean huespedSeAlojo(CriteriosBusq criterios, Alojado alojado){
+        /*
+         * Logica de "huesped se alojó"
+         * */
+        AlojadoDAOJSON DAO = new AlojadoDAOJSON();
+        List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
+        // Esta variable puede existir o no, depende del caso de uso 10
+        AlojadoDTO comparadorAlojadoDTO = new AlojadoDTO(alojado);
+        alojado.completarDTO(comparadorAlojadoDTO);
+        AlojadoDTO huespedBaja = encontrarPrimerOcurrenciaDTO(listaDTO, comparadorAlojadoDTO);
+
+        // estos dos ifs se pueden hacer excepcion
+        if(huespedBaja == null) {
+            System.out.println("No se ha encontrado el alojado.");
+            return false;
+        }
+        if(huespedBaja.getId_check_in().isEmpty() && huespedBaja.getId_check_out().isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    private void eliminarAlojado(Alojado alojado){
+        AlojadoDAOJSON DAO = new AlojadoDAOJSON();
+        AlojadoDTO eliminar = new AlojadoDTO(alojado);
+        DAO.eliminarAlojado(eliminar);
+    }
+
+    public void darDeBajaHuesped(Alojado alojado){
+
+        CriteriosBusq criterios = new CriteriosBusq();
+
+        var nombre=alojado.getDatos().getDatos_personales().getNombre();
+        var apellido=alojado.getDatos().getDatos_personales().getApellido();
+        var nroDoc=alojado.getDatos().getDatos_personales().getNroDoc();
+        var tipoDoc=alojado.getDatos().getDatos_personales().getTipoDoc();
+        cargar_criterios(nombre, apellido, tipoDoc, nroDoc, criterios);
+
+        boolean seAlojo = huespedSeAlojo(criterios, alojado);
+
+        InterfazDarBaja IO = new InterfazDarBaja();
+        if(seAlojo){
+            IO.noSePuedeDarBaja();
+        }
+        if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
+            return;
+        }
+
+        eliminarAlojado(alojado);
+
+        IO.terminarCU(criterios);
     }
 
 }

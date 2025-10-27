@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
 /**
  *
@@ -36,7 +37,12 @@ public class Huesped extends Alojado{
     public String getRazon_social() {
         return razon_social;
     }
-/* 
+
+    @Override
+    public void completarDTO(AlojadoDTO dto) {
+        dto.setRazon_social(razon_social);
+    }
+    /*
 
 
     public void agregarHuesped (){

@@ -36,6 +36,14 @@ public class DatosAlojado {
         return ((id_check_in.size()>0)||(id_check_out.size()>0));
     }
 
+    public List<Long> getId_check_in() {
+        return id_check_in;
+    }
+
+    public List<Long> getId_check_out() {
+        return id_check_out;
+    }
+
     public DatosContacto getDatos_contacto() {
         return datos_contacto;
     }

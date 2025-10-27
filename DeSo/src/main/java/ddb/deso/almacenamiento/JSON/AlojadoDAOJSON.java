@@ -17,8 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-/*
- Esta clase implementa la interfaz DAO para:
+/**
+ Implementa la interfaz DAO para:
  <ul>
     <li>Creación</li>
     <li>Modificación</li>
@@ -43,7 +43,6 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      Escribe lista completa en JSON
      listaAlojados es una lista de entidades de Alojado a persistir
      */
-
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
         try {
             manejador.escribir(listaAlojados);
@@ -70,7 +69,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     @Override
     public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
         eliminarAlojado(alojadoPrev);
-        this.crearAlojado(alojadoNuevo  );
+        this.crearAlojado(alojadoNuevo);
     }
     
     @Override

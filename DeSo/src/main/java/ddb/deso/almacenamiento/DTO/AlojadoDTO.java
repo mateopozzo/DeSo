@@ -5,9 +5,11 @@
 package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.TipoDoc;
+import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.Huesped;
 import ddb.deso.alojamiento.Invitado;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -41,38 +43,13 @@ public class AlojadoDTO {
     private LocalDate fechanac;
     // Si es huesped
     private String razon_social;
+    // Check in y out
+    private List<Long> id_check_in;
+    private List<Long> id_check_out;
 
-    public AlojadoDTO(Huesped h) {
-        // Datos Personales
-        this.setNombre(h.getDatos().getDatos_personales().getNombre());
-        this.setApellido(h.getDatos().getDatos_personales().getApellido());
-        this.setNacionalidad(h.getDatos().getDatos_personales().getNacionalidad());
-        this.setPosicionIva(h.getDatos().getDatos_personales().getPosicionIva());
-        this.setOcupacion(h.getDatos().getDatos_personales().getOcupacion());
-        this.setNroDoc(h.getDatos().getDatos_personales().getNroDoc());
-        this.setTipoDoc(h.getDatos().getDatos_personales().getTipoDoc());
-        this.setCUIT(h.getDatos().getDatos_personales().getCUIT());
-        this.setFechanac(h.getDatos().getDatos_personales().getFechanac());
 
-        // Datos Contacto
-        this.setTelefono(h.getDatos().getDatos_contacto().getTelefono());
-        this.setEmail(h.getDatos().getDatos_contacto().getEmail());
-
-        // Datos Residencia
-        this.setCalle(h.getDatos().getDatos_residencia().getCalle());
-        this.setDepto(h.getDatos().getDatos_residencia().getDepto());
-        this.setLocalidad(h.getDatos().getDatos_residencia().getLocalidad());
-        this.setProv(h.getDatos().getDatos_residencia().getProv());
-        this.setPais(h.getDatos().getDatos_residencia().getPais());
-        this.setNro_calle(h.getDatos().getDatos_residencia().getNro_calle());
-        this.setPiso(h.getDatos().getDatos_residencia().getPiso());
-        this.setCod_post(h.getDatos().getDatos_residencia().getCod_post());
-
-        // Si es huesped
-        this.setRazon_social(h.getRazon_social());
-    }
     
-    public AlojadoDTO(Invitado i) {
+    public AlojadoDTO(Alojado i) {
         // Datos Personales
         this.setNombre(i.getDatos().getDatos_personales().getNombre());
         this.setApellido(i.getDatos().getDatos_personales().getApellido());
@@ -97,9 +74,38 @@ public class AlojadoDTO {
         this.setNro_calle(i.getDatos().getDatos_residencia().getNro_calle());
         this.setPiso(i.getDatos().getDatos_residencia().getPiso());
         this.setCod_post(i.getDatos().getDatos_residencia().getCod_post());
+
+        // ingreso/egreso
+        this.id_check_in=i.getDatos().getId_check_in();
+        this.id_check_out=i.getDatos().getId_check_out();
+    }
+
+    public AlojadoDTO(Invitado i){
+        this((Alojado)i);
+        i.completarDTO(this);
+    }
+    public AlojadoDTO(Huesped h) {
+        this((Alojado)h);
+        h.completarDTO(this);
     }
     
     public AlojadoDTO() {
+    }
+
+    public List<Long> getId_check_in() {
+        return id_check_in;
+    }
+
+    public void setId_check_in(List<Long> id_check_in) {
+        this.id_check_in = id_check_in;
+    }
+
+    public List<Long> getId_check_out() {
+        return id_check_out;
+    }
+
+    public void setId_check_out(List<Long> id_check_out) {
+        this.id_check_out = id_check_out;
     }
 
     public void setRazon_social(String razon_social) {

@@ -4,10 +4,15 @@
  */
 package ddb.deso.alojamiento;
 
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+
 /**
  *
  * @author mat
  */
 public class Invitado extends Alojado {
-    
+    @Override
+    public void completarDTO(AlojadoDTO dto) {
+        return;
+    }
 }

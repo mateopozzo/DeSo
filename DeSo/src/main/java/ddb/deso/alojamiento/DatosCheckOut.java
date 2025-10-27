@@ -31,6 +31,6 @@ public class DatosCheckOut {
     }
 
     public void setFecha_hora_iout(LocalDate fecha_hora_out) {
-        this.fecha_hora_out = fecha_hora_iout;
+        this.fecha_hora_out = fecha_hora_out;
     }
 }

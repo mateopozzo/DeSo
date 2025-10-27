@@ -4,6 +4,8 @@
  */
 package ddb.deso.alojamiento;
 
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+
 /**
  *
  * @author mat
@@ -20,12 +22,11 @@ public abstract class Alojado {
         return datos;
     }
     public void checkIn(Alojado alojado) {
-        
     }
     public void checkOut(Alojado alojado) {
-        
     }
     public boolean esMayor() {
         return this.getDatos().getEdad() >= 18;
     }
+    public abstract void completarDTO(AlojadoDTO dto);
 }
