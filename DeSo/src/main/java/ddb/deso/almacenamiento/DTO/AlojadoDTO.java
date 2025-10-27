@@ -40,7 +40,7 @@ public class AlojadoDTO {
     private String nroDoc;
     private TipoDoc tipoDoc;
     private String CUIT;
-    private LocalDate fechanac;
+    private String fechanac;
     // Si es huesped
     private String razon_social;
     // Check in y out
@@ -189,7 +189,7 @@ public class AlojadoDTO {
     }
 
     public LocalDate getFechanac() {
-        return fechanac;
+        return LocalDate.parse(fechanac);
     }
 
     public void setTelefono(long telefono) {
@@ -265,7 +265,7 @@ public class AlojadoDTO {
     }
 
     public void setFechanac(LocalDate fechanac) {
-        this.fechanac = fechanac;
+        this.fechanac = fechanac.toString();
     }
 
     /**

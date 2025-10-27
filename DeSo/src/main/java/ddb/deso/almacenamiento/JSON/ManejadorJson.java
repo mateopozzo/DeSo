@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,6 +38,10 @@ public class ManejadorJson<T> {
     }
     
     public List<T> listar() throws IOException {
+        File archivo = path.toFile();
+        if(!archivo.exists()){
+            return new ArrayList<T>();
+        }
         try (FileReader lector = new FileReader(path.toFile())) {
             JsonArray jsonArray = JsonParser.parseReader(lector).getAsJsonArray();
             List<T> listaDto = new ArrayList<>();
@@ -46,6 +52,8 @@ public class ManejadorJson<T> {
     }
     
     public void escribir(List<T> items) throws IOException {
+        System.out.println("Escribiendo JSON en: " + path.toAbsolutePath());
+        System.out.println("Directorio padre: " + path.getParent());
         try (FileWriter escritor = new FileWriter(path.toFile())) {
             gson.toJson(items, escritor);
             escritor.flush();
