@@ -6,10 +6,6 @@ package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author mat
- */
 public class DatosCheckOut {
     LocalDate fecha_hora_out;
     long idCheckOut;
@@ -30,7 +26,7 @@ public class DatosCheckOut {
         return fecha_hora_out;
     }
 
-    public void setFecha_hora_iout(LocalDate fecha_hora_out) {
-        this.fecha_hora_out = fecha_hora_iout;
+    public void setFecha_hora_iout(LocalDate fecha_hora_out_p) {
+        this.fecha_hora_out = fecha_hora_out_p;
     }
 }

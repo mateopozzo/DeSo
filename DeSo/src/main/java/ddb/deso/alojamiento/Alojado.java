@@ -4,10 +4,6 @@
  */
 package ddb.deso.alojamiento;
 
-/**
- *
- * @author mat
- */
 public abstract class Alojado {
 
     protected DatosAlojado datos;

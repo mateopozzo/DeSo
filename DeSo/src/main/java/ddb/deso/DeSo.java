@@ -1,27 +1,38 @@
 package ddb.deso;
 
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.contabilidad.ResponsablePago;
 import ddb.deso.presentacion.InterfazLogin;
 
-/**
- *
- * @author mat
- */
 public class DeSo {
     public static void main(String[] args) {
-        // CASO DE USO 1: DAR DE ALTA HUESPED
+        // CASO DE USO 1: LOGIN
         InterfazLogin interfazLogin=new InterfazLogin();
         interfazLogin.ejecutar();
+        AlojadoDAOJSON alojadoDAOJSON=new AlojadoDAOJSON();
+        GestorAlojamiento gestor_aloj=new GestorAlojamiento(alojadoDAOJSON);
 
-        GestorAlojamiento gestor_aloj=new GestorAlojamiento();
         System.out.println("Bienvenido/a al sistema de gestión Hotel Premier © V.1.0.0 ----------------------------");
         System.out.println("El menú de opciones se navega ingresando el número correspondiente a la opción deseada.");
+
+        // CASO DE USO 9: DAR DE ALTA HUESPED
         gestor_aloj.darDeAltaHuesped();
+
+        //CASO DE USO 10: MODIFICAR HUESPED
 
         // CASO DE USO 2: BUSCAR HUESPED
         CriteriosBusq criterios=new CriteriosBusq();
         gestor_aloj.buscarHuesped(criterios);
+
+        // CASO DE USO 11: DAR DE BAJA HUESPED
+
+        // CU11 requiere de -> CU13 requiere de -> CU3 requiere de -> CU12
+        // Se simularán solo las partes necesarias
+        ResponsablePago resp_pago = gestor_aloj.cu_anteriores();
+        gestor_aloj.darDeBajaHuesped(resp_pago);
     }
 
 }

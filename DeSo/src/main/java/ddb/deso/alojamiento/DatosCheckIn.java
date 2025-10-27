@@ -6,10 +6,7 @@ package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author mat
- */
+
 public class DatosCheckIn {
     private LocalDate fecha_hora_in;
     long idCheckIn;
@@ -29,8 +26,8 @@ public class DatosCheckIn {
     public LocalDate getFecha_hora_in() {
         return fecha_hora_in;
     }
-    public void setFecha_hora_in(LocalDate fecha_hora_in) {
-        this.fecha_hora_in = fecha_hora_in;
+    public void setFecha_hora_in(LocalDate fecha_hora_in_p) {
+        this.fecha_hora_in = fecha_hora_in_p;
     }
     
 }

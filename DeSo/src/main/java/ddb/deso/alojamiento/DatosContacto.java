@@ -4,10 +4,6 @@
  */
 package ddb.deso.alojamiento;
 
-/**
- *
- * @author mat
- */
 public class DatosContacto {
     private long telefono;
     private String email;

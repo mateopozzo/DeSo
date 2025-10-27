@@ -2,6 +2,7 @@ package ddb.deso.alojamiento;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.contabilidad.ResponsablePago;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// @author mat
+import static java.lang.Integer.parseInt;
+
 
 public class GestorAlojamiento {
     private final AlojadoDAO alojadoDAO;
@@ -68,9 +70,9 @@ public class GestorAlojamiento {
        String dia = entrada.nextLine();
 
        LocalDate fecha_nacimiento= LocalDate.of(
-       Integer.parseInt(ano),
-       Integer.parseInt(mes),
-       Integer.parseInt(dia));
+       parseInt(ano),
+       parseInt(mes),
+       parseInt(dia));
 
        System.out.println("Dirección:");
        System.out.println("Calle:");
@@ -217,7 +219,7 @@ public class GestorAlojamiento {
         int seleccion=-1;
 
         // Cargar los criterios de búsqueda
-        System.out.println("Hotel Premier - Buscar huésped ----------------------------------------------------------------------------");
+        System.out.println("Hotel Premier - Buscar huésped --------------------------------------------------------");
         System.out.println("Seleccione un huésped y podrá modificarlo. Si no se encuentran coincidencias, podrá crear un nuevo huésped");
         System.out.println("Si desea crear un nuevo huésped incluso habiendo encontrado coincidencias, presione ENTER y luego SIGUIENTE");
 
@@ -262,7 +264,7 @@ public class GestorAlojamiento {
             // Si presionó un número, entonces voy a modificar huesped
             else {
                 try {
-                    seleccion = Integer.parseInt(input_user);
+                    seleccion = parseInt(input_user);
                     // Si la selección está dentro del rango, lo busco en mi lista
                     if (seleccion<=encontrados.size() && seleccion>0) {
                         huesped_seleccionado = encontrados.get(seleccion-1);
@@ -298,6 +300,61 @@ public class GestorAlojamiento {
     private boolean no_es_vacio (String contenido){
         boolean flag = (contenido==null || contenido.isEmpty());
         return !flag;
+    }
+
+    public ResponsablePago cu_anteriores(){
+        // CU3: BUSCAR RESP PAGO
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Hotel Premier - Buscar responsable pago -----------------------------------------------");
+        System.out.println("Ingrese la razón social: ");
+        String razon_soc = scanner.nextLine();
+        System.out.println("Ingrese el CUIT sin guiones ni espacios: ");
+        int cuit = parseInt(scanner.nextLine());
+
+        // CU12: DAR ALTA RESPONSABLE PAGO
+        System.out.println("Hotel Premier - Dar alta responsable pago ---------------------------------------------");
+
+        System.out.println("A continuación, ingrese la dirección.");
+        System.out.println("Calle: ");
+        String calle = scanner.nextLine();
+        System.out.println("Número de calle: ");
+        String numero = scanner.nextLine();
+        System.out.println("Departamento: ");
+        String departamento = scanner.nextLine();
+        System.out.println("Piso: ");
+        String piso = scanner.nextLine();
+        System.out.println("Código postal: ");
+        String codigo = scanner.nextLine();
+        System.out.println("País: ");
+        String pais = scanner.nextLine();
+        System.out.println("Provincia: ");
+        String provincia = scanner.nextLine();
+        System.out.println("Localidad: ");
+        String localidad = scanner.nextLine();
+        DatosResidencia direc = new DatosResidencia(calle,departamento,localidad,provincia,pais,numero,piso,codigo);
+
+        System.out.println("Ingrese el teléfono: ");
+        int tel = parseInt(scanner.nextLine());
+
+        ResponsablePago resp_pago = new ResponsablePago(razon_soc, cuit, direc, tel);
+        System.out.println("La firma" + razon_soc + "ha sido satisfactoriamente cargada al sistema.");
+
+        scanner.close();
+        return resp_pago;
+    }
+
+    public void darDeBajaHuesped(ResponsablePago resp_pago){
+        /*
+        Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
+        Si el huesped alguna vez se quedó en el hotel, no puede borrarse
+        Se buscan coincidencias entre CUIT y Alojados. Se muestra en pantalla:
+        “El huésped no puede ser eliminado, pues se ha alojado en el Hotel en alguna oportunidad. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
+        Si la lista de encontrados isEmpty, se muestra:
+        “Los datos del huésped <nombre> y <apellido>, <tipoDeDoc> y <nroDeDoc> serán eliminados del sistema. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
+        Se muestran dos botones: “ELIMINAR” y “CANCELAR”. En ambos el CU termina
+        */
+
     }
 
     private TipoDoc menuTipoDoc(){

@@ -12,10 +12,6 @@ import java.util.Map;
 
 import ddb.deso.TipoDoc;
 
-/**
- *
- * @author mat
- */
 public class Huesped extends Alojado{
 
     private String razon_social;

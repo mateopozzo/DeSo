@@ -4,10 +4,6 @@
  */
 package ddb.deso;
 
-/**
- *
- * @author gael-deb
- */
 public enum TipoHab {
     INDIVIDUALESTANDAR, DOBLEESTANDAR, DOBLESUPERIOR, SUPERIORFAMILYPLAN, SUITE
 }
