@@ -12,7 +12,7 @@ import java.util.*;
 // @author mat
 
 public class GestorAlojamiento {
-    private final AlojadoDAO alojadoDAO;
+    private AlojadoDAO alojadoDAO; // tenia un final esto pero no estaba instanciado!
     private List<Huesped> huespedes = new LinkedList<>();
 
     /*
@@ -327,6 +327,8 @@ public class GestorAlojamiento {
         return tipoDoc;
     }
 
+    //Esto lo uso en dar de baja huesped
+    //Discutir si sirve borrar solo el priemro, mas de uno o todos
     private AlojadoDTO encontrarPrimerOcurrenciaDTO(List<AlojadoDTO> listaDTO, AlojadoDTO comparadorAlojadoDTO){
         if(listaDTO.isEmpty()){
             return null;

@@ -13,8 +13,8 @@ import ddb.deso.*;
 public class DeSo {
     public static void main(String[] args) {
         System.out.println("asdf\n");
-        TestsFacturaDAO f = new TestsFacturaDAO();
-        f.buscarF();
+        TestCU11 t = new TestCU11();
+        t.testCU11();
     }
     
 }

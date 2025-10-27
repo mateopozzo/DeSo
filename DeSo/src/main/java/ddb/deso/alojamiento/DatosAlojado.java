@@ -25,7 +25,15 @@ public class DatosAlojado {
         this.datos_residencia = residencia;
         this.datos_personales = personales;
     }
-    
+
+    public void setId_check_in(List<Long> id_check_in) {
+        this.id_check_in = id_check_in;
+    }
+
+    public void setId_check_out(List<Long> id_check_out) {
+        this.id_check_out = id_check_out;
+    }
+
     public void nuevoCheckIn(DatosCheckIn check_in){
         id_check_in.add(check_in.getId());
     }
