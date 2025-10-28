@@ -42,6 +42,9 @@ public class ManejadorJson<T> {
         if(!archivo.exists()){
             return new ArrayList<T>();
         }
+        if(archivo.length() == 0){
+            return new ArrayList<T>();
+        }
         try (FileReader lector = new FileReader(path.toFile())) {
             JsonArray jsonArray = JsonParser.parseReader(lector).getAsJsonArray();
             List<T> listaDto = new ArrayList<>();

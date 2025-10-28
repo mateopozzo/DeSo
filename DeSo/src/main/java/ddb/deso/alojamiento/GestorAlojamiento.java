@@ -842,14 +842,17 @@ public class GestorAlojamiento {
             System.out.println("No se ha encontrado el alojado.");
             return false;
         }
-        try {
-            return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
-        } catch (NullPointerException e){
-            e.printStackTrace();
+        var lista_check_in = huespedBaja.getId_check_in();
+        var lista_check_out = huespedBaja.getId_check_out();
+        //tiene algun check in
+        if(lista_check_in!=null && !lista_check_in.isEmpty()){
+            return true;
         }
-
-        //por default devuelve true para no eliminar persistencia de un alojado
-        return true;
+        //tiene algun check out
+        if(lista_check_out!=null && !lista_check_out.isEmpty()){
+            return true;
+        }
+        return false;
     }
 
     private void eliminarAlojado(Alojado alojado){
@@ -880,8 +883,12 @@ public class GestorAlojamiento {
         boolean seAlojo = huespedSeAlojo(criterios);
 
         InterfazDarBaja IO = new InterfazDarBaja();
-        
-        if(seAlojo||IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
+
+        if(seAlojo){
+            IO.noSePuedeDarBaja();
+            return;
+        }
+        if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
             return;
         }
         else {
