@@ -1,10 +1,8 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.GestorAlojamiento;
-import ddb.deso.contabilidad.ResponsablePago;
 import ddb.deso.presentacion.InterfazLogin;
 
 public class DeSo {
@@ -29,10 +27,6 @@ public class DeSo {
 
         // CASO DE USO 11: DAR DE BAJA HUESPED
 
-        // CU11 requiere de -> CU13 requiere de -> CU3 requiere de -> CU12
-        // Se simularán solo las partes necesarias
-        ResponsablePago resp_pago = gestor_aloj.cu_anteriores();
-        gestor_aloj.darDeBajaHuesped(resp_pago);
     }
 
 }
