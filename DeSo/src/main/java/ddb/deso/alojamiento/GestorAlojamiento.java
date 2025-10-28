@@ -518,6 +518,7 @@ public class GestorAlojamiento {
         return resp_pago;
     }
 
+
     public void darDeBajaHuesped(ResponsablePago resp_pago){
         /*
         Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
@@ -895,6 +896,7 @@ public class GestorAlojamiento {
         // Esta variable puede existir o no, depende del caso de uso 10
         AlojadoDTO comparadorAlojadoDTO = new AlojadoDTO(alojado);
         alojado.completarDTO(comparadorAlojadoDTO);
+
         AlojadoDTO huespedBaja = encontrarPrimerOcurrenciaDTO(listaDTO, comparadorAlojadoDTO);
 
         // estos dos ifs se pueden hacer excepcion
