@@ -449,7 +449,7 @@ public class GestorAlojamiento {
                         System.out.println("Huesped seleccionado con éxito.");
                         if (huesped_seleccionado != null){
                             System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-                            modificarHuesped(huesped_seleccionado);
+//                            modificarHuesped(huesped_seleccionado);
                             // FIN DE CASO DE USO
                         }
                     }
@@ -880,11 +880,8 @@ public class GestorAlojamiento {
         boolean seAlojo = huespedSeAlojo(criterios);
 
         InterfazDarBaja IO = new InterfazDarBaja();
-
-        if(seAlojo){
-            IO.noSePuedeDarBaja();
-        }
-        if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
+        
+        if(seAlojo||IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
             return;
         }
         else {
