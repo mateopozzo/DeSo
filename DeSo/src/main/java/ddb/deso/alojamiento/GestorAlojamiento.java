@@ -26,6 +26,8 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
+    public GestorAlojamiento() {}
+
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }
@@ -449,7 +451,7 @@ public class GestorAlojamiento {
                         System.out.println("Huesped seleccionado con éxito.");
                         if (huesped_seleccionado != null){
                             System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-//                            modificarHuesped(huesped_seleccionado);
+                            modificarHuesped(huesped_seleccionado);
                             // FIN DE CASO DE USO
                         }
                     }
@@ -829,12 +831,8 @@ public class GestorAlojamiento {
     private boolean huespedSeAlojo(CriteriosBusq criterios){
         // Logica de "huesped se alojó"
 
-        System.out.println("DEBUG: buscando "+criterios.getApellido() + "lule");
-        List<AlojadoDTO> listaDTO = this.alojadoDAO.buscarHuespedDAO(criterios);
-//        System.out.println("encontro " + listaDTO==null ? "null" : listaDTO.size());
-//        for(var x:listaDTO){
-//            System.out.println(x.getApellido());
-//        }
+        AlojadoDAOJSON DAO = new AlojadoDAOJSON();
+        List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
 
         AlojadoDTO huespedBaja = listaDTO.getFirst();
 
@@ -843,17 +841,8 @@ public class GestorAlojamiento {
             System.out.println("No se ha encontrado el alojado.");
             return false;
         }
-        var lista_check_in = huespedBaja.getId_check_in();
-        var lista_check_out = huespedBaja.getId_check_out();
-        //tiene algun check in
-        if(lista_check_in!=null && !lista_check_in.isEmpty()){
-            return true;
-        }
-        //tiene algun check out
-        if(lista_check_out!=null && !lista_check_out.isEmpty()){
-            return true;
-        }
-        return false;
+
+        return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
     }
 
     private void eliminarAlojado(Alojado alojado){
@@ -887,7 +876,6 @@ public class GestorAlojamiento {
 
         if(seAlojo){
             IO.noSePuedeDarBaja();
-            return;
         }
         if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
             return;

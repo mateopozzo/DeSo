@@ -6,6 +6,7 @@ package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.DatosAlojado;
 import ddb.deso.alojamiento.Huesped;
 import ddb.deso.alojamiento.Invitado;
 import java.time.LocalDate;
@@ -47,6 +48,10 @@ public class AlojadoDTO {
     private List<Long> id_check_in;
     private List<Long> id_check_out;
 
+    public DatosAlojado getDatos(){
+        DatosAlojado datos = new DatosAlojado();
+
+    }
 
     
     public AlojadoDTO(Alojado i) {
