@@ -48,11 +48,6 @@ public class AlojadoDTO {
     private List<Long> id_check_in;
     private List<Long> id_check_out;
 
-    public DatosAlojado getDatos(){
-        DatosAlojado datos = new DatosAlojado();
-
-    }
-
     
     public AlojadoDTO(Alojado i) {
         // Datos Personales
