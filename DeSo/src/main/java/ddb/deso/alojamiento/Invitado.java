@@ -5,6 +5,8 @@
 package ddb.deso.alojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+
 public class Invitado extends Alojado {
     @Override
     public void completarDTO(AlojadoDTO dto) {

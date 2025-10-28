@@ -26,8 +26,6 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
-    public GestorAlojamiento() {}
-
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }
@@ -830,8 +828,12 @@ public class GestorAlojamiento {
     private boolean huespedSeAlojo(CriteriosBusq criterios){
         // Logica de "huesped se alojó"
 
-        AlojadoDAOJSON DAO = new AlojadoDAOJSON();
-        List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
+        System.out.println("DEBUG: buscando "+criterios.getApellido() + "lule");
+        List<AlojadoDTO> listaDTO = this.alojadoDAO.buscarHuespedDAO(criterios);
+//        System.out.println("encontro " + listaDTO==null ? "null" : listaDTO.size());
+//        for(var x:listaDTO){
+//            System.out.println(x.getApellido());
+//        }
 
         AlojadoDTO huespedBaja = listaDTO.getFirst();
 
@@ -840,8 +842,14 @@ public class GestorAlojamiento {
             System.out.println("No se ha encontrado el alojado.");
             return false;
         }
+        try {
+            return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
-        return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
+        //por default devuelve true para no eliminar persistencia de un alojado
+        return true;
     }
 
     private void eliminarAlojado(Alojado alojado){

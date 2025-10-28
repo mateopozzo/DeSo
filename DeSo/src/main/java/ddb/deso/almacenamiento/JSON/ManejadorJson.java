@@ -52,8 +52,6 @@ public class ManejadorJson<T> {
     }
     
     public void escribir(List<T> items) throws IOException {
-        System.out.println("Escribiendo JSON en: " + path.toAbsolutePath());
-        System.out.println("Directorio padre: " + path.getParent());
         try (FileWriter escritor = new FileWriter(path.toFile())) {
             gson.toJson(items, escritor);
             escritor.flush();

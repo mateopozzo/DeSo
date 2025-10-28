@@ -1,4 +1,6 @@
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Huesped;
 
 import java.util.List;
@@ -21,5 +23,11 @@ public class TestCU11 {
         PoblacionDeAlojados poblacion = new PoblacionDeAlojados();
         List<? extends Alojado> lista = poblacion.crearNHuespedes();
         poblacion.guardarLista(lista);
+        AlojadoDAOJSON alojadoDAO = new AlojadoDAOJSON();
+        GestorAlojamiento ge = new GestorAlojamiento(alojadoDAO);
+        for(var x:lista){
+            ge.darDeBajaHuesped(x);
+        }
+
     }
 }
