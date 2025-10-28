@@ -42,7 +42,7 @@ public class PoblacionDeAlojados {
         String nro_calle1 = "1456";
         String piso1 = "";
         String nro_postal1 = "3000";
-        int telefono1=4742205;
+        String telefono1="4742205";
         String correo1="guillermoorellano@utn.frsf.edu.ar";
         String nombre1="Guillermo";
         String apellido1 = "Orellano";
@@ -74,7 +74,7 @@ public class PoblacionDeAlojados {
         String nro_calle2 = "3200";
         String piso2 = "3 B";
         String nro_postal2 = "2000";
-        int telefono2=341590123;
+        String telefono2="341590123";
         String correo2="anamaria.perez@email.com";
         String nombre2="Ana María";
         String apellido2 = "Pérez";
@@ -106,7 +106,7 @@ public class PoblacionDeAlojados {
         String nro_calle3 = "50";
         String piso3 = "";
         String nro_postal3 = "28013";
-        int telefono3=34915678;
+        String telefono3="34915678";
         String correo3="juan.gomez@mail.es";
         String nombre3="Juan";
         String apellido3 = "Gómez";
@@ -138,7 +138,7 @@ public class PoblacionDeAlojados {
         String nro_calle4 = "1900";
         String piso4 = "7 C";
         String nro_postal4 = "1425";
-        int telefono4=1148765432;
+        String telefono4="1148765432";
         String correo4="laura.rodriguez@trabajo.org";
         String nombre4="Laura";
         String apellido4 = "Rodríguez";
@@ -170,7 +170,7 @@ public class PoblacionDeAlojados {
         String nro_calle5 = "200";
         String piso5 = "";
         String nro_postal5 = "M5V 2Z3";
-        int telefono5=1411234;
+        String telefono5="1411234";
         String correo5="david.smith@travel.ca";
         String nombre5="David";
         String apellido5 = "Smith";

@@ -26,6 +26,8 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
+    public GestorAlojamiento() {}
+
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }
@@ -917,6 +919,15 @@ public class GestorAlojamiento {
     }
 
     public void darDeBajaHuesped(Alojado alojado){
+     /*
+        Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
+        Si el huesped alguna vez se quedó en el hotel, no puede borrarse
+        Se buscan coincidencias entre CUIT y Alojados. Se muestra en pantalla:
+        “El huésped no puede ser eliminado, pues se ha alojado en el Hotel en alguna oportunidad. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
+        Si la lista de encontrados isEmpty, se muestra:
+        “Los datos del huésped <nombre> y <apellido>, <tipoDeDoc> y <nroDeDoc> serán eliminados del sistema. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
+        Se muestran dos botones: “ELIMINAR” y “CANCELAR”. En ambos el CU termina
+       */
 
         CriteriosBusq criterios = new CriteriosBusq();
 
