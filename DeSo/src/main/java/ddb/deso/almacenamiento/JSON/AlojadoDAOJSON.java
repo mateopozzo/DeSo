@@ -31,7 +31,7 @@ import java.util.List;
 
 public class AlojadoDAOJSON implements AlojadoDAO {
     // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
-    private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("data").resolve("Alojado.json").toString();
+    private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("DeSo").resolve("data").resolve("Alojado.json").toString();
     private ManejadorJson manejador;
 
     public AlojadoDAOJSON() {

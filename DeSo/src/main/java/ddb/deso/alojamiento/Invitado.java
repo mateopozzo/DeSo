@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ddb.deso.alojamiento;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
 public class Invitado extends Alojado {
     @Override

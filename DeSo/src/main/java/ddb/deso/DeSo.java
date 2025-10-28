@@ -10,6 +10,7 @@ public class DeSo {
         // CASO DE USO 1: LOGIN
         InterfazLogin interfazLogin=new InterfazLogin();
         interfazLogin.ejecutar();
+
         AlojadoDAOJSON alojadoDAOJSON=new AlojadoDAOJSON();
         GestorAlojamiento gestor_aloj=new GestorAlojamiento(alojadoDAOJSON);
 
@@ -17,7 +18,7 @@ public class DeSo {
         System.out.println("El menú de opciones se navega ingresando el número correspondiente a la opción deseada.");
 
         // CASO DE USO 9: DAR DE ALTA HUESPED
-        gestor_aloj.darDeAltaHuesped();
+        // gestor_aloj.darDeAltaHuesped();
 
         //CASO DE USO 10: MODIFICAR HUESPED
 
@@ -27,6 +28,6 @@ public class DeSo {
 
         // CASO DE USO 11: DAR DE BAJA HUESPED
 
-    }
+  }
 
 }

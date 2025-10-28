@@ -416,12 +416,17 @@ public class GestorAlojamiento {
         if (encontrados.isEmpty()) {
             System.out.println("No se encontraron coincidencias de búsqueda.");
             scanner.close();
-            darDeAltaHuesped();
+            System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
+            // darDeAltaHuesped();
             // FIN DE CASO DE USO
         }
         else {
             System.out.println("Ingrese el número de huesped que desea seleccionar.");
             System.out.println("Si no desea seleccionar alguno, presione ENTER y luego 1. (SIGUIENTE)");
+            for (int i = 0; i < encontrados.size(); i++) {
+                // nombre, apellido, tipoDoc, num_documento
+
+            }
             input_user = scanner.nextLine();
 
             // Si presionó ENTER, entonces voy a dar de alta huesped
@@ -429,7 +434,8 @@ public class GestorAlojamiento {
                 System.out.println("Presione 1 para SIGUIENTE");
                 String siguiente = scanner.nextLine();
                 if ("1".equals(siguiente)) {
-                    darDeAltaHuesped();
+                    System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
+                    // darDeAltaHuesped();
                     // FIN DE CASO DE USO
                 }
             }
@@ -442,7 +448,8 @@ public class GestorAlojamiento {
                         huesped_seleccionado = encontrados.get(seleccion-1);
                         System.out.println("Huesped seleccionado con éxito.");
                         if (huesped_seleccionado != null){
-                            // modificarHuesped(huesped_seleccionado);
+                            System.out.println("MODIFICAR HUESPED ---- FROM CU02");
+                            modificarHuesped(huesped_seleccionado);
                             // FIN DE CASO DE USO
                         }
                     }
@@ -495,7 +502,6 @@ public class GestorAlojamiento {
             default -> tipoDoc = TipoDoc.DNI;
         }
 
-        scanner.close();
         return tipoDoc;
     }
 

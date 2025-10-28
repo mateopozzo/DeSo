@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class AlojadoDTO {
     // Contacto
-    private long telefono;
+    private String telefono;
     private String email;
     // Residencia
     private String calle;
@@ -116,7 +116,7 @@ public class AlojadoDTO {
         return razon_social;
     }
 
-    public long getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
@@ -192,7 +192,7 @@ public class AlojadoDTO {
         return LocalDate.parse(fechanac);
     }
 
-    public void setTelefono(long telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
