@@ -6,10 +6,6 @@ package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author mat
- */
 public class DatosCheckOut {
     LocalDate fecha_hora_out;
     long idCheckOut;

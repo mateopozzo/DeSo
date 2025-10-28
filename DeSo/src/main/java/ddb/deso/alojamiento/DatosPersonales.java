@@ -13,10 +13,6 @@ import java.util.Date;
 
 import ddb.deso.TipoDoc;
 
-/**
- *
- * @author mat
- */
 public class DatosPersonales {
     private String nombre;
     private String apellido;

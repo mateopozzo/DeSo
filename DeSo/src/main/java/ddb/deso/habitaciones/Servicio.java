@@ -6,10 +6,6 @@ package ddb.deso.habitaciones;
 
 import ddb.deso.TipoServicio;
 
-/**
- *
- * @author gael-deb
- */
 public class Servicio {
     private TipoServicio tipo_servicio;
 

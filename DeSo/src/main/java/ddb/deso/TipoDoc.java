@@ -4,10 +4,6 @@
  */
 package ddb.deso;
 
-/**
- *
- * @author mat
- */
 public enum TipoDoc {
     DNI,LE,CI,PASAPORTE,OTRO
 }

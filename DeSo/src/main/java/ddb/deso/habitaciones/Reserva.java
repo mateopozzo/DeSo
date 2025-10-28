@@ -6,10 +6,6 @@ package ddb.deso.habitaciones;
 
 import java.util.Date;
 
-/**
- *
- * @author gael-deb
- */
 public class Reserva {
     private Date fecha_inicio;
     private Date fecha_fin;

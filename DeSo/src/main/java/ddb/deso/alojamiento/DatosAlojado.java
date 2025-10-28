@@ -7,10 +7,6 @@ package ddb.deso.alojamiento;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author mat
- */
 public class DatosAlojado {
     private DatosContacto   datos_contacto;
     private DatosResidencia datos_residencia;
@@ -41,7 +37,7 @@ public class DatosAlojado {
         id_check_in.add(check_out.getId());
     }
     public boolean ocupoHabitacion(){
-        return ((id_check_in.size()>0)||(id_check_out.size()>0));
+        return ((!id_check_in.isEmpty())||(!id_check_out.isEmpty()));
     }
 
     public List<Long> getId_check_in() {

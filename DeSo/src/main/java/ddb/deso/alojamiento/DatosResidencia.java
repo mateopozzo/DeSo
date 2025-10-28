@@ -4,10 +4,6 @@
  */
 package ddb.deso.alojamiento;
 
-/**
- *
- * @author mat
- */
 public class DatosResidencia {
     private String calle;
     private String depto;
