@@ -4,13 +4,13 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.presentacion.InterfazDarBaja;
-import ddb.deso.contabilidad.ResponsablePago;
 
+import ddb.deso.contabilidad.ResponsablePago;
 import java.nio.MappedByteBuffer;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Scanner;
 
@@ -242,7 +242,7 @@ public class GestorAlojamiento {
             case "9":
                  System.out.print("Teléfono: ");
                  String nuevoTelefono = entrada.nextLine();
-                 datosModificados.getDatos().getDatos_contacto().setTelefono(Long.parseLong(nuevoTelefono));
+                 datosModificados.getDatos().getDatos_contacto().setTelefono(nuevoTelefono);
                  if(Validador.isTelefonoValido(nuevoTelefono)){
                      camposInvalidos.clear(8);
                  } else {
@@ -355,27 +355,25 @@ public class GestorAlojamiento {
 }//darAltaHuesped
 
  /*
-                DatosResidencia dr= new DatosResidencia(calle,departamento,localidad,provincia,
-                pais,numero,piso,postal);
+      DatosResidencia dr= new DatosResidencia(calle,departamento,localidad,provincia,
+      pais,numero,piso,postal);
 
-                DatosContacto dc=new DatosContacto(Long.parseLong(telefono), email);
+      DatosContacto dc=new DatosContacto(Long.parseLong(telefono), email);
 
-                DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
-                num_documento, tipoDoc,cuit , fecha_nacimiento);
+      DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
+      num_documento, tipoDoc,cuit , fecha_nacimiento);
 
-                DatosAlojado da = new DatosAlojado(dc,dr,dp);
+      DatosAlojado da = new DatosAlojado(dc,dr,dp);
 
-                Huesped h= new Huesped(da);
+      Huesped h= new Huesped(da);
+      Huesped hdto =new Huesped(null);
+      AlojadoDTO auxDTO = new AlojadoDTO(hdto);
 
-                Huesped hdto =new Huesped(null);
-              AlojadoDTO auxDTO = new AlojadoDTO(hdto);
-
-
-
-            AlojadoDTO aDTO = new AlojadoDTO(h);
-            AlojadoDAO aDAO= new AlojadoDAOJSON();
-            aDAO.crearAlojado(aDTO);
+      AlojadoDTO aDTO = new AlojadoDTO(h);
+      AlojadoDAO aDAO= new AlojadoDAOJSON();
+      aDAO.crearAlojado(aDTO);
  */
+
     public void buscarHuesped (CriteriosBusq criterios_busq){
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
@@ -478,62 +476,6 @@ public class GestorAlojamiento {
         return !flag;
     }
 
-    public ResponsablePago cu_anteriores(){
-        // CU3: BUSCAR RESP PAGO
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Hotel Premier - Buscar responsable pago -----------------------------------------------");
-        System.out.println("Ingrese la razón social: ");
-        String razon_soc = scanner.nextLine();
-        System.out.println("Ingrese el CUIT sin guiones ni espacios: ");
-        int cuit = parseInt(scanner.nextLine());
-
-        // CU12: DAR ALTA RESPONSABLE PAGO
-        System.out.println("Hotel Premier - Dar alta responsable pago ---------------------------------------------");
-
-        System.out.println("A continuación, ingrese la dirección.");
-        System.out.println("Calle: ");
-        String calle = scanner.nextLine();
-        System.out.println("Número de calle: ");
-        String numero = scanner.nextLine();
-        System.out.println("Departamento: ");
-        String departamento = scanner.nextLine();
-        System.out.println("Piso: ");
-        String piso = scanner.nextLine();
-        System.out.println("Código postal: ");
-        String codigo = scanner.nextLine();
-        System.out.println("País: ");
-        String pais = scanner.nextLine();
-        System.out.println("Provincia: ");
-        String provincia = scanner.nextLine();
-        System.out.println("Localidad: ");
-        String localidad = scanner.nextLine();
-        DatosResidencia direc = new DatosResidencia(calle,departamento,localidad,provincia,pais,numero,piso,codigo);
-
-        System.out.println("Ingrese el teléfono: ");
-        int tel = parseInt(scanner.nextLine());
-
-        ResponsablePago resp_pago = new ResponsablePago(razon_soc, cuit, direc, tel);
-        System.out.println("La firma" + razon_soc + "ha sido satisfactoriamente cargada al sistema.");
-
-        scanner.close();
-        return resp_pago;
-    }
-
-
-    public void darDeBajaHuesped(ResponsablePago resp_pago){
-        /*
-        Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
-        Si el huesped alguna vez se quedó en el hotel, no puede borrarse
-        Se buscan coincidencias entre CUIT y Alojados. Se muestra en pantalla:
-        “El huésped no puede ser eliminado, pues se ha alojado en el Hotel en alguna oportunidad. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
-        Si la lista de encontrados isEmpty, se muestra:
-        “Los datos del huésped <nombre> y <apellido>, <tipoDeDoc> y <nroDeDoc> serán eliminados del sistema. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
-        Se muestran dos botones: “ELIMINAR” y “CANCELAR”. En ambos el CU termina
-        */
-
-    }
-
     private TipoDoc menuTipoDoc(){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
@@ -553,13 +495,14 @@ public class GestorAlojamiento {
             case "4" -> tipoDoc =TipoDoc.PASAPORTE;
             case "5" -> tipoDoc =TipoDoc.OTRO;
             default -> tipoDoc = TipoDoc.DNI;
-        };
+        }
 
         scanner.close();
         return tipoDoc;
     }
 
-    public void modificarHuesped( Huesped Huesped){
+    // Modificar huesped debería modificar alojados, no huesped (también puede modificar invitados)
+    public void modificarHuesped(Huesped Huesped){
 
    //creo un huesped auxiliar para modificar
   AlojadoDTO dto = new AlojadoDTO(Huesped);
@@ -853,6 +796,7 @@ public class GestorAlojamiento {
 
 }//modificarHuesped
 
+    // Esto debería hacerlo la interfaz
     private void listaDatosHuesped(Huesped Huesped){
      System.out.println("Datos del Huésped:\n" +
      "1. Apellido:" + Huesped.getDatos().getDatos_personales().getApellido() + "\n" +
@@ -876,40 +820,22 @@ public class GestorAlojamiento {
        "11. Ocupación:" + Huesped.getDatos().getDatos_personales().getOcupacion() + "\n" +
        "12. Nacionalidad:" + Huesped.getDatos().getDatos_personales().getNacionalidad() + "\n");
  }
-    //Esto lo uso en dar de baja huesped
-    //Discutir si sirve borrar solo el priemro, mas de uno o todos
-    private AlojadoDTO encontrarPrimerOcurrenciaDTO(List<AlojadoDTO> listaDTO, AlojadoDTO comparadorAlojadoDTO){
-        if(listaDTO.isEmpty()){
-            return null;
-        } else {
-            return  listaDTO.stream()
-                    .filter(dto -> dto.equals(comparadorAlojadoDTO))
-                    .findFirst()
-                    .orElse(null);
-        }
-    }
 
-    private boolean huespedSeAlojo(CriteriosBusq criterios, Alojado alojado){
-        /*
-         * Logica de "huesped se alojó"
-         * */
+    private boolean huespedSeAlojo(CriteriosBusq criterios){
+        // Logica de "huesped se alojó"
+
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
-        // Esta variable puede existir o no, depende del caso de uso 10
-        AlojadoDTO comparadorAlojadoDTO = new AlojadoDTO(alojado);
-        alojado.completarDTO(comparadorAlojadoDTO);
 
-        AlojadoDTO huespedBaja = encontrarPrimerOcurrenciaDTO(listaDTO, comparadorAlojadoDTO);
+        AlojadoDTO huespedBaja = listaDTO.getFirst();
 
         // estos dos ifs se pueden hacer excepcion
         if(huespedBaja == null) {
             System.out.println("No se ha encontrado el alojado.");
             return false;
         }
-        if(huespedBaja.getId_check_in().isEmpty() && huespedBaja.getId_check_out().isEmpty()){
-            return false;
-        }
-        return true;
+
+        return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
     }
 
     private void eliminarAlojado(Alojado alojado){
@@ -937,17 +863,19 @@ public class GestorAlojamiento {
         var tipoDoc=alojado.getDatos().getDatos_personales().getTipoDoc();
         cargar_criterios(nombre, apellido, tipoDoc, nroDoc, criterios);
 
-        boolean seAlojo = huespedSeAlojo(criterios, alojado);
+        boolean seAlojo = huespedSeAlojo(criterios);
 
         InterfazDarBaja IO = new InterfazDarBaja();
+
         if(seAlojo){
             IO.noSePuedeDarBaja();
         }
         if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
             return;
         }
-
-        eliminarAlojado(alojado);
+        else {
+            eliminarAlojado(alojado);
+        }
 
         IO.terminarCU(criterios);
     }

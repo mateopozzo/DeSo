@@ -74,13 +74,31 @@ Cabe mencionar que los integrantes del grupo pertenecen a distintos grupos de di
 ----
 
 ## Casos de uso implementados
-- Caso de uso 01: Login 
+- Caso de uso 01: Login
+
+```DESCRIPCION```
+
 - Caso de uso 02: Buscar huésped
+
+```DESCRIPCION```
 - Caso de uso 09: Dar de alta huésped
+
+```DESCRIPCION```
+
 - Caso de uso 10: Modificar huésped
+
+```DESCRIPCION```
+
 - Caso de uso 11: Dar de baja huésped
+
+```DESCRIPCION```
 
 ---
 
 ## Patrones implementados
-DAO **--(modificar esto)**
+| Patrón       | Nro de caso de uso | Nombre de caso de uso |
+|--------------|--------------------|-----------------------|
+| **DAO**      | `1, 2, 9, 10, 11`  | Todos                 |
+| **Singleton**     | `1`                | Login                 |
+| **Factory**  | `9`                | Dar de alta huésped   |
+

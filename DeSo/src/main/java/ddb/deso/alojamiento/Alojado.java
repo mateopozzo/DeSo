@@ -14,7 +14,6 @@ public abstract class Alojado {
 
     protected DatosAlojado datos;
 
-    // esto está raris - revisar
     public void setDatos(DatosAlojado datos){
         this.datos = datos;
     }
