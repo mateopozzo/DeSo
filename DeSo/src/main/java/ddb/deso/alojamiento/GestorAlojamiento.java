@@ -508,17 +508,17 @@ public class GestorAlojamiento {
     }
 
     // Modificar huesped debería modificar alojados, no huesped (también puede modificar invitados)
-    public void modificarHuesped(Huesped Huesped){
+    public void modificarHuesped(Alojado alojado){
+        // creo un huesped auxiliar para modificar
+      AlojadoDTO dto = new AlojadoDTO(alojado);
+      Alojado datosModificados = alojado;
+      Scanner entrada = new Scanner(System.in);
 
-   //creo un huesped auxiliar para modificar
-  AlojadoDTO dto = new AlojadoDTO(Huesped);
-  Huesped datosModificados = Huesped;
-  Scanner entrada = new Scanner(System.in);
-  boolean bandera=true;
-  BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
-  BitSet camposDireccionInvalidos = new BitSet(8); // BitSet para indicar que campos de direccion son invalidos
-  camposInvalidos.clear(); // Inicializo todos los bits en falso
-  camposDireccionInvalidos.clear(); // Inicializo todos los bits en falso
+      boolean bandera=true;
+      BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
+      BitSet camposDireccionInvalidos = new BitSet(8); // BitSet para indicar que campos de direccion son invalidos
+      camposInvalidos.clear(); // Inicializo todos los bits en falso
+      camposDireccionInvalidos.clear(); // Inicializo todos los bits en falso
 
   while(bandera){
         listaDatosHuesped(datosModificados);
@@ -534,9 +534,10 @@ public class GestorAlojamiento {
         String opcion = entrada.nextLine();
 
         System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
+
         switch (opcion.toLowerCase()) {
             case "1":
-                 System.out.print("Nuevo Apellido: ");
+                 System.out.print("Nuevo apellido: ");
                  String nuevoApellido = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setApellido(nuevoApellido);
                  if(Validador.isApellidoValido(nuevoApellido)){
@@ -546,7 +547,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "2":
-                 System.out.print("Nuevo Nombre: ");
+                 System.out.print("Nuevo nombre: ");
                  String nuevoNombre = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNombre(nuevoNombre);
                  if(Validador.isNombreValido(nuevoNombre)){
@@ -556,7 +557,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "3":
-                 System.out.print("Nuevo Tipo de Documento: ");
+                 System.out.print("Nuevo tipo de documento: ");
                  TipoDoc nuevoTipoDoc = menuTipoDoc();
                  datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
                  if(Validador.isTipoDocumentoValido(nuevoTipoDoc)){
@@ -566,7 +567,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "4":
-                 System.out.print("Nuevo Número de Documento: ");
+                 System.out.print("Nuevo número de documento: ");
                  String nuevoNroDoc = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNroDoc(nuevoNroDoc);
                  if(Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getDatos().getDatos_personales().getTipoDoc())){
@@ -576,7 +577,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "5":
-                 System.out.print("Nuevo Cuit: ");
+                 System.out.print("Nuevo CUIT (sin guiones ni espacios): ");
                  String nuevoCuit = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
                  if(Validador.isCuitValidoOpcional(nuevoCuit)){
@@ -586,7 +587,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "6":
-                 System.out.print("Nueva Posición frente al IVA: ");
+                 System.out.print("Nueva posición frente al IVA: ");
                  String nuevaPosIva = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setPosicionIva(nuevaPosIva);
                  if(Validador.isPosicionIvaValida(nuevaPosIva)){
@@ -596,7 +597,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "7":
-                 System.out.print("Nueva Fecha de Nacimiento (AAAA-MM-DD): ");
+                 System.out.print("Nueva fecha de nacimiento (AAAA-MM-DD): ");
                  String nuevaFechaStr = entrada.nextLine();
                  LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
                  datosModificados.getDatos().getDatos_personales().setFechanac(nuevaFecha);
@@ -607,7 +608,7 @@ public class GestorAlojamiento {
                     }
                  break;
             case "8":
-                 System.out.println("1 Nueva Calle, 2 Nuevo Número, 3 Nuevo Piso, 4 Nuevo Departamento, 5 Nueva Localidad, 6 Nueva Provincia, 7 Nuevo País, 8 Nuevo Código Postal ");
+                 System.out.println("1. Nueva calle, 2. Nuevo número, 3. Nuevo piso, 4. Nuevo departamento, 5. Nueva localidad, 6. Nueva provincia, 7. Nuevo país, 8. Nuevo código postal ");
                  System.out.print("Campos invalidos:");
                  for (int i = 0; i < 8; i++) {
                      if (camposDireccionInvalidos.get(i)) {
@@ -619,7 +620,7 @@ public class GestorAlojamiento {
                  opcion = entrada.nextLine();
                  switch (opcion) {
                     case "1":
-                       System.out.print("Nueva Calle: ");
+                       System.out.print("Nueva calle: ");
                        String nuevaCalle = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
                        if(Validador.isCalleValida(nuevaCalle)){
@@ -629,7 +630,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "2":
-                       System.out.print("Nuevo Número: ");
+                       System.out.print("Nuevo número: ");
                        String nuevoNumero = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
                        if(Validador.isNumeroCalleValido(nuevoNumero)){
@@ -639,7 +640,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "3":
-                       System.out.print("Nuevo Piso: ");
+                       System.out.print("Nuevo piso: ");
                        String nuevoPiso = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
                        if(Validador.isNumeroCalleValido(nuevoPiso)){
@@ -649,7 +650,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "4":
-                       System.out.print("Nuevo Departamento: ");
+                       System.out.print("Nuevo departamento: ");
                        String nuevoDepto = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
                        if(Validador.isNumeroCalleValido(nuevoDepto)){
@@ -659,7 +660,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "5":
-                       System.out.print("Nueva Localidad: ");
+                       System.out.print("Nueva localidad: ");
                        String nuevaLocalidad = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
                        if(Validador.isLocalidadValida(nuevaLocalidad)){
@@ -669,7 +670,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "6":
-                       System.out.print("Nueva Provincia: ");
+                       System.out.print("Nueva provincia: ");
                        String nuevaProvincia = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
                        if(Validador.isProvinciaValida(nuevaProvincia)){
@@ -679,7 +680,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "7":
-                       System.out.print("Nuevo País: ");
+                       System.out.print("Nuevo país: ");
                        String nuevoPais = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
                        if(Validador.isPaisValido(nuevoPais)){
@@ -689,7 +690,7 @@ public class GestorAlojamiento {
                        }
                        break;
                     case "8":
-                       System.out.print("Nuevo Código Postal: ");
+                       System.out.print("Nuevo código postal: ");
                        String nuevoCodPost = entrada.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
                        if(Validador.isCodigoPostalValido(nuevoCodPost)){
@@ -699,14 +700,14 @@ public class GestorAlojamiento {
                        }
                        break;
                  }
-                 if(camposDireccionInvalidos.isEmpty()){
+                 if (camposDireccionInvalidos.isEmpty()){
                      camposInvalidos.clear(7);
                  } else {
                      camposInvalidos.set(7);
                  }
                  break;
             case "9":
-                 System.out.print("Nuevo Teléfono: ");
+                 System.out.print("Nuevo teléfono: ");
                  String nuevoTelefono = entrada.nextLine();
                  datosModificados.getDatos().getDatos_contacto().setTelefono(nuevoTelefono);
                  if(Validador.isTelefonoValido(nuevoTelefono)){
@@ -716,7 +717,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "10":
-                 System.out.print("Nuevo Email: ");
+                 System.out.print("Nuevo email: ");
                  String nuevoEmail = entrada.nextLine();
                  datosModificados.getDatos().getDatos_contacto().setEmail(nuevoEmail);
                     if(Validador.isEmailValidoOpcional(nuevoEmail)){
@@ -726,7 +727,7 @@ public class GestorAlojamiento {
                     }
                  break;
             case "11":
-                 System.out.print("Nueva Ocupación: ");
+                 System.out.print("Nueva ocupación: ");
                  String nuevaOcupacion = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setOcupacion(nuevaOcupacion);
                  if(Validador.isOcupacionValida(nuevaOcupacion)){
@@ -736,7 +737,7 @@ public class GestorAlojamiento {
                  }
                  break;
             case "12":
-                 System.out.print("Nueva Nacionalidad: ");
+                 System.out.print("Nueva nacionalidad: ");
                  String nuevaNacionalidad = entrada.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNacionalidad(nuevaNacionalidad);
                  if(Validador.isNacionalidadValida(nuevaNacionalidad)){
@@ -748,7 +749,7 @@ public class GestorAlojamiento {
             case "siguiente":
             case "s":
                  if (camposInvalidos.isEmpty()) {
-                     //System.out.println("Los datos del huésped han sido  correctamente.");
+                     //System.out.println("Los datos del huésped han sido guardados correctamente.");
 
                 /*if(auxDTO.buscarPorDNI(nuevoNroDoc,nuevoNroDoc)){
                     String boton2= "-1";
@@ -803,28 +804,28 @@ public class GestorAlojamiento {
 }//modificarHuesped
 
     // Esto debería hacerlo la interfaz
-    private void listaDatosHuesped(Huesped Huesped){
+    private void listaDatosHuesped(Alojado alojado){
      System.out.println("Datos del Huésped:\n" +
-     "1. Apellido:" + Huesped.getDatos().getDatos_personales().getApellido() + "\n" +
-       "2. Nombre:" + Huesped.getDatos().getDatos_personales().getNombre() + "\n" +
-       "3. Tipo de Documento:" + Huesped.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-       "4. Número de Documento:" + Huesped.getDatos().getDatos_personales().getNroDoc() + "\n" +
-       "5. Cuit:" + Huesped.getDatos().getDatos_personales().getCUIT() + "\n" +
-       "6. Posición frente al IVA:" + Huesped.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-       "7. Fecha de Nacimiento:" + Huesped.getDatos().getDatos_personales().getFechanac() + "\n" +
+     "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
+       "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
+       "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
+       "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
+       "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
+       "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
+       "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
        "8. Dirección:\n" +
-       "  Calle:" + Huesped.getDatos().getDatos_residencia().getCalle() + "\n" +
-       "  Número:" + Huesped.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-       "  Piso:" + Huesped.getDatos().getDatos_residencia().getPiso() + "\n" +
-       "  Departamento:" + Huesped.getDatos().getDatos_residencia().getDepto() + "\n" +
-       "  Localidad:" + Huesped.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-       "  Provincia:" + Huesped.getDatos().getDatos_residencia().getProv() + "\n" +
-       "  País:" + Huesped.getDatos().getDatos_residencia().getPais() + "\n" +
-       "  Código Postal:" + Huesped.getDatos().getDatos_residencia().getCod_post() + "\n" +
-       "9. Teléfono:" + Huesped.getDatos().getDatos_contacto().getTelefono() + "\n" +
-       "10. Email:" + Huesped.getDatos().getDatos_contacto().getEmail() + "\n" +
-       "11. Ocupación:" + Huesped.getDatos().getDatos_personales().getOcupacion() + "\n" +
-       "12. Nacionalidad:" + Huesped.getDatos().getDatos_personales().getNacionalidad() + "\n");
+       "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
+       "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
+       "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
+       "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
+       "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
+       "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
+       "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
+       "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
+       "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
+       "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
+       "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
+       "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
  }
 
     private boolean huespedSeAlojo(CriteriosBusq criterios){
