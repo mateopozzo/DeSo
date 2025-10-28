@@ -8,21 +8,23 @@ import ddb.deso.contabilidad.ResponsablePago;
 
 import java.nio.MappedByteBuffer;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
 
 public class GestorAlojamiento {
-    private AlojadoDAO alojadoDAO; // tenia un final esto pero no estaba instanciado!
+    private final AlojadoDAO alojadoDAO;
     private List<Huesped> huespedes = new LinkedList<>();
 
     /*
     Inyección de dependencias porque si no no me deja importar el metodo del DAO
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
-
-    public GestorAlojamiento() {}
 
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
@@ -41,95 +43,294 @@ public class GestorAlojamiento {
 
     public void darDeAltaHuesped(){
 
-       Scanner entrada = new Scanner(System.in);
-       boolean b=true;
-       while(b){
-       System.out.println("Apellido:");
-       String apellido = entrada.nextLine();
+    Huesped datosModificados = new Huesped(null);
+    Scanner entrada = new Scanner(System.in);
+    boolean bandera=true;
+    BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
+    BitSet camposDireccionInvalidos = new BitSet(8); // BitSet para indicar que campos de direccion son invalidos
+    camposInvalidos.set(0,12); // Inicializo todos los bits en falso
+    camposDireccionInvalidos.set(0,8); // Inicializo todos los bits en falso
 
-       System.out.println("Nombre:");
-       String nombre = entrada.nextLine();
+     while(bandera){
+        System.out.println("entro");
+        listaDatosHuesped(datosModificados);
 
-       // Menú para elegir tipo de documento
-       TipoDoc tipoDoc = menuTipoDoc();
+        System.out.print("Campos invalidos:");
+        for (int i = 0; i < 12; i++) {
+            if (camposInvalidos.get(i)) {
+                System.out.print(" " + (i + 1));
+            }
+        }
+        System.out.println();
+        System.out.print("Seleccione el número del campo que desea modificar: ");
+        String opcion = entrada.nextLine();
 
-       System.out.println("Numero de documento:");
-       String num_documento = entrada.nextLine();
+        System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
+        switch (opcion.toLowerCase()) {
+            case "1":
+                 System.out.print("Apellido: ");
+                 String nuevoApellido = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setApellido(nuevoApellido);
+                 if(Validador.isApellidoValido(nuevoApellido)){
+                     camposInvalidos.clear(0);
+                 } else {
+                     camposInvalidos.set(0);
+                 }
+                 break;
+            case "2":
+                 System.out.print("Nombre: ");
+                 String nuevoNombre = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNombre(nuevoNombre);
+                 if(Validador.isNombreValido(nuevoNombre)){
+                     camposInvalidos.clear(1);
+                 } else {
+                     camposInvalidos.set(1);
+                 }
+                 break;
+            case "3":
+                 System.out.print("Tipo de Documento: ");
+                 TipoDoc nuevoTipoDoc = menuTipoDoc();
+                 datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
+                 if(Validador.isTipoDocumentoValido(nuevoTipoDoc)){
+                     camposInvalidos.clear(2);
+                 } else {
+                     camposInvalidos.set(2);
+                 }
+                 break;
+            case "4":
+                 System.out.print("Número de Documento: ");
+                 String nuevoNroDoc = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNroDoc(nuevoNroDoc);
+                 if(Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getDatos().getDatos_personales().getTipoDoc())){
+                     camposInvalidos.clear(3);
+                 } else {
+                     camposInvalidos.set(3);
+                 }
+                 break;
+            case "5"://No Obligatorio
+                 System.out.print("Cuit: ");
+                 String nuevoCuit = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
+                 if(Validador.isCuitValidoOpcional(nuevoCuit)){
+                     camposInvalidos.clear(4);
+                 } else {
+                     camposInvalidos.set(4);
+                 }
+                 break;
+            case "6":
+                 System.out.print("Posición frente al IVA: ");
+                 String nuevaPosIva = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setPosicionIva(nuevaPosIva);
+                 if(Validador.isPosicionIvaValida(nuevaPosIva)){
+                     camposInvalidos.clear(5);
+                 } else {
+                     camposInvalidos.set(5);
+                 }
+                 break;
+            case "7":
+                 System.out.print("Fecha de Nacimiento (AAAA-MM-DD): ");
+                 String nuevaFechaStr = entrada.nextLine();
+                 LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
+                 datosModificados.getDatos().getDatos_personales().setFechanac(nuevaFecha);
+                    if(Validador.isFechaNacimientoValida(nuevaFecha)){
+                        camposInvalidos.clear(6);
+                    } else {
+                        camposInvalidos.set(6);
+                    }
+                 break;
+            case "8":
+                 System.out.println("1 Calle, 2 Número, 3 Piso, 4 Departamento, 5 Localidad, 6 Provincia, 7 País, 8 Código Postal ");
+                 System.out.print("Campos invalidos:");
+                 for (int i = 0; i < 8; i++) {
+                     if (camposDireccionInvalidos.get(i)) {
+                         System.out.print(" " + (i + 1));
+                     }
+                 }
+                 System.out.println();
+                 System.out.print("Seleccione el número del campo que desea modificar: ");
+                 opcion = entrada.nextLine();
+                 switch (opcion) {
+                    case "1":
+                       System.out.print("Calle: ");
+                       String nuevaCalle = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
+                       if(Validador.isCalleValida(nuevaCalle)){
+                           camposDireccionInvalidos.clear(0);
+                       } else {
+                           camposDireccionInvalidos.set(0);
+                       }
+                       break;
+                    case "2":
+                       System.out.print("Número: ");
+                       String nuevoNumero = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
+                       if(Validador.isNumeroCalleValido(nuevoNumero)){
+                           camposDireccionInvalidos.clear(1);
+                       } else {
+                           camposDireccionInvalidos.set(1);
+                       }
+                       break;
+                    case "3":
+                       System.out.print("Piso: ");
+                       String nuevoPiso = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
+                       if(Validador.isNumeroCalleValido(nuevoPiso)){
+                           camposDireccionInvalidos.clear(2);
+                       } else {
+                           camposDireccionInvalidos.set(2);
+                       }
+                       break;
+                    case "4":
+                       System.out.print("Departamento: ");
+                       String nuevoDepto = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
+                       if(Validador.isNumeroCalleValido(nuevoDepto)){
+                           camposDireccionInvalidos.clear(3);
+                       } else {
+                           camposDireccionInvalidos.set(3);
+                       }
+                       break;
+                    case "5":
+                       System.out.print("Localidad: ");
+                       String nuevaLocalidad = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
+                       if(Validador.isLocalidadValida(nuevaLocalidad)){
+                           camposDireccionInvalidos.clear(4);
+                       } else {
+                           camposDireccionInvalidos.set(4);
+                       }
+                       break;
+                    case "6":
+                       System.out.print("Provincia: ");
+                       String nuevaProvincia = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
+                       if(Validador.isProvinciaValida(nuevaProvincia)){
+                           camposDireccionInvalidos.clear(5);
+                       } else {
+                           camposDireccionInvalidos.set(5);
+                       }
+                       break;
+                    case "7":
+                       System.out.print("País: ");
+                       String nuevoPais = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
+                       if(Validador.isPaisValido(nuevoPais)){
+                           camposDireccionInvalidos.clear(6);
+                       } else {
+                           camposDireccionInvalidos.set(6);
+                       }
+                       break;
+                    case "8":
+                       System.out.print("Código Postal: ");
+                       String nuevoCodPost = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
+                       if(Validador.isCodigoPostalValido(nuevoCodPost)){
+                           camposDireccionInvalidos.clear(7);
+                       } else {
+                           camposDireccionInvalidos.set(7);
+                       }
+                       break;
+                 }
+                 if(camposDireccionInvalidos.isEmpty()){
+                     camposInvalidos.clear(7);
+                 } else {
+                     camposInvalidos.set(7);
+                 }
+                 break;
+            case "9":
+                 System.out.print("Teléfono: ");
+                 String nuevoTelefono = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_contacto().setTelefono(Long.parseLong(nuevoTelefono));
+                 if(Validador.isTelefonoValido(nuevoTelefono)){
+                     camposInvalidos.clear(8);
+                 } else {
+                     camposInvalidos.set(8);
+                 }
+                 break;
+            case "10":
+                 System.out.print("Email: ");
+                 String nuevoEmail = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_contacto().setEmail(nuevoEmail);
+                    if(Validador.isEmailValidoOpcional(nuevoEmail)){
+                        camposInvalidos.clear(9);
+                    } else {
+                        camposInvalidos.set(9);
+                    }
+                 break;
+            case "11":
+                 System.out.print("Ocupación: ");
+                 String nuevaOcupacion = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setOcupacion(nuevaOcupacion);
+                 if(Validador.isOcupacionValida(nuevaOcupacion)){
+                     camposInvalidos.clear(10);
+                 } else {
+                     camposInvalidos.set(10);
+                 }
+                 break;
+            case "12":
+                 System.out.print("Nacionalidad: ");
+                 String nuevaNacionalidad = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNacionalidad(nuevaNacionalidad);
+                 if(Validador.isNacionalidadValida(nuevaNacionalidad)){
+                     camposInvalidos.clear(11);
+                 } else {
+                     camposInvalidos.set(11);
+                 }
+                 break;
+            case "siguiente":
+            case "s":
+                 if (camposInvalidos.isEmpty()) {
+                     //System.out.println("Los datos del huésped han sido  correctamente.");
+                    /*
+                     if(auxDTO.buscarPorDNI(nuevoNroDoc,nuevoNroDoc)){
+                         String boton2= "-1";
+                         while(!(boton2.equals("1")||boton2.equals("2"))){
+                             System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
+                             System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
+                             boton2= entrada.nextLine();
+                         }
+                }
+            if(boton2.equals("1")) {
+                    //guardo datos con dni repettido
+             System.out.print("El Huésped " + h.datos.getDatos_personales().getNombre() + " " +
+             h.datos.getDatos_personales().getApellido()  + " se ha cargado correctamente.");
+                String boton4 = "-1";
+                while(!(boton4.equals("1")||boton4.equals("2"))){
+                   System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
+                   boton4 = entrada.nextLine();
+                }
+                    if (boton4.equals("2")) bandera = false;
+                    else darDeAltaHuesped();
+                }
+            else {
+                camposInvalidos.set(4);
 
-       System.out.println("CUIT:");
-       String cuit = entrada.nextLine(); //no obligatorio
+            }
+             }
 
-       System.out.println("Posición frente al IVA:");
-       String iva = entrada.nextLine();
+             else{
+                //guardar datos
+    */
+            System.out.print("El Huésped " + datosModificados.datos.getDatos_personales().getNombre() + " " +
+            datosModificados.datos.getDatos_personales().getApellido()  + " se ha cargado correctamente.");
+            String boton4 = "-1";
+                while(!(boton4.equals("1")||boton4.equals("2"))){
+                   System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
+                   boton4 = entrada.nextLine();
+                }
+                    if (boton4.equals("2")) bandera = false;
+                    else darDeAltaHuesped();
 
-        //!
-       System.out.println("Fecha de Nacimiento:");
-       System.out.println("AÑO:");
-       String ano = entrada.nextLine();
-       System.out.println("MES:");
-       String mes = entrada.nextLine();
-       System.out.println("DIA:");
-       String dia = entrada.nextLine();
-
-       LocalDate fecha_nacimiento= LocalDate.of(
-       parseInt(ano),
-       parseInt(mes),
-       parseInt(dia));
-
-       System.out.println("Dirección:");
-       System.out.println("Calle:");
-       String calle = entrada.nextLine();
-
-       System.out.println("Numero:");
-       String numero = entrada.nextLine();
-
-       System.out.println("Departamento:");
-       String departamento = entrada.nextLine();
-
-       System.out.println("Piso:");
-       String piso = entrada.nextLine();
-
-       System.out.println("Código:");
-       String codigo = entrada.nextLine();
-
-       System.out.println("postal:");
-       String postal = entrada.nextLine();
-
-       System.out.println("Localidad:");
-       String localidad = entrada.nextLine();
-
-       System.out.println("Provincia:");
-       String provincia = entrada.nextLine();
-
-       System.out.println("Pais:");
-       String pais = entrada.nextLine();
+             }
 
 
-
-       System.out.println("Teléfono:");
-       String telefono = entrada.nextLine();
-
-       System.out.println("Email:");
-       String email = entrada.nextLine(); //no obligatorio
-
-       System.out.println("Ocupación:");
-       String ocupacion = entrada.nextLine();
-
-       System.out.println("Nacionalidad");
-       String nacionalidad = entrada.nextLine();
-
-       //ver si lo pongo dsp e comprobar si están vacíos
-       DatosResidencia dr= new DatosResidencia(calle,departamento,localidad,provincia,pais,numero,piso,postal);
-
-       //Huesped h=new Huesped(null);
-       String boton="-1";
-
-          while(!(boton.equals("1")||boton.equals("2"))){
-             System.out.println("Presione 1 para SIGUIENTE o 2 para CANCELAR" );
-             boton=entrada.nextLine();
-
-             if(boton.equals("2")){
-
+          //  }
+             else {
+                     System.out.println("No se pueden guardar los cambios. Hay campos inválidos.");
+                 }
+                 break;
+            case "cancelar":
+            case "c":
                 String boton3="-1";
                 while(!(boton3.equals("1")||boton3.equals("2"))){
 
@@ -139,69 +340,40 @@ public class GestorAlojamiento {
                 }
 
                 if(boton3.equals("1")){
-                   return;//sale del bucle principal y el CU termina
+                  bandera=false;//sale del bucle principal y el CU termina
                 }
+                //else vuelve al menu
 
-                else if (boton3.equals("2")){
-                   boton="1";
-                }
+             break;
 
-             }
+       }
 
-          }
+}
 
-          if(boton.equals("1")){
-                //faltan datos
-             if (apellido.isEmpty()  || nombre.isEmpty()   || tipoDoc==null ||
-                 num_documento.isEmpty()    || fecha_nacimiento == null    || calle.isEmpty()   ||
-                 localidad.isEmpty() || provincia.isEmpty() || pais.isEmpty()|| telefono.isEmpty()
-                 || iva.isEmpty() || ocupacion.isEmpty()|| nacionalidad.isEmpty()) {
-                    System.out.println("\n ERROR: Faltan datos obligatorios.");
-                    continue;
-                }
+}//darAltaHuesped
 
-                long tel = telefono.isEmpty() ? 0 : Long.parseLong(telefono);
-                Long nroDoc = Long.parseLong(num_documento);
-                Long cuitInt = cuit.isEmpty() ? 0 : Long.parseLong(cuit);
+ /*
+                DatosResidencia dr= new DatosResidencia(calle,departamento,localidad,provincia,
+                pais,numero,piso,postal);
 
-                DatosContacto dc=new DatosContacto(tel, email);
+                DatosContacto dc=new DatosContacto(Long.parseLong(telefono), email);
 
                 DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
-                nroDoc.toString(), tipoDoc,cuitInt.toString() , fecha_nacimiento);
+                num_documento, tipoDoc,cuit , fecha_nacimiento);
 
                 DatosAlojado da = new DatosAlojado(dc,dr,dp);
 
                 Huesped h= new Huesped(da);
 
-
-             if(dniExiste(nroDoc.toString(), tipoDoc)){
-             String boton2= "-1";
-                while(!(boton2.equals("1")||boton2.equals("2"))){
-                System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
-                System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
-                boton2= entrada.nextLine();
-                }
-                if(boton2.equals("2")) continue;
-             }
-
-             huespedes.add(h);
-             System.out.print("El Huésped " + h.datos.getDatos_personales().getNombre() + " " +
-             h.datos.getDatos_personales().getApellido()  + " se ha cargado correctamente.");
-             String boton4 = "-1";
-                while(!(boton4.equals("1")||boton4.equals("2"))){
-                   System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
-                   boton4 = entrada.nextLine();
-                }
-                if (boton4.equals("2")) b = false;
+                Huesped hdto =new Huesped(null);
+              AlojadoDTO auxDTO = new AlojadoDTO(hdto);
 
 
-          }
 
-       } // while
-
-
-    } // metodo
-
+            AlojadoDTO aDTO = new AlojadoDTO(h);
+            AlojadoDAO aDAO= new AlojadoDAOJSON();
+            aDAO.crearAlojado(aDTO);
+ */
     public void buscarHuesped (CriteriosBusq criterios_busq){
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
@@ -384,6 +556,323 @@ public class GestorAlojamiento {
         return tipoDoc;
     }
 
+    public void modificarHuesped( Huesped Huesped){
+
+   //creo un huesped auxiliar para modificar
+  AlojadoDTO dto = new AlojadoDTO(Huesped);
+  Huesped datosModificados = Huesped;
+  Scanner entrada = new Scanner(System.in);
+  boolean bandera=true;
+  BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
+  BitSet camposDireccionInvalidos = new BitSet(8); // BitSet para indicar que campos de direccion son invalidos
+  camposInvalidos.clear(); // Inicializo todos los bits en falso
+  camposDireccionInvalidos.clear(); // Inicializo todos los bits en falso
+
+  while(bandera){
+        listaDatosHuesped(datosModificados);
+        System.out.println("O escriba Siguiente (s) o Cancelar (c) o Borrar (b)");
+        System.out.print("Campos invalidos:");
+        for (int i = 0; i < 12; i++) {
+            if (camposInvalidos.get(i)) {
+                System.out.print(" " + (i + 1));
+            }
+        }
+        System.out.println();
+        System.out.print("Seleccione el número del campo que desea modificar: ");
+        String opcion = entrada.nextLine();
+
+        System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
+        switch (opcion.toLowerCase()) {
+            case "1":
+                 System.out.print("Nuevo Apellido: ");
+                 String nuevoApellido = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setApellido(nuevoApellido);
+                 if(Validador.isApellidoValido(nuevoApellido)){
+                     camposInvalidos.clear(0);
+                 } else {
+                     camposInvalidos.set(0);
+                 }
+                 break;
+            case "2":
+                 System.out.print("Nuevo Nombre: ");
+                 String nuevoNombre = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNombre(nuevoNombre);
+                 if(Validador.isNombreValido(nuevoNombre)){
+                     camposInvalidos.clear(1);
+                 } else {
+                     camposInvalidos.set(1);
+                 }
+                 break;
+            case "3":
+                 System.out.print("Nuevo Tipo de Documento: ");
+                 TipoDoc nuevoTipoDoc = menuTipoDoc();
+                 datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
+                 if(Validador.isTipoDocumentoValido(nuevoTipoDoc)){
+                     camposInvalidos.clear(2);
+                 } else {
+                     camposInvalidos.set(2);
+                 }
+                 break;
+            case "4":
+                 System.out.print("Nuevo Número de Documento: ");
+                 String nuevoNroDoc = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNroDoc(nuevoNroDoc);
+                 if(Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getDatos().getDatos_personales().getTipoDoc())){
+                     camposInvalidos.clear(3);
+                 } else {
+                     camposInvalidos.set(3);
+                 }
+                 break;
+            case "5":
+                 System.out.print("Nuevo Cuit: ");
+                 String nuevoCuit = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
+                 if(Validador.isCuitValidoOpcional(nuevoCuit)){
+                     camposInvalidos.clear(4);
+                 } else {
+                     camposInvalidos.set(4);
+                 }
+                 break;
+            case "6":
+                 System.out.print("Nueva Posición frente al IVA: ");
+                 String nuevaPosIva = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setPosicionIva(nuevaPosIva);
+                 if(Validador.isPosicionIvaValida(nuevaPosIva)){
+                     camposInvalidos.clear(5);
+                 } else {
+                     camposInvalidos.set(5);
+                 }
+                 break;
+            case "7":
+                 System.out.print("Nueva Fecha de Nacimiento (AAAA-MM-DD): ");
+                 String nuevaFechaStr = entrada.nextLine();
+                 LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
+                 datosModificados.getDatos().getDatos_personales().setFechanac(nuevaFecha);
+                    if(Validador.isFechaNacimientoValida(nuevaFecha)){
+                        camposInvalidos.clear(6);
+                    } else {
+                        camposInvalidos.set(6);
+                    }
+                 break;
+            case "8":
+                 System.out.println("1 Nueva Calle, 2 Nuevo Número, 3 Nuevo Piso, 4 Nuevo Departamento, 5 Nueva Localidad, 6 Nueva Provincia, 7 Nuevo País, 8 Nuevo Código Postal ");
+                 System.out.print("Campos invalidos:");
+                 for (int i = 0; i < 8; i++) {
+                     if (camposDireccionInvalidos.get(i)) {
+                         System.out.print(" " + (i + 1));
+                     }
+                 }
+                 System.out.println();
+                 System.out.print("Seleccione el número del campo que desea modificar: ");
+                 opcion = entrada.nextLine();
+                 switch (opcion) {
+                    case "1":
+                       System.out.print("Nueva Calle: ");
+                       String nuevaCalle = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
+                       if(Validador.isCalleValida(nuevaCalle)){
+                           camposDireccionInvalidos.clear(0);
+                       } else {
+                           camposDireccionInvalidos.set(0);
+                       }
+                       break;
+                    case "2":
+                       System.out.print("Nuevo Número: ");
+                       String nuevoNumero = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
+                       if(Validador.isNumeroCalleValido(nuevoNumero)){
+                           camposDireccionInvalidos.clear(1);
+                       } else {
+                           camposDireccionInvalidos.set(1);
+                       }
+                       break;
+                    case "3":
+                       System.out.print("Nuevo Piso: ");
+                       String nuevoPiso = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
+                       if(Validador.isNumeroCalleValido(nuevoPiso)){
+                           camposDireccionInvalidos.clear(2);
+                       } else {
+                           camposDireccionInvalidos.set(2);
+                       }
+                       break;
+                    case "4":
+                       System.out.print("Nuevo Departamento: ");
+                       String nuevoDepto = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
+                       if(Validador.isNumeroCalleValido(nuevoDepto)){
+                           camposDireccionInvalidos.clear(3);
+                       } else {
+                           camposDireccionInvalidos.set(3);
+                       }
+                       break;
+                    case "5":
+                       System.out.print("Nueva Localidad: ");
+                       String nuevaLocalidad = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
+                       if(Validador.isLocalidadValida(nuevaLocalidad)){
+                           camposDireccionInvalidos.clear(4);
+                       } else {
+                           camposDireccionInvalidos.set(4);
+                       }
+                       break;
+                    case "6":
+                       System.out.print("Nueva Provincia: ");
+                       String nuevaProvincia = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
+                       if(Validador.isProvinciaValida(nuevaProvincia)){
+                           camposDireccionInvalidos.clear(5);
+                       } else {
+                           camposDireccionInvalidos.set(5);
+                       }
+                       break;
+                    case "7":
+                       System.out.print("Nuevo País: ");
+                       String nuevoPais = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
+                       if(Validador.isPaisValido(nuevoPais)){
+                           camposDireccionInvalidos.clear(6);
+                       } else {
+                           camposDireccionInvalidos.set(6);
+                       }
+                       break;
+                    case "8":
+                       System.out.print("Nuevo Código Postal: ");
+                       String nuevoCodPost = entrada.nextLine();
+                       datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
+                       if(Validador.isCodigoPostalValido(nuevoCodPost)){
+                           camposDireccionInvalidos.clear(7);
+                       } else {
+                           camposDireccionInvalidos.set(7);
+                       }
+                       break;
+                 }
+                 if(camposDireccionInvalidos.isEmpty()){
+                     camposInvalidos.clear(7);
+                 } else {
+                     camposInvalidos.set(7);
+                 }
+                 break;
+            case "9":
+                 System.out.print("Nuevo Teléfono: ");
+                 String nuevoTelefono = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_contacto().setTelefono(nuevoTelefono);
+                 if(Validador.isTelefonoValido(nuevoTelefono)){
+                     camposInvalidos.clear(8);
+                 } else {
+                     camposInvalidos.set(8);
+                 }
+                 break;
+            case "10":
+                 System.out.print("Nuevo Email: ");
+                 String nuevoEmail = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_contacto().setEmail(nuevoEmail);
+                    if(Validador.isEmailValidoOpcional(nuevoEmail)){
+                        camposInvalidos.clear(9);
+                    } else {
+                        camposInvalidos.set(9);
+                    }
+                 break;
+            case "11":
+                 System.out.print("Nueva Ocupación: ");
+                 String nuevaOcupacion = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setOcupacion(nuevaOcupacion);
+                 if(Validador.isOcupacionValida(nuevaOcupacion)){
+                     camposInvalidos.clear(10);
+                 } else {
+                     camposInvalidos.set(10);
+                 }
+                 break;
+            case "12":
+                 System.out.print("Nueva Nacionalidad: ");
+                 String nuevaNacionalidad = entrada.nextLine();
+                 datosModificados.getDatos().getDatos_personales().setNacionalidad(nuevaNacionalidad);
+                 if(Validador.isNacionalidadValida(nuevaNacionalidad)){
+                     camposInvalidos.clear(11);
+                 } else {
+                     camposInvalidos.set(11);
+                 }
+                 break;
+            case "siguiente":
+            case "s":
+                 if (camposInvalidos.isEmpty()) {
+                     //System.out.println("Los datos del huésped han sido  correctamente.");
+
+                /*if(auxDTO.buscarPorDNI(nuevoNroDoc,nuevoNroDoc)){
+                    String boton2= "-1";
+                    while(!(boton2.equals("1")||boton2.equals("2"))){
+                        System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
+                        System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
+                        boton2= entrada.nextLine();
+                    }
+                    if(boton2.equals("1")) {
+                        //guardo datos con dni repettido
+                        System.out.println("Los datos del huésped han sido guardados correctamente.");
+                    }
+                 else {
+                    camposInvalidos.set(4);
+                 }
+             }
+             else{
+                //guardar datos
+                System.out.println("Los datos del huésped han sido guardados correctamente.");
+             }
+            }
+             else {
+                     System.out.println("No se pueden guardar los cambios. Hay campos inválidos.");
+                 */
+                 bandera = false; //sale del bucle principal y el CU termina
+                 }
+                 break;
+            case "cancelar":
+            case "c":
+                String boton3="-1";
+                while(!(boton3.equals("1")||boton3.equals("2"))){
+
+                   System.out.println("¿Desea cancelar el alta de huesped?");
+                   System.out.println("SI (1) o NO (2) ");
+                   boton3=entrada.nextLine();
+                }
+                if(boton3.equals("1")){
+                  bandera=false;//sale del bucle principal y el CU termina
+                }
+                //else vuelve al menu
+
+             break;
+            case "borrar":
+            case "b":
+                 System.out.println("Los datos del huésped serán eliminados del sistema.");
+
+       }
+
+
+}
+
+}//modificarHuesped
+
+    private void listaDatosHuesped(Huesped Huesped){
+     System.out.println("Datos del Huésped:\n" +
+     "1. Apellido:" + Huesped.getDatos().getDatos_personales().getApellido() + "\n" +
+       "2. Nombre:" + Huesped.getDatos().getDatos_personales().getNombre() + "\n" +
+       "3. Tipo de Documento:" + Huesped.getDatos().getDatos_personales().getTipoDoc() + "\n" +
+       "4. Número de Documento:" + Huesped.getDatos().getDatos_personales().getNroDoc() + "\n" +
+       "5. Cuit:" + Huesped.getDatos().getDatos_personales().getCUIT() + "\n" +
+       "6. Posición frente al IVA:" + Huesped.getDatos().getDatos_personales().getPosicionIva() + "\n" +
+       "7. Fecha de Nacimiento:" + Huesped.getDatos().getDatos_personales().getFechanac() + "\n" +
+       "8. Dirección:\n" +
+       "  Calle:" + Huesped.getDatos().getDatos_residencia().getCalle() + "\n" +
+       "  Número:" + Huesped.getDatos().getDatos_residencia().getNro_calle() + "\n" +
+       "  Piso:" + Huesped.getDatos().getDatos_residencia().getPiso() + "\n" +
+       "  Departamento:" + Huesped.getDatos().getDatos_residencia().getDepto() + "\n" +
+       "  Localidad:" + Huesped.getDatos().getDatos_residencia().getLocalidad() + "\n" +
+       "  Provincia:" + Huesped.getDatos().getDatos_residencia().getProv() + "\n" +
+       "  País:" + Huesped.getDatos().getDatos_residencia().getPais() + "\n" +
+       "  Código Postal:" + Huesped.getDatos().getDatos_residencia().getCod_post() + "\n" +
+       "9. Teléfono:" + Huesped.getDatos().getDatos_contacto().getTelefono() + "\n" +
+       "10. Email:" + Huesped.getDatos().getDatos_contacto().getEmail() + "\n" +
+       "11. Ocupación:" + Huesped.getDatos().getDatos_personales().getOcupacion() + "\n" +
+       "12. Nacionalidad:" + Huesped.getDatos().getDatos_personales().getNacionalidad() + "\n");
+ }
     //Esto lo uso en dar de baja huesped
     //Discutir si sirve borrar solo el priemro, mas de uno o todos
     private AlojadoDTO encontrarPrimerOcurrenciaDTO(List<AlojadoDTO> listaDTO, AlojadoDTO comparadorAlojadoDTO){
