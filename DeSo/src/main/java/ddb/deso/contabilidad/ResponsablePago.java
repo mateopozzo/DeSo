@@ -1,12 +1,14 @@
 package ddb.deso.contabilidad;
 
+import ddb.deso.alojamiento.DatosResidencia;
+
 public class ResponsablePago {
     private String razonSocial;
     private int cuit;
-    private String direccion;
+    private DatosResidencia direccion;
     private int telefono;
 
-    public ResponsablePago(String razonSocial, int cuit, String direccion, int telefono) {
+    public ResponsablePago(String razonSocial, int cuit, DatosResidencia direccion, int telefono) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.direccion = direccion;
@@ -19,7 +21,7 @@ public class ResponsablePago {
     public int getCuit() {
         return cuit;
     }
-    public String getDireccion() {
+    public DatosResidencia getDireccion() {
         return direccion;
     }
     public int getTelefono() {

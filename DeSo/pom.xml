@@ -14,19 +14,23 @@
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+         <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.25.1</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-<<<<<<< HEAD
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>ddb.deso.DeSo</exec.mainClass>
     </properties>
 </project>
-=======
-        <exec.mainClass>ddb.deso.DeSo</exec.mainClass>
-    </properties>
-
-</project>
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083

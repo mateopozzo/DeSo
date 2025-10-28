@@ -8,72 +8,68 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.alojamiento.DatosPersonales;
+import ddb.deso.alojamiento.Huesped;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Esta clase implementa la interfaz DAO para:
- * <ul>
- *   <li>Creacion</li>
- *   <li>Modificacion</li>
- *   <li>Eliminacion</li>
- *   <li>Listado</li>
- * </ul>
- * de la clase abtracta Alojado en el sistema usando libreria GSON.
- * @author mat
+ Implementa la interfaz DAO para:
+ <ul>
+    <li>Creación</li>
+    <li>Modificación</li>
+    <li>Eliminación</li>
+    <li>Listado</li>
+ </ul>
+ de la clase abstracta Alojado en el sistema usando libreria GSON.
+ @author mat
  */
+
 public class AlojadoDAOJSON implements AlojadoDAO {
-    private ManejadorJson manejador;
-    public AlojadoDAOJSON() {
-         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
-         System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
-    }
-    /**
-     * El archivo que contiene los datos se guarda en la carpeta <b>data</b> en el directorio raiz del proyecto
-     */
+    // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
     private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("data").resolve("Alojado.json").toString();
+    private ManejadorJson manejador;
+
+    public AlojadoDAOJSON() {
+        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
+        //System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
+    }
     
-    /**
-     * Escribe lista completa en JSON
-     * 
-     * @param listaAlojados es lista de Entidades de {@link Alojado} a persistir
+    /*
+     Escribe lista completa en JSON
+     listaAlojados es una lista de entidades de Alojado a persistir
      */
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
         try {
             manejador.escribir(listaAlojados);
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
-        
+        } 
     }
     
-    /**
-     * Crea un nuevo registro de {@link Alojado} y lo guarda en el archivo JSON.
-     *
-     * @param alojado el objeto a almacenar
+    /*
+     Crea un nuevo registro de alojado y lo guarda en el archivo JSON
+     Alojado es el objeto a guardar
      */
+
     @Override
     public void crearAlojado(AlojadoDTO alojado){
         List<AlojadoDTO> listaAlojados = listarAlojados();
         listaAlojados.add(alojado);
         escribirListaEnArchivo(listaAlojados);
     }
-    
-    /**
-     * Actualiza la instancia de Alojado guardada en json bajo suposicion de que Documento y TipoDoc son inmutables
-     *
-     * @param alojado actualizado
-     * 
-     */
+
+    // REVISAR ESTO --------------
+    // Actualiza la instancia de alojado guardada en JSON
+
     @Override
-    public void actualizarAlojado(AlojadoDTO alojado){
-        String documento = alojado.getNroDoc();
-        TipoDoc tipo = alojado.getTipoDoc();
-        AlojadoDTO remover = this.buscarPorDNI(documento, tipo);
-        eliminarAlojado(remover);
-        this.crearAlojado(alojado);
+    public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
+        eliminarAlojado(alojadoPrev);
+        this.crearAlojado(alojadoNuevo);
     }
     
     @Override
@@ -83,14 +79,14 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
-    /**
-     * Devuelve la lista completa de alojados almacenados.
-     *
-     * @return una lista {@link Alojado}
+    /*
+     Devuelve la lista completa de alojados almacenados.
+     @return una lista {@link Alojado}
      */
+
     @Override
     public List<AlojadoDTO> listarAlojados(){
-        List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();;
+        List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();
         
         try {
             listaAlojadosRetorno = manejador.listar();
@@ -100,14 +96,76 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         
         return listaAlojadosRetorno;
     }
+
+    /*
+    Busco todos los alojados con listarAlojados y los guardo en una lista de DTO
+    Inicializo otra lista vacía de DTO llamada encontrados
+    Por cada alojado, llamo a cumpleCriterio. Si es verdad, lo agrego a encontrados
+    */
+
+    @Override
+    public List<AlojadoDTO> buscarHuespedDAO (CriteriosBusq criterios_busq){
+        // Tengo la lista de todos los alojados del archivo Alojado.JSON
+        List<AlojadoDTO> lista_alojados = listarAlojados();
+        List<AlojadoDTO> encontrados = new ArrayList<>();
+
+        for(AlojadoDTO un_alojado: lista_alojados) {
+            if (cumpleCriterio(un_alojado, criterios_busq)){
+                encontrados.add(un_alojado);
+            }
+        }
+        return encontrados;
+    }
+
+    /*
+    Recibo una instancia de AlojadoDTO y un criterio de búsqueda
+    Si el criterio fue definido, pero no coinciden los atributos, retorno falso
+    Si el criterio fue definido y coincide, no entra a ningún if y devuelve true
+    Si el criterio no fue definido, no se evalúa la segunda condición
+    */
+
+    private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
+        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
+        String apellido_b = criterio.getApellido();
+        String nombres_b = criterio.getNombre();
+        TipoDoc tipoDoc_b = criterio.getTipoDoc();
+        String nroDoc_b = criterio.getNroDoc();
+        
+
+        String apellido_h = alojado_DTO.getApellido();
+        String nombre_h = alojado_DTO.getNombre();
+        TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
+        String nroDoc_h = alojado_DTO.getNroDoc();
+
+        if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
+            return false;
+        }
+        if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
+            return false;
+        }
+        if (no_es_vacio(tipoDoc_b.toString()) && !tipoDoc_h.equals(tipoDoc_b)) {
+            return false;
+        }
+        if (no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean no_es_vacio (String contenido){
+        boolean flag = (contenido==null || contenido.isEmpty());
+        return !flag;
+    }
     
-    /**
-     * Busca algun alojado que coincida con el parametro
-     * Se puede analizar optimizacion con hash o set ordenado.
-     *
-     * @param numero de documento y tipo
-     * @return una {@link Alojado}
+    /*
+     Busca algún alojado que coincida con el parámetro
+     Se puede analizar optimización con hash o set ordenado.
+
+     @param número de documento y tipo
+     @return una {@link Alojado}
      */
+
     @Override
     public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo){
         List<AlojadoDTO> listaAlojados = listarAlojados();

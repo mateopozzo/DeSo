@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package ddb.deso.almacenamiento.DAO;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.CriteriosBusq;
+
 import java.util.List;
 
 /**
@@ -13,8 +11,9 @@ import java.util.List;
  */
 public interface AlojadoDAO {
     void crearAlojado(AlojadoDTO alojado);
-    void actualizarAlojado(AlojadoDTO alojado);
+    void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo);
     void eliminarAlojado(AlojadoDTO alojado);
+    List<AlojadoDTO> buscarHuespedDAO(CriteriosBusq criterios);
     List<AlojadoDTO> listarAlojados();
     AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo);
 }

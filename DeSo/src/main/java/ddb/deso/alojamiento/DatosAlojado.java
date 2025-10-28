@@ -4,41 +4,48 @@
  */
 package ddb.deso.alojamiento;
 
-/**
- *
- * @author mat
- */
-public class DatosAlojado {
-<<<<<<< HEAD
-    private DatosContacto   contacto;
-    private DatosResidencia residencia;
-    private DatosPersonales huesped;   
+import java.util.ArrayList;
+import java.util.List;
 
-    public  DatosAlojado(DatosContacto dc, DatosResidencia dr, DatosPersonales dp){
-        this.contacto=dc;
-        this.residencia=dr;
-        this.huesped=dp;
-    }
-    public DatosContacto getDatosContacto(){
-        return this.contacto;
-    }
-   
-    public DatosResidencia getDatosResidencia(){
-        return this.residencia;
-    }
-   
-    public DatosPersonales getDatosPersonales(){
-        return this.huesped;
-    }
-=======
+public class DatosAlojado {
     private DatosContacto   datos_contacto;
     private DatosResidencia datos_residencia;
     private DatosPersonales datos_personales;   
+    private List<Long> id_check_in;
+    private List<Long> id_check_out;
     
     public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
+        id_check_in =new ArrayList<Long>();
+        id_check_out = new ArrayList<Long>();
         this.datos_contacto = contacto;
         this.datos_residencia = residencia;
         this.datos_personales = personales;
+    }
+
+    public void setId_check_in(List<Long> id_check_in) {
+        this.id_check_in = id_check_in;
+    }
+
+    public void setId_check_out(List<Long> id_check_out) {
+        this.id_check_out = id_check_out;
+    }
+
+    public void nuevoCheckIn(DatosCheckIn check_in){
+        id_check_in.add(check_in.getId());
+    }
+    public void nuevoCheckOut(DatosCheckIn check_out){
+        id_check_in.add(check_out.getId());
+    }
+    public boolean ocupoHabitacion(){
+        return ((!id_check_in.isEmpty())||(!id_check_out.isEmpty()));
+    }
+
+    public List<Long> getId_check_in() {
+        return id_check_in;
+    }
+
+    public List<Long> getId_check_out() {
+        return id_check_out;
     }
 
     public DatosContacto getDatos_contacto() {
@@ -69,7 +76,6 @@ public class DatosAlojado {
         return this.datos_personales.getEdad();
     }
     
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
 }
 
 

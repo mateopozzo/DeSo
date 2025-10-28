@@ -7,10 +7,6 @@ package ddb.deso.habitaciones;
 import ddb.deso.TipoHab;
 import ddb.deso.EstadoHab;
 
-/**
- *
- * @author gael-deb
- */
 public class Habitacion {
     private int nroHab;
     private TipoHab tipo_hab;
