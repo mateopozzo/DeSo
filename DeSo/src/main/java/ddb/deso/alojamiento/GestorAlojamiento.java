@@ -45,7 +45,7 @@ public class GestorAlojamiento {
 
     public void darDeAltaHuesped(){
 
-    Huesped datosModificados = new Huesped(null);
+    Huesped datosModificados = new AlojadoDTO(null);
     Scanner entrada = new Scanner(System.in);
     boolean bandera=true;
     BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
@@ -451,7 +451,7 @@ public class GestorAlojamiento {
                         System.out.println("Huesped seleccionado con éxito.");
                         if (huesped_seleccionado != null){
                             System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-                            modificarHuesped(huesped_seleccionado);
+                            // modificarHuesped(huesped_seleccionado);
                             // FIN DE CASO DE USO
                         }
                     }
@@ -508,10 +508,9 @@ public class GestorAlojamiento {
     }
 
     // Modificar huesped debería modificar alojados, no huesped (también puede modificar invitados)
-    public void modificarHuesped(Alojado alojado){
+    public void modificarHuesped(AlojadoDTO alojado){
         // creo un huesped auxiliar para modificar
-      AlojadoDTO dto = new AlojadoDTO(alojado);
-      Alojado datosModificados = alojado;
+      AlojadoDTO datosModificados = alojado;
       Scanner entrada = new Scanner(System.in);
 
       boolean bandera=true;
@@ -804,28 +803,28 @@ public class GestorAlojamiento {
 }//modificarHuesped
 
     // Esto debería hacerlo la interfaz
-    private void listaDatosHuesped(Alojado alojado){
+    private void listaDatosHuesped(AlojadoDTO alojado){
      System.out.println("Datos del Huésped:\n" +
-     "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
-       "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
-       "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-       "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
-       "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
-       "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-       "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
+     "1. Apellido:" + alojado.getApellido() + "\n" +
+       "2. Nombre:" + alojado.getNombre() + "\n" +
+       "3. Tipo de Documento:" + alojado.getTipoDoc() + "\n" +
+       "4. Número de Documento:" + alojado.getNroDoc() + "\n" +
+       "5. Cuit:" + alojado.getCUIT() + "\n" +
+       "6. Posición frente al IVA:" + alojado.getPosicionIva() + "\n" +
+       "7. Fecha de Nacimiento:" + alojado.getFechanac() + "\n" +
        "8. Dirección:\n" +
-       "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
-       "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-       "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
-       "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
-       "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-       "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
-       "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
-       "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
-       "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
-       "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
-       "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
-       "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
+       "  Calle:" + alojado.getCalle() + "\n" +
+       "  Número:" + alojado.getNro_calle() + "\n" +
+       "  Piso:" + alojado.getPiso() + "\n" +
+       "  Departamento:" + alojado.getDepto() + "\n" +
+       "  Localidad:" + alojado.getLocalidad() + "\n" +
+       "  Provincia:" + alojado.getProv() + "\n" +
+       "  País:" + alojado.getPais() + "\n" +
+       "  Código Postal:" + alojado.getCod_post() + "\n" +
+       "9. Teléfono:" + alojado.getTelefono() + "\n" +
+       "10. Email:" + alojado.getEmail() + "\n" +
+       "11. Ocupación:" + alojado.getOcupacion() + "\n" +
+       "12. Nacionalidad:" + alojado.getNacionalidad() + "\n");
  }
 
     private boolean huespedSeAlojo(CriteriosBusq criterios){
