@@ -36,7 +36,5 @@ public class TestCU10{
 
         gestor_aloj.modificarHuesped(alojado);
 
-        return;
-
     }
 }
