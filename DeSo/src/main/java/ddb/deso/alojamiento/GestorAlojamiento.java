@@ -193,8 +193,8 @@ public class GestorAlojamiento {
     private TipoDoc menuTipoDoc(){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
-        System.out.println("2. CI");
-        System.out.println("3. LE");
+        System.out.println("2. LE");
+        System.out.println("3. LC");
         System.out.println("4. PASAPORTE");
         System.out.println("5. OTRO");
 
@@ -204,8 +204,8 @@ public class GestorAlojamiento {
         String opcion = scanner.nextLine();
 
         switch (opcion) {
-            case "2" -> tipoDoc =TipoDoc.LC;
-            case "3" -> tipoDoc =TipoDoc.LE;
+            case "2" -> tipoDoc =TipoDoc.LE;
+            case "3" -> tipoDoc =TipoDoc.LC;
             case "4" -> tipoDoc =TipoDoc.PASAPORTE;
             case "5" -> tipoDoc =TipoDoc.OTRO;
             default -> tipoDoc = TipoDoc.DNI;
@@ -230,8 +230,8 @@ public class GestorAlojamiento {
 
         while(bandera){
             listaDatosHuesped(datosModificados);
-            System.out.println("O escriba Siguiente (s) o Cancelar (c) o Borrar (b)");
-            System.out.print("Campos invalidos:");
+            System.out.println("Escriba Siguiente (s), Cancelar (c) o Borrar (b)");
+            System.out.print("Campos inválidos en: ");
             for (int i = 0; i < 12; i++) {
                 if (camposInvalidos.get(i)) {
                     System.out.print(" " + (i + 1));
@@ -272,7 +272,7 @@ public class GestorAlojamiento {
                                 camposInvalidos.set(3); // marco nro doc como invalido
                             }
                         }
-                        bandera=false;//sale del bucle principal y el CU termina
+                        //bandera=false;//sale del bucle principal y el CU termina
                     }
                 break;
                 case "cancelar":
@@ -302,7 +302,7 @@ public class GestorAlojamiento {
             System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
         }
         System.out.print("El caso de uso 10 termina");
-        entrada.close();
+        //entrada.close();
     }//modificarHuesped
 
     //esta funcion es para el cu9 y cu10. contien la logica que comparten los casos de uso para ir cargando los campos
@@ -523,7 +523,7 @@ public class GestorAlojamiento {
                  break;
 
         }
-        dato.close();
+        //dato.close();
         return datosModificados;
 
     }

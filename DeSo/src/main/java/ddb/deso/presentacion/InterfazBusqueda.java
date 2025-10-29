@@ -40,8 +40,8 @@ public class InterfazBusqueda {
     private TipoDoc menuTipoDoc(){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
-        System.out.println("2. CI");
-        System.out.println("3. LE");
+        System.out.println("2. LE");
+        System.out.println("3. LC");
         System.out.println("4. PASAPORTE");
         System.out.println("5. OTRO");
 
@@ -51,13 +51,13 @@ public class InterfazBusqueda {
         String opcion = scanner.nextLine();
 
         switch (opcion) {
-            case "2" -> tipoDoc =TipoDoc.CI;
-            case "3" -> tipoDoc =TipoDoc.LE;
+            case "2" -> tipoDoc =TipoDoc.LE;
+            case "3" -> tipoDoc =TipoDoc.LC;
             case "4" -> tipoDoc =TipoDoc.PASAPORTE;
             case "5" -> tipoDoc =TipoDoc.OTRO;
             default -> tipoDoc = TipoDoc.DNI;
         }
-
+        scanner.close();
         return tipoDoc;
     }
 
