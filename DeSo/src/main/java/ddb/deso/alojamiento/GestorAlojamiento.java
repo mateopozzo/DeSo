@@ -3,9 +3,8 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.presentacion.InterfazBusqueda;
 import ddb.deso.presentacion.InterfazDarBaja;
-
-import ddb.deso.contabilidad.ResponsablePago;
 import java.nio.MappedByteBuffer;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ import static java.lang.Integer.parseInt;
 
 
 public class GestorAlojamiento {
-    private final AlojadoDAO alojadoDAO;
+    private static AlojadoDAO alojadoDAO;
     private List<Huesped> huespedes = new LinkedList<>();
 
     /*
@@ -29,7 +28,7 @@ public class GestorAlojamiento {
 //    public GestorAlojamiento() {}
 
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
-        this.alojadoDAO = alojadoDAO;
+        GestorAlojamiento.alojadoDAO = alojadoDAO;
     }
 
     public boolean dniExiste(String dni, TipoDoc tipo) {
@@ -374,8 +373,9 @@ public class GestorAlojamiento {
       aDAO.crearAlojado(aDTO);
  */
 
-    public void buscarHuesped (CriteriosBusq criterios_busq){
-        /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
+    public static void buscarHuesped(CriteriosBusq criterios_busq) {
+        /*
+        Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
         Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
         Si no encuentra coincidencias, encontrados is empty y se ejecuta darDeAltaHuesped() -> Fin CU
@@ -386,102 +386,21 @@ public class GestorAlojamiento {
         Se llama a modificarHuesped() con la instancia de huesped_seleccionado -> Fin CU
         */
 
+        InterfazBusqueda ui = new InterfazBusqueda();
         List<AlojadoDTO> encontrados;
-        Scanner scanner = new Scanner(System.in);
-        AlojadoDTO huesped_seleccionado;
-        String input_user;
-        int seleccion=-1;
-
-        // Cargar los criterios de búsqueda
-        System.out.println("Hotel Premier - Buscar huésped --------------------------------------------------------");
-        System.out.println("Seleccione un huésped y podrá modificarlo. Si no se encuentran coincidencias, podrá crear un nuevo huésped");
-        System.out.println("Si desea crear un nuevo huésped incluso habiendo encontrado coincidencias, presione ENTER y luego SIGUIENTE");
-
-        // Ingreso de los filtros de búsqueda
-        System.out.println("Ingrese el nombre: ");
-        String nombre = scanner.nextLine();
-
-        System.out.println("Ingrese el apellido: ");
-        String apellido = scanner.nextLine();
-
-        TipoDoc tipoDoc = menuTipoDoc();
-
-        System.out.println("Ingrese el número de documento: ");
-        String num_documento = scanner.nextLine();
-
-        // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
-        cargar_criterios (nombre, apellido, tipoDoc, num_documento, criterios_busq);
 
         // BÚSQUEDA EN JSON: Llamo al DAO -> Busca en la BDD -> Crea los DTO -> Devuelve lista de DTO a DAO -> DAO devuelve lista a gestor
         encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
 
         if (encontrados.isEmpty()) {
-            System.out.println("No se encontraron coincidencias de búsqueda.");
-            scanner.close();
-            System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
-            // darDeAltaHuesped();
+            ui.sin_coincidencias();
             // FIN DE CASO DE USO
         }
         else {
-            System.out.println("Ingrese el número de huesped que desea seleccionar.");
-            System.out.println("Si no desea seleccionar alguno, presione ENTER y luego 1. (SIGUIENTE)");
-            for (int i = 0; i < encontrados.size(); i++) {
-                // nombre, apellido, tipoDoc, num_documento
-
-            }
-            input_user = scanner.nextLine();
-
-            // Si presionó ENTER, entonces voy a dar de alta huesped
-            if (input_user.trim().isEmpty()) {
-                System.out.println("Presione 1 para SIGUIENTE");
-                String siguiente = scanner.nextLine();
-                if ("1".equals(siguiente)) {
-                    System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
-                    // darDeAltaHuesped();
-                    // FIN DE CASO DE USO
-                }
-            }
-            // Si presionó un número, entonces voy a modificar huesped
-            else {
-                try {
-                    seleccion = parseInt(input_user);
-                    // Si la selección está dentro del rango, lo busco en mi lista
-                    if (seleccion<=encontrados.size() && seleccion>0) {
-                        huesped_seleccionado = encontrados.get(seleccion-1);
-                        System.out.println("Huesped seleccionado con éxito.");
-                        if (huesped_seleccionado != null){
-                            System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-                            //modificarHuesped(huesped_seleccionado);
-                            // FIN DE CASO DE USO
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Entrada inválida. Debe ser un número o ENTER.");
-                }
-            }
-            scanner.close();
+            ui.seleccion(encontrados);
         }
     }
 
-    private void cargar_criterios (String nombre, String apellido, TipoDoc tipoDoc, String num_documento, CriteriosBusq criterio) {
-        if (no_es_vacio(nombre)){
-            criterio.setNombre(nombre);
-        }
-        if (no_es_vacio(apellido)){
-            criterio.setApellido(apellido);
-        }
-        if (no_es_vacio(tipoDoc.toString())){
-            criterio.setTipoDoc(tipoDoc);
-        }
-        if (no_es_vacio(num_documento)){
-            criterio.setNroDoc(num_documento);
-        }
-    }
-
-    private boolean no_es_vacio (String contenido){
-        boolean flag = (contenido==null || contenido.isEmpty());
-        return !flag;
-    }
 
     private TipoDoc menuTipoDoc(){
         System.out.println("Seleccione tipo de documento:");
@@ -875,6 +794,7 @@ public class GestorAlojamiento {
         NO_PERSISTIDO
     }
 
+
     public void darDeBajaHuesped(Alojado alojado){
      /*
         Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
@@ -886,13 +806,11 @@ public class GestorAlojamiento {
         Se muestran dos botones: “ELIMINAR” y “CANCELAR”. En ambos el CU termina
        */
 
-        CriteriosBusq criterios = new CriteriosBusq();
-
         var nombre=alojado.getDatos().getDatos_personales().getNombre();
         var apellido=alojado.getDatos().getDatos_personales().getApellido();
         var nroDoc=alojado.getDatos().getDatos_personales().getNroDoc();
         var tipoDoc=alojado.getDatos().getDatos_personales().getTipoDoc();
-        cargar_criterios(nombre, apellido, tipoDoc, nroDoc, criterios);
+        CriteriosBusq criterios = new CriteriosBusq(nombre, apellido, tipoDoc, nroDoc);
 
         InterfazDarBaja IO = new InterfazDarBaja();
 
