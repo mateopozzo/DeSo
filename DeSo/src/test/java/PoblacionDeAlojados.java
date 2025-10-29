@@ -206,6 +206,7 @@ public class PoblacionDeAlojados {
 
 
 
+
 //    public Invitado crearUnInvitado() {
 //
 //        DatosResidencia dr = new DatosResidencia("yo", "soy", "un", "invitado!", "mefalta", "432", "5", "sopa");

@@ -3,6 +3,7 @@ package ddb.deso.login.negocio;
 import java.util.Optional;
 
 import ddb.deso.almacenamiento.DAO.UsuarioDAO;
+import ddb.deso.login.Sesion;
 import ddb.deso.login.Usuario;
 import ddb.deso.login.negocio.excepciones.CredencialesInvalidasException;
 import ddb.deso.login.negocio.excepciones.UsuarioNoEncontradoException;
@@ -40,10 +41,11 @@ public class GestorAutenticacion {
             throw new UsuarioNoEncontradoException("No existe usuario: " + n);
         }
 
-        Usuario u = usuarioEncontrado .get();
+        Usuario u = usuarioEncontrado.get();
         if (!u.coincidePasswordCon(p)) {
             throw new CredencialesInvalidasException();
         }
-        return u;
+        Sesion.iniciarSesion(u);
+        return Sesion.getUsuarioLogueado();
     }
 }
