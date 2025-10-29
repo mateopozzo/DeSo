@@ -5,5 +5,5 @@
 package ddb.deso;
 
 public enum TipoDoc {
-    DNI,LE,LC,CI,PASAPORTE,OTRO
+    DNI,CI,LE,LC,PASAPORTE,OTRO
 }

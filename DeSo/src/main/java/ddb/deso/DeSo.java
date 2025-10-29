@@ -3,6 +3,7 @@ package ddb.deso;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.presentacion.InterfazBusqueda;
 import ddb.deso.presentacion.InterfazLogin;
 
 public class DeSo {
@@ -23,8 +24,8 @@ public class DeSo {
         //CASO DE USO 10: MODIFICAR HUESPED
 
         // CASO DE USO 2: BUSCAR HUESPED
-        CriteriosBusq criterios=new CriteriosBusq();
-        gestor_aloj.buscarHuesped(criterios);
+        InterfazBusqueda ui_busq=new InterfazBusqueda();
+        ui_busq.busqueda_huesped();
 
         // CASO DE USO 11: DAR DE BAJA HUESPED
 

@@ -7,7 +7,20 @@ public class CriteriosBusq {
     private TipoDoc tipoDoc;
     private String nroDoc;
 
-    public CriteriosBusq () { }
+    public CriteriosBusq(String apellido, String nombre, TipoDoc tipoDoc, String num_documento) {
+        if (no_es_vacio(nombre)){
+            this.setNombre(nombre);
+        }
+        if (no_es_vacio(apellido)){
+            this.setApellido(apellido);
+        }
+        if (no_es_vacio(tipoDoc.toString())){
+            this.setTipoDoc(tipoDoc);
+        }
+        if (no_es_vacio(num_documento)){
+            this.setNroDoc(num_documento);
+        }
+    }
 
     public String getApellido() {
         return apellido;
@@ -40,4 +53,11 @@ public class CriteriosBusq {
     public void setNroDoc(String nroDoc) {
         this.nroDoc = nroDoc;
     }
+
+    private boolean no_es_vacio (String contenido){
+        boolean flag = (contenido==null || contenido.isEmpty());
+        return !flag;
+    }
+
+
 }
