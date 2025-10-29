@@ -117,5 +117,4 @@ public class InterfazBusqueda {
         scanner.close();
     }
 
-
 }

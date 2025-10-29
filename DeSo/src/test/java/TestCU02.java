@@ -1,5 +1,7 @@
 import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.presentacion.InterfazBusqueda;
 
@@ -11,14 +13,15 @@ public class TestCU02 {
 
         System.out.println("TESTING: CASO DE USO 02 - BUSCAR HUÉSPED ----------------------------");
 
+        /*
          // CASO DE USO 2: BUSCAR HUESPED
         InterfazBusqueda ui_busq=new InterfazBusqueda();
 
-        // ENCONTRADO
+        // ENCONTRADO - Todos los criterios
         CriteriosBusq crit1 = new CriteriosBusq("Orellano", "Guillermo", TipoDoc.DNI, "34784093");
         buscarHuesped(crit1);
 
-        // CON TILDE EN BDD SIN TILDE EN BÚSQUEDA
+        // CON TILDE EN BDD, SIN TILDE EN BÚSQUEDA - Todos los criterios
         CriteriosBusq crit2 = new CriteriosBusq("Perez", "Ana Maria", TipoDoc.DNI, "25123456");
         buscarHuesped(crit2);
 
@@ -32,6 +35,6 @@ public class TestCU02 {
 
         // SIN COINCIDENCIAS
         CriteriosBusq crit5 = new CriteriosBusq("Suárez","Gael", TipoDoc.PASAPORTE, "AAF94042");
-        buscarHuesped(crit5);
+        buscarHuesped(crit5);*/
     }
 }

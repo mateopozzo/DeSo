@@ -16,7 +16,7 @@ public class TestCU10{
         AlojadoDAOJSON alojadoDAOJSON = new AlojadoDAOJSON();
         GestorAlojamiento gestor_aloj = new GestorAlojamiento(alojadoDAOJSON);
 
-        System.out.println("TESTING: CASO DE USO 02 - BUSCAR HUÉSPED ----------------------------");
+        System.out.println("TESTING: CASO DE USO 10 - BUSCAR HUÉSPED ----------------------------");
 
         // CASO DE USO 10: Modificar Huesped
         // Crear datos personales

@@ -4,10 +4,7 @@
  */
 package ddb.deso.almacenamiento.JSON;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,7 +19,10 @@ import java.util.List;
  * @author mat
  */
 public class ManejadorJson<T> {
+    // quiero probar algo
     private Gson gson = new Gson();
+    // private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     private Path path;
     private Class<T> clase;
     
