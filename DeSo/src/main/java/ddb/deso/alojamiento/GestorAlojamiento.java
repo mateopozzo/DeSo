@@ -26,7 +26,7 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
-    public GestorAlojamiento() {}
+//    public GestorAlojamiento() {}
 
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
@@ -451,7 +451,7 @@ public class GestorAlojamiento {
                         System.out.println("Huesped seleccionado con éxito.");
                         if (huesped_seleccionado != null){
                             System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-                            modificarHuesped(huesped_seleccionado);
+                            //modificarHuesped(huesped_seleccionado);
                             // FIN DE CASO DE USO
                         }
                     }
@@ -828,27 +828,51 @@ public class GestorAlojamiento {
        "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
  }
 
-    private boolean huespedSeAlojo(CriteriosBusq criterios){
+    private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios){
         // Logica de "huesped se alojó"
 
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
 
+        if(listaDTO == null || listaDTO.isEmpty()){
+            return ResumenHistorialHuesped.NO_PERSISTIDO;
+        }
+
         AlojadoDTO huespedBaja = listaDTO.getFirst();
 
         // estos dos ifs se pueden hacer excepcion
         if(huespedBaja == null) {
-            System.out.println("No se ha encontrado el alojado.");
-            return false;
+            return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
 
-        return !huespedBaja.getId_check_in().isEmpty() || !huespedBaja.getId_check_out().isEmpty();
+        // Si tiene algun check-in, el huesped se alojó
+        if(huespedBaja.getId_check_in().isEmpty() && huespedBaja.getId_check_out().isEmpty()){
+            return ResumenHistorialHuesped.SE_ALOJO;
+        }
+        return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
     private void eliminarAlojado(Alojado alojado){
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         AlojadoDTO eliminar = new AlojadoDTO(alojado);
         DAO.eliminarAlojado(eliminar);
+    }
+
+    /**
+     * Enumerador ResumenHistorialHuesped  informa el estado del huesped en el sistema
+     */
+    enum ResumenHistorialHuesped{
+        /**
+         * Tuvo alguna estadia en el hotel
+         * */
+        SE_ALOJO,
+        /**
+         * No tuvo ninguna estadia pero sus datos estan persistidos*/
+        NO_SE_ALOJO,
+        /**
+         * Sus datos no estan presentes en la base del sistema
+         */
+        NO_PERSISTIDO
     }
 
     public void darDeBajaHuesped(Alojado alojado){
@@ -870,20 +894,25 @@ public class GestorAlojamiento {
         var tipoDoc=alojado.getDatos().getDatos_personales().getTipoDoc();
         cargar_criterios(nombre, apellido, tipoDoc, nroDoc, criterios);
 
-        boolean seAlojo = huespedSeAlojo(criterios);
-
         InterfazDarBaja IO = new InterfazDarBaja();
 
-        if(seAlojo){
+        ResumenHistorialHuesped seAlojo = huespedSeAlojo(criterios);
+
+        // Flujo secundario de CU, el huesped se alojó o no existe en la base
+        if(seAlojo==ResumenHistorialHuesped.SE_ALOJO){
             IO.noSePuedeDarBaja();
+            return;
+        } else if(seAlojo==ResumenHistorialHuesped.NO_PERSISTIDO) {
+            IO.noExisteHuesped(criterios);
+            return;
         }
+
+        // El usuario desea cancelar la baja
         if(IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR){
             return;
         }
-        else {
-            eliminarAlojado(alojado);
-        }
 
+        eliminarAlojado(alojado);
         IO.terminarCU(criterios);
     }
 

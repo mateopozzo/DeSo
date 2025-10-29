@@ -13,7 +13,7 @@ import ddb.deso.*;
 public class DeSo {
     public static void main(String[] args) {
         TestCU11 t = new TestCU11();
-        t.testCU11();
+        t.eliminarHuespedInexistente();
     }
     
 }
