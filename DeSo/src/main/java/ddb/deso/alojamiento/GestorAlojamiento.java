@@ -1,7 +1,14 @@
 package ddb.deso.alojamiento;
+import static java.lang.Integer.parseInt;
+import java.time.LocalDate;
+import java.util.BitSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
 import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.presentacion.InterfazBusqueda;
 import ddb.deso.presentacion.InterfazDarBaja;
@@ -14,6 +21,7 @@ import java.util.BitSet;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
+
 
 
 public class GestorAlojamiento {
@@ -429,7 +437,6 @@ public class GestorAlojamiento {
     // Modificar huesped debería modificar alojados, no huesped (también puede modificar invitados)
     public void modificarHuesped(Alojado alojado){
         // creo un huesped auxiliar para modificar
-      AlojadoDTO dto = new AlojadoDTO(alojado);
       Alojado datosModificados = alojado;
       Scanner entrada = new Scanner(System.in);
 
@@ -455,6 +462,48 @@ public class GestorAlojamiento {
         System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
 
         switch (opcion.toLowerCase()) {
+            case "siguiente":
+            case "s":
+                 if (camposInvalidos.isEmpty()) {
+                     //System.out.println("Los datos del huésped han sido guardados correctamente.");
+                 }
+
+
+                 break;
+            case "cancelar":
+            case "c":
+                String boton3="-1";
+                while(!(boton3.equals("1")||boton3.equals("2"))){
+
+                   System.out.println("¿Desea cancelar el alta de huesped?");
+                   System.out.println("SI (1) o NO (2) ");
+                   boton3=entrada.nextLine();
+                }
+                if(boton3.equals("1")){
+                  bandera=false;//sale del bucle principal y el CU termina
+                }
+                //else vuelve al menu
+
+             break;
+            case "borrar":
+            case "b":
+                System.out.println("Los datos del huésped serán eliminados del sistema.");
+                break;
+            default:
+                datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalidos);
+                break;
+       }
+
+
+}
+
+}//modificarHuesped
+
+    private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos){
+        Alojado datosModificados = alojado;
+      Scanner entrada = new Scanner(System.in);
+
+        switch (opcion){
             case "1":
                  System.out.print("Nuevo apellido: ");
                  String nuevoApellido = entrada.nextLine();
@@ -665,62 +714,11 @@ public class GestorAlojamiento {
                      camposInvalidos.set(11);
                  }
                  break;
-            case "siguiente":
-            case "s":
-                 if (camposInvalidos.isEmpty()) {
-                     //System.out.println("Los datos del huésped han sido guardados correctamente.");
 
-                /*if(auxDTO.buscarPorDNI(nuevoNroDoc,nuevoNroDoc)){
-                    String boton2= "-1";
-                    while(!(boton2.equals("1")||boton2.equals("2"))){
-                        System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
-                        System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
-                        boton2= entrada.nextLine();
-                    }
-                    if(boton2.equals("1")) {
-                        //guardo datos con dni repettido
-                        System.out.println("Los datos del huésped han sido guardados correctamente.");
-                    }
-                 else {
-                    camposInvalidos.set(4);
-                 }
-             }
-             else{
-                //guardar datos
-                System.out.println("Los datos del huésped han sido guardados correctamente.");
-             }
-            }
-             else {
-                     System.out.println("No se pueden guardar los cambios. Hay campos inválidos.");
-                 */
-                 bandera = false; //sale del bucle principal y el CU termina
-                 }
-                 break;
-            case "cancelar":
-            case "c":
-                String boton3="-1";
-                while(!(boton3.equals("1")||boton3.equals("2"))){
+        }
+        return datosModificados;
 
-                   System.out.println("¿Desea cancelar el alta de huesped?");
-                   System.out.println("SI (1) o NO (2) ");
-                   boton3=entrada.nextLine();
-                }
-                if(boton3.equals("1")){
-                  bandera=false;//sale del bucle principal y el CU termina
-                }
-                //else vuelve al menu
-
-             break;
-            case "borrar":
-            case "b":
-                 System.out.println("Los datos del huésped serán eliminados del sistema.");
-
-       }
-
-
-}
-
-}//modificarHuesped
+    }
 
     // Esto debería hacerlo la interfaz
     private void listaDatosHuesped(Alojado alojado){
