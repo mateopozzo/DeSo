@@ -190,7 +190,7 @@ public class GestorAlojamiento {
     }
 
 
-    private TipoDoc menuTipoDoc(){
+    private TipoDoc menuTipoDoc(Scanner scanner){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
         System.out.println("2. LE");
@@ -199,8 +199,6 @@ public class GestorAlojamiento {
         System.out.println("5. OTRO");
 
         TipoDoc tipoDoc;
-
-        Scanner scanner = new Scanner(System.in);
         String opcion = scanner.nextLine();
 
         switch (opcion) {
@@ -210,7 +208,6 @@ public class GestorAlojamiento {
             case "5" -> tipoDoc =TipoDoc.OTRO;
             default -> tipoDoc = TipoDoc.DNI;
         }
-        scanner.close();
         return tipoDoc;
     }
 
@@ -296,7 +293,7 @@ public class GestorAlojamiento {
                     bandera=false;//sale del bucle principal y el CU termina
                     break;
                 default:
-                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalidos);
+                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalidos, entrada);
                 break;
         }
             System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
@@ -306,9 +303,8 @@ public class GestorAlojamiento {
     }//modificarHuesped
 
     //esta funcion es para el cu9 y cu10. contien la logica que comparten los casos de uso para ir cargando los campos
-    private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos){
+    private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos, Scanner dato){
         Alojado datosModificados = alojado;
-      Scanner dato = new Scanner(System.in);
 
         switch (opcion){
             case "1":
@@ -333,7 +329,7 @@ public class GestorAlojamiento {
                  break;
             case "3":
                  System.out.print("Nuevo tipo de documento: ");
-                 TipoDoc nuevoTipoDoc = menuTipoDoc();
+                 TipoDoc nuevoTipoDoc = menuTipoDoc(dato);
                  datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
                  if(Validador.isTipoDocumentoValido(nuevoTipoDoc)){
                      camposInvalidos.clear(2);
@@ -530,29 +526,27 @@ public class GestorAlojamiento {
 
     // Esto debería hacerlo la interfaz
     private void listaDatosHuesped(Alojado alojado){
-     System.out.println(STR."""
-        Datos del Huésped:
-        1. Apellido:\{alojado.getDatos().getDatos_personales().getApellido()}
-        2. Nombre:\{alojado.getDatos().getDatos_personales().getNombre()}
-        3. Tipo de Documento:\{alojado.getDatos().getDatos_personales().getTipoDoc()}
-        4. Número de Documento:\{alojado.getDatos().getDatos_personales().getNroDoc()}
-        5. Cuit:\{alojado.getDatos().getDatos_personales().getCUIT()}
-        6. Posición frente al IVA:\{alojado.getDatos().getDatos_personales().getPosicionIva()}
-        7. Fecha de Nacimiento:\{alojado.getDatos().getDatos_personales().getFechanac()}
-        8. Dirección:
-          Calle:\{alojado.getDatos().getDatos_residencia().getCalle()}
-          Número:\{alojado.getDatos().getDatos_residencia().getNro_calle()}
-          Piso:\{alojado.getDatos().getDatos_residencia().getPiso()}
-          Departamento:\{alojado.getDatos().getDatos_residencia().getDepto()}
-          Localidad:\{alojado.getDatos().getDatos_residencia().getLocalidad()}
-          Provincia:\{alojado.getDatos().getDatos_residencia().getProv()}
-          País:\{alojado.getDatos().getDatos_residencia().getPais()}
-          Código Postal:\{alojado.getDatos().getDatos_residencia().getCod_post()}
-        9. Teléfono:\{alojado.getDatos().getDatos_contacto().getTelefono()}
-        10. Email:\{alojado.getDatos().getDatos_contacto().getEmail()}
-        11. Ocupación:\{alojado.getDatos().getDatos_personales().getOcupacion()}
-        12. Nacionalidad:\{alojado.getDatos().getDatos_personales().getNacionalidad()}
-        """);
+        System.out.println("Datos del Huésped:\n" +
+                "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
+                "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
+                "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
+                "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
+                "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
+                "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
+                "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
+                "8. Dirección:\n" +
+                "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
+                "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
+                "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
+                "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
+                "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
+                "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
+                "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
+                "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
+                "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
+                "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
+                "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
+                "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
  }
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios){

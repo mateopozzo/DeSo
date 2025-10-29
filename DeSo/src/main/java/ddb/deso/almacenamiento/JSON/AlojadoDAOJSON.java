@@ -5,13 +5,9 @@
 package ddb.deso.almacenamiento.JSON;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.DatosPersonales;
-import ddb.deso.alojamiento.Huesped;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
