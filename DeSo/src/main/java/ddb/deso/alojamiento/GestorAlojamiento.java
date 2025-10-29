@@ -1,5 +1,4 @@
 package ddb.deso.alojamiento;
-import static java.lang.Integer.parseInt;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.LinkedList;
@@ -309,12 +308,12 @@ public class GestorAlojamiento {
     //esta funcion es para el cu9 y cu10. contien la logica que comparten los casos de uso para ir cargando los campos
     private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos){
         Alojado datosModificados = alojado;
-      Scanner entrada = new Scanner(System.in);
+      Scanner dato = new Scanner(System.in);
 
         switch (opcion){
             case "1":
                  System.out.print("Nuevo apellido: ");
-                 String nuevoApellido = entrada.nextLine();
+                 String nuevoApellido = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setApellido(nuevoApellido);
                  if(Validador.isApellidoValido(nuevoApellido)){
                      camposInvalidos.clear(0);
@@ -324,7 +323,7 @@ public class GestorAlojamiento {
                  break;
             case "2":
                  System.out.print("Nuevo nombre: ");
-                 String nuevoNombre = entrada.nextLine();
+                 String nuevoNombre = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNombre(nuevoNombre);
                  if(Validador.isNombreValido(nuevoNombre)){
                      camposInvalidos.clear(1);
@@ -344,7 +343,7 @@ public class GestorAlojamiento {
                  break;
             case "4":
                  System.out.print("Nuevo número de documento: ");
-                 String nuevoNroDoc = entrada.nextLine();
+                 String nuevoNroDoc = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNroDoc(nuevoNroDoc);
                  if(Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getDatos().getDatos_personales().getTipoDoc())){
                      camposInvalidos.clear(3);
@@ -354,7 +353,7 @@ public class GestorAlojamiento {
                  break;
             case "5":
                  System.out.print("Nuevo CUIT (sin guiones ni espacios): ");
-                 String nuevoCuit = entrada.nextLine();
+                 String nuevoCuit = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
                  if(Validador.isCuitValidoOpcional(nuevoCuit)){
                      camposInvalidos.clear(4);
@@ -364,7 +363,7 @@ public class GestorAlojamiento {
                  break;
             case "6":
                  System.out.print("Nueva posición frente al IVA: ");
-                 String nuevaPosIva = entrada.nextLine();
+                 String nuevaPosIva = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setPosicionIva(nuevaPosIva);
                  if(Validador.isPosicionIvaValida(nuevaPosIva)){
                      camposInvalidos.clear(5);
@@ -374,7 +373,7 @@ public class GestorAlojamiento {
                  break;
             case "7":
                  System.out.print("Nueva fecha de nacimiento (AAAA-MM-DD): ");
-                 String nuevaFechaStr = entrada.nextLine();
+                 String nuevaFechaStr = dato.nextLine();
                  LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
                  datosModificados.getDatos().getDatos_personales().setFechanac(nuevaFecha);
                     if(Validador.isFechaNacimientoValida(nuevaFecha)){
@@ -393,11 +392,11 @@ public class GestorAlojamiento {
                  }
                  System.out.println();
                  System.out.print("Seleccione el número del campo que desea modificar: ");
-                 opcion = entrada.nextLine();
+                 opcion = dato.nextLine();
                  switch (opcion) {
                     case "1":
                        System.out.print("Nueva calle: ");
-                       String nuevaCalle = entrada.nextLine();
+                       String nuevaCalle = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
                        if(Validador.isCalleValida(nuevaCalle)){
                            camposDireccionInvalidos.clear(0);
@@ -407,7 +406,7 @@ public class GestorAlojamiento {
                        break;
                     case "2":
                        System.out.print("Nuevo número: ");
-                       String nuevoNumero = entrada.nextLine();
+                       String nuevoNumero = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
                        if(Validador.isNumeroCalleValido(nuevoNumero)){
                            camposDireccionInvalidos.clear(1);
@@ -417,7 +416,7 @@ public class GestorAlojamiento {
                        break;
                     case "3":
                        System.out.print("Nuevo piso: ");
-                       String nuevoPiso = entrada.nextLine();
+                       String nuevoPiso = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
                        if(Validador.isNumeroCalleValido(nuevoPiso)){
                            camposDireccionInvalidos.clear(2);
@@ -427,7 +426,7 @@ public class GestorAlojamiento {
                        break;
                     case "4":
                        System.out.print("Nuevo departamento: ");
-                       String nuevoDepto = entrada.nextLine();
+                       String nuevoDepto = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
                        if(Validador.isNumeroCalleValido(nuevoDepto)){
                            camposDireccionInvalidos.clear(3);
@@ -437,7 +436,7 @@ public class GestorAlojamiento {
                        break;
                     case "5":
                        System.out.print("Nueva localidad: ");
-                       String nuevaLocalidad = entrada.nextLine();
+                       String nuevaLocalidad = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
                        if(Validador.isLocalidadValida(nuevaLocalidad)){
                            camposDireccionInvalidos.clear(4);
@@ -447,7 +446,7 @@ public class GestorAlojamiento {
                        break;
                     case "6":
                        System.out.print("Nueva provincia: ");
-                       String nuevaProvincia = entrada.nextLine();
+                       String nuevaProvincia = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
                        if(Validador.isProvinciaValida(nuevaProvincia)){
                            camposDireccionInvalidos.clear(5);
@@ -457,7 +456,7 @@ public class GestorAlojamiento {
                        break;
                     case "7":
                        System.out.print("Nuevo país: ");
-                       String nuevoPais = entrada.nextLine();
+                       String nuevoPais = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
                        if(Validador.isPaisValido(nuevoPais)){
                            camposDireccionInvalidos.clear(6);
@@ -467,7 +466,7 @@ public class GestorAlojamiento {
                        break;
                     case "8":
                        System.out.print("Nuevo código postal: ");
-                       String nuevoCodPost = entrada.nextLine();
+                       String nuevoCodPost = dato.nextLine();
                        datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
                        if(Validador.isCodigoPostalValido(nuevoCodPost)){
                            camposDireccionInvalidos.clear(7);
@@ -484,7 +483,7 @@ public class GestorAlojamiento {
                  break;
             case "9":
                  System.out.print("Nuevo teléfono: ");
-                 String nuevoTelefono = entrada.nextLine();
+                 String nuevoTelefono = dato.nextLine();
                  datosModificados.getDatos().getDatos_contacto().setTelefono(nuevoTelefono);
                  if(Validador.isTelefonoValido(nuevoTelefono)){
                      camposInvalidos.clear(8);
@@ -494,7 +493,7 @@ public class GestorAlojamiento {
                  break;
             case "10":
                  System.out.print("Nuevo email: ");
-                 String nuevoEmail = entrada.nextLine();
+                 String nuevoEmail = dato.nextLine();
                  datosModificados.getDatos().getDatos_contacto().setEmail(nuevoEmail);
                     if(Validador.isEmailValidoOpcional(nuevoEmail)){
                         camposInvalidos.clear(9);
@@ -504,7 +503,7 @@ public class GestorAlojamiento {
                  break;
             case "11":
                  System.out.print("Nueva ocupación: ");
-                 String nuevaOcupacion = entrada.nextLine();
+                 String nuevaOcupacion = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setOcupacion(nuevaOcupacion);
                  if(Validador.isOcupacionValida(nuevaOcupacion)){
                      camposInvalidos.clear(10);
@@ -514,7 +513,7 @@ public class GestorAlojamiento {
                  break;
             case "12":
                  System.out.print("Nueva nacionalidad: ");
-                 String nuevaNacionalidad = entrada.nextLine();
+                 String nuevaNacionalidad = dato.nextLine();
                  datosModificados.getDatos().getDatos_personales().setNacionalidad(nuevaNacionalidad);
                  if(Validador.isNacionalidadValida(nuevaNacionalidad)){
                      camposInvalidos.clear(11);
@@ -524,7 +523,7 @@ public class GestorAlojamiento {
                  break;
 
         }
-        entrada.close();
+        dato.close();
         return datosModificados;
 
     }
