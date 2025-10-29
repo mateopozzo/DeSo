@@ -1,20 +1,16 @@
 package ddb.deso.alojamiento;
-import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.presentacion.InterfazDarBaja;
-
-import ddb.deso.contabilidad.ResponsablePago;
-import java.nio.MappedByteBuffer;
-
+import static java.lang.Integer.parseInt;
 import java.time.LocalDate;
+import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.BitSet;
 import java.util.Scanner;
 
-import static java.lang.Integer.parseInt;
+import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.presentacion.InterfazDarBaja;
 
 
 public class GestorAlojamiento {
@@ -510,7 +506,6 @@ public class GestorAlojamiento {
     // Modificar huesped debería modificar alojados, no huesped (también puede modificar invitados)
     public void modificarHuesped(Alojado alojado){
         // creo un huesped auxiliar para modificar
-      AlojadoDTO dto = new AlojadoDTO(alojado);
       Alojado datosModificados = alojado;
       Scanner entrada = new Scanner(System.in);
 
