@@ -5,9 +5,12 @@ import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 
+
+/**
+ * Clase con casos de prueba para probar CU11: Dar de baja huesped
+ * @author mat
+ */
 public class TestCU11 {
-
-
     private AlojadoDAOJSON alojadoDAO;
     private GestorAlojamiento ge;
     private List<? extends Alojado> listaAlojados;

@@ -23,8 +23,6 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
-//    public GestorAlojamiento() {}
-
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         GestorAlojamiento.alojadoDAO = alojadoDAO;
     }
@@ -531,17 +529,23 @@ public class GestorAlojamiento {
         NO_PERSISTIDO
     }
 
-
-    public void darDeBajaHuesped(Alojado alojado){
-     /*
-        Se lo llama desde el CU13 al presionar BORRAR y se le pasa una instancia RespPago
-        Si el huesped alguna vez se quedó en el hotel, no puede borrarse
-        Se buscan coincidencias entre CUIT y Alojados. Se muestra en pantalla:
-        “El huésped no puede ser eliminado, pues se ha alojado en el Hotel en alguna oportunidad. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
-        Si la lista de encontrados isEmpty, se muestra:
-        “Los datos del huésped <nombre> y <apellido>, <tipoDeDoc> y <nroDeDoc> serán eliminados del sistema. PRESIONE CUALQUIER TECLA PARA CONTINUAR…”
-        Se muestran dos botones: “ELIMINAR” y “CANCELAR”. En ambos el CU termina
-       */
+/**
+ * **Clase que implementa CU11: Dar de baja Huesped**
+ * Implementa el **CU11: Dar de baja Huesped**.
+ * <p>
+ * Elimina huésped de la base de datos si y solo si no tiene registros de alojamiento
+ * Verificaciones que realiza:
+ * <ul>
+ * <li>Verifica si el huésped tuvo estadías.</li>
+ * <li>Verifica si el huésped **no existe** en la base de datos.</li>
+ * </ul>
+ * Si ninguna de las condiciones anteriores se cumple, solicita **confirmación** al usuario antes de proceder
+ * con la eliminación. Si el usuario cancela la operación, el CU finaliza sin cambios.
+ * </p>
+ * @param alojado El objeto {@code Alojado} que contiene los datos del huésped que se desea dar de baja.
+ * @return void
+ */
+public void darDeBajaHuesped(Alojado alojado){
 
         var nombre=alojado.getDatos().getDatos_personales().getNombre();
         var apellido=alojado.getDatos().getDatos_personales().getApellido();
@@ -572,4 +576,3 @@ public class GestorAlojamiento {
     }
 
 }
-
