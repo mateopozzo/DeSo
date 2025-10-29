@@ -1,3 +1,4 @@
+import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.presentacion.InterfazBusqueda;
@@ -13,19 +14,24 @@ public class TestCU02 {
          // CASO DE USO 2: BUSCAR HUESPED
         InterfazBusqueda ui_busq=new InterfazBusqueda();
 
-        CriteriosBusq crit1 = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        // ENCONTRADO
+        CriteriosBusq crit1 = new CriteriosBusq("Orellano", "Guillermo", TipoDoc.DNI, "34784093");
         buscarHuesped(crit1);
 
-        CriteriosBusq crit2 = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        // CON TILDE EN BDD SIN TILDE EN BÚSQUEDA
+        CriteriosBusq crit2 = new CriteriosBusq("Perez", "Ana Maria", TipoDoc.DNI, "25123456");
         buscarHuesped(crit2);
 
-        CriteriosBusq crit3 = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        // SOLO NOMBRE - MÁS DE UNA COINCIDENCIA
+        CriteriosBusq crit3 = new CriteriosBusq("Gómez","Juan", null, null);
         buscarHuesped(crit3);
 
-        CriteriosBusq crit4 = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        // SOLO APELLIDO, SOLO TIPO DOC - MÁS DE UNA COINCIDENCIA
+        CriteriosBusq crit4 = new CriteriosBusq("Smith","David", tipoDoc, num_documento);
         buscarHuesped(crit4);
 
-        CriteriosBusq crit5 = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        // SIN COINCIDENCIAS
+        CriteriosBusq crit5 = new CriteriosBusq("Suárez","Gael", TipoDoc.PASAPORTE, "AAF94042");
         buscarHuesped(crit5);
     }
 }
