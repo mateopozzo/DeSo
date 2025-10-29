@@ -1,9 +1,9 @@
+import java.util.List;
+
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
-
-import java.util.List;
 
 public class TestCU11 {
 
