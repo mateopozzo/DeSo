@@ -8,6 +8,10 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
 public class Invitado extends Alojado {
+    public Invitado (DatosAlojado da){
+        this.datos=da;
+        this.datos.getDatos_personales().setCUIT(null);
+    }
     @Override
     public void completarDTO(AlojadoDTO dto) {
         return;
