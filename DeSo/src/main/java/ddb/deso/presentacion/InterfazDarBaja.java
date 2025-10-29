@@ -68,4 +68,11 @@ public class InterfazDarBaja {
         return;
     }
 
+    public void noExisteHuesped(CriteriosBusq mostrar){
+        System.out.println("El huesped " + mostrar.getNombre() + " "
+                + mostrar.getApellido() + " No existe en la base de datos"
+        );
+        return;
+    }
+
 }
