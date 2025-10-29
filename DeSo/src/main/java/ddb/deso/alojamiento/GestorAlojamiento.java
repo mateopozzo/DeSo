@@ -530,27 +530,29 @@ public class GestorAlojamiento {
 
     // Esto debería hacerlo la interfaz
     private void listaDatosHuesped(Alojado alojado){
-     System.out.println("Datos del Huésped:\n" +
-     "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
-       "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
-       "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-       "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
-       "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
-       "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-       "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
-       "8. Dirección:\n" +
-       "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
-       "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-       "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
-       "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
-       "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-       "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
-       "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
-       "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
-       "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
-       "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
-       "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
-       "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
+     System.out.println(STR."""
+        Datos del Huésped:
+        1. Apellido:\{alojado.getDatos().getDatos_personales().getApellido()}
+        2. Nombre:\{alojado.getDatos().getDatos_personales().getNombre()}
+        3. Tipo de Documento:\{alojado.getDatos().getDatos_personales().getTipoDoc()}
+        4. Número de Documento:\{alojado.getDatos().getDatos_personales().getNroDoc()}
+        5. Cuit:\{alojado.getDatos().getDatos_personales().getCUIT()}
+        6. Posición frente al IVA:\{alojado.getDatos().getDatos_personales().getPosicionIva()}
+        7. Fecha de Nacimiento:\{alojado.getDatos().getDatos_personales().getFechanac()}
+        8. Dirección:
+          Calle:\{alojado.getDatos().getDatos_residencia().getCalle()}
+          Número:\{alojado.getDatos().getDatos_residencia().getNro_calle()}
+          Piso:\{alojado.getDatos().getDatos_residencia().getPiso()}
+          Departamento:\{alojado.getDatos().getDatos_residencia().getDepto()}
+          Localidad:\{alojado.getDatos().getDatos_residencia().getLocalidad()}
+          Provincia:\{alojado.getDatos().getDatos_residencia().getProv()}
+          País:\{alojado.getDatos().getDatos_residencia().getPais()}
+          Código Postal:\{alojado.getDatos().getDatos_residencia().getCod_post()}
+        9. Teléfono:\{alojado.getDatos().getDatos_contacto().getTelefono()}
+        10. Email:\{alojado.getDatos().getDatos_contacto().getEmail()}
+        11. Ocupación:\{alojado.getDatos().getDatos_personales().getOcupacion()}
+        12. Nacionalidad:\{alojado.getDatos().getDatos_personales().getNacionalidad()}
+        """);
  }
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios){
