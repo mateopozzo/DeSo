@@ -10,11 +10,12 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.presentacion.InterfazBusqueda;
 import ddb.deso.presentacion.InterfazDarBaja;
 
 
 public class GestorAlojamiento {
-    private final AlojadoDAO alojadoDAO;
+    private static AlojadoDAO alojadoDAO;
     private List<Huesped> huespedes = new LinkedList<>();
 
     /*
@@ -32,8 +33,7 @@ public class GestorAlojamiento {
     if (tipo == null || dni == null || dni.isBlank()) {
         return false; // o lanzar IllegalArgumentException según la política del proyecto
     }
-    CriteriosBusq criterios_busq = new CriteriosBusq();
-    cargar_criterios(null, null, tipo, dni, criterios_busq);
+    CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
     List<AlojadoDTO> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
     return encontrados != null && !encontrados.isEmpty();
 }
@@ -163,7 +163,7 @@ public class GestorAlojamiento {
       aDAO.crearAlojado(aDTO);
  */
 
-    public void buscarHuesped (CriteriosBusq criterios_busq){
+    public static void buscarHuesped(CriteriosBusq criterios_busq){
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
         Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
