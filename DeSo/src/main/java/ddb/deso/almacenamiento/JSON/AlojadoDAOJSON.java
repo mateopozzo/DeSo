@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+
 /**
  Implementa la interfaz DAO para:
  <ul>
@@ -39,6 +40,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      Escribe lista completa en JSON
      listaAlojados es una lista de entidades de Alojado a persistir
      */
+
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
         try {
             manejador.escribir(listaAlojados);
@@ -122,7 +124,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
 
     private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
         // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
-        String apellido_b = criterio.getApellido();
+        String apellido_b = criterio.getApellido().stripAccents();
         String nombres_b = criterio.getNombre();
         TipoDoc tipoDoc_b = criterio.getTipoDoc();
         String nroDoc_b = criterio.getNroDoc();

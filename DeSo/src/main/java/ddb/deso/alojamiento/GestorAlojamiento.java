@@ -23,11 +23,6 @@ public class GestorAlojamiento {
     Inyección por constructor: final, la dependencia es explícita, ayuda al testing
     */
 
-//    public GestorAlojamiento() {}
-
-    public GestorAlojamiento(AlojadoDAO alojadoDAO) {
-        GestorAlojamiento.alojadoDAO = alojadoDAO;
-    }
 
     public boolean dniExiste(String dni, TipoDoc tipo) {
         if (tipo == null || dni == null || dni.isBlank()) {
@@ -192,7 +187,7 @@ public class GestorAlojamiento {
     }   
 
 
-    private TipoDoc menuTipoDoc(){
+    private TipoDoc menuTipoDoc(Scanner scanner){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
         System.out.println("2. LE");
@@ -333,7 +328,7 @@ public class GestorAlojamiento {
                  break;
             case "3":
                  System.out.print("Nuevo tipo de documento: ");
-                 TipoDoc nuevoTipoDoc = menuTipoDoc();
+                 TipoDoc nuevoTipoDoc = menuTipoDoc(entrada);
                  datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
                  if(Validador.isTipoDocumentoValido(nuevoTipoDoc)){
                      camposInvalidos.clear(2);

@@ -13,11 +13,10 @@ public class TestCU02 {
 
         System.out.println("TESTING: CASO DE USO 02 - BUSCAR HUÉSPED ----------------------------");
 
-        /*
-         // CASO DE USO 2: BUSCAR HUESPED
+        // CASO DE USO 2: BUSCAR HUESPED
         InterfazBusqueda ui_busq=new InterfazBusqueda();
 
-        // ENCONTRADO - Todos los criterios
+        // ENCONTRADO - Todos los criterios -> una coincidencia
         CriteriosBusq crit1 = new CriteriosBusq("Orellano", "Guillermo", TipoDoc.DNI, "34784093");
         buscarHuesped(crit1);
 
@@ -29,12 +28,12 @@ public class TestCU02 {
         CriteriosBusq crit3 = new CriteriosBusq("Gómez","Juan", null, null);
         buscarHuesped(crit3);
 
-        // SOLO APELLIDO, SOLO TIPO DOC - MÁS DE UNA COINCIDENCIA
-        CriteriosBusq crit4 = new CriteriosBusq("Smith","David", tipoDoc, num_documento);
+        // SOLO NUM DOC - MÁS DE UNA COINCIDENCIA (porque puede ser el mismo num pero distinto tipo)
+        CriteriosBusq crit4 = new CriteriosBusq(null,null, null, "30987654");
         buscarHuesped(crit4);
 
         // SIN COINCIDENCIAS
         CriteriosBusq crit5 = new CriteriosBusq("Suárez","Gael", TipoDoc.PASAPORTE, "AAF94042");
-        buscarHuesped(crit5);*/
+        buscarHuesped(crit5);
     }
 }
