@@ -26,7 +26,7 @@ public class InterfazBusqueda {
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
 
-        TipoDoc tipoDoc = menuTipoDoc();
+        TipoDoc tipoDoc = menuTipoDoc(scanner);
 
         System.out.println("Ingrese el número de documento: ");
         String num_documento = scanner.nextLine();
@@ -37,22 +37,21 @@ public class InterfazBusqueda {
         scanner.close();
     }
 
-    private TipoDoc menuTipoDoc(){
+    private TipoDoc menuTipoDoc(Scanner scanner){
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
-        System.out.println("2. CI");
-        System.out.println("3. LE");
+        System.out.println("2. LE");
+        System.out.println("3. LC");
         System.out.println("4. PASAPORTE");
         System.out.println("5. OTRO");
 
         TipoDoc tipoDoc;
 
-        Scanner scanner = new Scanner(System.in);
         String opcion = scanner.nextLine();
 
         switch (opcion) {
-            case "2" -> tipoDoc =TipoDoc.CI;
-            case "3" -> tipoDoc =TipoDoc.LE;
+            case "2" -> tipoDoc =TipoDoc.LE;
+            case "3" -> tipoDoc =TipoDoc.LC;
             case "4" -> tipoDoc =TipoDoc.PASAPORTE;
             case "5" -> tipoDoc =TipoDoc.OTRO;
             default -> tipoDoc = TipoDoc.DNI;
@@ -79,7 +78,7 @@ public class InterfazBusqueda {
         for (int i = 0; i < encontrados.size(); i++) {
             // nombre, apellido, tipoDoc, num_documento
             huesped_seleccionado = encontrados.get(i);
-            System.out.println(STR."\{i + 1}. \{huesped_seleccionado.getNombre()} \{huesped_seleccionado.getApellido()} - \{huesped_seleccionado.getTipoDoc()}: \{huesped_seleccionado.getNroDoc()}");
+            System.out.println((i+1) + ". " + huesped_seleccionado.getNombre() + huesped_seleccionado.getApellido() + " - " + huesped_seleccionado.getTipoDoc() + ": " + huesped_seleccionado.getNroDoc());
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -106,6 +105,7 @@ public class InterfazBusqueda {
                     System.out.println("Huesped seleccionado con éxito.");
                     if (huesped_seleccionado != null){
                         System.out.println("MODIFICAR HUESPED ---- FROM CU02");
+
                         //modificarHuesped(huesped_seleccionado);
                         // FIN DE CASO DE USO
                     }
@@ -116,6 +116,5 @@ public class InterfazBusqueda {
         }
         scanner.close();
     }
-
 
 }

@@ -16,17 +16,17 @@ public class TestCU10{
         AlojadoDAOJSON alojadoDAOJSON = new AlojadoDAOJSON();
         GestorAlojamiento gestor_aloj = new GestorAlojamiento(alojadoDAOJSON);
 
-        System.out.println("TESTING: CASO DE USO 02 - BUSCAR HUÉSPED ----------------------------");
+        System.out.println("TESTING: CASO DE USO 10 - BUSCAR HUÉSPED ----------------------------");
 
         // CASO DE USO 10: Modificar Huesped
         // Crear datos personales
-        DatosPersonales datosPersonales = new DatosPersonales("Guillermo","Orellano", "argentino","excento","Docente","34784093",TipoDoc.DNI,"20-34784093-2", LocalDate.parse("2025-10-29"));
+        DatosPersonales datosPersonales = new DatosPersonales("Gatito","Negro", "Francés","excento","Docente","12345678",TipoDoc.PASAPORTE,"25-123457-2", LocalDate.parse("2023-11-09"));
 
         // Crear datos de residencia
-        DatosResidencia datosResidencia = new DatosResidencia("Lopez y Planes","Capital","Santa Fe","Santa Fe","Argentina","1456","","3000");
+        DatosResidencia datosResidencia = new DatosResidencia("Calle falsa","Capital","Santa Fe","Santa Fe","Argentina","1234","","1234");
 
         // Crear datos de contacto
-        DatosContacto datosContacto = new DatosContacto("4742205","guillermoorellano@utn.frsf.edu.ar");
+        DatosContacto datosContacto = new DatosContacto("1234784","gmichitonegro@utn.frsf.edu.ar");
 
         // Crear DatosAlojado que agrupa todos los datos
         DatosAlojado datos = new DatosAlojado(datosContacto, datosResidencia, datosPersonales);

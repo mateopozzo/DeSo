@@ -74,22 +74,62 @@ Cabe mencionar que los integrantes del grupo pertenecen a distintos grupos de di
 ----
 
 ## Casos de uso implementados
-- Caso de uso 01: Login
+
+----
+### Caso de uso 01: Login
+Para la implementación se utilizaron las siguientes clases:
+
+**Usuario:** Clase que representa a los usuarios del sistema. Contiene atributos como nombre, contraseña y permisos.
+
+**UsuarioDAO (interfaz):** Define las operaciones de acceso a los datos de los usuarios, como la búsqueda por nombre. Su uso permite desacoplar la lógica de negocio del manejo de archivos, aplicando el patrón DAO.
+
+**UsuarioJSONDAO:** Implementación concreta de UsuarioDAO. Gestiona la lectura de los usuarios desde un archivo usuarios.JSON utilizando la librería Gson para la conversión entre objetos Java y JSON.
+
+**GestorAutenticacion:** Clase de la capa de negocio que centraliza la lógica del caso de uso. Se encarga de validar las credenciales ingresadas, consultando al DAO y lanzando excepciones personalizadas cuando corresponde.
+
+
+### Excepciones personalizadas:
+
+*UsuarioNoEncontradoException:* Se lanza cuando el nombre de usuario no existe en el sistema.
+
+*CredencialesInvalidasException:* Se lanza cuando la contraseña ingresada no coincide con la registrada.
+
+*InterfazLogin:* Clase perteneciente a la capa de presentación. Se comunica con el usuario por consola para solicitar las credenciales. Utiliza la librería JLine para permitir que la contraseña se escriba de forma oculta, mostrando asteriscos (*) en lugar de los caracteres reales.
+
+*Sesion:* Clase que implementa el patrón Singleton, asegurando que solo exista una única sesión activa en el sistema.
+
+----
+### Caso de uso 02: Buscar huésped
+Para la implementación se utilizaron las siguientes clases:
+
+**Alojado:** Clase abstracta que forma parte del patrón factory. Sus clases hijas son huésped (encargado de habitación) e invitado.
+
+**AlojadoDAO (interfaz):** Interfaz del patrón DAO que recibe la llamada desde el gestor para ejecutar la implementación de buscarHuespedDAO en AlojadoDAOJSON.
+
+**AlojadoDAOJSON:** Implementación concreta del DAO para una base de datos en archivos JSON donde se encuentra el método buscarHuespedDAO. Este lista todos los huéspedes existentes y por cada uno de ellos llama al método cumpleCriterio que devuelve un booleano: Si los criterios coinciden con los datos de este alojado, retorna TRUE y este se agrega a una lista de "Encontrados". 
+
+**AlojadoDTO:** Objeto DTO que se crea al traer alojados desde la base de datos. Este se entrega a la implementación del DAO, que la devuelve en forma de lista de acuerdo a una condición (ver buscarHuespedDAO) hacia el gestor.
+
+**InterfazBusqueda:** GUI que interactua con el usuario en la toma de datos. También se encarga de mostrar por pantalla resultados, mensajes de error/éxito y llamar a métodos como buscarHuesped.
+
+**GestorAlojamiento:** Gestor que contiene el método buscarHuesped. Este recibe un criterio de búsqueda y llama al método buscarHuespedDAO.
+
+**CriteriosBusq:** Clase que se encarga de recibir los cuatro criterios opcionales. Los cuatro criterios son: Nombre, apellido, tipo de documento, número de documento. Si alguno no fue especificado, se inicializa en null. 
+
+
+
+----
+### Caso de uso 09: Dar de alta huésped
 
 ```DESCRIPCION```
 
-- Caso de uso 02: Buscar huésped
-
-```DESCRIPCION```
-- Caso de uso 09: Dar de alta huésped
-
-```DESCRIPCION```
-
-- Caso de uso 10: Modificar huésped
+----
+### Caso de uso 10: Modificar huésped
 
 ```DESCRIPCION```
 
-- Caso de uso 11: Dar de baja huésped
+----
+### Caso de uso 11: Dar de baja huésped
 
 ```DESCRIPCION```
 
