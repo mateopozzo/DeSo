@@ -74,15 +74,19 @@ public class GestorAlojamiento {
         AlojadoDTO aDTO=new AlojadoDTO(alojadoNuevo);
         aDao.crearAlojado(aDTO);
     }
-       
-    /*
-     Verifica si un huésped, basado en ciertos criterios de búsqueda, se ha alojado alguna vez en el hotel.
-     @param criterios Criterios de búsqueda (Nombre, Apellido, NroDoc, TipoDoc) para identificar al huésped.
-     @return El estado del historial del huésped según {@link ResumenHistorialHuesped}.
+
+    /**
+     * Verifica si un huésped, basado en los criterios de búsqueda, se alojó previamente.
+     *
+     * @param criterios Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
+     * @return Estado del historial del huésped.
+     * <ul>
+     * <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido pero no tiene check-in/out.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
+     * </ul>
      */
     private static ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
-        // Logica de "huesped se alojó"
-
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
 
@@ -92,26 +96,23 @@ public class GestorAlojamiento {
 
         AlojadoDTO huespedBaja = listaDTO.getFirst();
 
-        // estos dos ifs se pueden hacer excepcion
         if (huespedBaja == null) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
 
-        // Si tiene algun check-in, el huesped se alojó
         if (huespedBaja.getId_check_in().isEmpty() && huespedBaja.getId_check_out().isEmpty()) {
             return ResumenHistorialHuesped.SE_ALOJO;
         }
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
-    /*
-     Elimina el registro de un huésped de la base de datos (persistencia).
-     Este metodo se llama solo si el huésped nunca se alojó en el hotel.
 
-     @param alojado La instancia de {@code Alojado} a eliminar.
+    /**
+     * Elimina un registro de huésped del sistema.
+     *
+     * @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
      */
-
-    private static void eliminarAlojado(Alojado alojado) {
+    public static void eliminarAlojado(Alojado alojado) {
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         AlojadoDTO eliminar = new AlojadoDTO(alojado);
         DAO.eliminarAlojado(eliminar);
@@ -120,7 +121,7 @@ public class GestorAlojamiento {
     /**
      * Enumerador ResumenHistorialHuesped  informa el estado del huesped en el sistema
      */
-    enum ResumenHistorialHuesped {
+    public enum ResumenHistorialHuesped {
         /**
          * Tuvo alguna estadia en el hotel
          */
@@ -135,50 +136,31 @@ public class GestorAlojamiento {
         NO_PERSISTIDO
     }
 
-    /*
-     Clase que implementa CU11: Dar de baja Huesped**
-     Implementa el **CU11: Dar de baja Huesped**.
-     <p>
-     Elimina huésped de la base de datos si y solo si no tiene registros de alojamiento
-     Verificaciones que realiza:
-     <ul>
-     <li>Verifica si el huésped tuvo estadías.</li>
-     <li>Verifica si el huésped **no existe** en la base de datos.</li>
-     </ul>
-     Si ninguna de las condiciones anteriores se cumple, solicita **confirmación** al usuario antes de proceder
-     con la eliminación. Si el usuario cancela la operación, el CU finaliza sin cambios.
-     </p>
-
-     @param alojado El objeto {@code Alojado} que contiene los datos del huésped que se desea dar de baja.
-     @return void
+    /**
+     * Obtiene el resumen del historial de alojamiento de un huésped.
+     *
+     * @param alojado Objeto {@code Alojado} con los datos del huésped.
+     * @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
-    public static void darDeBajaHuesped(Alojado alojado) {
+    public static ResumenHistorialHuesped historialHuesped(Alojado alojado){
         var nombre = alojado.getDatos().getDatos_personales().getNombre();
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
         var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
         var tipoDoc = alojado.getDatos().getDatos_personales().getTipoDoc();
         CriteriosBusq criterios = new CriteriosBusq(nombre, apellido, tipoDoc, nroDoc);
-
-        InterfazDarBaja IO = new InterfazDarBaja();
-
         ResumenHistorialHuesped seAlojo = huespedSeAlojo(criterios);
 
         // Flujo secundario de CU, el huesped se alojó o no existe en la base
         if (seAlojo == ResumenHistorialHuesped.SE_ALOJO) {
-            IO.noSePuedeDarBaja();
-            return;
+            return ResumenHistorialHuesped.SE_ALOJO;
         } else if (seAlojo == ResumenHistorialHuesped.NO_PERSISTIDO) {
-            IO.noExisteHuesped(criterios);
-            return;
+            return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
+        return ResumenHistorialHuesped.NO_SE_ALOJO;
+    }
 
-        // El usuario desea cancelar la baja
-        if (IO.avisoBajaAlojado(criterios) == InterfazDarBaja.BajaCliente.CANCELAR) {
-            return;
-        }
-
-        eliminarAlojado(alojado);
-        IO.terminarCU(criterios);
+    public static obtenerAlojado(){
+        
     }
 }
 
