@@ -10,13 +10,17 @@ import java.util.Scanner;
 import static java.lang.Integer.parseInt;
 
 public class InterfazBusqueda {
+    private final Scanner scanner;
+
+    public InterfazBusqueda() {
+        this.scanner = new Scanner(System.in);
+    }
+
     public void busqueda_huesped() {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE MAIN
         System.out.println("Hotel Premier - Buscar huésped --------------------------------------------------------");
         System.out.println("Seleccione un huésped y podrá modificarlo. Si no se encuentran coincidencias, podrá crear un nuevo huésped");
         System.out.println("Si desea crear un nuevo huésped incluso habiendo encontrado coincidencias, presione ENTER y luego SIGUIENTE");
-
-        Scanner scanner = new Scanner(System.in);
 
         // Ingreso de los filtros de búsqueda
         System.out.println("Ingrese el nombre: ");
@@ -33,7 +37,6 @@ public class InterfazBusqueda {
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
         GestorAlojamiento.buscarHuesped(criterios_busq);
-        scanner.close();
     }
 
     private TipoDoc menuTipoDoc(Scanner scanner){
@@ -77,7 +80,7 @@ public class InterfazBusqueda {
         for (int i = 0; i < encontrados.size(); i++) {
             // nombre, apellido, tipoDoc, num_documento
             h_encontrado = encontrados.get(i);
-            System.out.println((i+1) + ". " + h_encontrado.getNombre() + h_encontrado.getApellido() + " - " + h_encontrado.getTipoDoc() + ": " + h_encontrado.getNroDoc());
+            System.out.println((i+1) + ". " + h_encontrado.getNombre() + " " + h_encontrado.getApellido() + " - " + h_encontrado.getTipoDoc() + ": " + h_encontrado.getNroDoc());
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -117,6 +120,9 @@ public class InterfazBusqueda {
                 System.out.println("Entrada inválida. Debe ser un número o ENTER.");
             }
         }
+    }
+
+    public void close() {
         scanner.close();
     }
 

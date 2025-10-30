@@ -146,7 +146,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
             return false;
         }
-        if (no_es_vacio(tipoDoc_b.toString()) && !tipoDoc_h.equals(tipoDoc_b)) {
+        if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {
             return false;
         }
         if (no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b)) {

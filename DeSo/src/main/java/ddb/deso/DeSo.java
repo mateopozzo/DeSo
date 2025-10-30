@@ -23,6 +23,7 @@ public class DeSo {
         // CASO DE USO 2: BUSCAR HUESPED
         InterfazBusqueda ui_busq=new InterfazBusqueda();
         ui_busq.busqueda_huesped();
+        ui_busq.close();
 
         // CASO DE USO 11: DAR DE BAJA HUESPED
 
