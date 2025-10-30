@@ -14,7 +14,7 @@ public class CriteriosBusq {
         if (no_es_vacio(apellido)){
             this.setApellido(apellido);
         }
-        if (no_es_vacio(tipoDoc.toString())){
+        if (tipoDoc != null && no_es_vacio(tipoDoc.toString())){
             this.setTipoDoc(tipoDoc);
         }
         if (no_es_vacio(num_documento)){

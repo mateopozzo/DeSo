@@ -14,7 +14,7 @@ import ddb.deso.presentacion.InterfazDarBaja;
 
 
 public class GestorAlojamiento {
-    private static AlojadoDAO alojadoDAO;
+    private static final AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
     private List<Huesped> huespedes = new LinkedList<>();
 
     /*
