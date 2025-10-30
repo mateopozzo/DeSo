@@ -20,7 +20,7 @@ public class Huesped extends Alojado{
    // private Map<Long,TipoDoc> dniMap= new HashMap<>();
 
 
-    public  Huesped (DatosAlojado da){
+    public Huesped (DatosAlojado da){
         this.datos=da;
     }
     public DatosAlojado getDatos(){

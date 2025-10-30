@@ -5,21 +5,24 @@ import ddb.deso.alojamiento.DatosCheckIn;
 
 import java.time.LocalDate;
 
+/**
+ * DTO-Clase check in
+ * @author mat
+ */
+
 public class DatosCheckInDTO{
-
-
     private LocalDate fecha_hora_in;
     long idCheckIn;
 
     /**
-     *
-     * @param obj Instancia de Check in de transferencia
+     * @param obj Instancia de {@code DatosCheckIn} transferido
      */
     public DatosCheckInDTO(DatosCheckIn obj) {
         fecha_hora_in=obj.getFecha_hora_in();
         idCheckIn= obj.getId();
     }
 
+    /*  Getters y setters */
     public LocalDate getFecha_hora_in() {
         return fecha_hora_in;
     }

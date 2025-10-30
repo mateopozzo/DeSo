@@ -5,17 +5,14 @@
 package ddb.deso.almacenamiento.JSON;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.Alojado;
 import java.util.ArrayList;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.DatosPersonales;
-import ddb.deso.alojamiento.Huesped;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
 
 /**
  Implementa la interfaz DAO para:
@@ -31,7 +28,7 @@ import java.util.List;
 
 public class AlojadoDAOJSON implements AlojadoDAO {
     // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
-    private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("data").resolve("Alojado.json").toString();
+    private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("DeSo").resolve("data").resolve("Alojado.json").toString();
     private ManejadorJson manejador;
 
     public AlojadoDAOJSON() {
@@ -43,6 +40,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      Escribe lista completa en JSON
      listaAlojados es una lista de entidades de Alojado a persistir
      */
+
     private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
         try {
             manejador.escribir(listaAlojados);

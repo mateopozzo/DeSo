@@ -6,6 +6,7 @@ package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.DatosAlojado;
 import ddb.deso.alojamiento.Huesped;
 import ddb.deso.alojamiento.Invitado;
 import java.time.LocalDate;
@@ -14,13 +15,18 @@ import java.util.Objects;
 
 /**
  *
- * DTO aplanado para Alojado
+ * DTO aplanado para entidad Alojado
+ * * <p>Esta clase se utiliza para transferir datos de un objeto {@code Alojado}
+ * (que puede ser un {@code Huesped} o un {@code Invitado}) de forma simplificada y aplanada.
+ * Consolida la información de contacto, residencia, personal y de registro
+ * (check-in/check-out) en una única estructura, ignorando las jerarquías internas
+ * del objeto de dominio.</p>
  * @author mat
  */
 
 public class AlojadoDTO {
     // Contacto
-    private long telefono;
+    private String telefono;
     private String email;
     // Residencia
     private String calle;
@@ -47,8 +53,12 @@ public class AlojadoDTO {
     private List<Long> id_check_in;
     private List<Long> id_check_out;
 
-
-    
+    /**
+     * Constructor que inicializa el DTO a partir de una instancia concreta de {@code Alojado}.
+     * * <p>Copia todos los datos de contacto, residencia, personales y de registro
+     * (check-in/check-out) desde el objeto de dominio {@code Alojado} de origen.</p>
+     * * @param i Cualquier instancia concreta de {@code Alojado} ({@code Huesped} o {@code Invitado}).
+     */
     public AlojadoDTO(Alojado i) {
         // Datos Personales
         this.setNombre(i.getDatos().getDatos_personales().getNombre());
@@ -78,15 +88,16 @@ public class AlojadoDTO {
         // ingreso/egreso
         this.id_check_in=i.getDatos().getId_check_in();
         this.id_check_out=i.getDatos().getId_check_out();
+
+        // Completar datos segun instancia concreta\
+        i.completarDTO(this);
     }
 
     public AlojadoDTO(Invitado i){
         this((Alojado)i);
-        i.completarDTO(this);
     }
     public AlojadoDTO(Huesped h) {
         this((Alojado)h);
-        h.completarDTO(this);
     }
     
     public AlojadoDTO() {
@@ -116,7 +127,7 @@ public class AlojadoDTO {
         return razon_social;
     }
 
-    public long getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
@@ -192,7 +203,7 @@ public class AlojadoDTO {
         return LocalDate.parse(fechanac);
     }
 
-    public void setTelefono(long telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
@@ -269,8 +280,9 @@ public class AlojadoDTO {
     }
 
     /**
-     * Metodo provisto por ide
-     * 
+     * Metodo provisto por IDE Netbeans
+     * Genera un código hash basado en el número de documento ({@code nroDoc}) y el tipo de documento ({@code tipoDoc}).
+     * * @return El código hash.
      */
     @Override
     public int hashCode() {
@@ -280,6 +292,13 @@ public class AlojadoDTO {
         return hash;
     }
 
+    /**
+     * Compara este {@code AlojadoDTO} con otro objeto para determinar si son iguales.
+     * Dos instancias son iguales si tienen mismo hash para número de documento ({@code nroDoc})
+     * y tipo de documento ({@code tipoDoc}).
+     * * @param obj El objeto a comparar.
+     * @return {@code true} si los objetos son iguales, {@code false} en caso contrario.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

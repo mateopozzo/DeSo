@@ -1,5 +1,4 @@
 
-
 import ddb.deso.*;
 
 /*
@@ -12,9 +11,8 @@ import ddb.deso.*;
  */
 public class DeSo {
     public static void main(String[] args) {
-        System.out.println("asdf\n");
         TestCU11 t = new TestCU11();
-        t.testCU11();
+        t.eliminarHuespedInexistente();
     }
     
 }

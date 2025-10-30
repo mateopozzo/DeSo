@@ -17,7 +17,7 @@ public class InterfazDarBaja {
         System.out.println("El huesped "+
                 criterios.getNombre() + " " +
                 criterios.getApellido() +
-                "Se dio de baja correctamente\n" +
+                " Se dio de baja correctamente\n" +
                 "Pulse cualquier tecla para continuar"
         );
         try{
@@ -54,10 +54,10 @@ public class InterfazDarBaja {
     }
 
     public void noSePuedeDarBaja(){
-        System.out.println("El" +
-                "huésped no puede ser eliminado pues se" +
-                "ha alojado en el Hotel en alguna" +
-                "oportunidad. PRESIONE CUALQUIER" +
+        System.out.println("El " +
+                "huésped no puede ser eliminado pues se " +
+                "ha alojado en el Hotel en alguna " +
+                "oportunidad. PRESIONE CUALQUIER " +
                 "TECLA PARA CONTINUAR");
         // Entiendo que esto lee el primer byte y vuelve, hay que testearlo
         try{
@@ -65,6 +65,13 @@ public class InterfazDarBaja {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return;
+    }
+
+    public void noExisteHuesped(CriteriosBusq mostrar){
+        System.out.println("El huesped " + mostrar.getNombre() + " "
+                + mostrar.getApellido() + " No existe en la base de datos"
+        );
         return;
     }
 

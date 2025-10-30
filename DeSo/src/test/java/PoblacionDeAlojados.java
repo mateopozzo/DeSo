@@ -205,16 +205,6 @@ public class PoblacionDeAlojados {
     }
 
 
-//    public Huesped crearUnHuesped(){
-//        DatosResidencia dr = new DatosResidencia("3a", "villa anonima", "cordoba", "vieja argentina", "mefalta", "432", "5", "304");
-//        DatosContacto dc = new DatosContacto(4742205, "polimorfismo@herencia.encap");
-//        DatosPersonales dp = new DatosPersonales("knapsack", "estado transicion", "mundo", "extremo centro", "stalker profesional", "1234532", TipoDoc.PASAPORTE, "21-231-13857", new Date());
-//        DatosAlojado da = new DatosAlojado(dc,dr,dp);
-//        Huesped x = new Huesped(da);
-//        x.setRazon_social("la razon de la vida");
-//        return x;
-//    }
-
 
 
 //    public Invitado crearUnInvitado() {
