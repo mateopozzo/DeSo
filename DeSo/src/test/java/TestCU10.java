@@ -2,23 +2,18 @@
 import java.time.LocalDate;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.DatosAlojado;
 import ddb.deso.alojamiento.DatosContacto;
 import ddb.deso.alojamiento.DatosPersonales;
 import ddb.deso.alojamiento.DatosResidencia;
-import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Huesped;
+import ddb.deso.presentacion.InterfazModiHues;
 
 public class TestCU10{
     public static void main(String[] args) {
-        AlojadoDAOJSON alojadoDAOJSON = new AlojadoDAOJSON();
-        GestorAlojamiento gestor_aloj = new GestorAlojamiento(alojadoDAOJSON);
-
         System.out.println("TESTING: CASO DE USO 10 - BUSCAR HUÉSPED ----------------------------");
 
-        // CASO DE USO 10: Modificar Huesped
         // Crear datos personales
         DatosPersonales datosPersonales = new DatosPersonales("Gatito","Negro", "Francés","excento","Docente","12345678",TipoDoc.PASAPORTE,"25-123457-2", LocalDate.parse("2023-11-09"));
 
@@ -34,7 +29,8 @@ public class TestCU10{
         // Crear el Alojado
         Alojado alojado = new Huesped(datos);  // Uso Huesped que extiende de Alojado
 
-        gestor_aloj.modificarHuesped(alojado);
+        InterfazModiHues interfaz_modi = new InterfazModiHues();
+        interfaz_modi.ejecutarModiHuesped(alojado);
 
     }
 }

@@ -2,8 +2,7 @@ package ddb.deso.presentacion;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.alojamiento.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -67,7 +66,7 @@ public class InterfazBusqueda {
     }
 
     public void seleccion (List<AlojadoDTO> encontrados){
-        AlojadoDTO huesped_seleccionado;
+        AlojadoDTO h_encontrado;
         String input_user;
 
         // Si nunca se actualiza el valor de control me lo muestra
@@ -77,8 +76,8 @@ public class InterfazBusqueda {
         System.out.println("Si no desea seleccionar alguno, presione ENTER y luego 1. (SIGUIENTE)");
         for (int i = 0; i < encontrados.size(); i++) {
             // nombre, apellido, tipoDoc, num_documento
-            huesped_seleccionado = encontrados.get(i);
-            System.out.println((i+1) + ". " + huesped_seleccionado.getNombre() + huesped_seleccionado.getApellido() + " - " + huesped_seleccionado.getTipoDoc() + ": " + huesped_seleccionado.getNroDoc());
+            h_encontrado = encontrados.get(i);
+            System.out.println((i+1) + ". " + h_encontrado.getNombre() + h_encontrado.getApellido() + " - " + h_encontrado.getTipoDoc() + ": " + h_encontrado.getNroDoc());
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -101,12 +100,16 @@ public class InterfazBusqueda {
                 seleccion = parseInt(input_user);
                 // Si la selección está dentro del rango, lo busco en mi lista
                 if (seleccion<=encontrados.size() && seleccion>0) {
-                    huesped_seleccionado = encontrados.get(seleccion-1);
+                    h_encontrado = encontrados.get(seleccion-1);
                     System.out.println("Huesped seleccionado con éxito.");
-                    if (huesped_seleccionado != null){
+                    if (h_encontrado != null){
                         System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-
-                        //modificarHuesped(huesped_seleccionado);
+                        DatosContacto cont = new DatosContacto(h_encontrado.getTelefono(), h_encontrado.getEmail());
+                        DatosResidencia res = new DatosResidencia(h_encontrado.getCalle(), h_encontrado.getDepto(), h_encontrado.getLocalidad(), h_encontrado.getProv(), h_encontrado.getPais(), h_encontrado.getNro_calle(), h_encontrado.getPiso(), h_encontrado.getCod_post());
+                        DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getNroDoc(), h_encontrado.getTipoDoc(), h_encontrado.getCUIT(), h_encontrado.getFechanac());
+                        DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
+                        Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
+                        // GestorAlojamiento.modificarHuesped(huesped_h);
                         // FIN DE CASO DE USO
                     }
                 }

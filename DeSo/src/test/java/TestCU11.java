@@ -1,29 +1,24 @@
 import java.util.List;
 
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 
 
-/**
- * Clase con casos de prueba para probar CU11: Dar de baja huesped
- * @author mat
+/*
+ Clase con casos de prueba para probar CU11: Dar de baja huesped
+ @author mat
  */
-public class TestCU11 {
-    private AlojadoDAOJSON alojadoDAO;
-    private GestorAlojamiento ge;
-    private List<? extends Alojado> listaAlojados;
 
-    public TestCU11() {
-        alojadoDAO = new AlojadoDAOJSON();
-        ge = new GestorAlojamiento(alojadoDAO);
-    }
+public class TestCU11 {
+    private static AlojadoDAO alojadoDAO;
+    private List<? extends Alojado> listaAlojados;
 
     private void poblarBase(){
         /*
-        * Metodo interno para poblar la base
-        * */
+        Metodo interno para poblar la base
+        */
         PoblacionDeAlojados poblacion = new PoblacionDeAlojados();
         listaAlojados = poblacion.crearNHuespedes();
         for(var a:listaAlojados){
@@ -42,7 +37,7 @@ public class TestCU11 {
         * */
         poblarBase();
         for(var x:listaAlojados){
-            ge.darDeBajaHuesped(x);
+            GestorAlojamiento.darDeBajaHuesped(x);
         }
     }
 
@@ -60,7 +55,7 @@ public class TestCU11 {
                 aleatorio.getDatos().getDatos_personales().getNombre() + " " +
                 aleatorio.getDatos().getDatos_personales().getApellido()
         );
-        ge.darDeBajaHuesped(aleatorio);
+        GestorAlojamiento.darDeBajaHuesped(aleatorio);
     }
 
 

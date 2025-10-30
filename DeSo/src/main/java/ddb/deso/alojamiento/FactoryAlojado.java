@@ -6,10 +6,10 @@ public class FactoryAlojado {
 
     public static int[] tipo = {HUESPED,INVITADO};
 
-    public static Alojado create (int tipo, Alojado inst_alojado){
+    public static Alojado create (int tipo, DatosAlojado datos){
         return switch (tipo) {
-            case HUESPED -> new Huesped(inst_alojado.getDatos());
-            case INVITADO -> new Invitado(inst_alojado.getDatos());
+            case HUESPED -> new Huesped(datos);
+            case INVITADO -> new Invitado(datos);
             default -> null;
         };
     }

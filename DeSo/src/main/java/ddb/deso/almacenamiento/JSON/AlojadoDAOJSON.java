@@ -5,6 +5,8 @@
 package ddb.deso.almacenamiento.JSON;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+
+import java.text.Normalizer;
 import java.util.ArrayList;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
@@ -128,12 +130,15 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         String nombres_b = criterio.getNombre();
         TipoDoc tipoDoc_b = criterio.getTipoDoc();
         String nroDoc_b = criterio.getNroDoc();
-        
 
-        String apellido_h = alojado_DTO.getApellido();
-        String nombre_h = alojado_DTO.getNombre();
+        String apellido = alojado_DTO.getApellido();
+        String nombre = alojado_DTO.getNombre();
         TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
         String nroDoc_h = alojado_DTO.getNroDoc();
+
+        // FUENTE: https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu
+        String apellido_h = Normalizer.normalize(apellido, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        String nombre_h = Normalizer.normalize(nombre, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
         if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
             return false;
