@@ -260,6 +260,7 @@ public class GestorAlojamiento {
                             }
                             if(boton2.equals("1")) {
                                 //guardo datos con dni repettido
+
                                 alojadoDTO = new AlojadoDTO(datosModificados);
                                 alojadoDAO.actualizarAlojado(datosOriginalesDTO, alojadoDTO);
                                 System.out.print("Los datos del huésped han sido modificados correctamente.");

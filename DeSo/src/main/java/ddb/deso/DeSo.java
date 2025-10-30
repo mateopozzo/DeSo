@@ -12,9 +12,6 @@ public class DeSo {
         InterfazLogin interfazLogin=new InterfazLogin();
         interfazLogin.ejecutar();
 
-        AlojadoDAOJSON alojadoDAOJSON=new AlojadoDAOJSON();
-        GestorAlojamiento gestor_aloj=new GestorAlojamiento(alojadoDAOJSON);
-
         System.out.println("Bienvenido/a al sistema de gestión Hotel Premier © V.1.0.0 ----------------------------");
         System.out.println("El menú de opciones se navega ingresando el número correspondiente a la opción deseada.");
 
