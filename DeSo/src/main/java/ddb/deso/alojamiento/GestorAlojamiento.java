@@ -135,6 +135,8 @@ public class GestorAlojamiento {
 
 
     public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
+
+        System.out.println("Modificando huesped...");
         AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
         AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
         AlojadoDTO datosModificadosDTO = new AlojadoDTO(aljadoModificado);

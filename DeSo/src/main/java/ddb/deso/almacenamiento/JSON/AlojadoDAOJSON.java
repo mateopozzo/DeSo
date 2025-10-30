@@ -3,17 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ddb.deso.almacenamiento.JSON;
-import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-
-import java.text.Normalizer;
-import java.util.ArrayList;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.CriteriosBusq;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
+
+import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.CriteriosBusq;
 
 
 /**
@@ -68,6 +68,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
 
     @Override
     public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
+        System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         eliminarAlojado(alojadoPrev);
         this.crearAlojado(alojadoNuevo);
     }
