@@ -44,7 +44,7 @@ public class InterfazDarAlta {
                 case "siguiente":
                 case "s":
                     if (camposInvalidos.isEmpty()) {
-                        
+
                         String nro_doc = nuevoAlojado.getDatos().getDatos_personales().getNroDoc();
                         TipoDoc tipo_doc = nuevoAlojado.getDatos().getDatos_personales().getTipoDoc();
                         boolean existe_dni = GestorAlojamiento.dniExiste(nro_doc,tipo_doc);
@@ -336,8 +336,9 @@ public class InterfazDarAlta {
                     camposInvalidos.set(11);
                 }
                 break;
-
+                
         }
+
         //entrada.close();
         return datosModificados;
 

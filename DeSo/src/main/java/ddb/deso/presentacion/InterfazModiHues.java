@@ -89,7 +89,7 @@ public class InterfazModiHues {
                 case "borrar":
                 case "b":
                     GestorAlojamiento.darDeBajaHuesped(alojadoOriginal);
-                    bandera=false;//sale del bucle principal y el CU termina
+                    bandera=false;//sale del bucle principal y e    l CU termina
                     break;
                 default:
                     datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalida);
