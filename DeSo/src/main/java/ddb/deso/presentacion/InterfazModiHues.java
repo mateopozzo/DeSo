@@ -1,11 +1,8 @@
 package ddb.deso.presentacion;
-
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
-
 import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Validador;
@@ -29,7 +26,7 @@ public class InterfazModiHues {
 
         // Lógica de modificación de huésped aquí
         Alojado datosModificados = alojadoOriginal;
-        Boolean bandera= true;
+        boolean bandera= true;
 
         while(bandera){
             listaDatosHuesped(datosModificados);
@@ -44,7 +41,10 @@ public class InterfazModiHues {
                 case "siguiente":
                 case "s":
                     if (camposInvalidos.isEmpty()) {
-                        if( !GestorAlojamiento.dniExiste(datosModificados.getDatos().getDatos_personales().getNroDoc(), datosModificados.getDatos().getDatos_personales().getTipoDoc()) ){
+                        String nro_doc = datosModificados.getDatos().getDatos_personales().getNroDoc();
+                        TipoDoc tipo_doc = datosModificados.getDatos().getDatos_personales().getTipoDoc();
+                        boolean existe_dni = GestorAlojamiento.dniExiste(nro_doc,tipo_doc);
+                        if(!existe_dni){
                             //guardo datos modificados
                             GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
                             System.out.print("Los datos del huésped han sido modificados correctamente.");
