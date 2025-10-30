@@ -24,6 +24,7 @@ public class Usuario {
      @param textoPlano Contraseña ingresada en texto plano.
      @return {@code true} si coincide, {@code false} en caso contrario.
      */
+
    public boolean coincidePasswordCon(String textoPlano) {
     return this.contrasenia.equals(textoPlano);
     }

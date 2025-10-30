@@ -11,9 +11,8 @@ package ddb.deso.login;
  */
 
 public class Sesion {
-    /*
-     Almacena la instancia del usuario que ha iniciado sesión.
-     */
+    // Almacena la instancia del usuario que ha iniciado sesión.
+
     private static Usuario usuarioLogueado;
 
     private static Sesion SINGLETON_INSTANCE;
@@ -27,6 +26,7 @@ public class Sesion {
 
     public static void iniciarSesion(Usuario u) {
         usuarioLogueado = u;
+
         if (usuarioLogueado != null & SINGLETON_INSTANCE==null){
             SINGLETON_INSTANCE = new Sesion();
         }
@@ -39,6 +39,7 @@ public class Sesion {
 
     public static void finalizarSesion() {
         usuarioLogueado = null;
+        SINGLETON_INSTANCE = null;
     }
 
     /*

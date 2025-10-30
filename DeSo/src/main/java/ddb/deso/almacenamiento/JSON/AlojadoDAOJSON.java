@@ -124,7 +124,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
 
     private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
         // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
-        String apellido_b = criterio.getApellido().stripAccents();
+        String apellido_b = criterio.getApellido();
         String nombres_b = criterio.getNombre();
         TipoDoc tipoDoc_b = criterio.getTipoDoc();
         String nroDoc_b = criterio.getNroDoc();

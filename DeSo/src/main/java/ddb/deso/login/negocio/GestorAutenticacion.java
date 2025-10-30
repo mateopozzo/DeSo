@@ -19,32 +19,35 @@ public class GestorAutenticacion {
         this.usuarioDAO = usuarioDAO; 
     }
 
-    /**
-     * Verifica las credenciales ingresadas por el usuario.
-     * <p>
-     * Si el usuario no existe o la contraseña no coincide, lanza
-     * excepciones específicas de negocio.
-     *
-     * @param nombre Nombre del usuario que intenta autenticarse.
-     * @param password Contraseña ingresada.
-     * @return El objeto {@link Usuario} correspondiente si la autenticación es exitosa.
-     * @throws UsuarioNoEncontradoException Si el nombre no existe en el sistema.
-     * @throws CredencialesInvalidasException Si la contraseña no coincide.
+    /*
+     Verifica las credenciales ingresadas por el usuario.
+     <p>
+     Si el usuario no existe o la contraseña no coincide, lanza
+     excepciones específicas de negocio.
+
+     @param nombre Nombre del usuario que intenta autenticarse.
+     @param password Contraseña ingresada.
+     @return El objeto {@link Usuario} correspondiente si la autenticación es exitosa.
+     @throws UsuarioNoEncontradoException Si el nombre no existe en el sistema.
+     @throws CredencialesInvalidasException Si la contraseña no coincide.
      */
+
     public Usuario autenticar(String nombre, String password) throws UsuarioNoEncontradoException, CredencialesInvalidasException {
         
         String n = (nombre == null) ? "" : nombre.trim();
         String p = (password == null) ? "" : password;
 
         Optional<Usuario> usuarioEncontrado  = usuarioDAO.buscarPorNombre(n);
-        if (usuarioEncontrado .isEmpty()) {
+        if (usuarioEncontrado.isEmpty()) {
             throw new UsuarioNoEncontradoException("No existe usuario: " + n);
         }
 
         Usuario u = usuarioEncontrado.get();
+
         if (!u.coincidePasswordCon(p)) {
             throw new CredencialesInvalidasException();
         }
+
         Sesion.iniciarSesion(u);
         return Sesion.getUsuarioLogueado();
     }
