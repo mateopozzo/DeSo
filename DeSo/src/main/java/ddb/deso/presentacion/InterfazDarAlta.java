@@ -26,7 +26,7 @@ public class InterfazDarAlta {
 
         camposInvalidos.set(0, 12); // Inicializo todos los bits en falso
         camposDireccionInvalida.set(0, 8); // Inicializo todos los bits en falso
-        // Lógica de modificación de huésped aquí
+
         boolean bandera= true;
 
         Alojado nuevoAlojado = new Invitado();
@@ -35,42 +35,53 @@ public class InterfazDarAlta {
             listaDatosHuesped(nuevoAlojado);
 
             System.out.println();
-            System.out.print("Seleccione el número del campo que desea modificar: ");
             String opcion = entrada.nextLine();
 
             System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
-
+            
             switch (opcion.toLowerCase()) {
+                
                 case "siguiente":
                 case "s":
-                    if (camposInvalidos.isEmpty()) {
-
+                    if (!camposInvalidos.isEmpty()) {
+                        
+                        muestraCamposValidos();
+                        continue;
+                    }
+                    else{
                         String nro_doc = nuevoAlojado.getDatos().getDatos_personales().getNroDoc();
                         TipoDoc tipo_doc = nuevoAlojado.getDatos().getDatos_personales().getTipoDoc();
                         boolean existe_dni = GestorAlojamiento.dniExiste(nro_doc,tipo_doc);
-                        if(!existe_dni){
-                            //guardo datos modificados
-                            GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
-                            System.out.print("Los datos del huésped han sido modificados correctamente.");
-                            bandera=false;//sale del bucle principal y el CU termina
-                        } else {
+                       
+                        if(existe_dni){
                             System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
                             String boton2= "-1";
                             while(!(boton2.equals("1")||boton2.equals("2"))){
                                 System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
                                 boton2= entrada.nextLine();
                             }
-                            if(boton2.equals("1")) {
-                                //guardo datos con dni repettido
-                                GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
-                                System.out.print("Los datos del huésped han sido modificados correctamente.");
-                                bandera=false;//sale del bucle principal y el CU termina
-                            }
-                            else {
+                            
+                           if(boton2.equals("2")) {
                                 camposInvalidos.set(3); // marco nro doc como invalido
+                                continue;
                             }
                         }
-                        //sale del bucle principal y el CU termina
+                        //guardo datos 
+                        GestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
+                        System.out.print("El Huésped " +
+                        nuevoAlojado.getDatos().getDatos_personales().getNombre() + " " +
+                        nuevoAlojado.getDatos().getDatos_personales().getApellido() + 
+                        " se ha cargado correctamente. ¿Desea cargar otro? SI(1)/ NO(2)");
+                        bandera=false;    
+                            String boton3= "-1";
+                            while(!(boton3.equals("1")||boton3.equals("2"))){
+                                System.out.print("¿Desea cargar otro? SI(1)/ NO(2) ");
+                                boton3= entrada.nextLine();
+                            }
+                            if(boton3.equals("1")){
+                                ejecutarDarAlta();
+                            }
+                        //else sale el bucle principal y el CU termina 
                     }
                     break;
                 case "cancelar":
@@ -78,16 +89,19 @@ public class InterfazDarAlta {
                     String boton3="-1";
                     while(!(boton3.equals("1")||boton3.equals("2"))){
 
-                        System.out.println("¿Desea cancelar la modificación del huésped?");
+                        System.out.println("¿Desea cancelar  el alta del huésped?");
                         System.out.println("SI (1) o NO (2) ");
                         boton3=entrada.nextLine();
                     }
                     if(boton3.equals("1")){
                         bandera=false;//sale del bucle principal y el CU termina
                     }
+                 default: cargarCampo(nuevoAlojado, opcion, camposInvalidos, camposDireccionInvalida);
+                     
             }
         }
     }
+
 
     private void listaDatosHuesped(Alojado alojado){
         System.out.println("Datos del Huésped:\n" +
@@ -111,9 +125,11 @@ public class InterfazDarAlta {
                 "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
                 "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
                 "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
-
-        System.out.println("Escriba Siguiente (s), Cancelar (c) o Borrar (b)");
-        System.out.print("Campos inválidos en: ");
+    }
+    
+    private void muestraCamposValidos(){ 
+    
+        System.out.print("Vuelva a ingresar los datos. Campos inválidos en: ");
         for (int i = 0; i < 12; i++) {
             if (camposInvalidos.get(i)) {
                 System.out.print(" " + (i + 1));
@@ -336,9 +352,8 @@ public class InterfazDarAlta {
                     camposInvalidos.set(11);
                 }
                 break;
-                
-        }
 
+        }
         //entrada.close();
         return datosModificados;
 
@@ -366,3 +381,4 @@ public class InterfazDarAlta {
     }
 
 }
+

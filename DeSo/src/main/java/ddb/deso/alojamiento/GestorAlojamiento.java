@@ -32,9 +32,6 @@ public class GestorAlojamiento {
         return encontrados != null && !encontrados.isEmpty();
     }
 
-
-
-
     public static void buscarHuesped(CriteriosBusq criterios_busq) {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
@@ -71,6 +68,13 @@ public class GestorAlojamiento {
         alojadoDAO.actualizarAlojado(datosOriginalesDTO, datosModificadosDTO);
     }
 
+
+    public static void darDeAltaHuesped(Alojado alojadoNuevo){
+        AlojadoDAO aDao=new AlojadoDAOJSON();
+        AlojadoDTO aDTO=new AlojadoDTO(alojadoNuevo);
+        aDao.crearAlojado(aDTO);
+    }
+       
     /*
      Verifica si un huésped, basado en ciertos criterios de búsqueda, se ha alojado alguna vez en el hotel.
      @param criterios Criterios de búsqueda (Nombre, Apellido, NroDoc, TipoDoc) para identificar al huésped.
