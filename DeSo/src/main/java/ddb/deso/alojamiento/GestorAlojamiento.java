@@ -1,4 +1,5 @@
 package ddb.deso.alojamiento;
+
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.LinkedList;
@@ -37,10 +38,6 @@ public class GestorAlojamiento {
         Huesped datosModificados = new Huesped(null);
         Scanner entrada = new Scanner(System.in);
         boolean bandera = true;
-        BitSet camposInvalidos = new BitSet(12); // BitSet para indicar que campos son invalidos
-        BitSet camposDireccionInvalidos = new BitSet(8); // BitSet para indicar que campos de direccion son invalidos
-        camposInvalidos.set(0, 12); // Inicializo todos los bits en falso
-        camposDireccionInvalidos.set(0, 8); // Inicializo todos los bits en falso
 
         while (bandera) {
             System.out.println("entro");
@@ -62,37 +59,6 @@ public class GestorAlojamiento {
                 case "siguiente":
                 case "s":
                     if (camposInvalidos.isEmpty()) {
-                        //System.out.println("Los datos del huésped han sido  correctamente.");
-                    /*
-                     if(auxDTO.buscarPorDNI(nuevoNroDoc,nuevoNroDoc)){
-                         String boton2= "-1";
-                         while(!(boton2.equals("1")||boton2.equals("2"))){
-                             System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
-                             System.out.print("¿Desea ACEPTAR IGUALMENTE (1) o CORREGIR (2)? ");
-                             boton2= entrada.nextLine();
-                         }
-                }
-            if(boton2.equals("1")) {
-                    //guardo datos con dni repettido
-             System.out.print("El Huésped " + h.datos.getDatos_personales().getNombre() + " " +
-             h.datos.getDatos_personales().getApellido()  + " se ha cargado correctamente.");
-                String boton4 = "-1";
-                while(!(boton4.equals("1")||boton4.equals("2"))){
-                   System.out.print("¿Desea cargar otro? SI (1) NO (2):  ");
-                   boton4 = entrada.nextLine();
-                }
-                    if (boton4.equals("2")) bandera = false;
-                    else darDeAltaHuesped();
-                }
-            else {
-                camposInvalidos.set(4);
-
-            }
-             }
-
-             else{
-                //guardar datos
-    */
                         System.out.print("El Huésped " + datosModificados.datos.getDatos_personales().getNombre() + " " +
                                 datosModificados.datos.getDatos_personales().getApellido() + " se ha cargado correctamente.");
                         String boton4 = "-1";
@@ -137,52 +103,9 @@ public class GestorAlojamiento {
             System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
         }
 
-    }//darAltaHuesped
-
- /*
-      DatosResidencia dr= new DatosResidencia(calle,departamento,localidad,provincia,
-      pais,numero,piso,postal);
-
-      DatosContacto dc=new DatosContacto(Long.parseLong(telefono), email);
-
-      DatosPersonales dp= new DatosPersonales(nombre, apellido, nacionalidad, iva, ocupacion,
-      num_documento, tipoDoc,cuit , fecha_nacimiento);
-
-      DatosAlojado da = new DatosAlojado(dc,dr,dp);
-
-      Huesped h= new Huesped(da);
-      Huesped hdto =new Huesped(null);
-      AlojadoDTO auxDTO = new AlojadoDTO(hdto);
-
-      AlojadoDTO aDTO = new AlojadoDTO(h);
-      AlojadoDAO aDAO= new AlojadoDAOJSON();
-      aDAO.crearAlojado(aDTO);
- */
-
-    // Esto debería hacerlo la interfaz -> cuando termine juli su cu plis borrar grax
-    private void listaDatosHuesped(Alojado alojado){
-        System.out.println("Datos del Huésped:\n" +
-                "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
-                "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
-                "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-                "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
-                "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
-                "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-                "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
-                "8. Dirección:\n" +
-                "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
-                "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-                "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
-                "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
-                "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-                "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
-                "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
-                "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
-                "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
-                "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
-                "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
-                "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
     }
+
+
 
     public static void buscarHuesped(CriteriosBusq criterios_busq) {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
@@ -208,34 +131,13 @@ public class GestorAlojamiento {
         } else {
             ui.seleccion(encontrados);
         }
-    }   
-
-
-    private static TipoDoc menuTipoDoc(Scanner scanner){
-        System.out.println("Seleccione tipo de documento:");
-        System.out.println("1. DNI");
-        System.out.println("2. LE");
-        System.out.println("3. LC");
-        System.out.println("4. PASAPORTE");
-        System.out.println("5. OTRO");
-
-        TipoDoc tipoDoc;
-        String opcion = scanner.nextLine();
-
-        switch (opcion) {
-            case "2" -> tipoDoc =TipoDoc.LC;
-            case "3" -> tipoDoc =TipoDoc.LE;
-            case "4" -> tipoDoc =TipoDoc.PASAPORTE;
-            case "5" -> tipoDoc =TipoDoc.OTRO;
-            default -> tipoDoc = TipoDoc.DNI;
-        }
-        return tipoDoc;
     }
 
-    public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado){
+
+    public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
         AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
         AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
-        AlojadoDTO datosModificadosDTO = new AlojadoDTO(aljadoModificado );
+        AlojadoDTO datosModificadosDTO = new AlojadoDTO(aljadoModificado);
         alojadoDAO.actualizarAlojado(datosOriginalesDTO, datosModificadosDTO);
     }
 
