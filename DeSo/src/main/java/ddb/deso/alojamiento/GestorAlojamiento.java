@@ -159,8 +159,31 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
-    public static obtenerAlojado(){
-
+    /**
+     * Busca el primer registro de alojado que coincide con el número y tipo de documento especificados
+     * y lo retorna como un objeto de dominio {@code Alojado}.
+     *
+     * <p>Utiliza el patrón DAO para la búsqueda y el patrón Factory para la conversión del DTO
+     * a la entidad de dominio {@code Alojado}.
+     *
+     * @param dni El número de documento del alojado.
+     * @param tipo El tipo de documento (p. ej., DNI, Pasaporte).
+     * @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
+     * o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
+     * @author mat
+     * @author gael
+     */
+    public static Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
+        if (tipo == null || dni == null || dni.isBlank()) {
+            return null;
+        }
+        CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
+        List<AlojadoDTO> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        AlojadoDTO encontradoDTO = encontrados.stream()
+                .findFirst() // Devuelve primer instancia
+                .orElse(null); // Si está vacío, devuelve null
+        if(encontradoDTO == null) return null;
+        return FactoryAlojado.createFromDTO(encontradoDTO);
     }
 }
 
