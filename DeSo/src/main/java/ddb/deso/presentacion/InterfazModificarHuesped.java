@@ -15,12 +15,31 @@ public class InterfazModificarHuesped {
     private BitSet camposInvalidos;
     private BitSet camposDireccionInvalida;
 
+    /**
+     * Constructor de la clase InterfazModificarHuesped.
+     * Inicializa el Scanner para la entrada de usuario y los BitSets utilizados
+     * para rastrear los campos inválidos en el formulario.
+     */
     public InterfazModificarHuesped() {
         this.entrada = new Scanner(System.in);
         this.camposInvalidos = new BitSet(12);
         this.camposDireccionInvalida = new BitSet(8);
     }
 
+    /**
+     * [cite_start]Método principal para ejecutar el Caso de Uso 10: Modificar Huésped[cite: 417].
+     * <p>
+     * Muestra un bucle interactivo donde el usuario puede ver los datos actuales
+     * del huésped, seleccionar un campo para modificar, o elegir una acción
+     * (Siguiente, Cancelar, Borrar).
+     * <p>
+     * Al seleccionar "Siguiente", valida que no haya campos inválidos y gestiona
+     * [cite_start]la lógica de duplicación de documentos (CU-10 Flujo Alternativo 2.B)[cite: 417, 422].
+     * [cite_start]Al seleccionar "Borrar", delega al CU11 ({@link #eliminarHuesped(Alojado)})[cite: 422].
+     *
+     * @param alojadoOriginal El objeto {@link Alojado} que se desea modificar,
+     * cargado desde el CU02 (Buscar Huésped).
+     */
     public void ejecutarModiHuesped(Alojado alojadoOriginal) {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE LA LLAMADA MAIN O OTRO CASO DE USO
         System.out.println("Interfaz de modificación de huésped - En desarrollo");
@@ -102,6 +121,12 @@ public class InterfazModificarHuesped {
 
     }
 
+    /**
+     * [cite_start]Muestra un menú interactivo para que el usuario seleccione un tipo de documento[cite: 417].
+     *
+     * @return El {@link TipoDoc} seleccionado por el usuario. Devuelve DNI por defecto
+     * si la opción no es válida.
+     */
     private TipoDoc menuTipoDoc() {
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
@@ -123,6 +148,15 @@ public class InterfazModificarHuesped {
         return tipoDoc;
     }
 
+    /**
+     * [cite_start]Muestra por consola todos los datos personales del huésped[cite: 417].
+     * <p>
+     * También informa al usuario sobre las acciones disponibles (Siguiente, Cancelar, Borrar)
+     * e imprime una lista de los campos que actualmente están marcados como inválidos
+     * según el BitSet {@code camposInvalidos}.
+     *
+     * @param alojado El objeto {@link Alojado} cuyos datos se van a mostrar.
+     */
     private void listaDatosHuesped(Alojado alojado) {
         System.out.println("Datos del Huésped:\n" +
                 "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
@@ -155,6 +189,21 @@ public class InterfazModificarHuesped {
         }
     }
 
+    /**
+     * Gestiona la lógica para modificar un campo específico del huésped.
+     * <p>
+     * Basado en la {@code opcion} seleccionada, solicita al usuario el nuevo valor
+     * para ese campo, actualiza el objeto {@code Alojado} (en memoria),
+     * valida el nuevo dato usando la clase {@link Validador}, y actualiza los
+     * BitSets {@code camposInvalidos} y {@code camposDireccionInvalida}
+     * para reflejar el estado de validez del campo.
+     *
+     * @param alojado El objeto {@link Alojado} que está siendo modificado.
+     * @param opcion El número (como String) del campo a modificar.
+     * @param camposInvalidos El BitSet que rastrea la validez de los campos principales.
+     * @param camposDireccionInvalidos El BitSet que rastrea la validez de los sub-campos de dirección.
+     * @return El objeto {@link Alojado} actualizado con el nuevo dato (aún no persistido).
+     */
     private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos) {
 
         Alojado datosModificados = alojado;

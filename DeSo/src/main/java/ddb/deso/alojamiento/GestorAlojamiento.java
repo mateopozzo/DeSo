@@ -55,6 +55,19 @@ public class GestorAlojamiento {
         }
     }
 
+    /**
+     * Gestiona la modificación de los datos de un huésped en el sistema.
+     *
+     * Este método recibe el objeto Alojado original y el objeto Alojado con los datos
+     * ya modificados (provenientes de la capa de presentación). Se encarga de
+     * convertir ambos objetos de dominio a sus respectivos DTO (Data Transfer Objects)
+     * y luego invoca al DAO ({@link AlojadoDAO}) para que persista la actualización.
+     *
+     * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
+     * antes de la modificación.
+     * @param aljadoModificado El objeto {@link Alojado} que contiene los nuevos datos
+     * a guardar en el sistema.
+     */
 
     public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
         System.out.println("Modificando huesped...");
