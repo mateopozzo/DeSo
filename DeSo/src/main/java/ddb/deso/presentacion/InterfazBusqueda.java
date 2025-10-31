@@ -9,13 +9,41 @@ import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
+/**
+ * Clase que gestiona la interfaz de usuario para la **búsqueda de un huésped**
+ * existente (Caso de Uso 02 o CU02).
+ * <p>
+ * Permite al usuario ingresar criterios (nombre, apellido, DNI) y, basado en los
+ * resultados:
+ * <ul>
+ * <li>Si hay coincidencias, permite seleccionar un huésped para **modificarlo**
+ * (llamando a {@code InterfazModificarHuesped}).</li>
+ * <li>Si no hay coincidencias o el usuario decide no seleccionar, inicia el
+ * flujo de **alta de un nuevo huésped** (llamando a {@code InterfazDarAlta}).</li>
+ * </ul>
+ * </p>
+ *
+ * @author Gael
+ * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)
+ */
 public class InterfazBusqueda {
     private final Scanner scanner;
 
+    /**
+     * Constructor. Inicializa el objeto {@link Scanner} para la entrada de usuario.
+     */
     public InterfazBusqueda() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
+     * <p>
+     * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarHuesped}
+     * para iniciar el proceso de búsqueda.
+     * </p>
+     */
     public void busqueda_huesped() {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE MAIN
         System.out.println("Hotel Premier - Buscar huésped --------------------------------------------------------");
@@ -42,6 +70,12 @@ public class InterfazBusqueda {
         GestorAlojamiento.buscarHuesped(criterios_busq);
     }
 
+    /**
+     * Muestra un menú de opciones para que el usuario seleccione el tipo de documento.
+     *
+     * @param scanner El {@link Scanner} abierto para la entrada del usuario.
+     * @return El {@link TipoDoc} seleccionado. Retorna {@code null} si el usuario presiona ENTER
+     */
     private TipoDoc menuTipoDoc(Scanner scanner){
         System.out.println("Ingrese número correspondiente para seleccionar tipo de documento:");
         System.out.println("1. DNI");
@@ -67,6 +101,11 @@ public class InterfazBusqueda {
         return tipoDoc;
     }
 
+    /**
+     * Muestra el mensaje de que **no se encontraron coincidencias** con los criterios
+     * de búsqueda e inicia inmediatamente el proceso de **alta de un nuevo huésped**
+     * (llamando a {@code InterfazDarAlta.ejecutarDarAlta()}).
+     */
     public void sin_coincidencias(){
         System.out.println("No se encontraron coincidencias de búsqueda.\n");
         InterfazDarAlta ui_alta = new InterfazDarAlta();
@@ -74,6 +113,18 @@ public class InterfazBusqueda {
         // FIN DE CASO DE USO
     }
 
+    /**
+     * Muestra la lista de huéspedes encontrados y solicita al usuario que seleccione uno
+     * para modificar, o que continúe para dar de alta uno nuevo.
+     *
+     * <ul>
+     * <li>Si selecciona un número válido: Convierte el DTO a un objeto {@code Alojado} completo
+     * y llama a {@code InterfazModificarHuesped.ejecutarModiHuesped()}.</li>
+     * <li>Si presiona ENTER + SIGUIENTE ('1'): Llama a {@code InterfazDarAlta.ejecutarDarAlta()}.</li>
+     * </ul>
+     *
+     * @param encontrados Una lista de {@link AlojadoDTO} que coinciden con la búsqueda.
+     */
     public void seleccion (List<AlojadoDTO> encontrados){
         AlojadoDTO h_encontrado;
         String input_user;
@@ -130,6 +181,9 @@ public class InterfazBusqueda {
         }
     }
 
+    /**
+     * Cierra el objeto {@link Scanner} interno. Se utiliza para evitar fugas de recursos.
+     */
     // Metodo aparte para cerrar el scanner porque si no suele tener problemas de cierre prematuro
     public void close() {
         scanner.close();

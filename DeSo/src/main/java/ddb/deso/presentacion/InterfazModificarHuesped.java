@@ -10,15 +10,31 @@ import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Validador;
 
+
+/**
+ * Clase que gestiona la interfaz de usuario para la modificación de los datos
+ * de un huésped existente.
+ * <p>
+ * Permite al usuario seleccionar un campo específico de los datos personales,
+ * de residencia o de contacto para editarlo. Utiliza {@link BitSet} para
+ * rastrear la validez de los campos modificados antes de permitir la persistencia
+ * de los cambios.
+ * </p>
+ *
+ * @author Lauti
+ * @see Alojado
+ * @see GestorAlojamiento
+ * @see Validador
+ */
+
 public class InterfazModificarHuesped {
     private Scanner entrada;
     private BitSet camposInvalidos;
     private BitSet camposDireccionInvalida;
 
     /**
-     * Constructor de la clase InterfazModificarHuesped.
-     * Inicializa el Scanner para la entrada de usuario y los BitSets utilizados
-     * para rastrear los campos inválidos en el formulario.
+     * Constructor: Inicializa el {@link Scanner} y los {@link BitSet} para
+     * rastrear la validez de los campos (12 campos principales, 8 de dirección).
      */
     public InterfazModificarHuesped() {
         this.entrada = new Scanner(System.in);
@@ -27,18 +43,30 @@ public class InterfazModificarHuesped {
     }
 
     /**
-     * [cite_start]Método principal para ejecutar el Caso de Uso 10: Modificar Huésped[cite: 417].
-     * <p>
-     * Muestra un bucle interactivo donde el usuario puede ver los datos actuales
-     * del huésped, seleccionar un campo para modificar, o elegir una acción
-     * (Siguiente, Cancelar, Borrar).
-     * <p>
-     * Al seleccionar "Siguiente", valida que no haya campos inválidos y gestiona
-     * [cite_start]la lógica de duplicación de documentos (CU-10 Flujo Alternativo 2.B)[cite: 417, 422].
-     * [cite_start]Al seleccionar "Borrar", delega al CU11 ({@link #eliminarHuesped(Alojado)})[cite: 422].
+     * Ejecuta la interfaz de modificación de huésped, permitiendo al usuario ver,
+     * modificar o eliminar los datos de un huésped ya existente en el sistema.
      *
-     * @param alojadoOriginal El objeto {@link Alojado} que se desea modificar,
-     * cargado desde el CU02 (Buscar Huésped).
+     * <p>El método entra en un bucle que presenta los datos actuales del huésped,
+     * y solicita al usuario que seleccione un campo para modificar, o use comandos
+     * especiales como 'siguiente', 'cancelar' o 'borrar'.</p>
+     *
+     * <ul>
+     * <li>**Modificación:** Permite editar los campos individualmente a través
+     * de la llamada a {@code cargarCampo}.</li>
+     * <li>**Guardar ('siguiente'):** Intenta guardar los cambios.
+     * Verifica la existencia de campos inválidos y si el DNI modificado
+     * ya existe en el sistema. Si hay DNI duplicado, ofrece la opción de
+     * aceptar el duplicado o corregir.</li>
+     * <li>**Cancelar ('cancelar'):** Pregunta por confirmación para descartar
+     * los cambios y salir del caso de uso.</li>
+     * <li>**Eliminar ('borrar'):** Llama a la función de eliminación de huésped
+     * (a través de {@code InterfazDarBaja.eliminarHuesped}) y finaliza
+     * el caso de uso.</li>
+     * </ul>
+     *
+     * @param alojadoOriginal El objeto {@code Alojado} que contiene los datos
+     * originales del huésped a ser modificado.
+     * @author Lauti
      */
     public void ejecutarModiHuesped(Alojado alojadoOriginal) {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE LA LLAMADA MAIN O OTRO CASO DE USO
@@ -79,7 +107,7 @@ public class InterfazModificarHuesped {
                                 boton2 = entrada.nextLine();
                             }
                             if (boton2.equals("1")) {
-                                //guardo datos con dni repettido
+                                //guardo datos con dni repetido
                                 GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
                                 System.out.print("Los datos del huésped han sido modificados correctamente.");
                                 bandera = false;//sale del bucle principal y el CU termina
@@ -119,7 +147,7 @@ public class InterfazModificarHuesped {
                     break;
                 case "borrar":
                 case "b":
-                    eliminarHuesped(alojadoOriginal);
+                    InterfazDarBaja.eliminarHuesped(alojadoOriginal, entrada);
                     bandera = false;//sale del bucle principal y el CU termina
                     break;
                 default:
@@ -132,10 +160,9 @@ public class InterfazModificarHuesped {
     }
 
     /**
-     * [cite_start]Muestra un menú interactivo para que el usuario seleccione un tipo de documento[cite: 417].
+     * Muestra un menú para seleccionar el tipo de documento.
      *
-     * @return El {@link TipoDoc} seleccionado por el usuario. Devuelve DNI por defecto
-     * si la opción no es válida.
+     * @return El {@link TipoDoc} seleccionado (DNI por defecto).
      */
     private TipoDoc menuTipoDoc() {
         System.out.println("Seleccione tipo de documento:");
@@ -159,13 +186,10 @@ public class InterfazModificarHuesped {
     }
 
     /**
-     * [cite_start]Muestra por consola todos los datos personales del huésped[cite: 417].
-     * <p>
-     * También informa al usuario sobre las acciones disponibles (Siguiente, Cancelar, Borrar)
-     * e imprime una lista de los campos que actualmente están marcados como inválidos
-     * según el BitSet {@code camposInvalidos}.
+     * Muestra los **datos actuales** del huésped y la lista de los **campos
+     * marcados como inválidos** (por su número).
      *
-     * @param alojado El objeto {@link Alojado} cuyos datos se van a mostrar.
+     * @param alojado El objeto {@link Alojado} con los datos actuales.
      */
     private void listaDatosHuesped(Alojado alojado) {
         System.out.println("Datos del Huésped:\n" +
@@ -200,19 +224,14 @@ public class InterfazModificarHuesped {
     }
 
     /**
-     * Gestiona la lógica para modificar un campo específico del huésped.
-     * <p>
-     * Basado en la {@code opcion} seleccionada, solicita al usuario el nuevo valor
-     * para ese campo, actualiza el objeto {@code Alojado} (en memoria),
-     * valida el nuevo dato usando la clase {@link Validador}, y actualiza los
-     * BitSets {@code camposInvalidos} y {@code camposDireccionInvalida}
-     * para reflejar el estado de validez del campo.
+     * Solicita y aplica el **nuevo valor para un campo específico**
+     * (determinado por {@code opcion}), lo **valida** con {@link Validador},
+     * y actualiza los {@link BitSet} de error correspondientes. Si la opción es "8" (Dirección),
+     * muestra un sub-menú.
      *
-     * @param alojado El objeto {@link Alojado} que está siendo modificado.
-     * @param opcion El número (como String) del campo a modificar.
-     * @param camposInvalidos El BitSet que rastrea la validez de los campos principales.
-     * @param camposDireccionInvalidos El BitSet que rastrea la validez de los sub-campos de dirección.
-     * @return El objeto {@link Alojado} actualizado con el nuevo dato (aún no persistido).
+     * @param alojado El objeto {@link Alojado} en modificación.
+     * @param opcion El número del campo a modificar (como String).
+     * @return El {@link Alojado} con el campo modificado.
      */
     private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos) {
 
@@ -435,147 +454,9 @@ public class InterfazModificarHuesped {
         return datosModificados;
 
     }
-
     /**
-     * Muestra el mensaje de éxito de la baja de un huésped y espera la confirmación del usuario
-     * (pulsa tecla) para finalizar el Caso de Uso 11 (CU11).
-     *
-     * @param eliminarAlojado El huésped que ha sido eliminado.
-     * @author mat
+     * Cierra el {@link Scanner} interno.
      */
-    public void terminarCU11(Alojado eliminarAlojado) {
-        System.out.println("El huesped " +
-                eliminarAlojado.getDatos().getDatos_personales().getNombre() + " " +
-                eliminarAlojado.getDatos().getDatos_personales().getApellido() +
-                " Se dio de baja correctamente\n" +
-                "Pulse cualquier tecla para continuar"
-        );
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Opciones para la confirmación de la baja de un cliente.
-     *
-     * @author mat
-     */
-    public enum BajaCliente {
-        /** Confirma la eliminación. */
-        ELIMINAR,
-        /** Cancela la operación. */
-        CANCELAR
-    }
-
-    /**
-     * Solicita al usuario la confirmación para eliminar los datos del huésped.
-     * Muestra una advertencia de eliminación de datos y espera una entrada ('1' para aceptar, '0' para cancelar).
-     *
-     * @param eliminarAlojado El huésped que se intenta eliminar.
-     * @return La opción elegida: {@code BajaCliente.ELIMINAR} o {@code BajaCliente.CANCELAR}.
-     * @author mat
-     */
-    public BajaCliente avisoBajaAlojado(Alojado eliminarAlojado) {
-        System.out.println("Los datos del huésped " +
-                eliminarAlojado.getDatos().getDatos_personales().getNombre() + " " +
-                eliminarAlojado.getDatos().getDatos_personales().getApellido() + " " +
-                eliminarAlojado.getDatos().getDatos_personales().getTipoDoc() + " " +
-                eliminarAlojado.getDatos().getDatos_personales().getNroDoc() + " " +
-                "serán ELIMINADOS del sistema"
-        );
-        System.out.println("Ingresa 1 para aceptar y 0 para cancelar");
-        var inp = entrada.nextLine();
-        /*
-         * LOGICA DE VALIDADOR
-         *   ES VACIO
-         *   ES SOLO 0 O 1
-         * */
-        if (inp.equals("1")) {
-            return BajaCliente.ELIMINAR;
-        }
-
-        return BajaCliente.CANCELAR;
-    }
-
-    /**
-     * Muestra un mensaje de error cuando la baja no es posible porque el huésped
-     * tiene historial de alojamiento. Espera la pulsación de una tecla para continuar.
-     *
-     * @author mat
-     */
-    public void noSePuedeDarBaja() {
-        System.out.println("El " +
-                "huésped no puede ser eliminado pues se " +
-                "ha alojado en el Hotel en alguna " +
-                "oportunidad. PRESIONE CUALQUIER " +
-                "TECLA PARA CONTINUAR");
-        // Entiendo que esto lee el primer byte y vuelve, hay que testearlo
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return;
-    }
-
-    /**
-     * Muestra un mensaje de error indicando que el huésped no existe en la base de datos.
-     *
-     * @author mat
-     */
-    public void noExisteHuesped() {
-        System.out.println("El huesped no existe en la base de datos");
-        return;
-    }
-
-
-    /**
-     * Elimina un huésped del sistema
-     * <p>
-     * Este método primero verifica el historial del huésped a través de {@code GestorAlojamiento.historialHuesped}.
-     * Si el huésped {@code SE_ALOJO} (tiene historial de alojamiento persistido), no se permite la eliminación
-     * y se llama a {@code noSePuedeDarBaja()}.
-     * Si el huésped {@code NO_PERSISTIDO} (no existe en el sistema o no tiene registro), se llama a {@code noExisteHuesped()}.
-     * <p>
-     * Si la eliminación es posible, se pide confirmación al usuario a través de {@code avisoBajaAlojado}.
-     * Si el usuario cancela, el proceso se detiene. De lo contrario,
-     * se procede a la eliminación utilizando {@code GestorAlojamiento.eliminarAlojado(alojadoParaEliminar)}
-     * y luego se invoca {@code terminarCU11(alojadoParaEliminar)} para finalizar la operación.
-     *
-     * @param alojadoParaEliminar El objeto {@code Alojado} que se intenta eliminar del sistema.
-     * @author mat
-     * @see GestorAlojamiento#historialHuesped(Alojado)
-     * @see GestorAlojamiento#eliminarAlojado(Alojado)
-     * @see #noSePuedeDarBaja()
-     * @see #noExisteHuesped()
-     * @see #avisoBajaAlojado(Alojado)
-     * @see #terminarCU11(Alojado)
-     */
-    private void eliminarHuesped(Alojado alojadoParaEliminar){
-
-        //  Flujo secundario, el huesped no se puede eliminar
-        var historialAlojado=GestorAlojamiento.historialHuesped(alojadoParaEliminar);
-        if(historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.SE_ALOJO)){
-            noSePuedeDarBaja();
-            return;
-        } else if (historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.NO_PERSISTIDO)) {
-            noExisteHuesped();
-            return;
-        }
-
-        // Flujo principal, avisa a usuario a quien se elimina
-        if(avisoBajaAlojado(alojadoParaEliminar).equals(BajaCliente.CANCELAR)){
-            System.out.println("Se cancela la baja del huesped");
-            return;
-        }
-
-        GestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
-
-        terminarCU11(alojadoParaEliminar);
-    }
-
     public void close(){
         entrada.close();
     }

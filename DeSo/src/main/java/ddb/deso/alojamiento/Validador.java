@@ -5,6 +5,23 @@ import java.time.LocalDate;
 import ddb.deso.TipoDoc;
 
 
+/**
+ * Clase estática (utility class) que provee un conjunto de métodos de **validación
+ * de reglas de negocio** para los datos de los huéspedes.
+ * <p>
+ * Contiene validadores específicos para formatos de documentos (DNI, CUIT, Pasaporte),
+ * datos de contacto (email, teléfono), y datos personales/residencia (nombres, fechas,
+ * direcciones), utilizando expresiones regulares y lógica de negocio (ej. cálculo
+ * de dígito verificador de CUIT).
+ * </p>
+ * <p>
+ * La mayoría de los métodos aseguran que el dato no sea nulo/vacío y cumpla con
+ * un formato de solo letras o números, según corresponda. Algunos métodos son
+ * "opcionales" ({@code *Opcional}), aceptando valores vacíos.
+ * </p>
+ *
+ * @author Lauti
+ */
 public class Validador {
 
     public static boolean validadorLetras(String texto) {

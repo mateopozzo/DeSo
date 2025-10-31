@@ -174,3 +174,9 @@ El método principal se encuentra en el GestorAlojamiento y recibe una instancia
 | **Singleton**   | `1`                | Login                 |
 | **Factory**     | `9`                | Dar de alta huésped   |
 
+---
+
+## Flujo de trabajo previsto
+
+Desde el metodo main se puede llamar unicamente el caso de uso 2 "Búsqueda de huesped", de aquel se puede alcanzar el resto de casos de uso como se desarrolla en la especificacion del sistema.
+
