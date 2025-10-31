@@ -15,6 +15,7 @@ public class TestCU10_CU11 {
 
     public static void main(String[] args) {
         System.out.println("TESTING: CASO DE USO 10 - BUSCAR HUÉSPED ----------------------------");
+        modificarHuespedExistente();
 
     }
 

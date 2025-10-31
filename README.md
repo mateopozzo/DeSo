@@ -120,25 +120,57 @@ Para la implementación se utilizaron las siguientes clases:
 
 ----
 ### Caso de uso 09: Dar de alta huésped
+**Alojado:** Clase abstracta que forma parte del patrón factory. Sus clases hijas son huésped (encargado de habitación) e invitado.
 
-```DESCRIPCION```
+**AlojadoDAO (interfaz):** Interfaz del patrón DAO que recibe la llamada desde el gestor para ejecutar la implementación de crearAlojado en AlojadoDAOJSON.
+
+**AlojadoDAOJSON:** Implementación concreta del DAO para una base de datos en archivos JSON donde se encuentra el método crearAlojado. A esta se le pasa un AlojadoDTO y lo agrega a una lista de alojadoDTO
+que esta en la interface AlojadoDAO.
+
+**AlojadoDTO:** Objeto DTO que recibe un huesped o invitado y se instancia. Este es pasado a crearAlojado.
+
+**InterfazBusqueda:** GUI que interactua con el usuario para crear un Alojado a traves de la toma de datos. También se encarga de mostrar por pantalla resultados, mensajes de error/éxito y llamar a métodos como darAltaHuesped.
+
+**GestorAlojamiento:** Gestor que contiene el método darAltaHuesped. A este se le pasa como parametro el invitado instanciado con datos validos y crea un DTO con el Invitado como parametro y llama a crearAlojado.
+
 
 ----
 ### Caso de uso 10: Modificar huésped
 
-```DESCRIPCION```
+**InterfazModificarHuesped:** Clase de la capa de presentación (GUI) que muestra los datos actuales del huésped. Gestiona la selección del campo a modificar, captura el nuevo dato y utiliza la clase Validador para comprobar su validez.
+
+**GestorAlojamiento:** Contiene el método modificarHuesped. Este método es llamado por la interfaz al pulsar "Siguiente" (guardar). Recibe el objeto Alojado original y el objeto Alojado con los datos modificados.
+
+**AlojadoDTO:** Objeto DTO. El gestor crea dos instancias de AlojadoDTO (una con los datos originales y otra con los modificados) para pasarlas a la capa de persistencia.
+
+**AlojadoDAO (interfaz):** Interfaz del patrón DAO que define la operación actualizarAlojado.
+
+**AlojadoDAOJSON:** Implementación concreta del DAO. Recibe el DTO original y el DTO modificado. Busca y elimina el registro original del archivo JSON y luego agrega el DTO modificado como un nuevo registro.
 
 ----
 ### Caso de uso 11: Dar de baja huésped
 
-```DESCRIPCION```
+Para la implementación se utilizaron las clases: 
+
+*GestorAlojamiento:* Que contiene métodos utilizados como eliminarAlojado, ResumenHistoriaHuesped, darDeBajaHuesped
+
+*InterfazDarBaja:* GUI que se encarga de intercambiar inputs con el usuario y mostrar mensajes y resultados por pantalla.
+
+*AlojadoDAO, AlojadoDAOJSON:* Interfaz perteneciente al patrón DAO cuya implementación AlojadoDAOJSON contiene métodos usados como: eliminarAlojado, buscarHuespedDAO
+
+El método principal se encuentra en el GestorAlojamiento y recibe una instancia de Alojado. Busca coincidencias en la base de datos y llama al método seAlojo: 
+
+- Si no encuentra coincidencias, el estado es NO_PERSISTIDO (no existe en la base de datos) y se ejecuta el método de interfaz noExisteHuesped.
+- Si tiene algún id_check_in, entonces el estado es SE_ALOJO y se ejecuta el método de interfaz noSePuedeDarDeBaja.
+- De lo contrario, es NO_SE_ALOJO y se ejecuta el método de clase eliminarAlojado y el método de interfaz terminarCU.
+- También existe la opción de querer cancelar la baja, en donde se llama al método de interfaz avisoBajaAlojado.
 
 ---
 
 ## Patrones implementados
-| Patrón       | Nro de caso de uso | Nombre de caso de uso |
-|--------------|--------------------|-----------------------|
-| **DAO**      | `1, 2, 9, 10, 11`  | Todos                 |
-| **Singleton**     | `1`                | Login                 |
-| **Factory**  | `9`                | Dar de alta huésped   |
+| Patrón          | Nro de caso de uso | Nombre de caso de uso |
+|-----------------|--------------------|-----------------------|
+| **DAO**         | `1, 2, 9, 10, 11`  | Todos                 |
+| **Singleton**   | `1`                | Login                 |
+| **Factory**     | `9`                | Dar de alta huésped   |
 
