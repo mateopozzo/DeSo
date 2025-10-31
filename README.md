@@ -142,7 +142,20 @@ que esta en la interface AlojadoDAO.
 ----
 ### Caso de uso 11: Dar de baja huésped
 
-```DESCRIPCION```
+Para la implementación se utilizaron las clases: 
+
+*GestorAlojamiento:* Que contiene métodos utilizados como eliminarAlojado, ResumenHistoriaHuesped, darDeBajaHuesped
+
+*InterfazDarBaja:* GUI que se encarga de intercambiar inputs con el usuario y mostrar mensajes y resultados por pantalla.
+
+*AlojadoDAO, AlojadoDAOJSON:* Interfaz perteneciente al patrón DAO cuya implementación AlojadoDAOJSON contiene métodos usados como: eliminarAlojado, buscarHuespedDAO
+
+El método principal se encuentra en el GestorAlojamiento y recibe una instancia de Alojado. Busca coincidencias en la base de datos y llama al método seAlojo: 
+
+- Si no encuentra coincidencias, el estado es NO_PERSISTIDO (no existe en la base de datos) y se ejecuta el método de interfaz noExisteHuesped.
+- Si tiene algún id_check_in, entonces el estado es SE_ALOJO y se ejecuta el método de interfaz noSePuedeDarDeBaja.
+- De lo contrario, es NO_SE_ALOJO y se ejecuta el método de clase eliminarAlojado y el método de interfaz terminarCU.
+- También existe la opción de querer cancelar la baja, en donde se llama al método de interfaz avisoBajaAlojado.
 
 ---
 
