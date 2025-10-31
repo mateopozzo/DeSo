@@ -1,5 +1,4 @@
 
-import java.security.PublicKey;
 import java.time.LocalDate;
 
 import ddb.deso.TipoDoc;
@@ -9,7 +8,7 @@ import ddb.deso.alojamiento.DatosContacto;
 import ddb.deso.alojamiento.DatosPersonales;
 import ddb.deso.alojamiento.DatosResidencia;
 import ddb.deso.alojamiento.Huesped;
-import ddb.deso.presentacion.InterfazModiHues;
+import ddb.deso.presentacion.InterfazModificarHuesped;
 
 public class TestCU10_CU11 {
 
@@ -35,7 +34,7 @@ public class TestCU10_CU11 {
         // Crear el Alojado
         Alojado alojado = new Huesped(datos);  // Uso Huesped que extiende de Alojado
 
-        InterfazModiHues interfaz_modi = new InterfazModiHues();
+        InterfazModificarHuesped interfaz_modi = new InterfazModificarHuesped();
         interfaz_modi.ejecutarModiHuesped(alojado);
     }
 
