@@ -4,8 +4,11 @@
  */
 package ddb.deso.alojamiento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import ddb.deso.TipoDoc;
 
 public class DatosAlojado {
     private DatosContacto   datos_contacto;
@@ -21,8 +24,17 @@ public class DatosAlojado {
         this.datos_residencia = residencia;
         this.datos_personales = personales;
     }
+    public DatosAlojado(){
+         id_check_in =new ArrayList<Long>();
+        id_check_out = new ArrayList<Long>();
+        this.datos_contacto=new DatosContacto("","");
+        this.datos_personales= new DatosPersonales("","", "",
+         "", "","", TipoDoc.DNI,"", LocalDate.now());
+         this.datos_residencia= new DatosResidencia("", "", "", "",
+          "", "", "", "");
+     } 
 
-    public void setId_check_in(List<Long> id_check_in) {
+    public  void setId_check_in(List<Long> id_check_in) {
         this.id_check_in = id_check_in;
     }
 

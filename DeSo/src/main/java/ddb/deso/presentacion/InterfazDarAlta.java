@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.alojamiento.DatosAlojado;
+import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Invitado;
 import ddb.deso.alojamiento.Validador;
@@ -28,12 +31,13 @@ public class InterfazDarAlta {
         camposDireccionInvalida.set(0, 8); // Inicializo todos los bits en falso
 
         boolean bandera= true;
+        DatosAlojado da= new DatosAlojado();
+        Alojado nuevoAlojado = FactoryAlojado.create(FactoryAlojado.INVITADO,da);
 
-        Alojado nuevoAlojado = new Invitado();
 
         while(bandera){
             listaDatosHuesped(nuevoAlojado);
-
+            System.out.println("Presione una opcion numérica o SIGUIENTE (s) CANCELAR (c) ");
             System.out.println();
             String opcion = entrada.nextLine();
 
@@ -65,13 +69,20 @@ public class InterfazDarAlta {
                                 camposInvalidos.set(3); // marco nro doc como invalido
                                 continue;
                             }
-                        }
+                  /*           else{
+                                //una vez con la bdd no se invocan los casos de uso, se modifica directamente
+                                CriteriosBusq cBusq=new CriteriosBusq("", "", tipo_doc, nro_doc)
+                                Alojado alojadoAnterior= GestorAlojamiento.obtenerHuesped(null);
+                                GestorAlojamiento.eliminarAlojado(alojadoAnterior);
+                            }
+                 */  
+                     }
                         //guardo datos 
                         GestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
                         System.out.print("El Huésped " +
                         nuevoAlojado.getDatos().getDatos_personales().getNombre() + " " +
                         nuevoAlojado.getDatos().getDatos_personales().getApellido() + 
-                        " se ha cargado correctamente. ¿Desea cargar otro? SI(1)/ NO(2)");
+                        " se ha cargado correctamente.");
                         bandera=false;    
                             String boton3= "-1";
                             while(!(boton3.equals("1")||boton3.equals("2"))){
@@ -79,6 +90,7 @@ public class InterfazDarAlta {
                                 boton3= entrada.nextLine();
                             }
                             if(boton3.equals("1")){
+                                System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
                                 ejecutarDarAlta();
                             }
                         //else sale el bucle principal y el CU termina 
@@ -96,9 +108,12 @@ public class InterfazDarAlta {
                     if(boton3.equals("1")){
                         bandera=false;//sale del bucle principal y el CU termina
                     }
-                 default: cargarCampo(nuevoAlojado, opcion, camposInvalidos, camposDireccionInvalida);
+                 default:
+                  cargarCampo(nuevoAlojado, opcion, camposInvalidos, camposDireccionInvalida);
                      
             }
+            System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
+        
         }
     }
 
@@ -134,10 +149,25 @@ public class InterfazDarAlta {
             if (camposInvalidos.get(i)) {
                 System.out.print(" " + (i + 1));
             }
+         
         }
-    }
+           System.out.println();
+            if (camposInvalidos.get(7)){
+                    System.out.print("Campos invalidos Direccion:");
+                for (int j = 0; j < 8; j++) {
+                    if (camposDireccionInvalida.get(j)) {
+                        System.out.print(" " + (j + 1));
+                    }
+                   
+                }
+                 System.out.println();
+                }
+            }
+        
+    
 
-    private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos){
+    private Alojado cargarCampo(Alojado alojado, String opcion,
+     BitSet camposInvalidos, BitSet camposDireccionInvalida){
 
         Alojado datosModificados = alojado;
 
@@ -214,14 +244,8 @@ public class InterfazDarAlta {
                 }
                 break;
             case "8":
-                System.out.println("1. Calle, 2. Número, 3. Piso, 4. Departamento, 5. Localidad, 6. Provincia, 7. País, 8. Código postal "); // Modificado de "Nueva calle, 2. Nuevo número, ..."
-                System.out.print("Campos invalidos:");
-                for (int i = 0; i < 8; i++) {
-                    if (camposDireccionInvalidos.get(i)) {
-                        System.out.print(" " + (i + 1));
-                    }
-                }
-                System.out.println();
+                System.out.println(" 1. Calle\n 2. Número\n 3. Piso\n 4. Departamento\n 5. Localidad\n 6. Provincia\n 7. País\n 8. Código postal"); // Modificado de "Nueva calle, 2. Nuevo número, ..."
+                      
                 System.out.print("Seleccione el número del campo que desea modificar: ");
                 opcion = entrada.nextLine();
                 switch (opcion) {
@@ -230,9 +254,9 @@ public class InterfazDarAlta {
                         String nuevaCalle = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
                         if(Validador.isCalleValida(nuevaCalle)){
-                            camposDireccionInvalidos.clear(0);
+                            camposDireccionInvalida.clear(0);
                         } else {
-                            camposDireccionInvalidos.set(0);
+                            camposDireccionInvalida.set(0);
                         }
                         break;
                     case "2":
@@ -240,9 +264,9 @@ public class InterfazDarAlta {
                         String nuevoNumero = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
                         if(Validador.isNumeroCalleValido(nuevoNumero)){
-                            camposDireccionInvalidos.clear(1);
+                            camposDireccionInvalida.clear(1);
                         } else {
-                            camposDireccionInvalidos.set(1);
+                            camposDireccionInvalida.set(1);
                         }
                         break;
                     case "3":
@@ -250,9 +274,9 @@ public class InterfazDarAlta {
                         String nuevoPiso = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
                         if(Validador.isNumeroCalleValido(nuevoPiso)){
-                            camposDireccionInvalidos.clear(2);
+                            camposDireccionInvalida.clear(2);
                         } else {
-                            camposDireccionInvalidos.set(2);
+                            camposDireccionInvalida.set(2);
                         }
                         break;
                     case "4":
@@ -260,9 +284,9 @@ public class InterfazDarAlta {
                         String nuevoDepto = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
                         if(Validador.isNumeroCalleValido(nuevoDepto)){
-                            camposDireccionInvalidos.clear(3);
+                            camposDireccionInvalida.clear(3);
                         } else {
-                            camposDireccionInvalidos.set(3);
+                            camposDireccionInvalida.set(3);
                         }
                         break;
                     case "5":
@@ -270,9 +294,9 @@ public class InterfazDarAlta {
                         String nuevaLocalidad = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
                         if(Validador.isLocalidadValida(nuevaLocalidad)){
-                            camposDireccionInvalidos.clear(4);
+                            camposDireccionInvalida.clear(4);
                         } else {
-                            camposDireccionInvalidos.set(4);
+                            camposDireccionInvalida.set(4);
                         }
                         break;
                     case "6":
@@ -280,9 +304,9 @@ public class InterfazDarAlta {
                         String nuevaProvincia = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
                         if(Validador.isProvinciaValida(nuevaProvincia)){
-                            camposDireccionInvalidos.clear(5);
+                            camposDireccionInvalida.clear(5);
                         } else {
-                            camposDireccionInvalidos.set(5);
+                            camposDireccionInvalida.set(5);
                         }
                         break;
                     case "7":
@@ -290,9 +314,9 @@ public class InterfazDarAlta {
                         String nuevoPais = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
                         if(Validador.isPaisValido(nuevoPais)){
-                            camposDireccionInvalidos.clear(6);
+                            camposDireccionInvalida.clear(6);
                         } else {
-                            camposDireccionInvalidos.set(6);
+                            camposDireccionInvalida.set(6);
                         }
                         break;
                     case "8":
@@ -300,13 +324,13 @@ public class InterfazDarAlta {
                         String nuevoCodPost = entrada.nextLine();
                         datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
                         if(Validador.isCodigoPostalValido(nuevoCodPost)){
-                            camposDireccionInvalidos.clear(7);
+                            camposDireccionInvalida.clear(7);
                         } else {
-                            camposDireccionInvalidos.set(7);
+                            camposDireccionInvalida.set(7);
                         }
                         break;
                 }
-                if (camposDireccionInvalidos.isEmpty()){
+                if (camposDireccionInvalida.isEmpty()){
                     camposInvalidos.clear(7);
                 } else {
                     camposInvalidos.set(7);
