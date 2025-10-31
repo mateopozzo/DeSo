@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
@@ -110,12 +111,9 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         List<AlojadoDTO> lista_alojados = listarAlojados();
         List<AlojadoDTO> encontrados = new ArrayList<>();
 
-        for(AlojadoDTO un_alojado: lista_alojados) {
-            if (cumpleCriterio(un_alojado, criterios_busq)){
-                encontrados.add(un_alojado);
-            }
-        }
-        return encontrados;
+        return lista_alojados.stream()
+                .filter(un_alojado -> cumpleCriterio(un_alojado, criterios_busq))
+                .collect(Collectors.toList());
     }
 
     /*
@@ -173,13 +171,9 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     @Override
     public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo){
         List<AlojadoDTO> listaAlojados = listarAlojados();
-        for(AlojadoDTO alojadoPersistente: listaAlojados){
-            String documentoInstancia = alojadoPersistente.getNroDoc();
-            TipoDoc tipoDocumentoInstancia = alojadoPersistente.getTipoDoc();
-            if(documentoInstancia.equals(documento) && tipoDocumentoInstancia.equals(tipo)){
-                return alojadoPersistente;
-            }
-        }
-        return null;
+        return listaAlojados.stream()
+                .filter(a -> a.getNroDoc().equals(documento) && a.getTipoDoc().equals(tipo))
+                .findFirst() // Devuelve un Optional<AlojadoDTO>
+                .orElse(null); // Si no se encuentra devuelve null
     }
 }

@@ -160,7 +160,7 @@ public class GestorAlojamiento {
     }
 
     public static obtenerAlojado(){
-        
+
     }
 }
 
