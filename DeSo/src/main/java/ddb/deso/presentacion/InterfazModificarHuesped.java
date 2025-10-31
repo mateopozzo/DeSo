@@ -89,6 +89,18 @@ public class InterfazModificarHuesped {
                         }
                         //sale del bucle principal y el CU termina
                     }
+                    else {
+                        System.out.println("Hay campos inválidos.Para saber cuales son revise la linea de \"Campos Invalidos en:\""+ "\n" +
+                        " Por favor, corríjalos antes de continuar.");
+                        try {
+                            // Pausa la ejecución por el tiempo especificado
+                            Thread.sleep(3000); 
+                        } catch (InterruptedException e) {
+                            // Es buena práctica manejar la interrupción
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt(); // Restablece el estado de interrupción
+                         }
+                    }
                     break;
                 case "cancelar":
                 case "c":
@@ -104,7 +116,6 @@ public class InterfazModificarHuesped {
                     }
                     //else vuelve al menu
 
-                    //System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
                     break;
                 case "borrar":
                 case "b":
@@ -112,10 +123,9 @@ public class InterfazModificarHuesped {
                     bandera = false;//sale del bucle principal y el CU termina
                     break;
                 default:
-                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalida);
-                    //System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
+                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalida);                
             }
-
+            System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
         }
         System.out.print("El caso de uso 10 termina");
 
