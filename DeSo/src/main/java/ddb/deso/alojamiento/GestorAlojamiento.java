@@ -1,10 +1,6 @@
 package ddb.deso.alojamiento;
 
-import java.time.LocalDate;
-import java.util.BitSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
@@ -15,7 +11,6 @@ import ddb.deso.presentacion.InterfazBusqueda;
 
 public class GestorAlojamiento {
     private static final AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
-    private List<Huesped> huespedes = new LinkedList<>();
 
     /*
     Inyección de dependencias porque si no no me deja importar el metodo del DAO
@@ -31,16 +26,19 @@ public class GestorAlojamiento {
         return encontrados != null && !encontrados.isEmpty();
     }
 
+    /*
+     Busca coincidencias en la base de datos con base en los criterios de búsqueda.
+
+     @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
+     */
+
     public static void buscarHuesped(CriteriosBusq criterios_busq) {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, que llama a DAOJSON y busca todos los alojados
         Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
-        Si no encuentra coincidencias, encontrados is empty y se ejecuta darDeAltaHuesped() -> Fin CU
 
-        Si encuentra, se muestra de 1 al n la cantidad de coincidencias
-        Usuario ingresa opción input_user y se parsea a un int seleccion
-        Se busca en la lista quien es el huesped seleccion-1 y se almacena
-        Se llama a modificarHuesped() con la instancia de huesped_seleccionado -> Fin CU
+        Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
+        Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
         InterfazBusqueda ui = new InterfazBusqueda();
@@ -59,7 +57,6 @@ public class GestorAlojamiento {
 
 
     public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
-
         System.out.println("Modificando huesped...");
         AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
         AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
@@ -74,17 +71,19 @@ public class GestorAlojamiento {
         aDao.crearAlojado(aDTO);
     }
 
-    /**
-     * Verifica si un huésped, basado en los criterios de búsqueda, se alojó previamente.
-     *
-     * @param criterios Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
-     * @return Estado del historial del huésped.
-     * <ul>
-     * <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
-     * <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido pero no tiene check-in/out.</li>
-     * <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
-     * </ul>
+    /*
+     Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
+
+     @param criterios: Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
+     @return Estado del historial del huésped.
+
+     <ul>
+     <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
+     <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido, pero no tiene check-in/out.</li>
+     <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
+     </ul>
      */
+
     private static ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         List<AlojadoDTO> listaDTO = DAO.buscarHuespedDAO(criterios);
@@ -107,41 +106,40 @@ public class GestorAlojamiento {
     }
 
 
-    /**
-     * Elimina un registro de huésped del sistema.
-     *
-     * @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
+    /*
+     Elimina un registro de huésped del sistema.
+
+     @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
      */
+
     public static void eliminarAlojado(Alojado alojado) {
         AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         AlojadoDTO eliminar = new AlojadoDTO(alojado);
         DAO.eliminarAlojado(eliminar);
     }
 
-    /**
-     * Enumerador ResumenHistorialHuesped  informa el estado del huesped en el sistema
+    /*
+     Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
      */
+
     public enum ResumenHistorialHuesped {
-        /**
-         * Tuvo alguna estadia en el hotel
-         */
+        // Tuvo alguna estadia en el hotel
         SE_ALOJO,
-        /**
-         * No tuvo ninguna estadia pero sus datos estan persistidos
-         */
+
+        // No tuvo ninguna estadia, pero sus datos están persistidos
         NO_SE_ALOJO,
-        /**
-         * Sus datos no estan presentes en la base del sistema
-         */
+
+        // Sus datos no están presentes en la base del sistema
         NO_PERSISTIDO
     }
 
-    /**
-     * Obtiene el resumen del historial de alojamiento de un huésped.
-     *
-     * @param alojado Objeto {@code Alojado} con los datos del huésped.
-     * @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
+    /*
+     Obtiene el resumen del historial de alojamiento de un huésped.
+
+     @param alojado Objeto {@code Alojado} con los datos del huésped.
+     @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
+
     public static ResumenHistorialHuesped historialHuesped(Alojado alojado){
         var nombre = alojado.getDatos().getDatos_personales().getNombre();
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
@@ -164,20 +162,21 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
-    /**
-     * Busca el primer registro de alojado que coincide con el número y tipo de documento especificados
-     * y lo retorna como un objeto de dominio {@code Alojado}.
-     *
-     * <p>Utiliza el patrón DAO para la búsqueda y el patrón Factory para la conversión del DTO
-     * a la entidad de dominio {@code Alojado}.
-     *
-     * @param dni El número de documento del alojado.
-     * @param tipo El tipo de documento (p. ej., DNI, Pasaporte).
-     * @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
-     * o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
-     * @author mat
-     * @author gael
+    /*
+     Busca el primer registro de alojado que coincide con el número y tipo de documento especificado
+     y lo retorna como un objeto de dominio {@code Alojado}.
+
+     <p>Utiliza el patrón DAO para la búsqueda y el patrón Factory para la conversión del DTO
+     a la entidad de dominio {@code Alojado}.
+
+     @param dni El número de documento del alojado.
+     @param tipo El tipo de documento (p. ej., DNI, Pasaporte).
+     @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
+     o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
+     @author mat
+     @author gael
      */
+
     public static Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;

@@ -1,9 +1,7 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.presentacion.InterfazBusqueda;
+import ddb.deso.presentacion.InterfazDarAlta;
 import ddb.deso.presentacion.InterfazLogin;
 
 public class DeSo {
@@ -12,20 +10,17 @@ public class DeSo {
         InterfazLogin interfazLogin=new InterfazLogin();
         interfazLogin.ejecutar();
 
-        System.out.println("Bienvenido/a al sistema de gestión Hotel Premier © V.1.0.0 ----------------------------");
+        System.out.println("Bienvenido/a al sistema de gestión Hotel Premier ©  -----------------------------------");
         System.out.println("El menú de opciones se navega ingresando el número correspondiente a la opción deseada.");
 
-        // CASO DE USO 9: DAR DE ALTA HUESPED
-        // gestor_aloj.darDeAltaHuesped();
-
-        //CASO DE USO 10: MODIFICAR HUESPED
-
         // CASO DE USO 2: BUSCAR HUESPED
-        InterfazBusqueda ui_busq=new InterfazBusqueda();
+        // Incluye ejecución de: CU09, CU10 -> DAR DE ALTA HUESPED, MODIFICAR HUESPED
+        InterfazBusqueda ui_busq = new InterfazBusqueda();
         ui_busq.busqueda_huesped();
         ui_busq.close();
 
         // CASO DE USO 11: DAR DE BAJA HUESPED
+
 
   }
 

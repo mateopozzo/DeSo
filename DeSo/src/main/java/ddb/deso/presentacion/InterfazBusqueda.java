@@ -63,16 +63,17 @@ public class InterfazBusqueda {
     }
 
     public void sin_coincidencias(){
-        System.out.println("No se encontraron coincidencias de búsqueda.");
-        System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
-        // darDeAltaHuesped();
+        System.out.println("No se encontraron coincidencias de búsqueda.\n");
+        InterfazDarAlta ui_alta = new InterfazDarAlta();
+        ui_alta.ejecutarDarAlta();
+        // FIN DE CASO DE USO
     }
 
     public void seleccion (List<AlojadoDTO> encontrados){
         AlojadoDTO h_encontrado;
         String input_user;
 
-        // Si nunca se actualiza el valor de control me lo muestra
+        // Si nunca se actualiza el valor bandera me lo muestra
         int seleccion=-1;
 
         System.out.println("Ingrese el número de huesped que desea seleccionar.");
@@ -92,8 +93,8 @@ public class InterfazBusqueda {
             String siguiente = scanner.nextLine();
 
             if ("1".equals(siguiente)) {
-                System.out.println("DAR DE ALTA HUESPED ---- FROM CU02");
-                // darDeAltaHuesped();
+                InterfazDarAlta ui_alta = new InterfazDarAlta();
+                ui_alta.ejecutarDarAlta();
                 // FIN DE CASO DE USO
             }
         }
@@ -112,7 +113,9 @@ public class InterfazBusqueda {
                         DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getNroDoc(), h_encontrado.getTipoDoc(), h_encontrado.getCUIT(), h_encontrado.getFechanac());
                         DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
                         Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
-                        // GestorAlojamiento.modificarHuesped(huesped_h);
+
+                        InterfazModiHues ui_modif = new InterfazModiHues();
+                        ui_modif.ejecutarModiHuesped(huesped_h);
                         // FIN DE CASO DE USO
                     }
                 }
@@ -122,6 +125,7 @@ public class InterfazBusqueda {
         }
     }
 
+    // Metodo aparte para cerrar el scanner porque si no suele tener problemas de cierre prematuro
     public void close() {
         scanner.close();
     }

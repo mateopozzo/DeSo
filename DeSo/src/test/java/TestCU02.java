@@ -9,9 +9,9 @@ public class TestCU02 {
 
         // CASO DE USO 2: BUSCAR HUESPED
         System.out.println("CON TILDE EN BDD, SIN TILDE EN BÚSQUEDA - Todos los criterios ------");
-        System.out.println("BÚSQUEDA: Gris, Gatito Panzon DNI 25123456 ----------------------------\n");
-        CriteriosBusq crit2 = new CriteriosBusq("Gris", "Gatito Panzon", TipoDoc.DNI, "336667778");
-        buscarHuesped(crit2);
+        System.out.println("BÚSQUEDA: Rodriguez, Maria DNI 25123456 ----------------------------\n");
+        CriteriosBusq crit2 = new CriteriosBusq("Rodriguezz", "Maria", TipoDoc.DNI, "336667778");
+         buscarHuesped(crit2);
 
         System.out.println("CON TILDE EN BUSQUEDA, SIN TILDE EN BDD - Todos los criterios ------");
         System.out.println("BÚSQUEDA: Grís, Gatito Panzón DNI 25123456 ----------------------------\n");

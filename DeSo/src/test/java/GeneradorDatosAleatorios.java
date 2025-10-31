@@ -6,26 +6,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+// Clase generada por llm Gemini
 
-/*
-* Clase generada por llm Gemini
-* */
 public class GeneradorDatosAleatorios {
 
     private static final Random RANDOM = new Random();
 
     // Listas de datos posibles
-    private static final List<String> NOMBRES = Arrays.asList("Ana", "Juan", "Maria", "Carlos", "Sofia", "Mateo");
-    private static final List<String> APELLIDOS = Arrays.asList("Gomez", "Perez", "Rodriguez", "Lopez", "Fernandez", "Martinez");
-    private static final List<String> CALLES = Arrays.asList("Av. Corrientes", "Mitre", "Ruta 40", "Queen St", "Elm St");
-    private static final List<String> PAISES = Arrays.asList("Argentina", "Canadá", "España", "Brasil", "Chile");
-    private static final List<String> LOCALIDADES = Arrays.asList("Buenos Aires", "Toronto", "Madrid", "Rio de Janeiro", "Santiago");
+    private static final List<String> NOMBRES = Arrays.asList("Ana", "Juan", "María", "Carlos", "Sofia", "Mateo", "Ernesto", "Esther", "Julia", "Domingo");
+    private static final List<String> APELLIDOS = Arrays.asList("Gomez", "Perez", "Rodriguez", "Lopez", "Fernandez", "Martinez", "Lehmnan", "Johnson", "Kler", "Díaz");
+    private static final List<String> CALLES = Arrays.asList("Av. Corrientes", "Mitre", "Ruta 40", "Queen St", "Elm St", "Castellanos");
+    private static final List<String> PAISES = Arrays.asList("Argentina", "Canadá", "España", "Brasil", "Chile", "Paraguay", "Perú");
+    private static final List<String> LOCALIDADES = Arrays.asList("Buenos Aires", "Toronto", "Madrid", "Rio de Janeiro", "Santiago", "Asunción", "Lima");
     private static final List<String> POSICIONES_IVA = Arrays.asList("Responsable Inscripto", "Monotributista", "Excento", "Consumidor Final");
-    private static final List<String> OCUPACIONES = Arrays.asList("Ingeniero", "Abogado", "Cientifico", "Estudiante", "Comerciante");
+    private static final List<String> OCUPACIONES = Arrays.asList("Ingeniero", "Abogado", "Cientifico", "Estudiante", "Comerciante", "Empleado");
 
-    /**
-     * Genera un número aleatorio como String de la longitud especificada.
-     */
+    // Genera un número aleatorio como String de la longitud especificada.
+
     private static String generarNroAleatorio(int longitud) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < longitud; i++) {
@@ -34,10 +31,11 @@ public class GeneradorDatosAleatorios {
         return sb.toString();
     }
 
-    /**
-     * Genera un objeto DatosAlojado con valores aleatorios.
-     * @return un nuevo objeto DatosAlojado.
+    /*
+     Genera un objeto DatosAlojado con valores aleatorios.
+     @return un nuevo objeto DatosAlojado.
      */
+
     public static DatosAlojado generarDatosAlojadoAleatorio() {
         // --- Datos Personales ---
         String nombre = NOMBRES.get(RANDOM.nextInt(NOMBRES.size()));
@@ -53,7 +51,6 @@ public class GeneradorDatosAleatorios {
 
         DatosPersonales dp = new DatosPersonales(nombre, apellido, nacionalidad, posicionIva, ocupacion, nroDoc, tipoDoc, CUIT, fechaa);
 
-
         // --- Datos Residencia ---
         String pais = PAISES.get(RANDOM.nextInt(PAISES.size()));
         String localidad = LOCALIDADES.get(RANDOM.nextInt(LOCALIDADES.size()));
@@ -66,15 +63,13 @@ public class GeneradorDatosAleatorios {
 
         DatosResidencia dr = new DatosResidencia(calle, depto, localidad, provincia, pais, nro_calle, piso, nro_postal);
 
-
-        // --- Datos Contacto ---
+        // --- Datos contacto ---
         String telefono = "1" + generarNroAleatorio(9); // Teléfono simulado con 10 dígitos
         String correo = nombre.toLowerCase() + "." + apellido.toLowerCase() + "@mail.com";
 
         DatosContacto dc = new DatosContacto(telefono, correo);
 
-
-        // --- Datos Alojado ---
+        // --- Datos alojado ---
         DatosAlojado da = new DatosAlojado(dc, dr, dp);
 
         // Los campos CICO se suelen inicializar a null o con una lista vacía para datos de prueba
@@ -84,10 +79,11 @@ public class GeneradorDatosAleatorios {
         return da;
     }
 
-    /**
-     * Genera un objeto Huesped con DatosAlojado aleatorios.
-     * @return un nuevo objeto Huesped.
+    /*
+     Genera un objeto Huesped con DatosAlojado aleatorios.
+     @return un nuevo objeto Huesped.
      */
+
     public static Huesped generarHuespedAleatorio() {
         return new Huesped(generarDatosAlojadoAleatorio());
     }
