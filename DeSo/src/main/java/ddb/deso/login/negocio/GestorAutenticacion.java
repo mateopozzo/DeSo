@@ -39,7 +39,7 @@ public class GestorAutenticacion {
 
         Optional<Usuario> usuarioEncontrado  = usuarioDAO.buscarPorNombre(n);
         if (usuarioEncontrado.isEmpty()) {
-            throw new UsuarioNoEncontradoException("No existe usuario: " + n);
+            throw new UsuarioNoEncontradoException(n);
         }
 
         Usuario u = usuarioEncontrado.get();
