@@ -109,7 +109,6 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     public List<AlojadoDTO> buscarHuespedDAO (CriteriosBusq criterios_busq){
         // Tengo la lista de todos los alojados del archivo Alojado.JSON
         List<AlojadoDTO> lista_alojados = listarAlojados();
-        List<AlojadoDTO> encontrados = new ArrayList<>();
 
         return lista_alojados.stream()
                 .filter(un_alojado -> cumpleCriterio(un_alojado, criterios_busq))
@@ -143,6 +142,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
             return false;
         }
         if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
+            System.out.println(nombres_b + nombre_h);
             return false;
         }
         if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {

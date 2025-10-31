@@ -11,7 +11,6 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.presentacion.InterfazBusqueda;
-import ddb.deso.presentacion.InterfazDarBaja;
 
 
 public class GestorAlojamiento {
@@ -99,8 +98,9 @@ public class GestorAlojamiento {
         if (huespedBaja == null) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
-
-        if (huespedBaja.getId_check_in().isEmpty() && huespedBaja.getId_check_out().isEmpty()) {
+        System.out.println(huespedBaja.getId_check_in() == null);
+        if ((huespedBaja.getId_check_in()!=null && huespedBaja.getId_check_in().isEmpty()) &&
+                (huespedBaja.getId_check_out()==null && huespedBaja.getId_check_out().isEmpty())) {
             return ResumenHistorialHuesped.SE_ALOJO;
         }
         return ResumenHistorialHuesped.NO_SE_ALOJO;
@@ -147,7 +147,12 @@ public class GestorAlojamiento {
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
         var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
         var tipoDoc = alojado.getDatos().getDatos_personales().getTipoDoc();
-        CriteriosBusq criterios = new CriteriosBusq(nombre, apellido, tipoDoc, nroDoc);
+
+        CriteriosBusq criterios = new CriteriosBusq(apellido, nombre, tipoDoc, nroDoc);
+        System.out.println(nombre);
+        System.out.println(apellido);
+        System.out.println(nroDoc);
+        System.out.println(tipoDoc);
         ResumenHistorialHuesped seAlojo = huespedSeAlojo(criterios);
 
         // Flujo secundario de CU, el huesped se alojó o no existe en la base

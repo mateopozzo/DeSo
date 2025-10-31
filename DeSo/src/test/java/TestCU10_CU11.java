@@ -1,4 +1,5 @@
 
+import java.security.PublicKey;
 import java.time.LocalDate;
 
 import ddb.deso.TipoDoc;
@@ -10,12 +11,15 @@ import ddb.deso.alojamiento.DatosResidencia;
 import ddb.deso.alojamiento.Huesped;
 import ddb.deso.presentacion.InterfazModiHues;
 
-public class TestCU10{
+public class TestCU10_CU11 {
 
 
     public static void main(String[] args) {
         System.out.println("TESTING: CASO DE USO 10 - BUSCAR HUÉSPED ----------------------------");
 
+    }
+
+    public static void modificarHuespedExistente(){
         // Crear datos personales
         DatosPersonales datosPersonales = new DatosPersonales("Gatito","Negro", "Francés","excento","Gato","56739633",TipoDoc.LC,"25-123457-2", LocalDate.parse("2023-11-09"));
 

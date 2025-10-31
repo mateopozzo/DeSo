@@ -468,7 +468,7 @@ public class InterfazModiHues {
      * @author mat
      */
     public void noExisteHuesped() {
-        System.out.println("El huesped No existe en la base de datos");
+        System.out.println("El huesped no existe en la base de datos");
         return;
     }
 
@@ -501,8 +501,10 @@ public class InterfazModiHues {
         var historialAlojado=GestorAlojamiento.historialHuesped(alojadoParaEliminar);
         if(historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.SE_ALOJO)){
             noSePuedeDarBaja();
+            return;
         } else if (historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.NO_PERSISTIDO)) {
             noExisteHuesped();
+            return;
         }
 
         // Flujo principal, avisa a usuario a quien se elimina
