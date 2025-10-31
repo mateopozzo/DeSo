@@ -17,7 +17,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
 
 
-/**
+/*
  Implementa la interfaz DAO para:
  <ul>
     <li>Creación</li>
@@ -32,11 +32,10 @@ import ddb.deso.alojamiento.CriteriosBusq;
 public class AlojadoDAOJSON implements AlojadoDAO {
     // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
     private final static String RUTA_ARCHIVO_JSON_ALOJADOS = Paths.get("").toAbsolutePath().resolve("DeSo").resolve("data").resolve("Alojado.json").toString();
-    private ManejadorJson manejador;
+    private final ManejadorJson manejador;
 
     public AlojadoDAOJSON() {
         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
-        //System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
     }
     
     /*
@@ -116,43 +115,57 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     }
 
     /*
-    Recibo una instancia de AlojadoDTO y un criterio de búsqueda
-    Si el criterio fue definido, pero no coinciden los atributos, retorno falso
-    Si el criterio fue definido y coincide, no entra a ningún if y devuelve true
-    Si el criterio no fue definido, no se evalúa la segunda condición
+    @param alojado_DTO: Instancia de AlojadoDTO
+    @param criterio: Criterio de búsqueda donde todos son opcionales, y si no fueron definidos son null
+    Se llama a normalizar para evitar problemas por tildes
+
+    Si el criterio fue definido, pero no coinciden los atributos: Devuelve false
+    Si el criterio fue definido y coincide: Devuelve true
+    Si el criterio no fue definido (no_es_vacio==false), no se evalúa la segunda condición
     */
 
     private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
-        // Criterios de búsqueda que pueden o no estar vacíos -> Hechos con clase plantilla CriteriosBusq
-        String apellido_b = criterio.getApellido();
-        String nombres_b = criterio.getNombre();
+        // atributo_b: Atributos obtenidos del criterio de búsqueda
+        // atributo_h: Atributos del huésped propiamente dicho
+
+        String apellido_crudo = criterio.getApellido();
+        String nombre_crudo = criterio.getNombre();
+
+        String apellido_b = normalizar(apellido_crudo);
+        String nombre_b = normalizar(nombre_crudo);
         TipoDoc tipoDoc_b = criterio.getTipoDoc();
         String nroDoc_b = criterio.getNroDoc();
 
         String apellido = alojado_DTO.getApellido();
         String nombre = alojado_DTO.getNombre();
+
+        String apellido_h = normalizar(apellido);
+        String nombre_h = normalizar(nombre);
         TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
         String nroDoc_h = alojado_DTO.getNroDoc();
-
-        // FUENTE: https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu
-        String apellido_h = Normalizer.normalize(apellido, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-        String nombre_h = Normalizer.normalize(nombre, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
         if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
             return false;
         }
-        if (no_es_vacio(nombres_b) && !nombre_h.equalsIgnoreCase(nombres_b)) {
-            System.out.println(nombres_b + nombre_h);
+        if (no_es_vacio(nombre_b) && !nombre_h.equalsIgnoreCase(nombre_b)) {
+            System.out.println(nombre_b + nombre_h);
             return false;
         }
         if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {
             return false;
         }
-        if (no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b)) {
-            return false;
-        }
+        return !(no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b));
+    }
 
-        return true;
+    /*
+    @param cadena: String que necesito normalizar
+    @return una cadena normalizada sin tildes
+
+    FUENTE: https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu
+    */
+
+    private String normalizar (String cadena){
+        return Normalizer.normalize(cadena, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     private boolean no_es_vacio (String contenido){

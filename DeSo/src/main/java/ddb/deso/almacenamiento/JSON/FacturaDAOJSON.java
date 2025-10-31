@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class FacturaDAOJSON implements FacturaDAO {
     private final static String RUTA_ARCHIVO_JSON_FACTURA = Paths.get("").toAbsolutePath().resolve("data").resolve("Factura.json").toString();
-    private ManejadorJson manejador;
+    private final ManejadorJson manejador;
+    
     public FacturaDAOJSON(){
         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_FACTURA),FacturaDTO.class);
     }

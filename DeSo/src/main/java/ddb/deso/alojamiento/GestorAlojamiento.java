@@ -118,9 +118,7 @@ public class GestorAlojamiento {
         DAO.eliminarAlojado(eliminar);
     }
 
-    /*
-     Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
-     */
+    // Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
 
     public enum ResumenHistorialHuesped {
         // Tuvo alguna estadia en el hotel

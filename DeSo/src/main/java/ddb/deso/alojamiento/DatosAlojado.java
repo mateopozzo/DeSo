@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
 public class DatosAlojado {
     private DatosContacto datos_contacto;

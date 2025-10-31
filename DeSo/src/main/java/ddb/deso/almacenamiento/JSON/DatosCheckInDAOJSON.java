@@ -4,7 +4,6 @@
  */
 package ddb.deso.almacenamiento.JSON;
 
-import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
 import ddb.deso.almacenamiento.DTO.DatosCheckInDTO;
 
@@ -29,7 +28,7 @@ public class DatosCheckInDAOJSON implements DatosCheckInDAO {
 
     // Ruta del archivo que contiene los datos se guarda en la carpeta data en el directorio raiz del proyecto
     private final static String RUTA_ARCHIVO_JSON_CHECKIN = Paths.get("").toAbsolutePath().resolve("data").resolve("CheckIn.json").toString();
-    private ManejadorJson manejador;
+    private final ManejadorJson manejador;
 
     public DatosCheckInDAOJSON() {
         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_CHECKIN), DatosCheckInDTO.class);
@@ -56,14 +55,14 @@ public class DatosCheckInDAOJSON implements DatosCheckInDAO {
      */
     @Override
     public void actualizarDatosCheckIn(DatosCheckInDTO datosCheckInPre, DatosCheckInDTO datosCheckIn){
-        return;
+
     }
-    /*
-     * No implementado
-     */
+
+    // No implementado
     @Override
     public void eliminarDatosCheckIn(DatosCheckInDTO datosCheckIn){
     }
+    
     @Override
     public List<DatosCheckInDTO> listarDatosCheckIn(){
         List<DatosCheckInDTO> listaCI=new ArrayList<>();

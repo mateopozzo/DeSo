@@ -22,13 +22,15 @@ public class UsuarioJsonDAO implements UsuarioDAO {
         .toAbsolutePath().resolve("DeSo").resolve("data").resolve("usuarios.json");
     private final Gson gson = new Gson();
 
-    /*// Método temporal para depurar la ruta real
+    /*
+    Metodo temporal para depurar la ruta real
     private void debugRuta() {
         System.out.println("[DEBUG] user.dir = " + System.getProperty("user.dir"));
         System.out.println("[DEBUG] JSON esperado en: " + RUTA.toString());
         System.out.println("[DEBUG] exists=" + Files.exists(RUTA));
     }
     */
+
     @Override
     public Optional<Usuario> buscarPorNombre(String nombre) {
         String buscado = (nombre == null) ? "" : nombre.trim();
@@ -42,7 +44,7 @@ public class UsuarioJsonDAO implements UsuarioDAO {
     }
 
    private List<UsuarioDTO> leerDtos() {
-        //debugRuta(); // Método temporal para depurar la ruta real
+        //debugRuta(); Metodo temporal para depurar la ruta real
 
         try (BufferedReader reader = Files.newBufferedReader(RUTA, StandardCharsets.UTF_8)) {
             Type listType = new TypeToken<List<UsuarioDTO>>() {}.getType();

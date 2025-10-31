@@ -6,10 +6,6 @@ package ddb.deso.alojamiento;
 
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
-/**
- *
- * @author mat
- */
 public abstract class Alojado {
 
     protected DatosAlojado datos;

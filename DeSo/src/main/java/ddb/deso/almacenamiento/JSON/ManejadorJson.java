@@ -14,14 +14,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author mat
+/*
+ @author mat
  */
+
 public class ManejadorJson<T> {
-    // quiero probar algo
     private Gson gson = new Gson();
-    // private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private Path path;
     private Class<T> clase;
@@ -58,7 +56,6 @@ public class ManejadorJson<T> {
         try (FileWriter escritor = new FileWriter(path.toFile())) {
             gson.toJson(items, escritor);
             escritor.flush();
-            escritor.close();
         }
     }
     
