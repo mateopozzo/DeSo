@@ -58,7 +58,8 @@ public class InterfazLogin {
                 } catch (UsuarioNoEncontradoException | CredencialesInvalidasException e) {
                     // Muestra el mensaje de error definido en la capa de negocio
                     System.out.println(e.getMessage());
-                    System.out.println(); // línea en blanco para legibilidad
+                    System.out.println();
+                    return;
                 }
             }
         } catch (Exception e) {

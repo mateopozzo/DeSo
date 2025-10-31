@@ -25,38 +25,43 @@ public class InterfazBusqueda {
         // Ingreso de los filtros de búsqueda
         System.out.println("Ingrese el nombre: ");
         String nombre = scanner.nextLine();
+        if(nombre.isEmpty()) nombre = null;
 
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
+        if(apellido.isEmpty()) nombre = null;
 
         TipoDoc tipoDoc = menuTipoDoc(scanner);
 
         System.out.println("Ingrese el número de documento: ");
         String num_documento = scanner.nextLine();
+        if(num_documento.isEmpty()) nombre = null;
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
-        CriteriosBusq criterios_busq = new CriteriosBusq(nombre, apellido, tipoDoc, num_documento);
+        CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
         GestorAlojamiento.buscarHuesped(criterios_busq);
     }
 
     private TipoDoc menuTipoDoc(Scanner scanner){
-        System.out.println("Seleccione tipo de documento:");
+        System.out.println("Ingrese número correspondiente para seleccionar tipo de documento:");
         System.out.println("1. DNI");
         System.out.println("2. LE");
         System.out.println("3. LC");
         System.out.println("4. PASAPORTE");
         System.out.println("5. OTRO");
+        System.out.println("Enter. NINGUNO");
 
         TipoDoc tipoDoc;
 
         String opcion = scanner.nextLine();
 
         switch (opcion) {
+            case "1" -> tipoDoc =TipoDoc.DNI;
             case "2" -> tipoDoc =TipoDoc.LE;
             case "3" -> tipoDoc =TipoDoc.LC;
             case "4" -> tipoDoc =TipoDoc.PASAPORTE;
             case "5" -> tipoDoc =TipoDoc.OTRO;
-            default -> tipoDoc = TipoDoc.DNI;
+            default -> tipoDoc = null;  //  el actor puede no elegir tipo
         }
 
         return tipoDoc;
@@ -114,7 +119,7 @@ public class InterfazBusqueda {
                         DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
                         Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
 
-                        InterfazModiHues ui_modif = new InterfazModiHues();
+                        InterfazModificarHuesped ui_modif = new InterfazModificarHuesped();
                         ui_modif.ejecutarModiHuesped(huesped_h);
                         // FIN DE CASO DE USO
                     }

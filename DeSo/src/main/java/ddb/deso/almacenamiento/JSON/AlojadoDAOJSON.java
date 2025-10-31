@@ -130,12 +130,15 @@ public class AlojadoDAOJSON implements AlojadoDAO {
 
         String apellido_crudo = criterio.getApellido();
         String nombre_crudo = criterio.getNombre();
+        String apellido_b=null, nombre_b=null;
 
-        String apellido_b = normalizar(apellido_crudo);
-        String nombre_b = normalizar(nombre_crudo);
+
+        if(no_es_vacio(apellido_crudo)) apellido_b = normalizar(apellido_crudo);
+        if(no_es_vacio(nombre_crudo)) nombre_b = normalizar(nombre_crudo);
         TipoDoc tipoDoc_b = criterio.getTipoDoc();
         String nroDoc_b = criterio.getNroDoc();
 
+        // para mi (mateo) seria robusto validar que todas las strings no sean vacias
         String apellido = alojado_DTO.getApellido();
         String nombre = alojado_DTO.getNombre();
 

@@ -7,16 +7,15 @@ import java.util.Scanner;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.GestorAlojamiento;
 import ddb.deso.alojamiento.Validador;
 
-public class InterfazModiHues {
+public class InterfazModificarHuesped {
     private Scanner entrada;
     private BitSet camposInvalidos;
     private BitSet camposDireccionInvalida;
 
-    public InterfazModiHues() {
+    public InterfazModificarHuesped() {
         this.entrada = new Scanner(System.in);
         this.camposInvalidos = new BitSet(12);
         this.camposDireccionInvalida = new BitSet(8);
@@ -516,6 +515,10 @@ public class InterfazModiHues {
         GestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
 
         terminarCU11(alojadoParaEliminar);
+    }
+
+    public void close(){
+        entrada.close();
     }
 
 

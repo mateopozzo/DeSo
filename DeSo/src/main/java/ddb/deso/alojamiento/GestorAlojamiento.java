@@ -47,7 +47,7 @@ public class GestorAlojamiento {
         // BÚSQUEDA EN JSON: Llamo al DAO -> Busca en la BDD -> Crea los DTO -> Devuelve lista de DTO a DAO -> DAO devuelve lista a gestor
         encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
 
-        if (encontrados.isEmpty()) {
+        if (encontrados == null || encontrados.isEmpty()) {
             ui.sin_coincidencias();
             // FIN DE CASO DE USO
         } else {
@@ -183,7 +183,7 @@ public class GestorAlojamiento {
         List<AlojadoDTO> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
         AlojadoDTO encontradoDTO = encontrados.stream()
                 .findFirst() // Devuelve primer instancia
-                .orElse(null); // Si está vacío, devuelve null
+                .orElse(null); // o devuelve null si está vacío
         if(encontradoDTO == null) return null;
         return FactoryAlojado.createFromDTO(encontradoDTO);
     }

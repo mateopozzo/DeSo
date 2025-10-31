@@ -428,5 +428,10 @@ public class InterfazDarAlta {
         return tipoDoc;
     }
 
+    public void close(){
+        entrada.close();
+    }
+
+
 }
 
