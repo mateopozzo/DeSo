@@ -120,8 +120,19 @@ Para la implementación se utilizaron las siguientes clases:
 
 ----
 ### Caso de uso 09: Dar de alta huésped
+**Alojado:** Clase abstracta que forma parte del patrón factory. Sus clases hijas son huésped (encargado de habitación) e invitado.
 
-```DESCRIPCION```
+**AlojadoDAO (interfaz):** Interfaz del patrón DAO que recibe la llamada desde el gestor para ejecutar la implementación de crearAlojado en AlojadoDAOJSON.
+
+**AlojadoDAOJSON:** Implementación concreta del DAO para una base de datos en archivos JSON donde se encuentra el método crearAlojado. A esta se le pasa un AlojadoDTO y lo agrega a una lista de alojadoDTO
+que esta en la interface AlojadoDAO.
+
+**AlojadoDTO:** Objeto DTO que recibe un huesped o invitado y se instancia. Este es pasado a crearAlojado.
+
+**InterfazBusqueda:** GUI que interactua con el usuario para crear un Alojado a traves de la toma de datos. También se encarga de mostrar por pantalla resultados, mensajes de error/éxito y llamar a métodos como darAltaHuesped.
+
+**GestorAlojamiento:** Gestor que contiene el método darAltaHuesped. A este se le pasa como parametro el invitado instanciado con datos validos y crea un DTO con el Invitado como parametro y llama a crearAlojado.
+
 
 ----
 ### Caso de uso 10: Modificar huésped
