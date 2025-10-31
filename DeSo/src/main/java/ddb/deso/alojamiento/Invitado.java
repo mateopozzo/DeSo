@@ -13,7 +13,7 @@ public class Invitado extends Alojado {
         this.datos.getDatos_personales().setCUIT(null);
     }
     public Invitado (){
-        this.datos=new DatosAlojado(null, null, null);
+        this.datos=new DatosAlojado();
     }
     @Override
     public void completarDTO(AlojadoDTO dto) {
