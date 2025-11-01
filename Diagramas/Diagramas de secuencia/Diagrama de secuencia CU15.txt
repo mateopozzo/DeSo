@@ -1,0 +1,82 @@
+@startuml
+title CU15: Ocupar habitacion
+' Actor y participantes
+actor "Conserje" as Conserje
+boundary "GUI" as UI
+participant "Gestor Habitacion" as GestorHabitacion
+participant "EstadiaDAO" as EDAO <<Interface>>
+database "Base de datos" as BDD <<Database>>
+
+
+' Precondición
+group Precondicion: El actor esta autenticado en el sistema. El huesped y sus acompañantes existen en el sistema.
+  rnote across: Inicio del caso de uso
+  
+  
+  Conserje -> UI : Asignar una o varias habitaciones a huesped e invitados
+  activate Conserje
+  activate UI
+  
+  UI -> GestorHabitacion : Ejecutar CU05 Mostrar estado de habitaciones
+  activate GestorHabitacion
+  GestorHabitacion --> UI : Grilla de habitaciones
+  deactivate GestorHabitacion
+  UI --> Conserje : Grilla de habitaciones
+  loop Verificar disponibilidad
+    Conserje -> UI : Seleccion dia inicial y dia final de cada habitacion
+    alt No existen habitaciones disponibles o reservadas
+      alt CU termina
+      end 
+      alt Habitacion distinta a disponible o reservada
+        Conserje -> UI : Click en habitacion con estado distinto a "Disponible" o "Reservada"
+      end
+      alt Habitacion disponible o reservada
+        Conserje -> UI : Click en habitacion con estado "Disponible" o "Reservada" englobando algun dia de la secuencia de ocupacion en que el estado es distinto a estos
+      end
+      alt Habitacion Reservada
+        Conserje -> UI : Click en habitacion con estado "Disponible" o "Reservada" englobando algun dia de la secuencia donde el estado es "Reservada"
+        UI --> Conserje : Mensaje informando dias reservados y huesped asociado
+        UI --> Conserje : Botones "Ocupar igual" y "Volver"
+        alt Ocupar igual
+          rnote over UI : Break loop
+        end
+        alt Volver
+        end
+      end
+    end
+  end    
+  
+  UI --> Conserje : Habitaciones seleccionadas con color rojo
+  UI --> Conserje : Mensaje "Presione cualquier tecla y continua..."
+  Conserje -> UI : Tecla presionada
+  UI --> Conserje : Campos de busqueda de huespedes
+  Conserje -> UI : Campos de busqueda ingresados
+  Conserje -> UI : Boton aceptar
+  UI --> Conserje : Grilla de huespedes coincidentes
+  Conserje -> UI : Seleccion de huesped
+  Conserje -> UI : Seleccion de invitados
+  Conserje -> UI : Boton aceptar
+  UI --> Conserje : Botones "Seguir cargando" "Cargar otra habitacion" y "Salir"
+  Conserje -> UI : Boton Salir
+  UI -> GestorHabitacion : Estado ocupado de habitaciones
+  activate GestorHabitacion
+  
+  GestorHabitacion -> EDAO : Estado ocupado de habitaciones
+  deactivate GestorHabitacion
+  activate EDAO
+  EDAO -> BDD  : Estado ocupado de habitaciones
+  
+  deactivate EDAO
+  
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondicion (exito) -- Una o varias habitaciones son asignadas a un huesped y sus acompañantes.
+  Postcondicion (fracaso) -- No se asignan habitaciones.
+end note
+
+@enduml
+ 
+ 
+

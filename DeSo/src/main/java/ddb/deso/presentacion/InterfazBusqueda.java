@@ -182,10 +182,11 @@ public class InterfazBusqueda {
 
     /**
      * Cierra el objeto {@link Scanner} interno. Se utiliza para evitar fugas de recursos.
+     * @deprecated
      */
     // Metodo aparte para cerrar el scanner porque si no suele tener problemas de cierre prematuro
     public void close() {
-        scanner.close();
+        /*scanner.close();*/
     }
 
 }
