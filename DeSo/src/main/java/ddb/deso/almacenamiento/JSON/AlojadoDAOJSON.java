@@ -69,7 +69,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
 
     @Override
     public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
-        System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
+//        System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         eliminarAlojado(alojadoPrev);
         this.crearAlojado(alojadoNuevo);
     }
@@ -152,7 +152,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
             return false;
         }
         if (no_es_vacio(nombre_b) && !nombre_h.equalsIgnoreCase(nombre_b)) {
-            System.out.println(nombre_b + nombre_h);
+//            System.out.println(nombre_b + nombre_h);
             return false;
         }
         if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {
