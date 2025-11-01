@@ -25,6 +25,9 @@ public class PoblacionDeAlojados {
     public PoblacionDeAlojados() {
     }
 
+    /**
+     * @deprecated
+     */
     public List<Huesped> crearNHuespedes(){
 
         List<Huesped> ret = new ArrayList<>();
