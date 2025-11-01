@@ -1,0 +1,12 @@
+unnamed package
+ddb.deso
+ddb.deso.almacenamiento.DAO
+ddb.deso.almacenamiento.DTO
+ddb.deso.almacenamiento.JSON
+ddb.deso.alojamiento
+ddb.deso.contabilidad
+ddb.deso.habitaciones
+ddb.deso.login
+ddb.deso.login.negocio
+ddb.deso.login.negocio.excepciones
+ddb.deso.presentacion

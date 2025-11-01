@@ -14,21 +14,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.*;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- * Clase para prueba de clase {@link Alojado} y clases descendientes
- * 
- * @author mat
+/*
+ Clase para prueba de clase {@link Alojado} y clases descendientes
+
+ @author mat
  */
 public class PoblacionDeAlojados {
 
     public PoblacionDeAlojados() {
     }
 
+    /**
+     * @deprecated
+     */
     public List<Huesped> crearNHuespedes(){
 
         List<Huesped> ret = new ArrayList<>();
@@ -203,8 +202,6 @@ public class PoblacionDeAlojados {
         }
         return;
     }
-
-
 
 
 //    public Invitado crearUnInvitado() {

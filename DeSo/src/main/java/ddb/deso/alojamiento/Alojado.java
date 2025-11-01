@@ -7,8 +7,16 @@ package ddb.deso.alojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
 /**
+ * Clase **abstracta base** que representa a cualquier persona alojada o registrada
+ * en el sistema (un huésped o un invitado).
+ * <p>
+ * Sirve como la raíz de la jerarquía para el concepto de "Alojado",
+ * encapsulando los datos comunes (personales, de contacto, y residencia) y
+ * definiendo métodos básicos de comportamiento y persistencia.
+ * </p>
  *
- * @author mat
+ * @see Huesped
+ * @see Invitado
  */
 public abstract class Alojado {
 

@@ -6,7 +6,10 @@ package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
 
-
+/**
+ * Clase que encapsula los datos relacionados con el proceso de **Check-In** (Entrada).
+ * Almacena la fecha y hora de la entrada y el identificador único del proceso.
+ */
 public class DatosCheckIn {
     private LocalDate fecha_hora_in;
     long idCheckIn;

@@ -4,6 +4,16 @@ import java.util.Date;
 
 import ddb.deso.MedioPago;
 
+
+/**
+ * Representa un **pago** realizado por un cliente o a un proveedor.
+ * <p>
+ * Contiene el monto de la transacción, el método utilizado para efectuarla
+ * (ej: efectivo, tarjeta) y la fecha en que se procesó.
+ * </p>
+ *
+ * @see ddb.deso.MedioPago
+ */
 public class Pago {
     private float monto;
     private MedioPago medio_pago;

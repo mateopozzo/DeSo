@@ -4,6 +4,11 @@
  */
 package ddb.deso.alojamiento;
 
+/**
+ * Clase que almacena la información de la **dirección de residencia**
+ * de una persona alojada (huésped o invitado).
+ * Incluye calle, número, localidad, provincia, país y código postal.
+ */
 public class DatosResidencia {
     private String calle;
     private String depto;

@@ -2,6 +2,17 @@ package ddb.deso.contabilidad;
 
 import ddb.deso.alojamiento.DatosResidencia;
 
+
+/**
+ * Representa a la **entidad o persona** legalmente responsable de efectuar un pago
+ * o recibir una factura.
+ * <p>
+ * Almacena los datos fiscales y de contacto necesarios para fines de contabilidad
+ * y facturación.
+ * </p>
+ *
+ * @see ddb.deso.alojamiento.DatosResidencia
+ */
 public class ResponsablePago {
     private String razonSocial;
     private int cuit;

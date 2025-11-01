@@ -4,6 +4,15 @@ import java.util.Date;
 
 import ddb.deso.TipoFactura;
 
+/**
+ * Representa un **documento contable** o factura.
+ * <p>
+ * Contiene todos los detalles fiscales y monetarios de una transacción,
+ * incluyendo fechas, importes desglosados (neto, IVA, total) y el destinatario.
+ * </p>
+ *
+ * @see ddb.deso.TipoFactura
+ */
 public class Factura {
     private Date fecha_factura;
     private int num_factura;

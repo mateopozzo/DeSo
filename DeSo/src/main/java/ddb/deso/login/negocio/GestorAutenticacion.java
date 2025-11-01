@@ -19,7 +19,7 @@ public class GestorAutenticacion {
         this.usuarioDAO = usuarioDAO; 
     }
 
-    /*
+    /**
      Verifica las credenciales ingresadas por el usuario.
      <p>
      Si el usuario no existe o la contraseña no coincide, lanza
@@ -39,7 +39,7 @@ public class GestorAutenticacion {
 
         Optional<Usuario> usuarioEncontrado  = usuarioDAO.buscarPorNombre(n);
         if (usuarioEncontrado.isEmpty()) {
-            throw new UsuarioNoEncontradoException("No existe usuario: " + n);
+            throw new UsuarioNoEncontradoException(n);
         }
 
         Usuario u = usuarioEncontrado.get();

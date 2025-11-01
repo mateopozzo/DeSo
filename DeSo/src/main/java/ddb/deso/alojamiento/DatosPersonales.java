@@ -13,6 +13,11 @@ import java.util.Date;
 
 import ddb.deso.TipoDoc;
 
+/**
+ * Clase que agrupa la información de **identificación personal** de un alojado.
+ * Incluye nombre, apellido, documentos, datos fiscales (CUIT, Posición IVA)
+ * y fecha de nacimiento.
+ */
 public class DatosPersonales {
     private String nombre;
     private String apellido;

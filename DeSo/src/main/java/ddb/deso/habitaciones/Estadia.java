@@ -6,6 +6,16 @@ package ddb.deso.habitaciones;
 
 import java.util.Date;
 
+
+/**
+ * Define el **período de tiempo** que un huésped pasa en el hotel.
+ * <p>
+ * Representa un simple rango de fechas (fecha de inicio y fecha de fin),
+ * siendo un componente fundamental de una {@link Reserva}.
+ * </p>
+ *
+ * @see ddb.deso.habitaciones.Reserva
+ */
 public class Estadia {
     private Date fecha_inicio;
     private Date fecha_fin;

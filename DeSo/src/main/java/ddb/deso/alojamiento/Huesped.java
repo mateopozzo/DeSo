@@ -13,6 +13,16 @@ import java.util.Map;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 
+
+/**
+ * Representa a un **huésped principal** que puede tener datos comerciales,
+ * como la razón social, lo cual es relevante para la facturación.
+ * <p>
+ * Extiende la clase {@link Alojado} y añade funcionalidad específica para
+ * el tratamiento de huéspedes principales, como la inclusión de razón social
+ * en el DTO.
+ * </p>
+ */
 public class Huesped extends Alojado{
 
     private String razon_social;

@@ -5,7 +5,10 @@
 package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
-
+/**
+ * Clase que encapsula los datos relacionados con el proceso de **Check-Out** (Salida).
+ * Almacena la fecha y hora de la salida y el identificador único del proceso.
+ */
 public class DatosCheckOut {
     LocalDate fecha_hora_out;
     long idCheckOut;

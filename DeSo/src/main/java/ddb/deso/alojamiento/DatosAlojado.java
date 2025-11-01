@@ -4,23 +4,37 @@
  */
 package ddb.deso.alojamiento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import ddb.deso.TipoDoc;
+
 public class DatosAlojado {
-    private DatosContacto   datos_contacto;
+    private DatosContacto datos_contacto;
     private DatosResidencia datos_residencia;
-    private DatosPersonales datos_personales;   
+    private DatosPersonales datos_personales;
     private List<Long> id_check_in;
     private List<Long> id_check_out;
-    
+
     public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
-        id_check_in =new ArrayList<Long>();
+        id_check_in = new ArrayList<Long>();
         id_check_out = new ArrayList<Long>();
         this.datos_contacto = contacto;
         this.datos_residencia = residencia;
         this.datos_personales = personales;
     }
+
+    public DatosAlojado() {
+        id_check_in = new ArrayList<Long>();
+        id_check_out = new ArrayList<Long>();
+        this.datos_contacto = new DatosContacto("", "");
+        this.datos_personales = new DatosPersonales("", "", "",
+                "", "", "", TipoDoc.DNI, "", LocalDate.now());
+        this.datos_residencia = new DatosResidencia("", "", "", "",
+                "", "", "", "");
+    }
+
 
     public void setId_check_in(List<Long> id_check_in) {
         this.id_check_in = id_check_in;
@@ -30,14 +44,16 @@ public class DatosAlojado {
         this.id_check_out = id_check_out;
     }
 
-    public void nuevoCheckIn(DatosCheckIn check_in){
+    public void nuevoCheckIn(DatosCheckIn check_in) {
         id_check_in.add(check_in.getId());
     }
-    public void nuevoCheckOut(DatosCheckIn check_out){
+
+    public void nuevoCheckOut(DatosCheckIn check_out) {
         id_check_in.add(check_out.getId());
     }
-    public boolean ocupoHabitacion(){
-        return ((!id_check_in.isEmpty())||(!id_check_out.isEmpty()));
+
+    public boolean ocupoHabitacion() {
+        return ((!id_check_in.isEmpty()) || (!id_check_out.isEmpty()));
     }
 
     public List<Long> getId_check_in() {
@@ -71,11 +87,11 @@ public class DatosAlojado {
     public void setDatos_personales(DatosPersonales datos_personales) {
         this.datos_personales = datos_personales;
     }
-    
+
     public int getEdad() {
         return this.datos_personales.getEdad();
     }
-    
+
 }
 
 
