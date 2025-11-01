@@ -1,4 +1,4 @@
 [
-  { "nombre": "admin", "contrasenia": "admin123", "permisos": 9 },
+  { "nombre": "admin", "contrasenia": "admin123", "permisos": 8 },
   { "nombre": "conserje",  "contrasenia": "conserje123",  "permisos": 6 }
 ]
