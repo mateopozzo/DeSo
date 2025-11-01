@@ -13,7 +13,7 @@ import ddb.deso.alojamiento.Huesped;
  * @author mat
  */
 public class DeSo {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         GeneradorDatosAleatorios generadorTest = new GeneradorDatosAleatorios();
        
         Huesped huespedTest = new Huesped(generadorTest.generarDatosAlojadoAleatorio());
@@ -24,5 +24,5 @@ public class DeSo {
 
 
     }
-    
+    */
 }
