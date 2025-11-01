@@ -1,13 +1,36 @@
 package ddb.deso.alojamiento;
 
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-
+/**
+ * Clase factoría estática para la creación de instancias de la clase de dominio
+ * {@link Alojado}, que puede ser de tipo {@link Huesped} o {@link Invitado}.
+ * <p>
+ * Proporciona métodos para crear objetos {@code Alojado} basados en un tipo
+ * predefinido o a partir de un objeto de transferencia de datos (DTO).
+ * </p>
+ *
+ * @author mat
+ * @see Alojado
+ * @see Huesped
+ * @see Invitado
+ */
 public class FactoryAlojado {
     public static final int HUESPED=0;
     public static final int INVITADO=1;
 
     public static int[] tipo = {HUESPED,INVITADO};
 
+    /**
+     * Crea una nueva instancia de {@code Alojado} ({@code Huesped} o {@code Invitado})
+     * basándose en el tipo especificado.
+     *
+     * @param tipo El tipo de alojado a crear (usar las constantes {@link #HUESPED}
+     * o {@link #INVITADO}).
+     * @param datos Un objeto {@link DatosAlojado} que contiene la información
+     * base del alojado.
+     * @return Una instancia de la clase concreta {@code Alojado} ({@code Huesped} o {@code Invitado}),
+     * o {@code null} si el tipo especificado no es válido.
+     */
     public static Alojado create (int tipo, DatosAlojado datos){
         return switch (tipo) {
             case HUESPED -> new Huesped(datos);
@@ -66,7 +89,6 @@ public class FactoryAlojado {
         datos.setId_check_in(dto.getId_check_in());
         datos.setId_check_out(dto.getId_check_out());
 
-        // --- Tipo de alojado ---
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {
             Huesped h = new Huesped(datos);

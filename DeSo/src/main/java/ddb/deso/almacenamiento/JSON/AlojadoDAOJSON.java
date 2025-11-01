@@ -17,7 +17,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
 
 
-/*
+/**
  Implementa la interfaz DAO para:
  <ul>
     <li>Creación</li>
@@ -38,7 +38,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
     }
     
-    /*
+    /**
      Escribe lista completa en JSON
      listaAlojados es una lista de entidades de Alojado a persistir
      */
@@ -51,7 +51,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         } 
     }
     
-    /*
+    /**
      Crea un nuevo registro de alojado y lo guarda en el archivo JSON
      Alojado es el objeto a guardar
      */
@@ -80,7 +80,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
     
-    /*
+    /**
      Devuelve la lista completa de alojados almacenados.
      @return una lista {@link Alojado}
      */
@@ -98,7 +98,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         return listaAlojadosRetorno;
     }
 
-    /*
+    /**
     Busco todos los alojados con listarAlojados y los guardo en una lista de DTO
     Inicializo otra lista vacía de DTO llamada encontrados
     Por cada alojado, llamo a cumpleCriterio. Si es verdad, lo agrego a encontrados
@@ -114,7 +114,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
                 .collect(Collectors.toList());
     }
 
-    /*
+    /**
     @param alojado_DTO: Instancia de AlojadoDTO
     @param criterio: Criterio de búsqueda donde todos son opcionales, y si no fueron definidos son null
     Se llama a normalizar para evitar problemas por tildes
@@ -160,7 +160,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         return !(no_es_vacio(nroDoc_b) && !nroDoc_h.equals(nroDoc_b));
     }
 
-    /*
+    /**
     @param cadena: String que necesito normalizar
     @return una cadena normalizada sin tildes
 
@@ -175,15 +175,14 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         boolean flag = (contenido==null || contenido.isEmpty());
         return !flag;
     }
-    
-    /*
-     Busca algún alojado que coincida con el parámetro
-     Se puede analizar optimización con hash o set ordenado.
 
-     @param número de documento y tipo
-     @return una {@link Alojado}
+    /**
+     * Busca y retorna un alojado que coincida con el número y tipo de documento especificados
+     *
+     * @param documento El **número de documento** del alojado a buscar (ej: "40123456").
+     * @param tipo El **tipo de documento** del alojado a buscar (ej: {@code TipoDoc.DNI}).
+     * @return Un objeto {@link AlojadoDTO} si se encuentra la coincidencia, o {@code null} en caso contrario.
      */
-
     @Override
     public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo){
         List<AlojadoDTO> listaAlojados = listarAlojados();

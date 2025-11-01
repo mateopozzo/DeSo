@@ -1,12 +1,28 @@
 package ddb.deso.alojamiento;
 import ddb.deso.TipoDoc;
-
+/**
+ * Clase que encapsula los **criterios de búsqueda** para identificar a una
+ * persona alojada, incluyendo datos personales básicos.
+ * <p>
+ * Contiene campos para el apellido, nombre, tipo de documento y número de documento.
+ * </p>
+ *
+ * @author gael
+ */
 public class CriteriosBusq {
     private String apellido;
     private String nombre;
     private TipoDoc tipoDoc;
     private String nroDoc;
-
+    /**
+     * Constructor que inicializa los criterios de búsqueda.
+     * Los campos se inicializan solo si los valores de entrada no son nulos ni vacíos.
+     *
+     * @param apellido El apellido a establecer como criterio de búsqueda.
+     * @param nombre El nombre a establecer como criterio de búsqueda.
+     * @param tipoDoc El tipo de documento ({link ddb.deso.TipoDoc}) a establecer.
+     * @param num_documento El número de documento a establecer.
+     */
     public CriteriosBusq(String apellido, String nombre, TipoDoc tipoDoc, String num_documento) {
         if (no_es_vacio(nombre)){
             this.setNombre(nombre);

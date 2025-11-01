@@ -4,6 +4,10 @@
  */
 package ddb.deso.alojamiento;
 
+/**
+ * Clase que almacena la información de **contacto** de una persona alojada.
+ * Incluye el número de teléfono y la dirección de correo electrónico.
+ */
 public class DatosContacto {
     private String telefono;
     private String email;

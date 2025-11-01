@@ -256,7 +256,7 @@ public class InterfazDarAlta {
                 break;
 
             case "5":
-                System.out.print("CUIT (sin guiones ni espacios): ");
+                System.out.print("CUIT (con el formato XX-XXXXXXXX-X): ");
                 String cuit = entrada.nextLine();
                 alojado.getDatos().getDatos_personales().setCUIT(cuit);
                 if (Validador.isCuitValidoOpcional(cuit)) {

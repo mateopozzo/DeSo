@@ -12,16 +12,14 @@ import static java.lang.Integer.parseInt;
 /**
  * Clase que gestiona la interfaz de usuario para la **búsqueda de un huésped**
  * existente (Caso de Uso 02 o CU02).
- * <p>
- * Permite al usuario ingresar criterios (nombre, apellido, DNI) y, basado en los
+ * <p>Permite al usuario ingresar criterios (nombre, apellido, DNI) y, basado en los
  * resultados:
  * <ul>
  * <li>Si hay coincidencias, permite seleccionar un huésped para **modificarlo**
  * (llamando a {@code InterfazModificarHuesped}).</li>
  * <li>Si no hay coincidencias o el usuario decide no seleccionar, inicia el
  * flujo de **alta de un nuevo huésped** (llamando a {@code InterfazDarAlta}).</li>
- * </ul>
- * </p>
+ * </ul></p>
  *
  * @author Gael
  * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)

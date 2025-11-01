@@ -168,11 +168,12 @@ El método principal se encuentra en el GestorAlojamiento y recibe una instancia
 ---
 
 ## Patrones implementados
-| Patrón          | Nro de caso de uso | Nombre de caso de uso |
-|-----------------|--------------------|-----------------------|
-| **DAO**         | `1, 2, 9, 10, 11`  | Todos                 |
-| **Singleton**   | `1`                | Login                 |
-| **Factory**     | `9`                | Dar de alta huésped   |
+| Patrón        | Nro de caso de uso | Nombre de caso de uso   |
+|---------------|------------------|-------------------------|
+| **DAO**       | `1, 2, 9, 10, 11` | Todos                   |
+| **Singleton** | `1`              | Login                   |
+| **Factory**   | `9`              | Dar de alta huésped     |
+| **Generics**  | `1, 2, 9, 10, 11`| Todos (ManejadorJSON.java) |
 
 ---
 

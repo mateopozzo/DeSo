@@ -279,7 +279,7 @@ public class InterfazModificarHuesped {
                 }
                 break;
             case "5":
-                System.out.print("Nuevo CUIT (sin guiones ni espacios): ");
+                System.out.print("Nuevo CUIT (con el formato XX-XXXXXXXX-X): ");
                 String nuevoCuit = entrada.nextLine();
                 datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
                 if (Validador.isCuitValidoOpcional(nuevoCuit)) {
