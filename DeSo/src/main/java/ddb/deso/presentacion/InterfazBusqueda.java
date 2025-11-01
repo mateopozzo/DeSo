@@ -19,7 +19,8 @@ import static java.lang.Integer.parseInt;
  * (llamando a {@code InterfazModificarHuesped}).</li>
  * <li>Si no hay coincidencias o el usuario decide no seleccionar, inicia el
  * flujo de **alta de un nuevo huésped** (llamando a {@code InterfazDarAlta}).</li>
- * </ul></p>
+ * </ul>
+ * <p>
  *
  * @author Gael
  * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)

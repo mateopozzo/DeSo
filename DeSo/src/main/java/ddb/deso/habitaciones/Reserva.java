@@ -6,6 +6,14 @@ package ddb.deso.habitaciones;
 
 import java.util.Date;
 
+
+/**
+ * Representa una **reserva** de alojamiento.
+ * <p>
+ * Contiene el periodo de tiempo reservado (fechas de inicio y fin) y el estado
+ * actual de dicha reserva (ej: 'Confirmada', 'Pendiente', 'Cancelada').
+ * </p>
+ */
 public class Reserva {
     private Date fecha_inicio;
     private Date fecha_fin;

@@ -7,6 +7,17 @@ package ddb.deso.habitaciones;
 import ddb.deso.TipoHab;
 import ddb.deso.EstadoHab;
 
+
+/**
+ * Representa una **Habitación** dentro del sistema de gestión hotelera.
+ * <p>
+ * Define las propiedades físicas y el estado operativo de la habitación,
+ * incluyendo su tipo, tarifa, capacidad y número de identificación.
+ * </p>
+ *
+ * @see ddb.deso.TipoHab
+ * @see ddb.deso.EstadoHab
+ */
 public class Habitacion {
     private int nroHab;
     private TipoHab tipo_hab;

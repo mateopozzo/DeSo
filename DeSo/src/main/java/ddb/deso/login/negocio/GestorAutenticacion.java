@@ -19,7 +19,7 @@ public class GestorAutenticacion {
         this.usuarioDAO = usuarioDAO; 
     }
 
-    /*
+    /**
      Verifica las credenciales ingresadas por el usuario.
      <p>
      Si el usuario no existe o la contraseña no coincide, lanza

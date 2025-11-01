@@ -177,7 +177,8 @@ El método principal se encuentra en el GestorAlojamiento y recibe una instancia
 
 ---
 
-## Flujo de trabajo previsto
+## Flujo de trabajo propuesto
 
+Al ingresar usuario, puede ver los existentes del sistema en data/Usuarios.json, uno valido es "admin" y "admin123"
 Desde el metodo main se puede llamar unicamente el caso de uso 2 "Búsqueda de huesped", de aquel se puede alcanzar el resto de casos de uso como se desarrolla en la especificacion del sistema.
 
