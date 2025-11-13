@@ -3,5 +3,6 @@
 /DeSo/main/java/src/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
 *.class
 /.idea/
+DeSo.zip
 /.vscode/
 /.target/
