@@ -165,7 +165,7 @@ public class InterfazBusqueda {
                         System.out.println("MODIFICAR HUESPED ---- FROM CU02");
                         DatosContacto cont = new DatosContacto(h_encontrado.getTelefono(), h_encontrado.getEmail());
                         DatosResidencia res = new DatosResidencia(h_encontrado.getCalle(), h_encontrado.getDepto(), h_encontrado.getLocalidad(), h_encontrado.getProv(), h_encontrado.getPais(), h_encontrado.getNro_calle(), h_encontrado.getPiso(), h_encontrado.getCod_post());
-                        DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getNroDoc(), h_encontrado.getTipoDoc(), h_encontrado.getCUIT(), h_encontrado.getFechanac());
+                        DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getTipoDoc(), h_encontrado.getNroDoc(), h_encontrado.getCUIT(), h_encontrado.getFechanac());
                         DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
                         Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
 

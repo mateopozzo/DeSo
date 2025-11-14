@@ -29,23 +29,21 @@ import lombok.NoArgsConstructor;
  * en el DTO.
  * </p>
  */
-
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@DiscriminatorValue("HUESPED")
 public class Huesped extends Alojado{
 
     private String razon_social;
 
-    public Huesped (DatosAlojado da){
+    public Huesped (DatosAlojado da) {
         this.datos=da;
     }
-    public DatosAlojado getDatos(){
-        return this.datos; 
-    }
+
     public void setRazon_social(String razon_social) {
         this.razon_social = razon_social;
-    }
-
-    public String getRazon_social() {
-        return razon_social;
     }
 
     @Override

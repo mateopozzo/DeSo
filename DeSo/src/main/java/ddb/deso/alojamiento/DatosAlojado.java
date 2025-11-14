@@ -10,10 +10,12 @@ import java.util.List;
 import ddb.deso.TipoDoc;
 import jakarta.persistence.*;
 import lombok.*;
+
+import javax.management.BadAttributeValueExpException;
+
 @Entity
 @Data
 @Table(name = "datos_alojado")
-@NoArgsConstructor
 public class DatosAlojado {
     @EmbeddedId
     AlojadoID idAlojado;
@@ -23,6 +25,17 @@ public class DatosAlojado {
     private DatosResidencia datos_residencia;
     @Embedded
     private DatosPersonales datos_personales;
+
+    public DatosAlojado(){
+        var dr = new DatosResidencia();
+        var dc = new DatosContacto();
+        var dp = new DatosPersonales();
+        datos_residencia = dr;
+        datos_contacto=dc;
+        datos_personales = dp;
+        checkIns = new ArrayList<>();
+        checkOuts = new ArrayList<>();
+    }
 
     @OneToMany(
             mappedBy = "alojado",
@@ -40,13 +53,19 @@ public class DatosAlojado {
     )
     private List<DatosCheckOut> checkOuts;
 
+
+
     public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
         checkOuts = new ArrayList<>();
         checkIns = new ArrayList<>();
         this.datos_contacto = contacto;
         this.datos_residencia = residencia;
         this.datos_personales = personales;
-        if(datos_personales!=null)this.datos_personales.setAlojadoOwner(this);
+        if(datos_personales!=null) {
+            this.datos_personales.setAlojadoOwner(this);
+            idAlojado = new AlojadoID();
+        }
+
     }
 
     @PostLoad

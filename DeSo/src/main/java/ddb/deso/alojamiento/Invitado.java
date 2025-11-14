@@ -14,6 +14,9 @@ import jakarta.persistence.*;
  * </p>
  */
 
+@Entity
+@Data
+@DiscriminatorValue("INVITADO")
 public class Invitado extends Alojado {
     public Invitado (DatosAlojado da){
         this.datos=da;

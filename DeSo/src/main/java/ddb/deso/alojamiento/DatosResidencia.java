@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
  */
 @Embeddable
 @NoArgsConstructor
+@AllArgsConstructor
 public class DatosResidencia {
     private String calle;
     private String depto;

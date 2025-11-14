@@ -56,7 +56,7 @@ public class InterfazDarAlta {
 
         boolean bandera = true;
         DatosAlojado da = new DatosAlojado();
-        Alojado nuevoAlojado = FactoryAlojado.create(1, da);
+        Alojado nuevoAlojado = FactoryAlojado.create(FactoryAlojado.HUESPED, da);
 
         while (bandera) {
             System.out.println("CREAR HUESPED NUEVO --------------------------------------");

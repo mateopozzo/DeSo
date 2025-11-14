@@ -86,8 +86,8 @@ public class FactoryAlojado {
         }
 
         // ==== Check-in / Check-out ====
-        datos.setId_check_in(dto.getId_check_in());
-        datos.setId_check_out(dto.getId_check_out());
+        datos.setCheckIns(dto.getId_check_in());
+        datos.setCheckOuts(dto.getId_check_out());
 
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {

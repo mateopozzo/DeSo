@@ -5,10 +5,9 @@
 package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.DatosAlojado;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.alojamiento.Invitado;
+import ddb.deso.alojamiento.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +23,7 @@ import java.util.Objects;
  * @author mat
  */
 
+@Data
 public class AlojadoDTO {
     // Contacto
     private String telefono;
@@ -50,8 +50,8 @@ public class AlojadoDTO {
     // Si es huesped
     private String razon_social;
     // Check in y out
-    private List<Long> id_check_in;
-    private List<Long> id_check_out;
+    private List<DatosCheckIn> id_check_in;
+    private List<DatosCheckOut> id_check_out;
 
     /**
      * Constructor que inicializa el DTO a partir de una instancia concreta de {@code Alojado}.
@@ -86,8 +86,8 @@ public class AlojadoDTO {
         this.setCod_post(i.getDatos().getDatos_residencia().getCod_post());
 
         // ingreso/egreso
-        this.id_check_in=i.getDatos().getId_check_in();
-        this.id_check_out=i.getDatos().getId_check_out();
+        this.id_check_in=i.getDatos().getCheckIns();
+        this.id_check_out=i.getDatos().getCheckOuts();
 
         // Completar datos segun instancia concreta\
         i.completarDTO(this);
@@ -103,21 +103,6 @@ public class AlojadoDTO {
     public AlojadoDTO() {
     }
 
-    public List<Long> getId_check_in() {
-        return id_check_in;
-    }
-
-    public void setId_check_in(List<Long> id_check_in) {
-        this.id_check_in = id_check_in;
-    }
-
-    public List<Long> getId_check_out() {
-        return id_check_out;
-    }
-
-    public void setId_check_out(List<Long> id_check_out) {
-        this.id_check_out = id_check_out;
-    }
 
     public void setRazon_social(String razon_social) {
         this.razon_social = razon_social;

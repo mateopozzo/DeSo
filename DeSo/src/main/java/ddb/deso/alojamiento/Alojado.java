@@ -21,18 +21,23 @@ import jakarta.persistence.*;
  * @see Invitado
  */
 
+@Entity
+@Data
+@Table(name = "alojado")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_alojado", discriminatorType = DiscriminatorType.STRING)
 public abstract class Alojado {
 
-
+    @EmbeddedId
+    private AlojadoID id;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapsId // ¡Esta es la clave! "Usa el ID de 'datos' como mi 'id'"
+    @JoinColumns({
+            @JoinColumn(name = "alojado_nroDoc", referencedColumnName = "nroDoc"),
+            @JoinColumn(name = "alojado_tipoDoc", referencedColumnName = "tipoDoc")
+    })
     protected DatosAlojado datos;
 
-
-    public void setDatos(DatosAlojado datos){
-        this.datos = datos;
-    }
-    public DatosAlojado getDatos() {
-        return datos;
-    }
     public void checkIn(Alojado alojado) {
     }
     public void checkOut(Alojado alojado) {
