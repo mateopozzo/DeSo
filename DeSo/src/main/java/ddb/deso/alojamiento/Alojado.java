@@ -5,6 +5,8 @@
 package ddb.deso.alojamiento;
 
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import lombok.*;
+import jakarta.persistence.*;
 
 /**
  * Clase **abstracta base** que representa a cualquier persona alojada o registrada
@@ -18,9 +20,12 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
  * @see Huesped
  * @see Invitado
  */
+
 public abstract class Alojado {
 
+
     protected DatosAlojado datos;
+
 
     public void setDatos(DatosAlojado datos){
         this.datos = datos;

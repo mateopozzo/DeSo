@@ -4,11 +4,19 @@
  */
 package ddb.deso.alojamiento;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Clase que almacena la información de la **dirección de residencia**
  * de una persona alojada (huésped o invitado).
  * Incluye calle, número, localidad, provincia, país y código postal.
  */
+@Embeddable
+@NoArgsConstructor
 public class DatosResidencia {
     private String calle;
     private String depto;
@@ -18,17 +26,6 @@ public class DatosResidencia {
     private String nro_calle;
     private String piso;
     private String cod_post;
-
-    public DatosResidencia(String calle, String depto, String localidad, String prov, String pais, String nro_calle, String piso, String cod_post) {
-        this.calle = calle;
-        this.depto = depto;
-        this.localidad = localidad;
-        this.prov = prov;
-        this.pais = pais;
-        this.nro_calle = nro_calle;
-        this.piso = piso;
-        this.cod_post = cod_post;
-    }
 
     public void setCalle(String calle) {
         this.calle = calle;

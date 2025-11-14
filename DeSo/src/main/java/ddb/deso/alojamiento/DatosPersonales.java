@@ -12,34 +12,28 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import ddb.deso.TipoDoc;
+import jakarta.persistence.*;
+import lombok.*;
 
 /**
  * Clase que agrupa la información de **identificación personal** de un alojado.
  * Incluye nombre, apellido, documentos, datos fiscales (CUIT, Posición IVA)
  * y fecha de nacimiento.
  */
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class DatosPersonales {
     private String nombre;
     private String apellido;
     private String nacionalidad;
     private String posicionIva;
     private String ocupacion;
-    private String nroDoc;
-    private TipoDoc tipoDoc;
     private String CUIT;
     private LocalDate fechanac;
 
-    public DatosPersonales(String nombre, String apellido, String nacionalidad, String posicionIva, String ocupacion, String nroDoc, TipoDoc tipoDoc, String CUIT, LocalDate fechanac) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.nacionalidad = nacionalidad;
-        this.posicionIva = posicionIva;
-        this.ocupacion = ocupacion;
-        this.nroDoc = nroDoc;
-        this.tipoDoc = tipoDoc;
-        this.CUIT = CUIT;
-        this.fechanac = fechanac;
-    }
+    @Transient
+    private DatosAlojado alojadoOwner;
  
     public String getNombre() {
         return nombre;
@@ -71,26 +65,40 @@ public class DatosPersonales {
     public void setOcupacion(String ocupacion) {
         this.ocupacion = ocupacion;
     }
-    public String getNroDoc() {
-        return nroDoc;
-    }
-    public void setNroDoc(String nroDoc) {
-        this.nroDoc = nroDoc;
-    }
-    public TipoDoc getTipoDoc() {
-        return tipoDoc;
-    }
-    public void setTipoDoc(TipoDoc tipoDoc) {
-        this.tipoDoc = tipoDoc;
-    }
     public String getCUIT() {
         return CUIT;
     }
     public void setCUIT(String CUIT) {
         this.CUIT = CUIT;
     }
-    public LocalDate getFechanac() {
-        return fechanac;
+    public void setAlojadoOwner(DatosAlojado owner) {
+        this.alojadoOwner = owner;
+    }
+
+    public String getNroDoc() {
+        if (alojadoOwner == null) {
+            return null;
+        }
+        return alojadoOwner.getNroDoc();
+    }
+
+    public TipoDoc getTipoDoc() {
+        if (alojadoOwner == null) {
+            return null;
+        }
+        return alojadoOwner.getTipoDoc();
+    }
+
+    public void setNroDoc(String nroDoc) {
+        if (alojadoOwner != null) {
+            alojadoOwner.setNroDoc(nroDoc);
+        }
+    }
+
+    public void setTipoDoc(TipoDoc tipoDoc) {
+        if (alojadoOwner != null) {
+            alojadoOwner.setTipoDoc(tipoDoc);
+        }
     }
     public void setFechanac(LocalDate fechanac) {
         this.fechanac = fechanac;

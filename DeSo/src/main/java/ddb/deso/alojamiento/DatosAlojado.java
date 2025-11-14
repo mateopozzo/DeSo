@@ -4,65 +4,85 @@
  */
 package ddb.deso.alojamiento;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
-
+import jakarta.persistence.*;
+import lombok.*;
+@Entity
+@Data
+@Table(name = "datos_alojado")
+@NoArgsConstructor
 public class DatosAlojado {
+    @EmbeddedId
+    AlojadoID idAlojado;
+    @Embedded
     private DatosContacto datos_contacto;
+    @Embedded
     private DatosResidencia datos_residencia;
+    @Embedded
     private DatosPersonales datos_personales;
-    private List<Long> id_check_in;
-    private List<Long> id_check_out;
+
+    @OneToMany(
+            mappedBy = "alojado",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<DatosCheckIn> checkIns;
+
+    @OneToMany(
+            mappedBy = "alojado",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<DatosCheckOut> checkOuts;
 
     public DatosAlojado(DatosContacto contacto, DatosResidencia residencia, DatosPersonales personales) {
-        id_check_in = new ArrayList<Long>();
-        id_check_out = new ArrayList<Long>();
+        checkOuts = new ArrayList<>();
+        checkIns = new ArrayList<>();
         this.datos_contacto = contacto;
         this.datos_residencia = residencia;
         this.datos_personales = personales;
+        if(datos_personales!=null)this.datos_personales.setAlojadoOwner(this);
     }
 
-    public DatosAlojado() {
-        id_check_in = new ArrayList<Long>();
-        id_check_out = new ArrayList<Long>();
-        this.datos_contacto = new DatosContacto("", "");
-        this.datos_personales = new DatosPersonales("", "", "",
-                "", "", "", TipoDoc.DNI, "", LocalDate.now());
-        this.datos_residencia = new DatosResidencia("", "", "", "",
-                "", "", "", "");
+    @PostLoad
+    private void wireOwnerAfterLoad() {
+        if (this.datos_personales != null) {
+            this.datos_personales.setAlojadoOwner(this);
+        }
     }
 
-
-    public void setId_check_in(List<Long> id_check_in) {
-        this.id_check_in = id_check_in;
+    public void setTipoDoc(TipoDoc tipoDoc) {
+        if(this.idAlojado == null) this.idAlojado = new AlojadoID();
+        this.idAlojado.setTipoDoc(tipoDoc);
     }
-
-    public void setId_check_out(List<Long> id_check_out) {
-        this.id_check_out = id_check_out;
+    public TipoDoc getTipoDoc() {
+        return (this.idAlojado != null) ? this.idAlojado.getTipoDoc() : null;
+    }
+    public void setNroDoc(String nroDoc) {
+        if(this.idAlojado == null) this.idAlojado = new AlojadoID();
+        this.idAlojado.setNroDoc(nroDoc);
+    }
+    public String getNroDoc() {
+        return (this.idAlojado != null) ? this.idAlojado.getNroDoc() : null;
     }
 
     public void nuevoCheckIn(DatosCheckIn check_in) {
-        id_check_in.add(check_in.getId());
+        checkIns.add(check_in);
     }
 
-    public void nuevoCheckOut(DatosCheckIn check_out) {
-        id_check_in.add(check_out.getId());
+    public void nuevoCheckOut(DatosCheckOut check_out) {
+        checkOuts.add(check_out);
     }
 
     public boolean ocupoHabitacion() {
-        return ((!id_check_in.isEmpty()) || (!id_check_out.isEmpty()));
+        return ((!checkIns.isEmpty()) || (!checkOuts.isEmpty()));
     }
 
-    public List<Long> getId_check_in() {
-        return id_check_in;
-    }
-
-    public List<Long> getId_check_out() {
-        return id_check_out;
-    }
 
     public DatosContacto getDatos_contacto() {
         return datos_contacto;

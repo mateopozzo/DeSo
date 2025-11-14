@@ -12,6 +12,12 @@ import java.util.Map;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -23,12 +29,10 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
  * en el DTO.
  * </p>
  */
+
 public class Huesped extends Alojado{
 
     private String razon_social;
-    //private List <Huesped> huespedes= new LinkedList<>();
-   // private Map<Long,TipoDoc> dniMap= new HashMap<>();
-
 
     public Huesped (DatosAlojado da){
         this.datos=da;
@@ -48,44 +52,6 @@ public class Huesped extends Alojado{
     public void completarDTO(AlojadoDTO dto) {
         dto.setRazon_social(razon_social);
     }
-    /*
-
-
-    public void agregarHuesped (){
-    
-        huespedes.add(this);
-
-
-    Long dni = this.datos.getDatosPersonales().getNroDoc();
-    TipoDoc tipo = this.datos.getDatosPersonales().getTipoDoc();
-
-    this.dniMap.put(dni,tipo);
-=======
-
-    
-    
->>>>>>> 02c0b6a5890096dd1a6ad1cdd911de5593caf083
-}
-public void eliminarHuesped (){
-    huespedes.remove(this);
-}
-
-public Boolean dniExiste(){
-    if (this.datos == null || this.datos.getDatosPersonales() == null) {
-        System.out.println("ERROR: No se puede verificar un huésped sin datos.");
-        return false;
-    }
-    Long dni = this.datos.getDatosPersonales().getNroDoc();
-    TipoDoc tipo = this.datos.getDatosPersonales().getTipoDoc();
-
-
-    Map.Entry<Long, TipoDoc> aux = new AbstractMap.SimpleEntry<>(dni,tipo);
-    boolean coincide = this.dniMap.containsKey(aux.getKey()) &&
-                       aux.getValue().equals(this.dniMap.get(aux.getKey()));
-
-                           return coincide;
-}
-                           */
 }
 
 
