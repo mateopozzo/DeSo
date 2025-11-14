@@ -1,0 +1,121 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+#main {
+  display: flex;
+  max-width: 1300px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+#lateral {
+  width: 200px;
+  background: white;
+  color: #141414;
+  padding: 30px 20px;
+}
+
+/* Contenido */
+#contenido {
+  flex: 1;
+  padding: 40px;
+}
+
+h1 {
+  color: #141414;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  padding-bottom: 10px;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: auto;
+  gap: 20px;
+}
+
+/* Campos del formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #141414;
+}
+
+input,
+select {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  font-size: 1rem;
+}
+
+input:focus,
+select:focus {
+  border-color: #9ca9be;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 100, 145, 0.2);
+}
+
+/* BOTONES FILA 6 */
+.buttons {
+  grid-column: span 4;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+}
+
+.btn {
+  padding: 8px 31px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-borrar {
+  background-color: #ca695e;
+  color: white;
+}
+
+.btn-cancel {
+  color: #1a252f;
+}
+
+.btn-borrar:hover,
+.btn-cancel:hover {
+  background-color: #b92716;
+  color: white;
+}
+
+.btn-submit {
+  background-color: #52a173;
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: #10b655;
+}
