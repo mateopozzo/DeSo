@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/DeSo/front-end/src/icon-logo.png"
+    />
+    <title>Hotel Premier - Dar de alta huésped</title>
+    <link rel="stylesheet" href="/DeSo/front-end/src/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <nav id="nav-bar">
+    <div id="barra-nav" class="stack-sans-text">
+        <img src="./src/icon-logo.png" alt="Logo Hotel Premier minimalista" width="60px" height="60px">
+      <h2>Hotel Premier</h2>
+      <div id="user-info">
+        <span id="saludo-user">Hola, Aldo</span>
+        <img src="./src/logout.png" alt="Cerrar sesión" width="30px" height="30px">
+      </div>
+    </div>
+  </nav>
+
+  <body class="stack-sans-text">
+    <div id="main">
+      <div id="lateral">
+        <ul>
+          <li>
+            <a href="#">
+              <img
+                src="/DeSo/front-end/src/logo-premier.png"
+                alt="Logo Hotel Premier"
+                width="100px"
+                height="100px"
+              />
+            </a>
+          </li>
+          <li>
+            <img
+              src="./src/hab.png"
+              alt="Habitaciones"
+              width="30px"
+              height="30px"
+              class="opcion"
+            />
+          </li>
+          <li>
+            <img
+              src="./src/res.png"
+              alt="Reservas"
+              width="30px"
+              height="30px"
+              class="opcion"
+            />
+          </li>
+          <li>
+            <img
+              src="./src/fac.png"
+              alt="Facturación"
+              width="30px"
+              height="30px"
+              class="opcion"
+            />
+          </li>
+        </ul>
+      </div>
+
+      <div id="contenido">
+        <h1>Dar de alta un huésped</h1>
+
+        <div id="error-campos">
+          Los campos obligatorios deben ser completados.
+        </div>
+
+        <form id="alta-huesped" class="grid-form">
+          <!-- FILA 1 -->
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              placeholder="Doe"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="John" />
+          </div>
+          <div class="form-group">
+            <label for="nacionalidad">Nacionalidad</label>
+            <input id="nacionalidad" name="nacionalidad">
+            </input>
+          </div>
+
+          <div class="form-group">
+            <label for="fecha-nacimiento">Fecha de nacimiento</label>
+            <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" />
+          </div>
+
+          <div class="form-group">
+            <label for="tipo-documento">Tipo de documento</label>
+            <select id="tipo-documento" name="tipo-documento">
+              <option value="dni">DNI</option>
+              <option value="lc">LC</option>
+              <option value="le">LE</option>
+              <option value="otro">Otro</option>
+              <option value="pasaporte">Pasaporte</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="numero-documento">Nro. de documento</label>
+            <input
+              type="text"
+              id="numero-documento"
+              name="numero-documento"
+              placeholder="Sin guiones ni puntos"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              placeholder="Cód. de área + número"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="(Opcional)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="calle">Calle</label>
+            <input
+              type="text"
+              id="calle"
+              name="calle"
+              placeholder="Calle falsa"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="numero-calle">Número</label>
+            <input
+              type="text"
+              id="numero-calle"
+              name="numero-calle"
+              placeholder="1234"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="piso">Piso</label>
+            <input type="text" id="piso" name="piso" placeholder="(Opcional)" />
+          </div>
+
+          <div class="form-group">
+            <label for="cod_postal">Código postal</label>
+            <input
+              type="text"
+              id="cod_postal"
+              name="cod_postal"
+              placeholder="3000"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="pais-residencia">País de residencia</label>
+            <input
+              type="text"
+              id="pais-residencia"
+              name="pais-residencia"
+              placeholder="Argentina"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="provincia">Provincia</label>
+            <input
+              type="text"
+              id="provincia"
+              name="provincia"
+              placeholder="Santa Fe"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="localidad">Localidad</label>
+            <input
+              type="text"
+              id="localidad"
+              name="localidad"
+              placeholder="Santa Fe"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ocupacion">Ocupación</label>
+            <input
+              type="text"
+              id="ocupacion"
+              name="ocupacion"
+              placeholder="Empleado"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cuit">CUIT (sin guiones ni puntos)</label>
+            <input
+              type="number"
+              id="cuit"
+              name="cuit"
+              placeholder="(Opcional)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="iva">Posición frente al IVA</label>
+            <select id="iva" name="iva">
+              <option value="consumidor-final">Consumidor final</option>
+              <option value="responsable-inscripto">
+                Responsable inscripto
+              </option>
+              <option value="monotributista">Monotributista</option>
+              <option value="exento">Exento</option>
+            </select>
+          </div>
+
+          <!-- FILA 6 - BOTONES -->
+          <div class="buttons" id="botones-op">
+            <button type="button" class="btn btn-borrar">Borrar</button>
+            <button type="button" class="btn btn-cancel" id="boton-cancelar">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-submit">Siguiente</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/DeSo/front-end/src/script.js"></script>
+  </body>
+</html>
