@@ -18,11 +18,12 @@
     />
   </head>
   <nav id="nav-bar">
-    <div id="nav-bar" class="stack-sans-text">
+    <div id="barra-nav" class="stack-sans-text">
+        <img src="./src/icon-logo.png" alt="Logo Hotel Premier minimalista" width="60px" height="60px">
       <h2>Hotel Premier</h2>
       <div id="user-info">
-        <span>Administrador</span>
-        <button id="logout-btn" class="btn btn-logout">Cerrar sesión</button>
+        <span id="saludo-user">Hola, Aldo</span>
+        <img src="./src/logout.png" alt="Cerrar sesión" width="30px" height="30px">
       </div>
     </div>
   </nav>
@@ -96,13 +97,8 @@
           </div>
           <div class="form-group">
             <label for="nacionalidad">Nacionalidad</label>
-            <select id="nacionalidad" name="nacionalidad">
-              <option value="argentina">Argentina</option>
-              <option value="brasil">Brasil</option>
-              <option value="chile">Chile</option>
-              <option value="uruguay">Uruguay</option>
-              <option value="otros">Otros</option>
-            </select>
+            <input id="nacionalidad" name="nacionalidad">
+            </input>
           </div>
 
           <div class="form-group">
@@ -114,10 +110,10 @@
             <label for="tipo-documento">Tipo de documento</label>
             <select id="tipo-documento" name="tipo-documento">
               <option value="dni">DNI</option>
-              <option value="pasaporte">Pasaporte</option>
-              <option value="le">LE</option>
               <option value="lc">LC</option>
+              <option value="le">LE</option>
               <option value="otro">Otro</option>
+              <option value="pasaporte">Pasaporte</option>
             </select>
           </div>
 
@@ -249,9 +245,11 @@
           </div>
 
           <!-- FILA 6 - BOTONES -->
-          <div class="buttons">
+          <div class="buttons" id="botones-op">
             <button type="button" class="btn btn-borrar">Borrar</button>
-            <button type="button" class="btn btn-cancel">Cancelar</button>
+            <button type="button" class="btn btn-cancel" id="boton-cancelar">
+              Cancelar
+            </button>
             <button type="submit" class="btn btn-submit">Siguiente</button>
           </div>
         </form>

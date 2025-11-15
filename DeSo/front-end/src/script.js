@@ -110,9 +110,20 @@ try {
   if (cargarOtro) {
     form.reset();
   } else {
-    alert("<Fin de caso de uso>");
+    window.location.href = "home.html";
   }
 } catch (error) {
   console.error("Error:", error);
   alert("Error al enviar los datos.");
 }
+
+document
+  .getElementById("botones-op")
+  .getElementById("boton-cancelar")
+  .addEventListener("click", function (e) {
+    const cancelado = confirm("¿Desea cancelar la modificación del huésped?");
+
+    if (cancelado) {
+      window.location.href = "home.html";
+    }
+  });
