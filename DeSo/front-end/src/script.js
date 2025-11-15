@@ -113,6 +113,7 @@ document.getElementById("botones-op").addEventListener("click", (e) => {
 
   if (e.target.id === "reinicio") {
     if (confirm("Se borrarán todos los datos del formulario.")) {
+      document.getElementById("error-campos").style.display = "none";
       form.reset();
     }
   }
