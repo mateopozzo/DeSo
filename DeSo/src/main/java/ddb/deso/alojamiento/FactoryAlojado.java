@@ -89,6 +89,10 @@ public class FactoryAlojado {
         datos.setCheckIns(dto.getId_check_in());
         datos.setCheckOuts(dto.getId_check_out());
 
+        AlojadoID alojadoID = new AlojadoID(dto.getNroDoc(), dto.getTipoDoc());
+        datos.setIdAlojado(alojadoID);
+        datos.getDatos_personales().setAlojadoOwner(datos);
+
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {
             Huesped h = new Huesped(datos);
@@ -97,6 +101,9 @@ public class FactoryAlojado {
         } else {
             return new Invitado(datos);
         }
+
+
+
     }
 
 }

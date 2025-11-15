@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  * Controlador REST para gestionar las operaciones de Huéspedes.
  * Escucha las peticiones web y las delega al GestorAlojamiento.
  */
 @RestController
-@RequestMapping("/api/huespedes")
+@RequestMapping("/api/huesped")
+@CrossOrigin(origins = "http://localhost:63342")
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;
