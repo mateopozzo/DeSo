@@ -41,69 +41,70 @@ document
         const campo_input = document.getElementById(campo.id);
         campo_input.classList.add("input-error");
       });
+
+      return; // Detener la ejecución si hay errores
     } else {
-      msg_error_campo.style.display = "none";
+      document.getElementById("error-campos").style.display = "none";
     }
 
-    return;
+    // Si no hay errores, construir el objeto y enviar los datos
+    const data = {
+      apellido: form.apellido.value,
+      nombre: form.nombre.value,
+      tipoDoc: form["tipo-documento"].value,
+      documento: form["numero-documento"].value,
+      fechaNacimiento: form["fecha-nacimiento"].value,
+      calle: form.calle.value,
+      numero_calle: form["numero-calle"].value,
+      piso: form.piso.value || null,
+      localidad: form.localidad.value,
+      provincia: form.provincia.value,
+      paisResidencia: form["pais-residencia"].value,
+      cuit: form.cuit.value || null,
+      iva: form.iva.value,
+      ocupacion: form.ocupacion.value,
+      telefono: form.telefono.value,
+      email: form.email.value,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/huespedes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        alert("Error al guardar el huésped.");
+        return;
+      }
+
+      const msg = await response.text();
+      console.log("Éxito (server): ", msg);
+
+      const cargarOtro = confirm(
+        "El huésped " +
+          data.nombre +
+          " " +
+          data.apellido +
+          " ha sido cargado satisfactoriamente en el sistema. \n\n¿Desea cargar otro?"
+      );
+
+      if (cargarOtro) {
+        form.reset();
+      } else {
+        window.location.href = "home.html";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error al enviar los datos.");
+    }
   });
 
-// si no tiene errores no retorna y arma el objeto
-const data = {
-  apellido,
-  nombre,
-  tipoDoc,
-  documento,
-  fechaNacimiento,
-  calle,
-  numero_calle,
-  piso: form.piso.value || null,
-  localidad,
-  provincia,
-  paisResidencia,
-  cuit: cuit || null,
-  iva,
-  ocupacion,
-  telefono,
-  email,
-};
-
-try {
-  const response = await fetch("http://localhost:8080/api/huespedes", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    alert("Error al guardar el huésped.");
-    return;
-  }
-
-  const msg = await response.text();
-  console.log("Éxito (server): ", msg);
-
-  // confirm me da opción de confirmar o cancelar en lugar de alert que solo se puede dar aceptar
-  const cargarOtro = confirm(
-    "El huésped " +
-      nombre +
-      " " +
-      apellido +
-      "ha sido cargado satisfactoriamente en el sistema. \n\n¿Desea cargar otro?"
-  );
-
-  // si cargarotro true limpio el form else fin
-  if (cargarOtro) {
-    form.reset();
-  } else {
-    window.location.href = "home.html";
-  }
-} catch (error) {
-  console.error("Error:", error);
-  alert("Error al enviar los datos.");
-}
-
+// Evento para los botones reiniciar y cancelar
 document.getElementById("botones-op").addEventListener("click", (e) => {
+  const form = document.getElementById("alta-huesped");
+
   if (e.target.id === "boton-cancelar") {
     if (confirm("¿Desea cancelar la modificación del huésped?")) {
       window.location.href = "home.html";
