@@ -2,10 +2,8 @@ document
     .getElementById("alta-huesped")
     .addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const form = e.target;
 
-      // --- 1. VALIDACIÓN DE CAMPOS VACÍOS ---
       const camposObligatorios = [
         { id: "apellido", nombre: "Apellido" },
         { id: "nombre", nombre: "Nombre" },
@@ -24,7 +22,6 @@ document
 
       const cuit = form.cuit.value.trim();
       const email = form.email.value.trim();
-      console.log(cuit+" "+email);
 
       const faltantes = [];
       const data = {}; // Creamos el objeto data aquí
@@ -43,13 +40,11 @@ document
 
       let msg_error_campo = document.getElementById("error-campos");
       if (faltantes.length > 0) {
-        const mensajeError =
-            "Los campos " + faltantes.join(", ") + " no pueden estar vacíos.";
-        msg_error_campo.innerText = mensajeError;
+        msg_error_campo.innerText = "Los campos " + faltantes.join(", ") + " no pueden estar vacíos.";
         msg_error_campo.style.display = "block";
-        return; // Si hay campos faltantes, MOSTRAMOS ERROR y SALIMOS
+        return;
       } else {
-        msg_error_campo.style.display = "none"; // Ocultamos si no hay errores
+        msg_error_campo.style.display = "none";
       }
 
       const dataDTO = {
@@ -57,7 +52,7 @@ document
         nombre: data.nombre,
         nacionalidad: data.nacionalidad,
         fechanac: data["fecha-nacimiento"],
-        tipo_doc: form["tipo-documento"].value.toUpperCase(), // Aseguramos mayúsculas para el Enum
+        tipo_doc: form["tipo-documento"].value.toUpperCase(),
         nro_doc: data["numero-documento"],
         telefono: data.telefono,
         email: data.email,
@@ -71,18 +66,10 @@ document
         ocupacion: data.ocupacion,
         cuit: cuit || null,
         posicion_iva: data.iva,
-        razon_social: null, // Ajusta esto si tienes un campo para razon_social,
+        razon_social: null,
         depto:null
       };
-
-
-
-
-
-
-      // --- 4. ENVÍO (FETCH) (AHORA DENTRO DE LA FUNCIÓN ASYNC) ---
       try {
-        // CORREGÍ LA URL (puerto 8000 y /api/huesped)
         const response = await fetch("http://localhost:8000/api/huesped", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -107,7 +94,6 @@ document
 
         if (cargarOtro) {
           form.reset();
-          // Limpiamos los errores visuales
           camposObligatorios.forEach(campo => {
             form[campo.id].classList.remove("input-error");
           });
@@ -118,18 +104,22 @@ document
         console.error("Error:", error);
         alert("Error al enviar los datos.");
       }
-    }); // <-- El listener del formulario AHORA CIERRA AQUÍ, al final de la lógica
-
-// --- Listener del botón Cancelar (Este sí estaba bien) ---
-document
-    .getElementById("botones-op")
-    .querySelector("#boton-cancelar") // Usamos querySelector para más seguridad
-    .addEventListener("click", function (e) {
-      const cancelado = confirm("¿Desea cancelar el alta del huésped?");
-
-      if (cancelado) {
-        window.location.href = "home.html";
-      }
     });
 
-// No había ningún '}' extra, la elimino.
+document.getElementById("botones-op").addEventListener("click", (e) => {
+    const form = document.getElementById("alta-huesped");
+
+    if (e.target.id === "boton-cancelar") {
+        if (confirm("¿Desea cancelar la modificación del huésped?")) {
+            window.location.href = "home.html";
+        }
+    }
+
+    if (e.target.id === "reinicio") {
+        if (confirm("Se borrarán todos los datos del formulario.")) {
+            document.getElementById("error-campos").style.display = "none";
+            form.reset();
+        }
+    }
+});
+
