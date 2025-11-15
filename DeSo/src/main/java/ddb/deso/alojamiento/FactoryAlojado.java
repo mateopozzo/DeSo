@@ -100,7 +100,6 @@ public class FactoryAlojado {
 
         datos.setNroDoc(dto.getNroDoc());
         datos.setTipoDoc(dto.getTipoDoc());
-        ret.setId(datos.getIdAlojado());
 
         return ret;
 

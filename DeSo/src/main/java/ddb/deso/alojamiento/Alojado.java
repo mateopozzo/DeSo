@@ -27,10 +27,6 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_alojado", discriminatorType = DiscriminatorType.STRING)
 public abstract class Alojado {
-
-    @EmbeddedId
-    private AlojadoID id;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @MapsId
     @JoinColumns({

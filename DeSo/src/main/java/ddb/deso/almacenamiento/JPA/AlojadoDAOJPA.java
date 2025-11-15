@@ -57,7 +57,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         // 2. save() de JPA actúa como un "merge":
         // Si la entidad tiene un ID que ya existe, la actualiza.
         // Si no, la inserta. (Asumimos que siempre tendrá ID)
-        if (entidadModificada != null && entidadModificada.getId() != null) {
+        if (entidadModificada != null && entidadModificada.getDatos().getIdAlojado() != null) {
             alojadoRepository.save(entidadModificada);
         }
     }
