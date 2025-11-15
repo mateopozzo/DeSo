@@ -130,12 +130,12 @@
           </div>
 
           <div class="form-group">
-            <label for="numero-documento">Número de documento</label>
+            <label for="numero-documento">Nro. de documento</label>
             <input
               type="text"
               id="numero-documento"
               name="numero-documento"
-              placeholder="19876543"
+              placeholder="Sin guiones ni puntos"
               required
             />
           </div>
@@ -244,8 +244,13 @@
           </div>
 
           <div class="form-group">
-            <label for="cuit">CUIT</label>
-            <input type="text" id="cuit" name="cuit" placeholder="(Opcional)" />
+            <label for="cuit">CUIT (sin guiones ni puntos)</label>
+            <input
+              type="number"
+              id="cuit"
+              name="cuit"
+              placeholder="(Opcional)"
+            />
           </div>
 
           <div class="form-group">
