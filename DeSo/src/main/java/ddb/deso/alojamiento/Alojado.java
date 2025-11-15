@@ -30,11 +30,12 @@ public abstract class Alojado {
 
     @EmbeddedId
     private AlojadoID id;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @MapsId // ¡Esta es la clave! "Usa el ID de 'datos' como mi 'id'"
+    @MapsId
     @JoinColumns({
-            @JoinColumn(name = "alojado_nroDoc", referencedColumnName = "nroDoc"),
-            @JoinColumn(name = "alojado_tipoDoc", referencedColumnName = "tipoDoc")
+            @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
+            @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
     })
     protected DatosAlojado datos;
 

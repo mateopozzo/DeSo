@@ -11,8 +11,6 @@ import java.util.Scanner;
 @SpringBootApplication
 public class DeSo {
     public static void main(String[] args) throws InterruptedException {
-
         SpringApplication.run(DeSo.class, args);
-
     }
 }

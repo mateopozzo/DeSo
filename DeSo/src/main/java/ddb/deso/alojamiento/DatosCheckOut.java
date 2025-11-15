@@ -25,8 +25,8 @@ public class DatosCheckOut {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "alojado_nroDoc", referencedColumnName = "nroDoc"),
-            @JoinColumn(name = "alojado_tipoDoc", referencedColumnName = "tipoDoc")
+            @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
+            @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
     })
     private DatosAlojado alojado;
 

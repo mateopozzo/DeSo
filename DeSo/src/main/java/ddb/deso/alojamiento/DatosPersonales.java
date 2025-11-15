@@ -26,7 +26,9 @@ public class DatosPersonales {
     private String ocupacion;
     private String CUIT;
     private LocalDate fechanac;
+    @Transient
     private String nroDoc;
+    @Transient
     private TipoDoc tipoDoc;
 
     @Transient

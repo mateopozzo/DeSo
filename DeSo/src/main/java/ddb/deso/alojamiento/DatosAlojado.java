@@ -74,18 +74,21 @@ public class DatosAlojado {
             this.datos_personales.setAlojadoOwner(this);
         }
     }
-
+    @Transient
     public void setTipoDoc(TipoDoc tipoDoc) {
         if(this.idAlojado == null) this.idAlojado = new AlojadoID();
         this.idAlojado.setTipoDoc(tipoDoc);
     }
+    @Transient
     public TipoDoc getTipoDoc() {
         return (this.idAlojado != null) ? this.idAlojado.getTipoDoc() : null;
     }
+    @Transient
     public void setNroDoc(String nroDoc) {
         if(this.idAlojado == null) this.idAlojado = new AlojadoID();
         this.idAlojado.setNroDoc(nroDoc);
     }
+    @Transient
     public String getNroDoc() {
         return (this.idAlojado != null) ? this.idAlojado.getNroDoc() : null;
     }
