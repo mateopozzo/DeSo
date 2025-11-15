@@ -15,6 +15,6 @@ public class AlojadoID implements Serializable {
     private String nroDoc;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_doc")
+    @Column(name = "tipo_doc", columnDefinition = "VARCHAR(31)")
     private TipoDoc tipoDoc;
 }

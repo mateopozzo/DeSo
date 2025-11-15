@@ -89,20 +89,20 @@ public class FactoryAlojado {
         datos.setCheckIns(dto.getId_check_in());
         datos.setCheckOuts(dto.getId_check_out());
 
-        AlojadoID alojadoID = new AlojadoID(dto.getNroDoc(), dto.getTipoDoc());
-        datos.setIdAlojado(alojadoID);
-        datos.getDatos_personales().setAlojadoOwner(datos);
-
+        Alojado ret;
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {
-            Huesped h = new Huesped(datos);
-            h.setRazon_social(dto.getRazon_social());
-            return h;
+            ret = new Huesped(datos);
+            ((Huesped)ret).setRazon_social(dto.getRazon_social());
         } else {
-            return new Invitado(datos);
+            ret = new Invitado(datos);
         }
 
+        datos.setNroDoc(dto.getNroDoc());
+        datos.setTipoDoc(dto.getTipoDoc());
+        ret.setId(datos.getIdAlojado());
 
+        return ret;
 
     }
 

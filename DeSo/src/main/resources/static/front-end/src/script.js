@@ -71,7 +71,7 @@ document
         ocupacion: data.ocupacion,
         cuit: cuit || null,
         posicion_iva: data.iva,
-        razon_social: null // Ajusta esto si tienes un campo para razon_social,
+        razon_social: null, // Ajusta esto si tienes un campo para razon_social,
         depto:null
       };
 
