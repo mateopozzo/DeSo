@@ -42,12 +42,11 @@ document
         campo_input.classList.add("input-error");
       });
 
-      return; // Detener la ejecución si hay errores
+      return;
     } else {
       document.getElementById("error-campos").style.display = "none";
     }
 
-    // Si no hay errores, construir el objeto y enviar los datos
     const data = {
       apellido: form.apellido.value,
       nombre: form.nombre.value,
@@ -101,7 +100,6 @@ document
     }
   });
 
-// Evento para los botones reiniciar y cancelar
 document.getElementById("botones-op").addEventListener("click", (e) => {
   const form = document.getElementById("alta-huesped");
 
