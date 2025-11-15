@@ -51,6 +51,20 @@ body {
   padding: 40px;
 }
 
+.input-error {
+  border-color: #af4b40;
+}
+
+#error-campos {
+  display: none;
+  color: white;
+  background-color: #b67c75;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-left: 10px;
+}
+
 h1 {
   color: #141414;
   margin-bottom: 30px;

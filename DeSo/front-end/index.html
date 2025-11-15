@@ -74,6 +74,10 @@
       <div id="contenido">
         <h1>Dar de alta un huésped</h1>
 
+        <div id="error-campos">
+          Los campos obligatorios deben ser completados.
+        </div>
+
         <form id="alta-huesped" class="grid-form">
           <!-- FILA 1 -->
           <div class="form-group">
@@ -83,23 +87,16 @@
               id="apellido"
               name="apellido"
               placeholder="Doe"
-              required
             />
           </div>
 
           <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              placeholder="John"
-              required
-            />
+            <input type="text" id="nombre" name="nombre" placeholder="John" />
           </div>
           <div class="form-group">
             <label for="nacionalidad">Nacionalidad</label>
-            <select id="nacionalidad" name="nacionalidad" required>
+            <select id="nacionalidad" name="nacionalidad">
               <option value="argentina">Argentina</option>
               <option value="brasil">Brasil</option>
               <option value="chile">Chile</option>
@@ -110,12 +107,7 @@
 
           <div class="form-group">
             <label for="fecha-nacimiento">Fecha de nacimiento</label>
-            <input
-              type="date"
-              id="fecha-nacimiento"
-              name="fecha-nacimiento"
-              required
-            />
+            <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" />
           </div>
 
           <div class="form-group">
@@ -136,7 +128,6 @@
               id="numero-documento"
               name="numero-documento"
               placeholder="Sin guiones ni puntos"
-              required
             />
           </div>
 
@@ -147,7 +138,6 @@
               id="telefono"
               name="telefono"
               placeholder="Cód. de área + número"
-              required
             />
           </div>
 
@@ -168,7 +158,6 @@
               id="calle"
               name="calle"
               placeholder="Calle falsa"
-              required
             />
           </div>
 
@@ -179,7 +168,6 @@
               id="numero-calle"
               name="numero-calle"
               placeholder="1234"
-              required
             />
           </div>
 
@@ -195,7 +183,6 @@
               id="cod_postal"
               name="cod_postal"
               placeholder="3000"
-              required
             />
           </div>
 
@@ -206,7 +193,6 @@
               id="pais-residencia"
               name="pais-residencia"
               placeholder="Argentina"
-              required
             />
           </div>
 
@@ -217,7 +203,6 @@
               id="provincia"
               name="provincia"
               placeholder="Santa Fe"
-              required
             />
           </div>
 
@@ -228,7 +213,6 @@
               id="localidad"
               name="localidad"
               placeholder="Santa Fe"
-              required
             />
           </div>
 
@@ -239,7 +223,6 @@
               id="ocupacion"
               name="ocupacion"
               placeholder="Empleado"
-              required
             />
           </div>
 
@@ -255,7 +238,7 @@
 
           <div class="form-group">
             <label for="iva">Posición frente al IVA</label>
-            <select id="iva" name="iva" required>
+            <select id="iva" name="iva">
               <option value="consumidor-final">Consumidor final</option>
               <option value="responsable-inscripto">
                 Responsable inscripto
