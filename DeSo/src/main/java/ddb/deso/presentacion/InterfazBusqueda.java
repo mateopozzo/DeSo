@@ -1,7 +1,9 @@
 package ddb.deso.presentacion;
 
 import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.*;
 
 import java.util.List;
@@ -54,6 +56,9 @@ public class InterfazBusqueda {
         String nombre = scanner.nextLine();
         if(nombre.isEmpty()) nombre = null;
 
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
         if(apellido.isEmpty()) nombre = null;
@@ -66,7 +71,7 @@ public class InterfazBusqueda {
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        GestorAlojamiento.buscarHuesped(criterios_busq);
+        gestorAlojamiento.buscarHuesped(criterios_busq);
     }
 
     /**

@@ -41,7 +41,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
     @Override
     public void crearAlojado(AlojadoDTO alojado) {
-        // 1. Convierte el DTO a una entidad de dominio usando la factoría
         Alojado entidad = FactoryAlojado.createFromDTO(alojado);
 
         // 2. Persiste la entidad usando el repositorio
@@ -145,7 +144,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             // Combina todos los predicados con un "AND"
             return cb.and(predicates.toArray(new Predicate[0]));
         };
-
         // 1. Ejecuta la búsqueda con la especificación dinámica
         //    (Requiere que AlojadoRepository extienda JpaSpecificationExecutor)
         List<Alojado> entidades = alojadoRepository.findAll(spec);
