@@ -5,9 +5,6 @@ document
 
     const form = e.target;
 
-    const numeros = /^[0-9]+$/;
-    const formato_email = /^[A-Za-z0-9._%+-]+@[A-Za-z]+\.(com)$/;
-
     const camposObligatorios = [
       { id: "apellido", nombre: "Apellido" },
       { id: "nombre", nombre: "Nombre" },
@@ -50,17 +47,6 @@ document
 
     return;
   });
-
-// si no es vacío que solo tenga num
-if (cuit !== "" && !numeros.test(cuit)) {
-  alert("El CUIT solo puede contener números.");
-  return;
-}
-
-if (!formato_email.test(email)) {
-  alert("El correo debe tener un formato válido: ejemplo@algo.com");
-  return;
-}
 
 // si no tiene errores no retorna y arma el objeto
 const data = {
@@ -117,13 +103,16 @@ try {
   alert("Error al enviar los datos.");
 }
 
-document
-  .getElementById("botones-op")
-  .getElementById("boton-cancelar")
-  .addEventListener("click", function (e) {
-    const cancelado = confirm("¿Desea cancelar la modificación del huésped?");
-
-    if (cancelado) {
+document.getElementById("botones-op").addEventListener("click", (e) => {
+  if (e.target.id === "boton-cancelar") {
+    if (confirm("¿Desea cancelar la modificación del huésped?")) {
       window.location.href = "home.html";
     }
-  });
+  }
+
+  if (e.target.id === "reinicio") {
+    if (confirm("Se borrarán todos los datos del formulario.")) {
+      form.reset();
+    }
+  }
+});
