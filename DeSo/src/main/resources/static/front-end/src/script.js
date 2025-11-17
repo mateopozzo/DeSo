@@ -57,20 +57,20 @@ document
         nombre: data.nombre,
         nacionalidad: data.nacionalidad,
         fechanac: data["fecha-nacimiento"],
-        tipo_doc: form["tipo-documento"].value.toUpperCase(), // Aseguramos mayúsculas para el Enum
-        nro_doc: data["numero-documento"],
+        tipoDoc: form["tipo-documento"].value.toUpperCase(), // Aseguramos mayúsculas para el Enum
+        nroDoc: data["numero-documento"],
         telefono: data.telefono,
         email: data.email,
         calle: data.calle,
-        nro_calle: data["numero-calle"],
+        nroCalle: data["numero-calle"],
         piso: form.piso.value || null,
-        cod_post: form.cod_postal.value || null,
+        codPost: form.cod_postal.value || null,
         pais: data["pais-residencia"],
         prov: data.provincia,
         localidad: data.localidad,
         ocupacion: data.ocupacion,
         cuit: cuit || null,
-        posicion_iva: data.iva,
+        posicionIva: data.iva,
         razon_social: null, // Ajusta esto si tienes un campo para razon_social,
         depto:null
       };

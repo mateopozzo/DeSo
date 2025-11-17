@@ -17,6 +17,7 @@ import javax.management.BadAttributeValueExpException;
 @Data
 @Table(name = "datos_alojado")
 public class DatosAlojado {
+
     @EmbeddedId
     AlojadoID idAlojado;
     @Embedded
@@ -30,6 +31,7 @@ public class DatosAlojado {
         var dr = new DatosResidencia();
         var dc = new DatosContacto();
         var dp = new DatosPersonales();
+        dp.setAlojadoOwner(this);
         datos_residencia = dr;
         datos_contacto=dc;
         datos_personales = dp;
