@@ -1,5 +1,7 @@
 package ddb.deso.presentacion;
 
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.GestorAlojamiento;
 
@@ -145,8 +147,11 @@ public class InterfazDarBaja {
 
         scanner = scannerExterno;
 
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+
         //  Flujo secundario, el huesped no se puede eliminar
-        var historialAlojado=GestorAlojamiento.historialHuesped(alojadoParaEliminar);
+        var historialAlojado=gestorAlojamiento.historialHuesped(alojadoParaEliminar);
         if(historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.SE_ALOJO)){
             noSePuedeDarBaja();
             return;
@@ -161,7 +166,7 @@ public class InterfazDarBaja {
             return;
         }
 
-        GestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
+        gestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
 
         terminarCU11(alojadoParaEliminar);
     }

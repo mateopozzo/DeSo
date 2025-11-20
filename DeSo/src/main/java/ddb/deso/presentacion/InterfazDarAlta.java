@@ -5,6 +5,8 @@ import java.util.BitSet;
 import java.util.Scanner;
 
 import ddb.deso.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.DatosAlojado;
 import ddb.deso.alojamiento.FactoryAlojado;
@@ -53,10 +55,12 @@ public class InterfazDarAlta {
 
         camposInvalidos.set(0, 12);
         camposDireccionInvalida.set(0, 8);
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
 
         boolean bandera = true;
         DatosAlojado da = new DatosAlojado();
-        Alojado nuevoAlojado = FactoryAlojado.create(1, da);
+        Alojado nuevoAlojado = FactoryAlojado.create(FactoryAlojado.HUESPED, da);
 
         while (bandera) {
             System.out.println("CREAR HUESPED NUEVO --------------------------------------");
@@ -78,7 +82,7 @@ public class InterfazDarAlta {
                     } else {
                         String nro_doc = nuevoAlojado.getDatos().getDatos_personales().getNroDoc();
                         TipoDoc tipo_doc = nuevoAlojado.getDatos().getDatos_personales().getTipoDoc();
-                        boolean existe_dni = GestorAlojamiento.dniExiste(nro_doc, tipo_doc);
+                        boolean existe_dni = gestorAlojamiento.dniExiste(nro_doc, tipo_doc);
 
                         if (existe_dni) {
                             System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
@@ -92,12 +96,12 @@ public class InterfazDarAlta {
                                 camposInvalidos.set(3); // marca nro doc como inválido
                                 continue;
                             } else {
-                                Alojado alojadoAnterior = GestorAlojamiento.obtenerAlojadoPorDNI(nro_doc, tipo_doc);
-                                GestorAlojamiento.eliminarAlojado(alojadoAnterior);
+                                Alojado alojadoAnterior = gestorAlojamiento.obtenerAlojadoPorDNI(nro_doc, tipo_doc);
+                                gestorAlojamiento.eliminarAlojado(alojadoAnterior);
                             }
                         }
                         // Guarda los datos
-                        GestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
+                        gestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
                         System.out.print("El Huésped " +
                                 nuevoAlojado.getDatos().getDatos_personales().getNombre() + " " +
                                 nuevoAlojado.getDatos().getDatos_personales().getApellido() +

@@ -1,6 +1,9 @@
 package ddb.deso.alojamiento;
 
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+
+import java.time.LocalDate;
+
 /**
  * Clase factoría estática para la creación de instancias de la clase de dominio
  * {@link Alojado}, que puede ser de tipo {@link Huesped} o {@link Invitado}.
@@ -64,7 +67,7 @@ public class FactoryAlojado {
             datos.getDatos_personales().setTipoDoc(dto.getTipoDoc());
             datos.getDatos_personales().setNroDoc(dto.getNroDoc());
             datos.getDatos_personales().setCUIT(dto.getCUIT());
-            datos.getDatos_personales().setFechanac(dto.getFechanac());
+            datos.getDatos_personales().setFechanac(LocalDate.parse(dto.getFechanac()));
         }
 
         // ==== Datos de contacto ====
@@ -80,23 +83,30 @@ public class FactoryAlojado {
             datos.getDatos_residencia().setLocalidad(dto.getLocalidad());
             datos.getDatos_residencia().setProv(dto.getProv());
             datos.getDatos_residencia().setPais(dto.getPais());
-            datos.getDatos_residencia().setNro_calle(dto.getNro_calle());
+            datos.getDatos_residencia().setNro_calle(dto.getNroCalle());
             datos.getDatos_residencia().setPiso(dto.getPiso());
-            datos.getDatos_residencia().setCod_post(dto.getCod_post());
+            datos.getDatos_residencia().setCod_post(dto.getCodPost());
         }
 
         // ==== Check-in / Check-out ====
-        datos.setId_check_in(dto.getId_check_in());
-        datos.setId_check_out(dto.getId_check_out());
+        datos.setCheckIns(dto.getId_check_in());
+        datos.setCheckOuts(dto.getId_check_out());
 
+        Alojado ret;
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {
-            Huesped h = new Huesped(datos);
-            h.setRazon_social(dto.getRazon_social());
-            return h;
+            ret = new Huesped(datos);
+            ((Huesped)ret).setRazon_social(dto.getRazon_social());
         } else {
-            return new Invitado(datos);
+            ret = new Invitado(datos);
         }
+
+        datos.setNroDoc(dto.getNroDoc());
+        datos.setTipoDoc(dto.getTipoDoc());
+        ret.setId(datos.getIdAlojado());
+
+        return ret;
+
     }
 
 }
