@@ -24,8 +24,7 @@ import static java.lang.Integer.parseInt;
  * flujo de **alta de un nuevo huésped** (llamando a {@code InterfazDarAlta}).</li>
  * </ul>
  * <p>
- *
- * @author Gael
+
  * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)
  */
 public class InterfazBusqueda {

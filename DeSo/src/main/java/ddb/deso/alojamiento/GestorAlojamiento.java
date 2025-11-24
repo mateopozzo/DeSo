@@ -56,21 +56,21 @@ public class GestorAlojamiento {
     /**
      * Gestiona la modificación de los datos de un huésped en el sistema.
      *
-     * Este método recibe el objeto Alojado original y el objeto Alojado con los datos
+     * Este metodo recibe el objeto Alojado original y el objeto Alojado con los datos
      * ya modificados (provenientes de la capa de presentación). Se encarga de
      * convertir ambos objetos de dominio a sus respectivos DTO (Data Transfer Objects)
      * y luego invoca al DAO ({@link AlojadoDAO}) para que persista la actualización.
      *
      * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
      * antes de la modificación.
-     * @param aljadoModificado El objeto {@link Alojado} que contiene los nuevos datos
+     * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
      * a guardar en el sistema.
      */
 
-    public void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
-        System.out.println("Modificando huesped...");
+    public void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
+        System.out.println("Modificando huésped...");
         AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
-        AlojadoDTO datosModificadosDTO = new AlojadoDTO(aljadoModificado);
+        AlojadoDTO datosModificadosDTO = new AlojadoDTO(alojadoModificado);
         // Usa el campo 'alojadoDAO' inyectado
         alojadoDAO.actualizarAlojado(datosOriginalesDTO, datosModificadosDTO);
     }
@@ -120,7 +120,7 @@ public class GestorAlojamiento {
     }
 
 
-    /*
+    /**
      Elimina un registro de huésped del sistema.
 
      @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
@@ -145,7 +145,7 @@ public class GestorAlojamiento {
         NO_PERSISTIDO
     }
 
-    /*
+    /**
      Obtiene el resumen del historial de alojamiento de un huésped.
 
      @param alojado Objeto {@code Alojado} con los datos del huésped.
@@ -174,7 +174,7 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
-    /*
+    /**
      Busca el primer registro de alojado que coincide con el número y tipo de documento especificado
      y lo retorna como un objeto de dominio {@code Alojado}.
 

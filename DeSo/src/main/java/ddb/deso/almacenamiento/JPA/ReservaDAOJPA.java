@@ -63,10 +63,7 @@ public class ReservaDAOJPA implements ReservaDAO {
         if(fechaResInicio.isBefore(fechaFin) && fechaResInicio.isAfter(fechaInicio)){
             return true;
         }
-        if(fechaResFin.isBefore(fechaFin) && fechaResFin.isAfter(fechaInicio)){
-            return true;
-        }
-        return false;
+        return fechaResFin.isBefore(fechaFin) && fechaResFin.isAfter(fechaInicio);
     }
 }
 
