@@ -5,6 +5,7 @@ import java.util.List;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.presentacion.InterfazBusqueda;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +83,7 @@ public class GestorAlojamiento {
         alojadoDAO.crearAlojado(aDTO);
     }
 
-    /*
+    /**
      Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
 
      @param criterios: Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
@@ -185,8 +186,6 @@ public class GestorAlojamiento {
      @param tipo El tipo de documento (p. ej., DNI, Pasaporte).
      @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
-     @author mat
-     @author gael
      */
 
     public Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
