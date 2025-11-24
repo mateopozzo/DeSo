@@ -136,10 +136,8 @@ public class GestorAlojamiento {
     public enum ResumenHistorialHuesped {
         // Tuvo alguna estadia en el hotel
         SE_ALOJO,
-
         // No tuvo ninguna estadia, pero sus datos están persistidos
         NO_SE_ALOJO,
-
         // Sus datos no están presentes en la base del sistema
         NO_PERSISTIDO
     }

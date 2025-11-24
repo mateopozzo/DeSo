@@ -147,12 +147,12 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         String nombre_h = normalizar(nombre);
         TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
         String nroDoc_h = alojado_DTO.getNroDoc();
-
+        System.out.println(nombre_b + " " + nombre_h);
         if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
             return false;
         }
         if (no_es_vacio(nombre_b) && !nombre_h.equalsIgnoreCase(nombre_b)) {
-//            System.out.println(nombre_b + nombre_h);
+            System.out.println(nombre_b + " " + nombre_h);
             return false;
         }
         if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {
