@@ -42,7 +42,7 @@ public abstract class Alojado {
     public void checkOut(Alojado alojado) {
     }
     public boolean esMayor() {
-        return this.getEdad() >= 18;
+        return this.getDatos().getEdad() >= 18;
     }
     public abstract void completarDTO(AlojadoDTO dto);
 }
