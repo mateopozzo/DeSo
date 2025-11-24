@@ -34,7 +34,6 @@
         <maven.compiler.release>21</maven.compiler.release>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <!-- REMOVER: <exec.mainClass>ddb.deso.DeSo</exec.mainClass> -->
     </properties>
     <dependencies>
         <dependency>
@@ -93,7 +92,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- AGREGAR la configuración del mainClass aquí -->
                     <mainClass>ddb.deso.DeSo</mainClass>
                 </configuration>
             </plugin>

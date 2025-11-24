@@ -62,13 +62,13 @@ public class InterfazBusqueda {
 
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
-        if(apellido.isEmpty()) nombre = null;
+        if(apellido.isEmpty()) apellido = null;
 
         TipoDoc tipoDoc = menuTipoDoc(scanner);
 
         System.out.println("Ingrese el número de documento: ");
         String num_documento = scanner.nextLine();
-        if(num_documento.isEmpty()) nombre = null;
+        if(num_documento.isEmpty()) num_documento = null;
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
