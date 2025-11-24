@@ -1,23 +1,19 @@
 package ddb.deso.alojamiento;
 
 import java.util.List;
-import java.util.Optional;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.presentacion.InterfazBusqueda;
-import ddb.deso.repository.AlojadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GestorAlojamiento {
     private final AlojadoDAO alojadoDAO;
-    private final AlojadoRepository alojadoRepository;
 
-    public GestorAlojamiento(AlojadoDAO alojadoDAO, AlojadoRepository alojadoRepository) {
-        this.alojadoRepository = alojadoRepository;
+    /*Inyeccion de dependencia*/
+    public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }
 
@@ -204,24 +200,6 @@ public class GestorAlojamiento {
                 .orElse(null);
         if(encontradoDTO == null) return null;
         return FactoryAlojado.createFromDTO(encontradoDTO);
-    }
-
-    public Alojado crearAlojadoAPI (Alojado nuevo_alojado){
-        TipoDoc tipo_doc = nuevo_alojado.getDatos().getTipoDoc();
-        String nro_doc = nuevo_alojado.getDatos().getNroDoc();
-
-        Optional<Alojado> alojado_enbdd = alojadoRepository.findByDatos_DatosPersonales_TipoDocAndDatos_DatosPersonales_NroDoc(tipo_doc, nro_doc);
-        if (alojado_enbdd.isPresent()) {
-            throw new DocDuplicadoException(alojado_enbdd.get());
-        }
-
-        return alojadoRepository.save(nuevo_alojado);
-    }
-
-    public Alojado sustituirAlojadoAPI (Long id_anterior, Alojado nuevo_alojado){
-        Alojado alojado_ant = alojadoRepository.findById(id_anterior).orElseThrow(() -> new RuntimeException("Alojado no encontrado para sustituir: " + id_anterior));
-        alojado_ant.setDatos(nuevo_alojado.getDatos());
-        return alojadoRepository.save(alojado_ant);
     }
 }
 

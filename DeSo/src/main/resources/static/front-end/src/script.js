@@ -2,6 +2,7 @@ document
     .getElementById("alta-huesped")
     .addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const form = e.target;
 
       const camposObligatorios = [
