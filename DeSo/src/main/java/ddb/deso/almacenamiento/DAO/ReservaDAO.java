@@ -22,11 +22,11 @@ public interface ReservaDAO {
     
     //  Devuelve las instancias de reserva que ocurren durante la fecha
     List<Reserva> listarPorFecha(LocalDate fecha);
-    
-    List<Estadia> listarPorHuesped(Huesped huesped);
-    
-    //  devuelve todas las estadias del huesped que ocupo durante la fecha
-    List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
-    
+//
+//    List<Estadia> listarPorHuesped(Huesped huesped);
+//
+//    //  devuelve todas las estadias del huesped que ocupo durante la fecha
+//    List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
+//
     
 }

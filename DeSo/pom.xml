@@ -93,7 +93,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- AGREGAR la configuración del mainClass aquí -->
                     <mainClass>ddb.deso.DeSo</mainClass>
                 </configuration>
             </plugin>

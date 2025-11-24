@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlojadoRepository extends JpaRepository<Alojado, AlojadoID>,
         JpaSpecificationExecutor<Alojado> {
-
 }

@@ -6,6 +6,9 @@ package ddb.deso.habitaciones;
 
 import ddb.deso.TipoHab;
 import ddb.deso.EstadoHab;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -18,7 +21,13 @@ import ddb.deso.EstadoHab;
  * @see ddb.deso.TipoHab
  * @see ddb.deso.EstadoHab
  */
+@Data
+@Entity
+@Table(name="habitacion")
+@NoArgsConstructor
 public class Habitacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     private int nroHab;
     private TipoHab tipo_hab;
     private EstadoHab estado_hab;
@@ -73,4 +82,4 @@ public class Habitacion {
         this.capacidad = capacidad;
     }
     
-    }
+}

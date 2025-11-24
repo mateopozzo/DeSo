@@ -4,6 +4,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "alojado")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

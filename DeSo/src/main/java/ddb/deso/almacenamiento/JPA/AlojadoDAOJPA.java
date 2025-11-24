@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
  *
  * Ejemplo:
  * public interface AlojadoRepository extends JpaRepository<Alojado, AlojadoID>, JpaSpecificationExecutor<Alojado> { }
- *
  */
 @Repository
 public class AlojadoDAOJPA implements AlojadoDAO {

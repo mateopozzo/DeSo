@@ -5,6 +5,10 @@
 package ddb.deso.habitaciones;
 
 import ddb.deso.TipoServicio;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Representa un **servicio** ofrecido en una habitación (o en el contexto
@@ -16,17 +20,15 @@ import ddb.deso.TipoServicio;
  *
  * @see ddb.deso.TipoServicio
  */
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="servicio")
 public class Servicio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
+    long idServicio;
     private TipoServicio tipo_servicio;
-
-    public Servicio() {
-    }
-
-    public TipoServicio getTipo_servicio() {
-        return tipo_servicio;
-    }
-
-    public void setTipo_servicio(TipoServicio tipo_servicio) {
-        this.tipo_servicio = tipo_servicio;
-    }
 }
