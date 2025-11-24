@@ -26,19 +26,19 @@ public class GestorAlojamiento {
         return encontrados != null && !encontrados.isEmpty();
     }
 
-    /*
+    /**
      Busca coincidencias en la base de datos con base en los criterios de búsqueda.
 
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
     public static void buscarHuesped(CriteriosBusq criterios_busq) {
-        /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
-        Llama al DAO, que llama a DAOJSON y busca todos los alojados
-        Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
-
-        Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
-        Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
+        /*
+         * Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
+         * Llama al DAO, que llama a DAOJSON y busca todos los alojados
+         * Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
+         * Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
+         * Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
         InterfazBusqueda ui = new InterfazBusqueda();
@@ -65,15 +65,15 @@ public class GestorAlojamiento {
      *
      * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
      * antes de la modificación.
-     * @param aljadoModificado El objeto {@link Alojado} que contiene los nuevos datos
+     * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
      * a guardar en el sistema.
      */
 
-    public static void modificarHuesped(Alojado alojadoOriginal, Alojado aljadoModificado) {
+    public static void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
         System.out.println("Modificando huesped...");
         AlojadoDAO alojadoDAO = new AlojadoDAOJSON();
         AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
-        AlojadoDTO datosModificadosDTO = new AlojadoDTO(aljadoModificado);
+        AlojadoDTO datosModificadosDTO = new AlojadoDTO(alojadoModificado);
         alojadoDAO.actualizarAlojado(datosOriginalesDTO, datosModificadosDTO);
     }
 
@@ -84,7 +84,7 @@ public class GestorAlojamiento {
         aDao.crearAlojado(aDTO);
     }
 
-    /*
+    /**
      Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
 
      @param criterios: Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
@@ -119,7 +119,7 @@ public class GestorAlojamiento {
     }
 
 
-    /*
+    /**
      Elimina un registro de huésped del sistema.
 
      @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
@@ -144,7 +144,7 @@ public class GestorAlojamiento {
         NO_PERSISTIDO
     }
 
-    /*
+    /**
      Obtiene el resumen del historial de alojamiento de un huésped.
 
      @param alojado Objeto {@code Alojado} con los datos del huésped.
@@ -173,7 +173,7 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
-    /*
+    /**
      Busca el primer registro de alojado que coincide con el número y tipo de documento especificado
      y lo retorna como un objeto de dominio {@code Alojado}.
 
