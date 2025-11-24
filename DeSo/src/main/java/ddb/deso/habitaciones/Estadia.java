@@ -4,11 +4,17 @@
  */
 package ddb.deso.habitaciones;
 
+
+import ddb.deso.alojamiento.DatosCheckIn;
+import ddb.deso.alojamiento.DatosCheckOut;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.util.Date;
+import java.util.List;
+import ddb.deso.habitaciones.Habitacion;
 
 
 /**
@@ -30,6 +36,17 @@ public class Estadia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idReserva;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    List<Habitacion> listaHabitaciones;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    List<Servicio> listaServicios;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    DatosCheckIn datosCheckIn;
+    @OneToOne(fetch = FetchType.LAZY)
+    DatosCheckOut datosCheckOut;
 
     private Date fecha_inicio;
     private Date fecha_fin;

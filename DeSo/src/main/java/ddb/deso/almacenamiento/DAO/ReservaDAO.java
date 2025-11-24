@@ -21,7 +21,7 @@ public interface ReservaDAO {
     List<Reserva> listar();
     
     //  Devuelve las instancias de reserva que ocurren durante la fecha
-    List<Reserva> listarPorFecha(LocalDate fecha);
+    List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin);
 //
 //    List<Estadia> listarPorHuesped(Huesped huesped);
 //

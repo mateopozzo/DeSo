@@ -10,7 +10,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 
 /**
@@ -33,11 +34,14 @@ public class Reserva {
     long idReserva;
 
     @Getter
-    private Date fecha_inicio;
-    private Date fecha_fin;
+    private LocalDate fecha_inicio;
+    private LocalDate fecha_fin;
     private String estado;
 
-    public Reserva(Date fecha_inicio, Date fecha_fin, String estado) {
+    @ManyToMany(fetch = FetchType.LAZY)
+    List<Habitacion> listaHabitaciones;
+
+    public Reserva(LocalDate fecha_inicio, LocalDate fecha_fin, String estado) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.estado = estado;

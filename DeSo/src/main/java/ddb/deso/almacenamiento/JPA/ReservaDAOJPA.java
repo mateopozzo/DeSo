@@ -8,7 +8,10 @@ import ddb.deso.repository.AlojadoRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import ddb.deso.repository.ReservaRepository;
+import org.springframework.cglib.core.Local;
 
 public class ReservaDAOJPA implements ReservaDAO {
 
@@ -36,13 +39,34 @@ public class ReservaDAOJPA implements ReservaDAO {
 
     @Override
     public List<Reserva> listar() {
-        return List.of();
+        return reservaRepository.findAll();
     }
 
     @Override
-    public List<Reserva> listarPorFecha(LocalDate fecha) {
-        return List.of();
+    public List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin) {
+        var listaReservas = listar();
+        listaReservas = listaReservas.stream().
+                filter(una_res -> enRango(una_res, fechaInicio, fechaFin)).
+                toList();
+        return listaReservas;
     }
 
+    boolean enRango(Reserva reserva, LocalDate fechaInicio, LocalDate fechaFin){
+        LocalDate fechaResInicio = reserva.getFecha_inicio();
+        LocalDate fechaResFin = reserva.getFecha_fin();
+        if(fechaResInicio.isEqual(fechaInicio) || fechaResInicio.isEqual(fechaFin)){
+            return true;
+        }
+        if(fechaResFin.isEqual(fechaInicio) || fechaResFin.isEqual(fechaFin)){
+            return true;
+        }
+        if(fechaResInicio.isBefore(fechaFin) && fechaResInicio.isAfter(fechaInicio)){
+            return true;
+        }
+        if(fechaResFin.isBefore(fechaFin) && fechaResFin.isAfter(fechaInicio)){
+            return true;
+        }
+        return false;
+    }
 }
 

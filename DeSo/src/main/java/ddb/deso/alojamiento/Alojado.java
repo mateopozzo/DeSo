@@ -1,7 +1,10 @@
 package ddb.deso.alojamiento;/* ... (paquete e importaciones) ... */
 
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.habitaciones.Estadia;
+import ddb.deso.habitaciones.Reserva;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -22,26 +25,12 @@ public abstract class Alojado {
     })
     protected DatosAlojado datos;
 
-    public AlojadoID getId() {
-        return id;
-    }
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Reserva> listaReservas;
 
-    public void setId(AlojadoID id) {
-        this.id = id;
-    }
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Estadia> listaEstadias;
 
-    public DatosAlojado getDatos() {
-        return datos;
-    }
-
-    public void setDatos(DatosAlojado datos) {
-        this.datos = datos;
-    }
-
-    public void checkIn(Alojado alojado) {
-    }
-    public void checkOut(Alojado alojado) {
-    }
     public boolean esMayor() {
         return this.getDatos().getEdad() >= 18;
     }
