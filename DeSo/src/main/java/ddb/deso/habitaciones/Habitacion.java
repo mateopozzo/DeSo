@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class Habitacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
-    private int nroHab;
+    private Long nroHab;
     private TipoHab tipo_hab;
     private EstadoHab estado_hab;
     private float tarifa;
@@ -42,7 +42,7 @@ public class Habitacion {
         this.capacidad = capacidad;
     }
 
-    public int getNroHab() {
+    public Long getNroHab() {
         return nroHab;
     }
 
@@ -62,7 +62,7 @@ public class Habitacion {
         return capacidad;
     }
 
-    public void setNroHab(int nroHab) {
+    public void setNroHab(Long nroHab) {
         this.nroHab = nroHab;
     }
 

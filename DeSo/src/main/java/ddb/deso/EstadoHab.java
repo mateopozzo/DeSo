@@ -4,6 +4,11 @@
  */
 package ddb.deso;
 
+/**
+ * Enumerador de estados de habitacion
+ *  Representa el estado presente de una habitacion
+ * */
 public enum EstadoHab {
+    // TODO -> Definir que es RESERVADA y en todo caso sacarlo
     DISPONIBLE, OCUPADA, RESERVADA, ENMANTENIMIENTO;
 }

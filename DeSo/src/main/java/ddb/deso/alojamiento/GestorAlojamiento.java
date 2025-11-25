@@ -5,7 +5,6 @@ import java.util.List;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.presentacion.InterfazBusqueda;
 import org.springframework.stereotype.Service;
 

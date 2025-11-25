@@ -18,5 +18,5 @@ public interface HabitacionDAO {
     void eliminarHabitacion(Habitacion habitacion);
     List<Habitacion> listar();
     List<Habitacion> listarPorTipo(TipoHab tipoHabitacion);
-    Habitacion buscarPorNumero(int numero);
+    Habitacion buscarPorNumero(Long numero);
 }

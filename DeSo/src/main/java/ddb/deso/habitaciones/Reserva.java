@@ -29,6 +29,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Reserva {
 
+    //  Cambiar para que contenga nombre, apellido y telefono del que reserva
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idReserva;
@@ -37,6 +39,10 @@ public class Reserva {
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
     private String estado;
+    //Proposicion de cambio, es inutil (e imposible) guardar alojados sin documento
+    //private String nombre;
+    //private String apellido;
+    //private String telefono;
 
     @ManyToMany(fetch = FetchType.LAZY)
     List<Habitacion> listaHabitaciones;
@@ -45,6 +51,15 @@ public class Reserva {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.estado = estado;
+    }
+
+    public Reserva(LocalDate fecha_inicio, LocalDate fecha_fin){
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+    }
+
+    public void agregarHabitacion(Habitacion habitacion){
+        listaHabitaciones.add(habitacion);
     }
 
 }

@@ -12,7 +12,10 @@ import java.util.stream.Collectors;
 
 import ddb.deso.repository.ReservaRepository;
 import org.springframework.cglib.core.Local;
+import org.springframework.stereotype.Repository;
 
+
+@Repository
 public class ReservaDAOJPA implements ReservaDAO {
 
     private final ReservaRepository reservaRepository;
