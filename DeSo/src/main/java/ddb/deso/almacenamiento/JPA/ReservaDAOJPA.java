@@ -26,7 +26,7 @@ public class ReservaDAOJPA implements ReservaDAO {
 
     @Override
     public void crearReserva(Reserva reserva) {
-        if(reserva != null) {return;}
+        if(reserva == null) {return;}
         reservaRepository.save(reserva);
     }
 

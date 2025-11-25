@@ -39,10 +39,9 @@ public class Reserva {
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
     private String estado;
-    //Proposicion de cambio, es inutil (e imposible) guardar alojados sin documento
-    //private String nombre;
-    //private String apellido;
-    //private String telefono;
+    private String nombre;
+    private String apellido;
+    private String telefono;
 
     @ManyToMany(fetch = FetchType.LAZY)
     List<Habitacion> listaHabitaciones;
