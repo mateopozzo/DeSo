@@ -1,0 +1,655 @@
+ 
+ 
+@startuml
+title Diagrama de clases de diseño - Grupo 22
+scale 2
+
+package "Enumeradores"{
+enum TipoHabitacion {
+  IndividualEstandar
+  DobleEstandar
+  DobleSuperior
+  SuperiorFamilyPlan
+  Suite
+}
+
+enum EstadoHabitacion {
+  Disponible
+  Ocupada
+  Reservada
+  EnMantenimiento
+}
+
+enum MedioPago {
+  Efectivo
+  MonedaExtranjera
+  Cheque
+  TarjetaCredito
+  TarjetaDebito
+}
+
+enum TipoDoc {
+  DNI
+  LE
+  CI
+  Pasaporte
+  Otro
+}
+
+enum TipoFactura {
+  A
+  B
+  C
+  E
+}
+
+enum TipoServicio {
+  LavadoyPlanchado
+  Sauna
+  Bar
+}
+}
+package "Implementaciones DAO" {
+  
+  interface EstadiaDAO #Wheat
+  class EstadiaDAOBdd #LightGray implements EstadiaDAO {
+    +create(e: Estadia): void
+    +read(id: int): Estadia
+    +update(e: Estadia): void
+    +delete(e: Estadia): void
+  }
+  interface ReservaDAO #Wheat
+  class ReservaDAOBdd #LightGray  implements ReservaDAO {
+  +create(e: Reserva): void
+  +read(id: int): Reserva
+  +update(e: Reserva): void
+  +delete(e: Reserva): void
+}
+interface HabitacionDAO #Wheat
+class HabitacionDAOBdd #LightGray  implements HabitacionDAO {
+  +create(h: Habitacion): void
+  +read(id: int): Habitacion
+  +update(h: Habitacion): void
+  +delete(h: Habitacion): void
+}
+interface DatosAlojadoDAO #Wheat
+class DatosAlojadoBdd #LightGray  implements DatosAlojadoDAO {
+  +create(e: DatosAlojado): void
+  +read(id: int): DatosAlojado
+  +update(e: DatosAlojado): void
+  +delete(e: DatosAlojado): void
+}
+interface ServicioDAO #Wheat
+class ServicioDAOBdd  #LightGray implements ServicioDAO {
+  +create(s: Servicio): void
+  +read(id: int): Servicio
+  +update(s: Servicio): void
+  +delete(s: Servicio): void
+}
+interface PagoDAO #Wheat
+class PagoDAOBdd #LightGray  implements PagoDAO {
+  +create(p: Pago): void
+  +read(id: int): Pago
+  +update(p: Pago): void
+  +delete(p: Pago): void
+}
+interface FacturaDAO #Wheat
+class FacturaDAOBdd #LightGray  implements FacturaDAO {
+  +create(f: Factura): void
+  +read(id: int): Factura
+  +update(f: Factura): void
+  +delete(f: Factura): void
+}
+interface AlojadoDAO #Wheat
+class AlojadoDAOBdd #LightGray  implements AlojadoDAO {
+  +create(a: Alojado): void
+  +read(id: int): Alojado
+  +update(a: Alojado): void
+  +delete(a: Alojado): void
+}
+interface ResponsablePagoDAO #Wheat
+class ResponsablePagoDAOBdd  #LightGray implements ResponsablePagoDAO {
+  +create(r: ResponsablePago): void
+  +read(id: int): ResponsablePago
+  +update(r: ResponsablePago): void
+  +delete(r: ResponsablePago): void
+}
+
+' Implementaciones de los nuevos DAOs
+interface DatosPersonalesDAO #Wheat
+class DatosPersonalesDAOBdd #LightGray  implements DatosPersonalesDAO {
+  +create(dp: DatosPersonales): void
+  +read(id: int): DatosPersonales
+  +update(dp: DatosPersonales): void
+  +delete(dp: DatosPersonales): void
+}
+interface DatosContactoDAO #Wheat
+class DatosContactoDAOBdd  #LightGray implements DatosContactoDAO {
+  +create(dc: DatosContacto): void
+  +read(id: int): DatosContacto
+  +update(dc: DatosContacto): void
+  +delete(dc: DatosContacto): void
+}
+interface DatosResidenciaDAO #Wheat
+class DatosResidenciaDAOBdd  #LightGray implements DatosResidenciaDAO {
+  +create(dr: DatosResidencia): void
+  +read(id: int): DatosResidencia
+  +update(dr: DatosResidencia): void
+  +delete(dr: DatosResidencia): void
+}
+interface DatosCheckInDAO #Wheat
+class DatosCheckInDAOBdd  #LightGray implements DatosCheckInDAO {
+  +create(dci: DatosCheckIn): void
+  +read(id: int): DatosCheckIn
+  +update(dci: DatosCheckIn): void
+  +delete(dci: DatosCheckIn): void
+}
+interface DatosCheckOutDAO #Wheat
+class DatosCheckOutDAOBdd  #LightGray implements DatosCheckOutDAO {
+  +create(dco: DatosCheckOut): void
+  +read(id: int): DatosCheckOut
+  +update(dco: DatosCheckOut): void
+  +delete(dco: DatosCheckOut): void
+}
+EstadiaDAO -[hidden]down- AlojadoDAOBdd
+}
+
+
+package "Diagrama de negocio"{
+
+
+class Usuario #RoyalBlue {
+  -nombre: string
+  -contrasena: string
+  -permisos: int
+  +autenticarUsuario(u: Usuario): bool
+}
+together{
+class Habitacion {
+  -numeroHab: int
+  -tipoHab: TipoHabitacion
+  -estadoHab: EstadoHabitacion
+  -tarifaHab: float
+  -capacidadHab: int
+  +getEstado(): EstadoHabitacion
+}
+
+
+class Estadia {
+  -fechaInicio: Date
+  -fechaFin: Date
+  +getTipoHab(): TipoHabitacion
+  +getFechaInicio(): Date
+  +getFechaFin(): Date
+}
+
+class Alojado {
+  -datosAlojado: DatosAlojado
+  +setAlojado(): void
+  +getAlojado(): void
+  +checkIn(a: Alojado): void
+  +checkOut(a: Alojado): void
+  +esMayor(a: Alojado): bool
+}
+
+class Invitado {
+}
+
+
+class Huesped {
+  -razonSocial: string
+  +getRazonSocial(): string
+  +setRazonSocial(): void
+}
+
+class DatosAlojado {
+}
+
+class DatosPersonales {
+  -nombre: string
+  -apellido: string
+  -tipoDoc: TipoDoc
+  -nroDoc: int
+  -nacionalidad: string
+  -CUIT: int
+  -posicionIVA: string
+  -fechaNacimiento: Date
+  -ocupacion: string
+  +verificarTipo(t: TipoDoc): bool
+  +setNombre(n: string): void
+  +setApellido(a: string): void
+  +...()
+  +setOcupacion(o: string): void
+  +getNombre(): string
+  +getApellido(): string
+  +...()
+  +getOcupacion(): string
+}
+
+class DatosContacto {
+  -telefono: int
+  -email: string
+  +setTel(t: int): void
+  +setEmail(e: string): void
+  +getTel(): int
+  +getEmail(): string
+}
+
+class DatosResidencia {
+  -calle: string
+  -nroCalle: int
+  -departamento: string
+  -piso: int
+  -codPostal: int
+  -localidad: string
+  -provincia: string
+  -pais: string
+  +setCalle(c: string): void
+  +setNroCalle(n: int): void
+  +...()
+  +setPais(p: string): void
+  +getCalle(): string
+  +getNroCalle(): int
+  +...()
+  +getPais(): string
+}
+
+class DatosCheckIn {
+  -fechaCheckIn: Date
+  -horaCheckIn: Date
+  +setFechaIn(f: Date): void
+  +setHoraIn(h: Time): void
+  +getFechaIn(): Date
+  +getHoraIn(): Time
+}
+
+class DatosCheckOut {
+  -fechaCheckOut: Date
+  -horaCheckOut: Time
+  +setFechaOut(f: Date): void
+  +setHoraOut(h: Time): void
+  +getFechaOut(): Date
+  +getHoraOut(): Time
+}
+
+class Servicio {
+  -tipoServicio: TipoServicio
+  +getTipo(): TipoServicio
+  +setTipo(t: TipoServicio): void
+}
+
+class ResponsablePago {
+  -razonSocial: string
+  -CUIT: int
+  -direccion: string
+  -telefono: int
+}
+
+class Pago {
+  -monto: float
+  -medioPago: MedioPago
+  -fechaPago: Date
+  +getRespPago(): ResponsablePago
+  +getMonto(): float
+  +setFechaPago(f: Date): void
+  +setMedioPago(m: MedioPago): void
+}
+
+class Factura {
+  -fechaFactura: date
+  -nroFactura: int
+  -tipo: TipoFactura
+  -montoTotal: float
+  -montoIVA: float
+  -montoNeto: float
+  -IVA: int
+  -destinatario: string
+  +setFecha(f: date): void
+  +...()
+  +setMontoIVA(total: float, iva: int): void
+  +getMontoNeto(total: float, neto: float): float
+  +...()
+  +getTipoFactura(): TipoFactura
+}
+
+class NotaCredito {
+  -montoNCredito: float
+  +setMontoNC(m: float): void
+  +getMontoNC(): float
+}
+class Reserva{
+  -fechaInicio: Date
+  -fechaFin: Date
+  -estado : string
+  +getTipoHab(): TipoHabitacion
+  +getFechaInicio(): Date
+  +getFechaFin(): Date
+}
+}
+class GestorHabitaciones #LightBlue {
+  +cancelarEstadia(): bool
+  +listarHabitaciones(inicio: Date, fin: Date): List<Habitacion>
+  +facturar(e: Estadia): Factura
+  +reservarHabitacion(): void
+  +ocuparHabitacion(): void
+}
+
+
+class GestorAlojamiento #LightBlue  {
+  +altaAlojado(h: Huesped): void
+  +modifAlojado(h: Huesped): void
+  +bajaAlojado(h: Huesped): void
+  +checkIn(d: DatosCheckIn): void
+  +checkOut(d: DatosCheckOut): void
+}
+
+class GestorContabilidad #LightBlue  {
+  +gestionarListado(): void
+  +facturar(h: Habitacion): List<Factura>
+  +ingresarPago(): bool
+  +buscarRespPago(): ResponsablePago
+  +listarCheques(): Pago
+  +listarIngresos(): List<DatosCheckIn>
+  +generarNotaCredito(): void
+}
+
+class ReservaDTO #MintCream{
+  -fechaInicio: Date
+  -fechaFin: Date
+  -estado : string
+}
+
+class PagoDTO #MintCream{
+  -monto: float
+  -medioPago: MedioPago
+  -fechaPago: Date
+}
+
+class DatosAlojadoDTO #MintCream{
+}
+
+class FacturaDTO #MintCream{
+  -fechaFactura: date
+  -nroFactura: int
+  -tipo: TipoFactura
+  -montoTotal: float
+  -montoIVA: float
+  -montoNeto: float
+  -IVA: int
+  -destinatario: string
+}
+
+class ResponsablePagoDTO #MintCream{
+  -razonSocial: string
+  -CUIT: int
+  -direccion: string
+  -telefono: int
+}
+
+class ServicioDTO #MintCream{
+  -tipoServicio: TipoServicio
+}
+
+class HabitacionDTO #MintCream{
+  -numeroHab: int
+  -tipoHab: TipoHabitacion
+  -estadoHab: EstadoHabitacion
+  -tarifaHab: float
+  -capacidadHab: int
+}
+
+class EstadiaDTO #MintCream{
+  -fechaInicio: Date
+  -fechaFin: Date
+}
+
+class DatosCheckInDTO #MintCream{
+  -fechaCheckIn: Date
+  -horaCheckIn: Date
+}
+
+class DatosCheckOutDTO #MintCream{
+  -fechaCheckOut: Date
+  -horaCheckOut: Time
+}
+
+class DatosContactoDTO #MintCream{
+  -telefono: int
+  -email: string
+}
+
+
+class DatosResidenciaDTO #MintCream{
+  -calle: string
+  -nroCalle: int
+  -departamento: string
+  -piso: int
+  -codPostal: int
+  -localidad: string
+  -provincia: string
+  -pais: string
+}
+
+class DatosPersonalesDTO #MintCream{
+  -nombre: string
+  -apellido: string
+  -tipoDoc: TipoDoc
+  -nroDoc: int
+  -nacionalidad: string
+  -CUIT: int
+  -posicionIVA: string
+  -fechaNacimiento: Date
+  -ocupacion: string
+}
+
+interface EstadiaDAO #Wheat{
+  +create(e: Estadia): void
+  +read(id: int): Estadia
+  +update(e: Estadia): void
+  +delete(e: Estadia): void
+}
+
+interface DatosAlojadoDAO #Wheat{
+  +create(e: DatosAlojado): void
+  +read(id: int): DatosAlojado
+  +update(e: DatosAlojado): void
+  +delete(e: DatosAlojado): void
+}
+
+interface HabitacionDAO #Wheat {
+  +readAll(): List<HabitacionDTO>
+  +create(h: Habitacion): void
+  +read(id: int): Habitacion
+  +update(h: Habitacion): void
+  +delete(h: Habitacion): void
+}
+
+interface ServicioDAO #Wheat{
+  +create(s: Servicio): void
+  +read(id: int): Servicio
+  +update(s: Servicio): void
+  +delete(s: Servicio): void
+}
+
+interface PagoDAO #Wheat{
+  +create(p: Pago): void
+  +read(id: int): Pago
+  +update(p: Pago): void
+  +delete(p: Pago): void
+}
+
+interface FacturaDAO #Wheat{
+  +create(f: Factura): void
+  +read(id: int): Factura
+  +update(f: Factura): void
+  +delete(f: Factura): void
+}
+
+interface AlojadoDAO #Wheat{
+  +create(a: Alojado): void
+  +read(id: int): Alojado
+  +update(a: Alojado): void
+  +delete(a: Alojado): void
+}
+
+interface ResponsablePagoDAO #Wheat{
+  +create(r: ResponsablePago): void
+  +read(id: int): ResponsablePago
+  +update(r: ResponsablePago): void
+  +delete(r: ResponsablePago): void
+}
+
+' Nuevos DAOs agregados
+interface ReservaDAO #Wheat{
+  +readDate(Date: ini, Date: end): List<ReservaDTO>
+  +create(dp: Reserva): void
+  +read(id: int): Reserva
+  +update(dp: Reserva): void
+  +delete(dp: Reserva): void
+}
+
+interface DatosPersonalesDAO #Wheat{
+  +create(dp: DatosPersonales): void
+  +read(id: int): DatosPersonales
+  +update(dp: DatosPersonales): void
+  +delete(dp: DatosPersonales): void
+}
+
+interface DatosContactoDAO #Wheat{
+  +create(dc: DatosContacto): void
+  +read(id: int): DatosContacto
+  +update(dc: DatosContacto): void
+  +delete(dc: DatosContacto): void
+}
+
+interface DatosResidenciaDAO #Wheat{
+  +create(dr: DatosResidencia): void
+  +read(id: int): DatosResidencia
+  +update(dr: DatosResidencia): void
+  +delete(dr: DatosResidencia): void
+}
+
+
+interface DatosCheckInDAO #Wheat{
+  +create(dci: DatosCheckIn): void
+  +read(id: int): DatosCheckIn
+  +update(dci: DatosCheckIn): void
+  +delete(dci: DatosCheckIn): void
+}
+
+interface DatosCheckOutDAO #Wheat{
+  +create(dco: DatosCheckOut): void
+  +read(id: int): DatosCheckOut
+  +update(dco: DatosCheckOut): void
+  +delete(dco: DatosCheckOut): void
+}
+
+
+
+' Dependencias de gestores a DAOs
+GestorHabitaciones ..> EstadiaDAO
+GestorHabitaciones ..> ReservaDAO
+GestorHabitaciones ..> HabitacionDAO
+GestorHabitaciones ..> ServicioDAO
+GestorHabitaciones ..> DatosAlojadoDAO
+
+GestorAlojamiento ..> AlojadoDAO
+GestorAlojamiento ..> DatosPersonalesDAO
+GestorAlojamiento ..> DatosContactoDAO
+GestorAlojamiento ..> DatosResidenciaDAO
+GestorAlojamiento ..> DatosCheckInDAO
+GestorAlojamiento ..> DatosCheckOutDAO
+GestorAlojamiento ..> DatosAlojadoDAO
+
+GestorContabilidad ..> EstadiaDAO
+GestorContabilidad ..> PagoDAO
+GestorContabilidad ..> FacturaDAO
+GestorContabilidad ..> ResponsablePagoDAO
+GestorContabilidad ..> DatosPersonalesDAO
+GestorContabilidad ..> DatosContactoDAO
+
+' Dependencias de DAOs a sus entidades correspondientes
+EstadiaDAO ..> Estadia
+DatosAlojadoDAO ..> DatosAlojado
+ReservaDAO ..> Reserva
+HabitacionDAO ..> Habitacion
+ServicioDAO ..> Servicio
+PagoDAO ..> Pago
+FacturaDAO ..> Factura
+AlojadoDAO ..> Alojado
+ResponsablePagoDAO ..> ResponsablePago
+DatosPersonalesDAO ..> DatosPersonales
+' PersonaJuridicaDAO ..> PersonaJuridica
+DatosContactoDAO ..> DatosContacto
+DatosResidenciaDAO ..> DatosResidencia
+DatosCheckInDAO ..> DatosCheckIn
+DatosCheckOutDAO ..> DatosCheckOut
+
+'Dependendias de los DTOs agregados'
+
+GestorContabilidad ..> PagoDTO
+GestorContabilidad ..> FacturaDTO
+GestorContabilidad ..> ResponsablePagoDTO
+GestorContabilidad ..> DatosPersonalesDTO
+GestorContabilidad ..> DatosContactoDTO
+GestorContabilidad ..> EstadiaDTO
+' GestorContabilidad ..> PersonaJuridicaDAO
+
+GestorAlojamiento ..> DatosAlojadoDTO
+GestorAlojamiento ..> DatosCheckInDTO
+GestorAlojamiento ..> DatosCheckOutDTO
+
+
+GestorHabitaciones ..> DatosAlojadoDTO
+GestorHabitaciones ..> ReservaDTO
+GestorHabitaciones ..> ServicioDTO
+GestorHabitaciones ..> HabitacionDTO
+GestorHabitaciones ..> EstadiaDTO
+
+DatosAlojadoDTO "1" --> "1" DatosPersonalesDTO
+DatosAlojadoDTO "1" --> "1" DatosContactoDTO
+DatosAlojadoDTO "1" --> "1" DatosResidenciaDTO
+DatosAlojadoDTO "1" --> "0..*" DatosCheckInDTO
+DatosAlojadoDTO "1" --> "0..*" DatosCheckOutDTO
+' DatosAlojadoDTO --> PersonaJuridicaDTO
+
+FacturaDTO "1" --> "0..*" PagoDTO
+PagoDTO "0..*" --> "1" ResponsablePagoDTO
+
+EstadiaDTO "0..1" --> "0..1 ""ReservaDTO"
+EstadiaDTO "0..*" --> "0..*" ServicioDTO
+EstadiaDTO "0..*" --> "1..*" HabitacionDTO
+
+' Relaciones de asociación y composición
+Estadia "0..*" --> "1" Huesped
+Estadia "0..*" --> "0..*" Invitado
+Estadia "0..*" --> "0..*" Habitacion
+Estadia "0..*" --> "0..*" Servicio
+Reserva "0..*" --> "0..*" Habitacion
+Reserva "0..*" --> "1" Huesped
+
+Alojado <|-- Huesped
+Alojado <|-- Invitado
+Estadia "1" --> "1" DatosCheckIn
+Estadia "1" --> "1" DatosCheckOut
+Alojado "1" --> "0..*" DatosCheckIn
+Alojado "1" --> "0..*" DatosCheckOut
+
+DatosAlojado "1" *-- "1" DatosPersonales
+DatosAlojado "1" *-- "1" DatosResidencia
+DatosAlojado "1" *-- "1" DatosContacto
+
+Alojado "1" --> "1" DatosAlojado
+
+Pago "0..*" <-- "1" Estadia
+Factura "1" --> "1" Pago
+Factura "1" --> "0..*" NotaCredito
+ResponsablePago "1" <-- "0..*" Pago
+
+Usuario .down..> GestorAlojamiento
+Usuario .down..> GestorContabilidad
+Usuario .down..> GestorHabitaciones
+}
+
+@enduml 
+

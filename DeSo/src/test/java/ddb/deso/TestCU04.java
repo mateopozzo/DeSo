@@ -4,18 +4,17 @@ import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
 
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.habitaciones.Reserva;
-import ddb.deso.repository.HabitacionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @SpringBootTest
 //@Transactional
@@ -59,7 +58,7 @@ public class TestCU04 {
         habs.add(1L<<62-2);
         habs.add(1L<<62-1);
         habs.add(1L<<62);
-        Exception e = assertThrows(NullPointerException.class, () -> {
+        Exception e = assertThrows(HabitacionInexistenteException.class, () -> {
             gestorHabitacion.crearReserva(rese, habs);
         } );
     }

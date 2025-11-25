@@ -2,6 +2,7 @@ package ddb.deso.gestores;
 
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.habitaciones.Reserva;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import java.util.List;
 
 @Service
 public class GestorHabitacion {
+
     private ReservaDAO reservaDAO;
     private HabitacionDAO habitacionDAO;
 
     @Autowired
-    public GestorHabitacion(ReservaDAO reservaDAO) {
+    public GestorHabitacion(ReservaDAO reservaDAO, HabitacionDAO habitacionDAO) {
         this.reservaDAO = reservaDAO;
+        this.habitacionDAO = habitacionDAO;
     }
 
     @Autowired
@@ -34,7 +37,7 @@ public class GestorHabitacion {
             if(habitacion != null) {
                 reserva.agregarHabitacion(habitacion);
             } else {
-                throw new NullPointerException("Habitacion no encontrada");
+                throw new HabitacionInexistenteException("Habitacion " + id + " no encontrada");
             }
         }
 
