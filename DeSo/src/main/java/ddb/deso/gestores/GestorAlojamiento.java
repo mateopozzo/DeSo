@@ -1,11 +1,15 @@
-package ddb.deso.alojamiento;
+package ddb.deso.gestores;
 
 import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.presentacion.InterfazBusqueda;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +17,7 @@ public class GestorAlojamiento {
     private final AlojadoDAO alojadoDAO;
 
     /*Inyeccion de dependencia*/
+    @Autowired
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }

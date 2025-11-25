@@ -1,4 +1,4 @@
-//import ddb.deso.TipoDoc;
+package ddb.deso;//import ddb.deso.TipoDoc;
 //import ddb.deso.alojamiento.*;
 //
 //import java.time.LocalDate;

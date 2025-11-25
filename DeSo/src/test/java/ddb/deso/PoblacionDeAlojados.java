@@ -1,19 +1,4 @@
-
-import ddb.deso.*;
-import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.DatosAlojado;
-import ddb.deso.alojamiento.DatosContacto;
-import ddb.deso.alojamiento.DatosPersonales;
-import ddb.deso.alojamiento.DatosResidencia;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.alojamiento.Invitado;
-import org.jetbrains.annotations.NotNull;
-
-import java.time.LocalDate;
-import java.util.*;
+package ddb.deso;
 
 /*
  Clase para prueba de clase {@link Alojado} y clases descendientes
@@ -22,7 +7,7 @@ import java.util.*;
  */
 public class PoblacionDeAlojados {}
 //
-//    public PoblacionDeAlojados() {
+//    public ddb.deso.PoblacionDeAlojados() {
 //    }
 //
 //    /**

@@ -1,4 +1,4 @@
-package ddb.deso.login.negocio.excepciones;
+package ddb.deso.login.excepciones;
 
 /**
  * Excepción que indica que la contraseña ingresada no coincide

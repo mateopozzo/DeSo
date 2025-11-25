@@ -5,6 +5,7 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.*;
+import ddb.deso.gestores.GestorAlojamiento;
 
 import java.util.List;
 import java.util.Scanner;

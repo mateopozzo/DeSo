@@ -1,16 +1,17 @@
-package ddb.deso.habitaciones;
+package ddb.deso.gestores;
 
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.habitaciones.Habitacion;
+import ddb.deso.habitaciones.Reserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class GestorHabitacion {
-    private final ReservaDAO reservaDAO;
+    private ReservaDAO reservaDAO;
     private HabitacionDAO habitacionDAO;
 
     @Autowired
@@ -23,14 +24,17 @@ public class GestorHabitacion {
         this.habitacionDAO = habitacionDAO;
     }
 
+    @Autowired
+    public void setReservaDAO(ReservaDAO reservaDAO) {this.reservaDAO = reservaDAO;}
+
     public void crearReserva(Reserva reserva, List<Long> listaIDHabitaciones) {
 
         for(var id : listaIDHabitaciones) {
-            try {
-                Habitacion habitacion = habitacionDAO.buscarPorNumero(id);
+            Habitacion habitacion = habitacionDAO.buscarPorNumero(id);
+            if(habitacion != null) {
                 reserva.agregarHabitacion(habitacion);
-            } catch (Exception e){
-                e.printStackTrace(); // TODO -> hacer excepcion especifica por si no encuentra una habitacao
+            } else {
+                throw new NullPointerException("Habitacion no encontrada");
             }
         }
 

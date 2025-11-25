@@ -23,7 +23,7 @@ public class DatosCheckIn {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idCheckIn;
 
-    @ManyToOne(fetch = FetchType.LAZY) // LAZY es buena práctica
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
             @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
@@ -40,13 +40,6 @@ public class DatosCheckIn {
 
     public void setId(long idCheckIn) {
         this.idCheckIn = idCheckIn;
-    }
-
-    public LocalDate getFecha_hora_in() {
-        return fecha_hora_in;
-    }
-    public void setFecha_hora_in(LocalDate fecha_hora_in_p) {
-        this.fecha_hora_in = fecha_hora_in_p;
     }
     
 }

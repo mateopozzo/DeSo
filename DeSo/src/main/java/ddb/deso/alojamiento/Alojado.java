@@ -23,7 +23,6 @@ public abstract class Alojado {
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
             @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
     })
-
     protected DatosAlojado datos;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

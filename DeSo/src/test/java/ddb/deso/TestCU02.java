@@ -1,7 +1,6 @@
-import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.CriteriosBusq;
+package ddb.deso;
 
-//import static ddb.deso.alojamiento.GestorAlojamiento.buscarHuesped;
+//import static ddb.deso.gestores.GestorAlojamiento.buscarHuesped;
 
 public class TestCU02 {}
 //    public static void main(String[] args) {

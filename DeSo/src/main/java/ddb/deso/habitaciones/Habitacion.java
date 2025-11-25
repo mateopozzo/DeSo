@@ -34,8 +34,7 @@ public class Habitacion {
     private float tarifa;
     private int capacidad;
 
-    public Habitacion(int nroHab, TipoHab tipo_hab, EstadoHab estado_hab, float tarifa, int capacidad) {
-        this.nroHab = nroHab;
+    public Habitacion(TipoHab tipo_hab, EstadoHab estado_hab, float tarifa, int capacidad) {
         this.tipo_hab = tipo_hab;
         this.estado_hab = estado_hab;
         this.tarifa = tarifa;

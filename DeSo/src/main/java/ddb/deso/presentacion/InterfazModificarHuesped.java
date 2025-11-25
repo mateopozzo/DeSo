@@ -1,6 +1,5 @@
 package ddb.deso.presentacion;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -9,7 +8,7 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.alojamiento.Validador;
 
 

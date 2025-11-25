@@ -14,7 +14,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>deso</name>
-    <description>Proyecto DeSo con SpringBoot - Discipulos de Bjarne</description>
+    <description>Proyecto ddb.deso.DeSo con SpringBoot - Discipulos de Bjarne</description>
     <url/>
     <licenses>
         <license/>
@@ -84,6 +84,11 @@
             <artifactId>jline</artifactId>
             <version>3.25.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,7 +97,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ddb.deso.DeSo</mainClass>
+                    <mainClass>ddb.deso.ddb.deso.DeSo</mainClass>
                 </configuration>
             </plugin>
         </plugins>

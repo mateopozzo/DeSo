@@ -1,16 +1,4 @@
-
-import java.time.LocalDate;
-import java.util.Scanner;
-
-import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.DatosAlojado;
-import ddb.deso.alojamiento.DatosContacto;
-import ddb.deso.alojamiento.DatosPersonales;
-import ddb.deso.alojamiento.DatosResidencia;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.presentacion.InterfazDarBaja;
-import ddb.deso.presentacion.InterfazModificarHuesped;
+package ddb.deso;
 
 public class TestCU10_CU11 {}
 

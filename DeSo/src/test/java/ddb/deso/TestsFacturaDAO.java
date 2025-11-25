@@ -1,9 +1,4 @@
-
-import ddb.deso.TipoFactura;
-import ddb.deso.almacenamiento.DTO.FacturaDTO;
-import ddb.deso.almacenamiento.JSON.FacturaDAOJSON;
-import ddb.deso.contabilidad.Factura;
-import java.util.Date;
+package ddb.deso;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,7 +12,7 @@ import java.util.Date;
 public class TestsFacturaDAO {}
 //
 //    public Factura f0,f1;
-//    public TestsFacturaDAO() {
+//    public ddb.deso.TestsFacturaDAO() {
 //        Date x = new Date("12/12/12");
 //        Date y = new Date("11/11/11");
 //        f0 = new Factura(x, 0, TipoFactura.C, (float)3234.4, (float)123.0, (float)1093.4, "Ramiro");

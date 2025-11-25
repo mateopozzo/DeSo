@@ -1,4 +1,4 @@
-package ddb.deso.login.negocio.excepciones;
+package ddb.deso.login.excepciones;
 
 /**
  * Excepción que indica que no existe un usuario con el nombre especificado.

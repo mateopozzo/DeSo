@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +28,6 @@ import java.util.List;
 @Entity
 @Table(name="reserva")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Reserva {
 
     //  Cambiar para que contenga nombre, apellido y telefono del que reserva
@@ -46,19 +47,23 @@ public class Reserva {
     @ManyToMany(fetch = FetchType.LAZY)
     List<Habitacion> listaHabitaciones;
 
-    public Reserva(LocalDate fecha_inicio, LocalDate fecha_fin, String estado) {
+    public Reserva(LocalDate fecha_inicio, LocalDate fecha_fin, String estado, String nombre, String apellido, String telefono) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.estado = estado;
-    }
-
-    public Reserva(LocalDate fecha_inicio, LocalDate fecha_fin){
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.listaHabitaciones = new ArrayList<>();
     }
 
     public void agregarHabitacion(Habitacion habitacion){
-        listaHabitaciones.add(habitacion);
+        try {
+            listaHabitaciones.add(habitacion);
+        } catch(NullPointerException e){
+            System.out.println("ERROR EN AGREGAR HABITACION, CLASE RESERVA");
+            e.printStackTrace();
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package ddb.deso.controller;
 
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.FactoryAlojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,7 @@ package ddb.deso.presentacion;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.gestores.GestorAlojamiento;
 
 import java.io.IOException;
 import java.util.Scanner;
