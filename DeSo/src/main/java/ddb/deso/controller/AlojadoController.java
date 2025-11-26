@@ -1,15 +1,14 @@
 package ddb.deso.controller;
 
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JPA.AlojadoDAOJPA;
 import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.repository.AlojadoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador REST para gestionar las operaciones de Huéspedes.
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  */
 @RestController
 @RequestMapping("/api/huesped")
-@CrossOrigin(origins = "http://localhost:63342")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;
@@ -38,7 +37,7 @@ public class AlojadoController {
      * @return El AlojadoDTO creado con un código 201 (Created).
      */
     @PostMapping
-    public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO) {
+    public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
         ddb.deso.alojamiento.Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
 
@@ -47,7 +46,16 @@ public class AlojadoController {
             return ResponseEntity.badRequest().build();
         }
 
-        gestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
+        if (!force) {
+            boolean existe_doc = gestorAlojamiento.dniExiste(
+                    nuevoAlojado.getDatos().getNroDoc(),
+                    nuevoAlojado.getDatos().getTipoDoc()
+            );
+
+            if(existe_doc) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
     }
