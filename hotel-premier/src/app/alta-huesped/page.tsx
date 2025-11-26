@@ -44,8 +44,33 @@ export default function AltaHuesped() {
     e.preventDefault();
     setError(null);
 
-    if (!formData.apellido || !formData.nombre || !formData.numeroDocumento) {
-      setError("Los campos obligatorios no pueden estar vacíos.");
+    const campos_ob = [
+      { key: "apellido", etiq: "apellido" },
+      { key: "nombre", etiq: "nombre" },
+      { key: "nacionalidad", etiq: "nacionalidad" },
+      { key: "fechaNacimiento", etiq: "fecha de nacimiento" },
+      { key: "tipo_documento", etiq: "tipo de doc." },
+      { key: "numeroDocumento", etiq: "nro. de doc." },
+      { key: "calle", etiq: "calle" },
+      { key: "numeroCalle", etiq: "nro. de calle" },
+      { key: "codPostal", etiq: "cód. postal" },
+      { key: "paisResidencia", etiq: "país" },
+      { key: "provincia", etiq: "provincia" },
+      { key: "localidad", etiq: "localidad" },
+      { key: "ocupacion", etiq: "ocupación" },
+      { key: "iva", etiq: "posición frente al IVA" },
+    ];
+
+    const campos_obligatorios = campos_ob.filter((campo) => {
+      // porque si no al typescript no le gusta
+      const valor = formData[campo.key as keyof typeof formData];
+      return !valor || valor.toString().trim() === "";
+    });
+
+    if (campos_obligatorios.length > 0) {
+      // junto todos los campos con un map donde hago join entre c/u y una coma
+      const lista = campos_obligatorios.map((c) => c.etiq).join(", ");
+      setError(`Los campos: ${lista} no pueden estar vacíos`);
       return;
     }
 
@@ -54,12 +79,12 @@ export default function AltaHuesped() {
       nombre: formData.nombre,
       nacionalidad: formData.nacionalidad,
       fechanac: formData.fechaNacimiento,
-      tipo_doc: formData.tipo_documento,
-      nro_doc: formData.numeroDocumento,
+      tipoDoc: formData.tipo_documento,
+      nroDoc: formData.numeroDocumento,
       telefono: formData.telefono,
       email: formData.email,
       calle: formData.calle,
-      nro_calle: formData.numeroCalle,
+      nroCalle: formData.numeroCalle,
       piso: formData.piso,
       codPost: formData.codPostal,
       pais: formData.paisResidencia,
@@ -72,7 +97,7 @@ export default function AltaHuesped() {
 
     // enviar post a back
     try {
-      const response = await fetch("http://localhost:8000/api/huesped", {
+      const response = await fetch("http://localhost:3000/api/huesped", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataDTO),
@@ -105,7 +130,7 @@ export default function AltaHuesped() {
 
       {/* INICIO DEL FORM */}
       {error && (
-        <div className="bg-[#b67c75] text-white p-2 mb-5 rounded font-semibold">
+        <div className="bg-[#914d45] text-white p-2 mb-4 rounded font-semibold">
           {error}
         </div>
       )}
@@ -285,32 +310,33 @@ export default function AltaHuesped() {
             <option value="Monotributista">Excento</option>
           </select>
         </div>
+        {/* INICIO DE BOTONES */}
+        <div className="flex flex-col lg:flex-row  justify-center gap-4 pt-5 col-span-4">
+          <button
+            type="button"
+            onClick={() => setFormData(form_limpio)}
+            className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#ca695e] text-white hover:bg-[#b92716]"
+          >
+            Reiniciar
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655]"
+          >
+            Siguiente
+          </button>
+        </div>
+        {/* FIN DE BOTONES */}
+
         {/* FIN DEL FORM */}
       </form>
-      {/* INICIO DE BOTONES */}
-      <div className="flex flex-col lg:flex-row  justify-center gap-4 mt-12 pt-5">
-        <button
-          type="button"
-          onClick={() => setFormData(form_limpio)}
-          className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#ca695e] text-white hover:bg-[#b92716]"
-        >
-          Reiniciar
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655]"
-        >
-          Siguiente
-        </button>
-      </div>
-      {/* FIN DE BOTONES */}
     </div>
   );
 }
