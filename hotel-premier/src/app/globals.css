@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 245, 247, 250;
+  --background-end-rgb: 245, 247, 250;
+}
+
+@layer base {
+  html {
+    font-family: "Stack Sans Text", system-ui, sans-serif;
+  }
+}
