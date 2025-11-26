@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import ddb.deso.habitaciones.Habitacion;
@@ -48,10 +49,10 @@ public class Estadia {
     @OneToOne(fetch = FetchType.LAZY)
     DatosCheckOut datosCheckOut;
 
-    private Date fecha_inicio;
-    private Date fecha_fin;
+    private LocalDate fecha_inicio;
+    private LocalDate fecha_fin;
 
-    public Estadia(Date fecha_inicio, Date fecha_fin) {
+    public Estadia(LocalDate fecha_inicio, LocalDate fecha_fin) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
     }

@@ -2,7 +2,7 @@ package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
 import org.springframework.stereotype.Repository;
@@ -39,7 +39,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public void crearAlojado(AlojadoDTO alojado) {
+    public void crearAlojado(Alojado alojado) {
         Alojado entidad = FactoryAlojado.createFromDTO(alojado);
 
         // 2. Persiste la entidad usando el repositorio
@@ -49,7 +49,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo) {
+    public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
         // 1. Convierte el DTO con los *nuevos datos* a una entidad
         Alojado entidadModificada = FactoryAlojado.createFromDTO(alojadoNuevo);
 
@@ -62,7 +62,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public void eliminarAlojado(AlojadoDTO alojado) {
+    public void eliminarAlojado(Alojado alojado) {
         // Es más eficiente construir el ID y usar deleteById
         if (alojado != null && alojado.getTipoDoc() != null && alojado.getNroDoc() != null) {
             AlojadoID id = new AlojadoID(alojado.getNroDoc(), alojado.getTipoDoc());
@@ -75,19 +75,19 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public List<AlojadoDTO> listarAlojados() {
+    public List<Alojado> listarAlojados() {
         // 1. Obtiene todas las entidades de la BD
         List<Alojado> entidades = alojadoRepository.findAll();
 
         // 2. Convierte la lista de Entidades a una lista de DTOs
         //    (Esto asume que AlojadoDTO tiene un constructor que acepta Alojado)
         return entidades.stream()
-                .map(AlojadoDTO::new)
+                .map(Alojado::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo) {
+    public Alojado buscarPorDNI(String documento, TipoDoc tipo) {
         if (documento == null || tipo == null) return null;
 
         // 1. Construye el ID compuesto
@@ -99,16 +99,16 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         // 3. Mapea el Optional:
         //    - Si la entidad está presente, la convierte a DTO.
         //    - Si no, devuelve null.
-        return entidadOptional.map(AlojadoDTO::new)
+        return entidadOptional.map(Alojado::new)
                 .orElse(null);
     }
 
     @Override
-    public List<AlojadoDTO> buscarHuespedDAO(CriteriosBusq criterios) {
+    public List<Alojado> buscarHuespedDAO(CriteriosBusq criterios) {
 
         // --- Optimización: Si los criterios incluyen el ID completo, usar la búsqueda por ID ---
         if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank() && criterios.getTipoDoc() != null) {
-            AlojadoDTO dto = this.buscarPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+            Alojado dto = this.buscarPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
             return (dto != null) ? List.of(dto) : List.of(); // Devuelve lista con 1 o 0 elementos
         }
 
@@ -149,7 +149,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
         // 2. Convierte los resultados a DTO
         return entidades.stream()
-                .map(AlojadoDTO::new)
+                .map(Alojado::new)
                 .collect(Collectors.toList());
     }
 }
