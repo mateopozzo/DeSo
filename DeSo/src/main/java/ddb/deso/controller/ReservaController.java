@@ -1,5 +1,6 @@
 package ddb.deso.controller;
 
+import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Reserva;
@@ -7,10 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reserva")
 @CrossOrigin("localhost:63342")
 public class ReservaController {
     private final GestorHabitacion gestorHabitacion;
@@ -24,11 +25,8 @@ public class ReservaController {
         List<Long> listaIDHabitaciones;
     }
 
-    @PostMapping
+    @PostMapping("/api/reserva")
     public ResponseEntity<ReservaDTO> crearReserva (@RequestBody EstructuraPost estructura) {
-
-        /*  La idea es que despues el gestor busque en la base segun los ids de las habitaciones
-            que el conserje elige   */
 
         ReservaDTO reservaDTO = estructura.reservaDTO;
         List<Long> listaIDHabitaciones  = estructura.listaIDHabitaciones;
@@ -37,11 +35,21 @@ public class ReservaController {
             return ResponseEntity.badRequest().build();
         }
 
-        Reserva reserva = new Reserva(reservaDTO.getFecha_inicio(), reservaDTO.getFecha_fin(), "Reservado", reservaDTO.getNombre(), reservaDTO.getApellido(), reservaDTO.getTelefono());
+        Reserva reserva = new Reserva(
+                reservaDTO.getFecha_inicio(),
+                reservaDTO.getFecha_fin(),
+                "Reservado",
+                reservaDTO.getNombre(),
+                reservaDTO.getApellido(),
+                reservaDTO.getTelefono()
+        );
 
         gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
-
     }
+
+
+
+
 }

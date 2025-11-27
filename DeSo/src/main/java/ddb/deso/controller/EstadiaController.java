@@ -1,6 +1,7 @@
 package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.CrearEstadiaDTO;
+import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/estadia")
 @CrossOrigin(origins = "http://localhost:63342")
 public class EstadiaController {
 
@@ -18,7 +20,7 @@ public class EstadiaController {
     @Autowired
     public EstadiaController(GestorHabitacion gestorHabitacion) {this.gestorHabitacion = gestorHabitacion;}
 
-    @PostMapping
+    @PostMapping("/api/ocupar-habitacion")
     public ResponseEntity<CrearEstadiaDTO> crearEstadia(@RequestBody CrearEstadiaDTO estadiaDTO) {
 
         if(     estadiaDTO == null ||
@@ -31,9 +33,17 @@ public class EstadiaController {
             return ResponseEntity.badRequest().body(null);
         }
 
-        gestorHabitacion.ocuparHabitacion(estadiaDTO.getIdHabitacion(), estadiaDTO.getEncargado(), estadiaDTO.getListaInvitados(), estadiaDTO.getFechaInicio(), estadiaDTO.getFechaFin());
+        gestorHabitacion.ocuparHabitacion(
+                estadiaDTO.getIdHabitacion(),
+                estadiaDTO.getEncargado(), estadiaDTO.getListaInvitados(),
+                estadiaDTO.getFechaInicio(),
+                estadiaDTO.getFechaFin()
+        );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(estadiaDTO);
 
     }
+
+
+
 }

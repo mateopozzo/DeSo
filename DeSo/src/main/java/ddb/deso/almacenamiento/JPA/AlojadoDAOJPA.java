@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +95,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         // Esto crea una consulta SQL dinámica (WHERE ... AND ... AND ...)
         Specification<Alojado> spec = (root, query, cb) -> {
 
-            // Necesitamos hacer "JOIN" en la consulta para acceder a las tablas anidadas
+            // "JOIN" en la consulta para acceder a las tablas anidadas
             // Alojado -> DatosAlojado
             Join<Alojado, DatosAlojado> datosAlojado = root.join("datos");
             // DatosAlojado -> DatosPersonales
@@ -104,10 +105,10 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
             // Añadir predicados (condiciones WHERE) solo si el criterio no es nulo/vacío
             if (criterios.getApellido() != null && !criterios.getApellido().isBlank()) {
-                predicates.add(cb.like(cb.lower(datosPersonales.get("apellido")), "%" + criterios.getApellido().toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(datosPersonales.get("apellido")), "%" + normalizar(criterios.getApellido().toLowerCase()) + "%"));
             }
             if (criterios.getNombre() != null && !criterios.getNombre().isBlank()) {
-                predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), "%" + criterios.getNombre().toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), "%" + normalizar(criterios.getNombre().toLowerCase() + "%")));
             }
 
             // Los campos de ID están en la entidad DatosAlojado (en el EmbeddedId idAlojado)
@@ -127,4 +128,21 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         // 2. Convierte los resultados a DTO
         return alojadoRepository.findAll(spec);
     }
+
+    /**
+     @param cadena: String que necesito normalizar
+     @return una cadena normalizada sin tildes
+
+     FUENTE: https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu
+     */
+
+    private String normalizar (String cadena){
+        return Normalizer.normalize(cadena, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    private boolean no_es_vacio (String contenido){
+        boolean flag = (contenido==null || contenido.isEmpty());
+        return !flag;
+    }
+
 }

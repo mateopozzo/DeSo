@@ -60,8 +60,8 @@ public class DatosAlojado {
         this.datos_residencia = residencia;
         this.datos_personales = personales;
         if(datos_personales!=null) {
+            idAlojado = new AlojadoID(personales.getNroDoc(), personales.getTipoDoc());
             this.datos_personales.setAlojadoOwner(this);
-            idAlojado = new AlojadoID();
         }
     }
 

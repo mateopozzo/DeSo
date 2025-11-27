@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "start-backend": "java -jar ..target/deso-0.0.1-SNAPSHOT.jar",
+    "full-stack-dev": "concurrently \"npm run dev\" \"npm run start-backend\""
   },
   "dependencies": {
     "next": "16.0.4",
@@ -19,6 +21,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "concurrently": "^9.2.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5"
   }
