@@ -8,12 +8,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
 /**
  * Clase que encapsula los datos relacionados con el proceso de **Check-Out** (Salida).
  * Almacena la fecha y hora de la salida y el identificador único del proceso.
  */
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "check_out")
@@ -48,5 +51,17 @@ public class DatosCheckOut {
 
     public void setFecha_hora_iout(LocalDate fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        DatosCheckOut that = (DatosCheckOut) o;
+        return idCheckOut == that.idCheckOut;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idCheckOut);
     }
 }

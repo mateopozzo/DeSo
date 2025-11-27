@@ -5,15 +5,13 @@
 package ddb.deso.habitaciones;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -24,19 +22,17 @@ import java.util.List;
  * </p>
  */
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="reserva")
 @NoArgsConstructor
 public class Reserva {
-
     //  Cambiar para que contenga nombre, apellido y telefono del que reserva
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idReserva;
 
-    @Getter
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
     private String estado;
@@ -66,4 +62,16 @@ public class Reserva {
         }
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Reserva reserva = (Reserva) o;
+        return idReserva == reserva.idReserva;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idReserva);
+    }
 }

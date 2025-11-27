@@ -5,9 +5,14 @@ import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
 import jakarta.persistence.*;
 import java.util.List;
-import lombok.Data;
+import java.util.Objects;
 
-@Data
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "alojado")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -35,4 +40,16 @@ public abstract class Alojado {
         return this.getDatos().getEdad() >= 18;
     }
     public abstract void completarDTO(AlojadoDTO dto);
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Alojado alojado = (Alojado) o;
+        return Objects.equals(id, alojado.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

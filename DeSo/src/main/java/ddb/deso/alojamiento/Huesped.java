@@ -4,19 +4,11 @@
  */
 package ddb.deso.alojamiento;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -24,7 +16,7 @@ import lombok.NoArgsConstructor;
  * Representa a un **huésped principal** que puede tener datos comerciales,
  * como la razón social, lo cual es relevante para la facturación.
  * <p>
- * Extiende la clase {@link Alojado} y añade funcionalidad específica para
+ * Extiende la clase {@link ddb.deso.alojamiento.Alojado} y añade funcionalidad específica para
  * el tratamiento de huéspedes principales, como la inclusión de razón social
  * en el DTO.
  * </p>
@@ -33,8 +25,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("HUESPED")
-public class Huesped extends Alojado{
+@DiscriminatorValue("Huesped")
+public class Huesped extends ddb.deso.alojamiento.Alojado {
 
     private String razon_social;
 

@@ -4,18 +4,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ddb.deso.almacenamiento.DAO.*;
+import ddb.deso.alojamiento.*;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ddb.deso.alojamiento.DatosCheckIn;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.alojamiento.Invitado;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.habitaciones.Reserva;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class GestorHabitacion {
 
     private ReservaDAO reservaDAO;
@@ -70,26 +70,29 @@ public class GestorHabitacion {
     }
 
 
-    public void ocuparHabitacion(List<Habitacion> habitaciones, Huesped huesped, List<Invitado> invitados, LocalDate fechaInicio, LocalDate fechaFin ) {
+    public void ocuparHabitacion(Long IDHabitacion, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
+
+        Huesped huesped = (Huesped) alojadoDAO.buscarHuespedDAO(criteriosHuesped).getFirst();
+        List<Alojado> alojados = criteriosinvitados.stream()
+                .map(criteriosBusq -> alojadoDAO.buscarHuespedDAO(criteriosBusq).getFirst())
+                .toList();
+        Habitacion habitacion = habitacionDAO.buscarPorNumero(IDHabitacion);
+
         DatosCheckIn checkIn = new DatosCheckIn(fechaInicio);
         checkIn.setAlojado(huesped.getDatos());
-        checkInDAO.crearDatosCheckIn(checkIn);
-
         huesped.getDatos().nuevoCheckIn(checkIn);
-        alojadoDAO.crearAlojado(huesped);
-        for(var id : invitados) {
+        checkInDAO.crearDatosCheckIn(checkIn);
+//        alojadoDAO.crearAlojado(huesped);     spring actualiza solo
+        for(var id : alojados) {
             id.getDatos().nuevoCheckIn(checkIn);
-            alojadoDAO.crearAlojado(id);
+//            alojadoDAO.crearAlojado(id);
         }
 
         Estadia estadia = new Estadia();
         estadia.setFecha_inicio(fechaInicio);
         estadia.setFecha_fin(fechaFin);
         estadia.setDatosCheckIn(checkIn);
-        estadia.setListaHabitaciones(habitaciones);
+        estadia.setHabitacion(habitacion);
         estadiaDAO.crear(estadia);
-
-
-
     }
 }

@@ -9,6 +9,7 @@ import ddb.deso.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 public class TestCU04 {
 
     @Autowired
@@ -32,8 +33,7 @@ public class TestCU04 {
      * Test de GestorHabitacion -> crear reserva()
      * Prueba una Reserva valida
      */
-    @Test
-    public void pruebaCrearReserva() {
+    @Test public void pruebaCrearReserva() {
         var rese = crearReservaValida();
         List<Long> habs = new ArrayList<>() ;
         habs.add(101L);
@@ -62,8 +62,6 @@ public class TestCU04 {
             gestorHabitacion.crearReserva(rese, habs);
         } );
     }
-
-
 
     public static Reserva crearReservaValida() {
         LocalDate fecha_inicio = LocalDate.parse("2025-11-01");

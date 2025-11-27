@@ -40,33 +40,23 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
     @Override
     public void crearAlojado(Alojado alojado) {
-        Alojado entidad = FactoryAlojado.createFromDTO(alojado);
-
-        // 2. Persiste la entidad usando el repositorio
-        if (entidad != null) {
-            alojadoRepository.save(entidad);
+        if (alojado != null) {
+            alojadoRepository.save(alojado);
         }
     }
 
     @Override
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
-        // 1. Convierte el DTO con los *nuevos datos* a una entidad
-        Alojado entidadModificada = FactoryAlojado.createFromDTO(alojadoNuevo);
-
-        // 2. save() de JPA actúa como un "merge":
-        // Si la entidad tiene un ID que ya existe, la actualiza.
-        // Si no, la inserta. (Asumimos que siempre tendrá ID)
-        if (entidadModificada != null && entidadModificada.getDatos().getIdAlojado() != null) {
-            alojadoRepository.save(entidadModificada);
+        if (alojadoPrev != null && alojadoPrev.getDatos().getIdAlojado() != null) {
+            alojadoRepository.save(alojadoPrev);
         }
     }
 
     @Override
     public void eliminarAlojado(Alojado alojado) {
         // Es más eficiente construir el ID y usar deleteById
-        if (alojado != null && alojado.getTipoDoc() != null && alojado.getNroDoc() != null) {
-            AlojadoID id = new AlojadoID(alojado.getNroDoc(), alojado.getTipoDoc());
-
+        if (alojado != null && alojado.getDatos().getTipoDoc() != null && alojado.getDatos().getNroDoc() != null) {
+            AlojadoID id = new AlojadoID(alojado.getDatos().getNroDoc(), alojado.getDatos().getTipoDoc());
             // Solo intenta borrar si existe, para evitar excepciones
             if (alojadoRepository.existsById(id)) {
                 alojadoRepository.deleteById(id);
@@ -77,39 +67,27 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     @Override
     public List<Alojado> listarAlojados() {
         // 1. Obtiene todas las entidades de la BD
-        List<Alojado> entidades = alojadoRepository.findAll();
-
-        // 2. Convierte la lista de Entidades a una lista de DTOs
-        //    (Esto asume que AlojadoDTO tiene un constructor que acepta Alojado)
-        return entidades.stream()
-                .map(Alojado::new)
-                .collect(Collectors.toList());
+        return alojadoRepository.findAll();
     }
 
     @Override
     public Alojado buscarPorDNI(String documento, TipoDoc tipo) {
         if (documento == null || tipo == null) return null;
 
-        // 1. Construye el ID compuesto
         AlojadoID id = new AlojadoID(documento, tipo);
 
-        // 2. Busca por ID. Devuelve un Optional<Alojado>
         Optional<Alojado> entidadOptional = alojadoRepository.findById(id);
 
-        // 3. Mapea el Optional:
-        //    - Si la entidad está presente, la convierte a DTO.
-        //    - Si no, devuelve null.
-        return entidadOptional.map(Alojado::new)
-                .orElse(null);
+        return entidadOptional.orElse(null);
     }
 
     @Override
     public List<Alojado> buscarHuespedDAO(CriteriosBusq criterios) {
 
-        // --- Optimización: Si los criterios incluyen el ID completo, usar la búsqueda por ID ---
+        // Si el Documento esta entero se aprovecha
         if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank() && criterios.getTipoDoc() != null) {
-            Alojado dto = this.buscarPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
-            return (dto != null) ? List.of(dto) : List.of(); // Devuelve lista con 1 o 0 elementos
+            Alojado alojado = this.buscarPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+            return (alojado != null) ? List.of(alojado) : List.of(); // Devuelve lista con 1 o 0 elementos
         }
 
         // --- Búsqueda dinámica con JPA Specifications ---
@@ -145,11 +123,8 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         };
         // 1. Ejecuta la búsqueda con la especificación dinámica
         //    (Requiere que AlojadoRepository extienda JpaSpecificationExecutor)
-        List<Alojado> entidades = alojadoRepository.findAll(spec);
 
         // 2. Convierte los resultados a DTO
-        return entidades.stream()
-                .map(Alojado::new)
-                .collect(Collectors.toList());
+        return alojadoRepository.findAll(spec);
     }
 }

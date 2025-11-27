@@ -5,6 +5,8 @@
 package ddb.deso.alojamiento;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
 import lombok.*;
 import jakarta.persistence.*;
 
@@ -13,7 +15,8 @@ import jakarta.persistence.*;
  * Almacena la fecha y hora de la entrada y el identificador único del proceso.
  */
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "check_in")
@@ -41,5 +44,16 @@ public class DatosCheckIn {
     public void setId(long idCheckIn) {
         this.idCheckIn = idCheckIn;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        DatosCheckIn that = (DatosCheckIn) o;
+        return idCheckIn == that.idCheckIn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idCheckIn);
+    }
 }

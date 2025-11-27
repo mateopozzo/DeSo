@@ -8,7 +8,11 @@ import ddb.deso.TipoHab;
 import ddb.deso.EstadoHab;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
 
 
 /**
@@ -21,7 +25,8 @@ import lombok.NoArgsConstructor;
  * @see ddb.deso.TipoHab
  * @see ddb.deso.EstadoHab
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="habitacion")
 @NoArgsConstructor
@@ -80,5 +85,16 @@ public class Habitacion {
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Habitacion that = (Habitacion) o;
+        return Objects.equals(nroHab, that.nroHab);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(nroHab);
+    }
 }

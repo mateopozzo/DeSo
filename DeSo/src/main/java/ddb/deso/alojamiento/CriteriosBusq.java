@@ -1,5 +1,8 @@
 package ddb.deso.alojamiento;
 import ddb.deso.TipoDoc;
+
+import java.util.Objects;
+
 /**
  * Clase que encapsula los **criterios de búsqueda** para identificar a una
  * persona alojada, incluyendo datos personales básicos.
@@ -68,6 +71,18 @@ public class CriteriosBusq {
 
     public void setNroDoc(String nroDoc) {
         this.nroDoc = nroDoc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CriteriosBusq that = (CriteriosBusq) o;
+        return tipoDoc == that.tipoDoc && Objects.equals(nroDoc, that.nroDoc);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tipoDoc, nroDoc);
     }
 
     private boolean no_es_vacio (String contenido){

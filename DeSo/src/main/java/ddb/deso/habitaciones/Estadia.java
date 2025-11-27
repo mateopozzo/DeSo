@@ -9,13 +9,17 @@ import ddb.deso.alojamiento.DatosCheckIn;
 import ddb.deso.alojamiento.DatosCheckOut;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 import ddb.deso.habitaciones.Habitacion;
+import lombok.Setter;
 
 
 /**
@@ -30,16 +34,17 @@ import ddb.deso.habitaciones.Habitacion;
 
 @Entity
 @Table(name="estadia")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Estadia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
-    long idReserva;
+    long idEstadia;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    List<Habitacion> listaHabitaciones;
+    @ManyToOne(fetch = FetchType.LAZY)
+    Habitacion habitacion;
 
     @ManyToMany(fetch = FetchType.LAZY)
     List<Servicio> listaServicios;
@@ -56,6 +61,16 @@ public class Estadia {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
     }
-    
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Estadia estadia = (Estadia) o;
+        return idEstadia == estadia.idEstadia;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idEstadia);
+    }
 }

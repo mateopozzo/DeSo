@@ -2,15 +2,15 @@ package ddb.deso.alojamiento;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ddb.deso.TipoDoc;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.management.BadAttributeValueExpException;
-
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "datos_alojado")
 public class DatosAlojado {
 
@@ -63,12 +63,16 @@ public class DatosAlojado {
             this.datos_personales.setAlojadoOwner(this);
             idAlojado = new AlojadoID();
         }
-
     }
 
     @PostLoad
     private void wireOwnerAfterLoad() {
-        if (this.datos_personales != null) {
+        if (this.datos_personales != null &&
+                this.idAlojado != null &&
+                this.idAlojado.getNroDoc() != null &&
+                !this.idAlojado.getNroDoc().isEmpty() &&
+                this.idAlojado.getTipoDoc() != null
+        ) {
             this.datos_personales.setAlojadoOwner(this);
         }
     }
@@ -92,10 +96,12 @@ public class DatosAlojado {
     }
 
     public void nuevoCheckIn(DatosCheckIn check_in) {
+        if(checkIns==null)checkIns=new ArrayList<>();
         checkIns.add(check_in);
     }
 
     public void nuevoCheckOut(DatosCheckOut check_out) {
+        if(checkOuts==null)checkOuts=new ArrayList<>();
         checkOuts.add(check_out);
     }
 
@@ -107,4 +113,15 @@ public class DatosAlojado {
         return this.datos_personales.getEdad();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        DatosAlojado that = (DatosAlojado) o;
+        return Objects.equals(idAlojado, that.idAlojado);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idAlojado);
+    }
 }

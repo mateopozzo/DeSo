@@ -1,6 +1,5 @@
 package ddb.deso.controller;
 
-import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
@@ -41,7 +40,7 @@ public class AlojadoController {
     @PostMapping
     public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO) {
 
-        Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
+        ddb.deso.alojamiento.Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
 
         if (nuevoAlojado == null) {
             // No pudo crear=>Devuelve 400 Bad Request

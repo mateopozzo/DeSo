@@ -1,5 +1,6 @@
 package ddb.deso.gestores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
@@ -27,7 +28,7 @@ public class GestorAlojamiento {
             return false;
         }
         CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
-        List<AlojadoDTO> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
         return encontrados != null && !encontrados.isEmpty();
     }
 
@@ -47,14 +48,19 @@ public class GestorAlojamiento {
         */
 
         InterfazBusqueda ui = new InterfazBusqueda();
-        List<AlojadoDTO> encontrados;
-
+        List<Alojado> encontrados;
         encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+
+        List<AlojadoDTO> encontradosDTO = new ArrayList<AlojadoDTO>();
+        for(var a : encontrados){
+            AlojadoDTO adto = new AlojadoDTO(a);
+            encontradosDTO.add(adto);
+        }
 
         if (encontrados == null || encontrados.isEmpty()) {
             ui.sin_coincidencias();
         } else {
-            ui.seleccion(encontrados);
+            ui.seleccion(encontradosDTO);
         }
     }
 
@@ -66,25 +72,21 @@ public class GestorAlojamiento {
      * convertir ambos objetos de dominio a sus respectivos DTO (Data Transfer Objects)
      * y luego invoca al DAO ({@link AlojadoDAO}) para que persista la actualización.
      *
-     * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
+     * @param alojadoOriginal El objeto {@link ddb.deso.alojamiento.Alojado} con los datos tal como se encontraban
      * antes de la modificación.
-     * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
+     * @param alojadoModificado El objeto {@link ddb.deso.alojamiento.Alojado} que contiene los nuevos datos
      * a guardar en el sistema.
      */
 
-    public void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
+    public void modificarHuesped(ddb.deso.alojamiento.Alojado alojadoOriginal, ddb.deso.alojamiento.Alojado alojadoModificado) {
         System.out.println("Modificando huésped...");
-        AlojadoDTO datosOriginalesDTO = new AlojadoDTO(alojadoOriginal);
-        AlojadoDTO datosModificadosDTO = new AlojadoDTO(alojadoModificado);
         // Usa el campo 'alojadoDAO' inyectado
-        alojadoDAO.actualizarAlojado(datosOriginalesDTO, datosModificadosDTO);
+        alojadoDAO.actualizarAlojado(alojadoOriginal, alojadoModificado);
     }
 
 
     public void darDeAltaHuesped(Alojado alojadoNuevo){
-        // AlojadoDAO aDao=new AlojadoDAOJSON();
-        AlojadoDTO aDTO=new AlojadoDTO(alojadoNuevo);
-        alojadoDAO.crearAlojado(aDTO);
+        alojadoDAO.crearAlojado(alojadoNuevo);
     }
 
     /**
@@ -102,20 +104,20 @@ public class GestorAlojamiento {
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
         // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
-        List<AlojadoDTO> listaDTO = alojadoDAO.buscarHuespedDAO(criterios);
+        List<Alojado> listaAlojados = alojadoDAO.buscarHuespedDAO(criterios);
 
-        if (listaDTO == null || listaDTO.isEmpty()) {
+        if (listaAlojados == null || listaAlojados.isEmpty()) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
 
-        AlojadoDTO huespedBaja = listaDTO.getFirst();
+        Alojado huespedBaja = listaAlojados.getFirst();
 
         if (huespedBaja == null) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
 
-        boolean tieneCheckIns = huespedBaja.getId_check_in() != null && !huespedBaja.getId_check_in().isEmpty();
-        boolean tieneCheckOuts = huespedBaja.getId_check_out() != null && !huespedBaja.getId_check_out().isEmpty();
+        boolean tieneCheckIns = huespedBaja.getDatos().getCheckIns() != null && !huespedBaja.getDatos().getCheckIns().isEmpty();
+        boolean tieneCheckOuts = huespedBaja.getDatos().getCheckOuts() != null && !huespedBaja.getDatos().getCheckOuts().isEmpty();
 
         if (tieneCheckIns || tieneCheckOuts) {
             return ResumenHistorialHuesped.SE_ALOJO;
@@ -131,10 +133,9 @@ public class GestorAlojamiento {
      @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
      */
 
-    public void eliminarAlojado(Alojado alojado) {
+    public void eliminarAlojado(ddb.deso.alojamiento.Alojado alojado) {
         // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
-        AlojadoDTO eliminar = new AlojadoDTO(alojado);
-        alojadoDAO.eliminarAlojado(eliminar);
+        alojadoDAO.eliminarAlojado(alojado);
     }
 
     // Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
@@ -157,7 +158,7 @@ public class GestorAlojamiento {
      @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
 
-    public ResumenHistorialHuesped historialHuesped(Alojado alojado){
+    public ResumenHistorialHuesped historialHuesped(ddb.deso.alojamiento.Alojado alojado){
         var nombre = alojado.getDatos().getDatos_personales().getNombre();
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
         var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
@@ -192,17 +193,16 @@ public class GestorAlojamiento {
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
      */
 
-    public Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
+    public ddb.deso.alojamiento.Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;
         }
         CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
-        List<AlojadoDTO> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
-        AlojadoDTO encontradoDTO = encontrados.stream()
+        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        Alojado encontrado = encontrados.stream()
                 .findFirst()
                 .orElse(null);
-        if(encontradoDTO == null) return null;
-        return FactoryAlojado.createFromDTO(encontradoDTO);
+        return encontrado;
     }
 }
 

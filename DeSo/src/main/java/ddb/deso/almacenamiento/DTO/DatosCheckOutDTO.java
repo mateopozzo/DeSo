@@ -19,7 +19,7 @@ public class DatosCheckOutDTO {
      */
     public DatosCheckOutDTO(DatosCheckOut obj) {
         fecha_hora_out=obj.getFecha_hora_out();
-        idCheckOut= obj.getId();
+        idCheckOut= obj.getIdCheckOut();
     }
 
     /*  Getters y setters   */

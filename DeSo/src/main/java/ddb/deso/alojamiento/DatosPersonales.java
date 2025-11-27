@@ -18,6 +18,8 @@ import lombok.*;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class DatosPersonales {
     private String nombre;
     private String apellido;
@@ -49,48 +51,12 @@ public class DatosPersonales {
         alojadoOwner=null;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public String getApellido() {
-        return apellido;
-    }
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
-    }
-    public String getPosicionIva() {
-        return posicionIva;
-    }
-    public void setPosicionIva(String posicionIva) {
-        this.posicionIva = posicionIva;
-    }
-    public String getOcupacion() {
-        return ocupacion;
-    }
-    public void setOcupacion(String ocupacion) {
-        this.ocupacion = ocupacion;
-    }
-    public String getCUIT() {
-        return CUIT;
-    }
-    public void setCUIT(String CUIT) {
-        this.CUIT = CUIT;
-    }
+
     public void setAlojadoOwner(DatosAlojado owner) {
         this.alojadoOwner = owner;
-        AlojadoID idAlojado = new AlojadoID(nroDoc, tipoDoc);
-        owner.setIdAlojado(idAlojado);
-        owner.setNroDoc(nroDoc);
-        owner.setTipoDoc(tipoDoc);
+        AlojadoID idAlojado = new AlojadoID(owner.getNroDoc(), owner.getTipoDoc());
+        this.setNroDoc(idAlojado.getNroDoc());
+        this.setTipoDoc(owner.getTipoDoc());
     }
 
     public String getNroDoc() {
