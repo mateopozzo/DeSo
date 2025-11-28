@@ -2,6 +2,7 @@ package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.CrearEstadiaDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
+import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:63342")
 public class EstadiaController {
+    private final GestorHabitacion gestorHabitacion;
 
-
+    public EstadiaController(GestorHabitacion gestorHabitacion) {
+        this.gestorHabitacion = gestorHabitacion;
+    }
 
     @PostMapping("/api/ocupar-habitacion")
     public ResponseEntity<CrearEstadiaDTO> crearEstadia(@RequestBody CrearEstadiaDTO estadiaDTO) {
@@ -29,6 +33,7 @@ public class EstadiaController {
         ) {
             return ResponseEntity.badRequest().body(null);
         }
+
 
         gestorHabitacion.ocuparHabitacion(
                 estadiaDTO.getIdHabitacion(),

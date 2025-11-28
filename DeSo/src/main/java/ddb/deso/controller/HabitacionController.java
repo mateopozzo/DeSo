@@ -10,6 +10,7 @@ import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class HabitacionController {
 
     @Autowired
@@ -29,7 +31,7 @@ public class HabitacionController {
     public HabitacionController(GestorHabitacion gestorHabitacion) {this.gestorHabitacion = gestorHabitacion;}
 
     /**
-     * DTO destinado a la comunacion de reservas y estadias en su rango de fecha
+     * DTO destinado a la comunicación de reservas y estadias en su rango de fecha
      */
     @AllArgsConstructor
     public class DisponibilidadDTO {
@@ -99,6 +101,7 @@ public class HabitacionController {
 
     }
 
+    /*
     @GetMapping("/api/habitaciones-disponibilidad")
     public ResponseEntity<List<DisponibilidadDTO>> disponibilidadHabitaciones() {
 
@@ -120,5 +123,5 @@ public class HabitacionController {
         return ResponseEntity.ok(listaDisponibilidades);
 
     }
-
+    */
 }

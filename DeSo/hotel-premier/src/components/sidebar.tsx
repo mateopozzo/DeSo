@@ -20,7 +20,7 @@ const MENU_ITEMS: opciones[] = [
     alt: "Habitaciones",
     width: 40,
     options: [
-      { label: "Dar de alta huésped", href: "/alta-huesped" },
+      { label: "Dar alta de huésped", href: "/alta-huesped" },
       { label: "Ocupar habitación", href: "/ocupar-hab" },
     ],
   },

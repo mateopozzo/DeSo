@@ -94,7 +94,7 @@ export default function hamburguesa({ isOpen, onClose }: HamburguesaProps) {
             <MenuLink
               href="/alta-huesped"
               icon="/hab.svg"
-              label="Dar de alta huésped"
+              label="Dar alta de huésped"
               desc="Registra un nuevo huésped en el sistema"
               onClose={onClose}
             />
