@@ -7,6 +7,7 @@ import ddb.deso.almacenamiento.DAO.*;
 import ddb.deso.alojamiento.*;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
@@ -40,16 +41,49 @@ public class GestorHabitacion {
     }
 
     @Autowired
-    public void setReservaDAO(ReservaDAO reservaDAO) {this.reservaDAO = reservaDAO;}
+    public void setReservaDAO(ReservaDAO reservaDAO) {
+        this.reservaDAO = reservaDAO;
+    }
 
     @Autowired
-    public void setEstadiaDao(EstadiaDAO estadiaDAO) {this.estadiaDAO = estadiaDAO;}
+    public void setEstadiaDao(EstadiaDAO estadiaDAO) {
+        this.estadiaDAO = estadiaDAO;
+    }
 
     @Autowired
-    public void setAlojadoDAO(AlojadoDAO alojadoDAO) {this.alojadoDAO = alojadoDAO;}
+    public void setAlojadoDAO(AlojadoDAO alojadoDAO) {
+        this.alojadoDAO = alojadoDAO;
+    }
 
     @Autowired
-    public void setCheckInDAO(DatosCheckInDAO checkInDAO) {this.checkInDAO = checkInDAO;}
+    public void setCheckInDAO(DatosCheckInDAO checkInDAO) {
+        this.checkInDAO = checkInDAO;
+    }
+
+
+    public List<Reserva> listarReservas() {
+
+        return reservaDAO.listar();
+
+    }
+
+    public List<Reserva> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
+
+        return reservaDAO.listarPorFecha(fechaInicio, fechaFin);
+
+    }
+
+    public List<Estadia> listarEstadias() {
+
+        return estadiaDAO.listar();
+
+    }
+
+    public List<Estadia> listarEstadias(LocalDate fechaInicio, LocalDate fechaFin){
+
+        return estadiaDAO.listarPorFecha(fechaInicio, fechaFin);
+
+    }
 
 
     public void crearReserva(Reserva reserva, List<Long> listaIDHabitaciones) {
