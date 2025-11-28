@@ -45,6 +45,7 @@ public class TestCU15 {
     @Test
     void guardarEstadia() {
         var estadia = funcionarCrearEstadia();
+
         gestorHabitacion.ocuparHabitacion(
                 estadia.getIdHabitacion(),
                 estadia.getEncargado(),

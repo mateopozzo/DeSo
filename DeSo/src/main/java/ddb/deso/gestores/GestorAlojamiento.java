@@ -1,15 +1,13 @@
 package ddb.deso.gestores;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.FactoryAlojado;
-import ddb.deso.presentacion.InterfazBusqueda;
+import ddb.deso.alojamiento.Huesped;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,29 +36,35 @@ public class GestorAlojamiento {
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
-    public void buscarHuesped(CriteriosBusq criterios_busq) {
+    public List<Alojado> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
-        Llama al DAO, que llama a DAOJSON y busca todos los alojados
-        Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
+        Llama al DAO, busca todos los alojados
 
         Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
         Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
-        InterfazBusqueda ui = new InterfazBusqueda();
-        List<Alojado> encontrados;
-        encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
 
-        List<AlojadoDTO> encontradosDTO = new ArrayList<AlojadoDTO>();
-        for(var a : encontrados){
-            AlojadoDTO adto = new AlojadoDTO(a);
-            encontradosDTO.add(adto);
-        }
+        if(encontrados == null || encontrados.isEmpty())
+            throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojado disponibles para el criterio dado");
 
-        if (encontrados == null || encontrados.isEmpty()) {
-            ui.sin_coincidencias();
-        } else {
-            ui.seleccion(encontradosDTO);
+        return encontrados;
+    }
+
+    public List<Huesped> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+        try{
+            var listaAlojados = this.buscarAlojado(criterios_busq);
+            List<Huesped> listaHuespedes = listaAlojados.stream()
+                    .filter(alojado -> alojado instanceof Huesped)
+                    .map(alojado -> (Huesped) alojado)
+                    .toList();
+            if(listaHuespedes == null || listaHuespedes.isEmpty()){
+                throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Huesped disponibles para el criterio dado");
+            }
+            return listaHuespedes;
+        } catch (AlojadosSinCoincidenciasException e){
+            throw e;
         }
     }
 
@@ -103,7 +107,7 @@ public class GestorAlojamiento {
      */
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
-        // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
+
         List<Alojado> listaAlojados = alojadoDAO.buscarHuespedDAO(criterios);
 
         if (listaAlojados == null || listaAlojados.isEmpty()) {

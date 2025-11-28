@@ -6,6 +6,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -26,7 +27,7 @@ import static java.lang.Integer.parseInt;
  * </ul>
  * <p>
 
- * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)
+ * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
  */
 public class InterfazBusqueda {
     private final Scanner scanner;
@@ -42,7 +43,7 @@ public class InterfazBusqueda {
      * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
      * <p>
      * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
-     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarHuesped}
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarAlojado}
      * para iniciar el proceso de búsqueda.
      * </p>
      */
@@ -72,7 +73,20 @@ public class InterfazBusqueda {
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        gestorAlojamiento.buscarHuesped(criterios_busq);
+        List<Alojado> alojadosEncontrados = null;
+        try{
+            alojadosEncontrados = gestorAlojamiento.buscarHuesped(criterios_busq);
+        } catch (AlojadosSinCoincidenciasException e){
+            System.out.println(e.getMessage());
+            this.sin_coincidencias();
+        }
+
+        var alojadosDTO = alojadosEncontrados.stream()
+                .map(AlojadoDTO::new)
+                .toList();
+
+        this.seleccion(alojadosDTO);
+
     }
 
     /**
