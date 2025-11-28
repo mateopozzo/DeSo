@@ -1,5 +1,3 @@
- 
- 
 @startuml
 title Diagrama de clases de diseño - Grupo 22
 scale 2
@@ -15,8 +13,6 @@ enum TipoHabitacion {
 
 enum EstadoHabitacion {
   Disponible
-  Ocupada
-  Reservada
   EnMantenimiento
 }
 
@@ -31,7 +27,7 @@ enum MedioPago {
 enum TipoDoc {
   DNI
   LE
-  CI
+  LC
   Pasaporte
   Otro
 }
@@ -50,65 +46,68 @@ enum TipoServicio {
 }
 }
 package "Implementaciones DAO" {
-  
   interface EstadiaDAO #Wheat
-  class EstadiaDAOBdd #LightGray implements EstadiaDAO {
+  class EstadiaDAOPostGre #LightGray implements EstadiaDAO {
     +create(e: Estadia): void
     +read(id: int): Estadia
     +update(e: Estadia): void
     +delete(e: Estadia): void
   }
   interface ReservaDAO #Wheat
-  class ReservaDAOBdd #LightGray  implements ReservaDAO {
+  class ReservaDAOPostGre #LightGray  implements ReservaDAO {
   +create(e: Reserva): void
   +read(id: int): Reserva
   +update(e: Reserva): void
   +delete(e: Reserva): void
 }
 interface HabitacionDAO #Wheat
-class HabitacionDAOBdd #LightGray  implements HabitacionDAO {
+class HabitacionDAOPostGre #LightGray  implements HabitacionDAO {
   +create(h: Habitacion): void
   +read(id: int): Habitacion
   +update(h: Habitacion): void
   +delete(h: Habitacion): void
 }
 interface DatosAlojadoDAO #Wheat
-class DatosAlojadoBdd #LightGray  implements DatosAlojadoDAO {
+class DatosAlojadoPostGre #LightGray  implements DatosAlojadoDAO {
   +create(e: DatosAlojado): void
   +read(id: int): DatosAlojado
   +update(e: DatosAlojado): void
   +delete(e: DatosAlojado): void
 }
 interface ServicioDAO #Wheat
-class ServicioDAOBdd  #LightGray implements ServicioDAO {
+class ServicioDAOPostGre  #LightGray implements ServicioDAO {
   +create(s: Servicio): void
   +read(id: int): Servicio
   +update(s: Servicio): void
   +delete(s: Servicio): void
 }
+interface UsuarioDAO #Wheat
+class UsuarioDAOPostGre  #LightGray implements UsuarioDAO {
+  +BuscarPorNombre(nom: String): Optional<Usuario>
+}
 interface PagoDAO #Wheat
-class PagoDAOBdd #LightGray  implements PagoDAO {
+class PagoDAOPostGre #LightGray  implements PagoDAO {
   +create(p: Pago): void
   +read(id: int): Pago
   +update(p: Pago): void
   +delete(p: Pago): void
 }
 interface FacturaDAO #Wheat
-class FacturaDAOBdd #LightGray  implements FacturaDAO {
+class FacturaDAOPostGre #LightGray  implements FacturaDAO {
   +create(f: Factura): void
   +read(id: int): Factura
   +update(f: Factura): void
   +delete(f: Factura): void
 }
 interface AlojadoDAO #Wheat
-class AlojadoDAOBdd #LightGray  implements AlojadoDAO {
+class AlojadoDAOPostGre #LightGray  implements AlojadoDAO {
   +create(a: Alojado): void
   +read(id: int): Alojado
   +update(a: Alojado): void
   +delete(a: Alojado): void
 }
 interface ResponsablePagoDAO #Wheat
-class ResponsablePagoDAOBdd  #LightGray implements ResponsablePagoDAO {
+class ResponsablePagoDAOPostGre  #LightGray implements ResponsablePagoDAO {
   +create(r: ResponsablePago): void
   +read(id: int): ResponsablePago
   +update(r: ResponsablePago): void
@@ -117,41 +116,42 @@ class ResponsablePagoDAOBdd  #LightGray implements ResponsablePagoDAO {
 
 ' Implementaciones de los nuevos DAOs
 interface DatosPersonalesDAO #Wheat
-class DatosPersonalesDAOBdd #LightGray  implements DatosPersonalesDAO {
+class DatosPersonalesDAOPostGre #LightGray  implements DatosPersonalesDAO {
   +create(dp: DatosPersonales): void
   +read(id: int): DatosPersonales
   +update(dp: DatosPersonales): void
   +delete(dp: DatosPersonales): void
 }
 interface DatosContactoDAO #Wheat
-class DatosContactoDAOBdd  #LightGray implements DatosContactoDAO {
+class DatosContactoDAOPostGre  #LightGray implements DatosContactoDAO {
   +create(dc: DatosContacto): void
   +read(id: int): DatosContacto
   +update(dc: DatosContacto): void
   +delete(dc: DatosContacto): void
 }
 interface DatosResidenciaDAO #Wheat
-class DatosResidenciaDAOBdd  #LightGray implements DatosResidenciaDAO {
+class DatosResidenciaDAOPostGre  #LightGray implements DatosResidenciaDAO {
   +create(dr: DatosResidencia): void
   +read(id: int): DatosResidencia
   +update(dr: DatosResidencia): void
   +delete(dr: DatosResidencia): void
 }
 interface DatosCheckInDAO #Wheat
-class DatosCheckInDAOBdd  #LightGray implements DatosCheckInDAO {
+class DatosCheckInDAOPostGre  #LightGray implements DatosCheckInDAO {
   +create(dci: DatosCheckIn): void
   +read(id: int): DatosCheckIn
   +update(dci: DatosCheckIn): void
   +delete(dci: DatosCheckIn): void
 }
 interface DatosCheckOutDAO #Wheat
-class DatosCheckOutDAOBdd  #LightGray implements DatosCheckOutDAO {
+class DatosCheckOutDAOPostGre  #LightGray implements DatosCheckOutDAO {
   +create(dco: DatosCheckOut): void
   +read(id: int): DatosCheckOut
   +update(dco: DatosCheckOut): void
   +delete(dco: DatosCheckOut): void
 }
-EstadiaDAO -[hidden]down- AlojadoDAOBdd
+
+EstadiaDAO -[hidden]down- AlojadoDAOPostGre
 }
 
 
@@ -166,30 +166,68 @@ class Usuario #RoyalBlue {
 }
 together{
 class Habitacion {
-  -numeroHab: int
-  -tipoHab: TipoHabitacion
-  -estadoHab: EstadoHabitacion
-  -tarifaHab: float
-  -capacidadHab: int
+  -nroHab: Long
+  -tipo_hab: TipoHabitacion
+  -estado_hab: EstadoHabitacion
+  -tarifa: float
+  -capacidad: int
   +getEstado(): EstadoHabitacion
+  +...()
+  +getCapacidad(): int
+  +setNroHab(n: Long): void
+  +...()
+  +setCapacidad(n: int): void
+  +equals(o: Object): bool
+  +hasCode(): int
 }
 
 
 class Estadia {
+  -idEstadia: Long
+  -habitacion: Habitacion
+  -listaServicios: List<Servicio>
+  -datosCheckIn: DatosCheckIn
+  -datosCheckOut: DatosCheckOut
   -fechaInicio: Date
   -fechaFin: Date
-  +getTipoHab(): TipoHabitacion
-  +getFechaInicio(): Date
-  +getFechaFin(): Date
+  +equals(o: Object): bool
+  +hasCode(): int
 }
 
 class Alojado {
-  -datosAlojado: DatosAlojado
-  +setAlojado(): void
-  +getAlojado(): void
-  +checkIn(a: Alojado): void
-  +checkOut(a: Alojado): void
-  +esMayor(a: Alojado): bool
+  -id: AlojadoID
+  -datos: DatosAlojado
+  -listaReservas: List<Reserva>
+  -listaEstadia: List<Estadia>
+  +esMayor(): bool
+  +completarDTO(dto AlojadoDTO): void
+  +equals(o: Object): bool
+  +hashCode(): int
+}
+
+class AlojadoID{
+  -nroDoc: string
+  -tipoDoc: TipoDoc
+  +equals(o: Object): bool
+  +hashCode(): int
+}
+
+class CriteriosBusq{
+  -apellido: string
+  -nombre: string
+  -tipoDoc: TipoDoc
+  -nroDoc: string
+  +getTipoDoc(): TipoDoc
+  +setTipoDoc(t: TipoDoc): void
+  +getNroDoc(): string
+  +setNroDoc(n: string): void
+  +getApellido(): string
+  +setApellido(a: string): void
+  +getNombre(): string
+  +setNombre(n: string): void
+  +equals(o: Object): bool
+  +hashCode(): int
+  +no_es_vacio(c: string): bool
 }
 
 class Invitado {
@@ -202,7 +240,31 @@ class Huesped {
   +setRazonSocial(): void
 }
 
+class FactoryAlojado {
+  + _HUESPED : int
+  + _INVITADO : int
+  + create(tipo : int, DatosAlojado da) : Alojado
+  + createFromDTO(AlojadoDTO) : Alojado
+}
+
 class DatosAlojado {
+  -idAlojado: AlojadoID
+  -datos_contacto: DatosContacto
+  -datos_residencia: DatosResidencia
+  -datos_personales: DatosPersonales
+  -checkIns: List<DatosCheckIn>
+  -checkOut: List<DatosCheckOut>
+  -wireOwnerAfterLoad(): void
+  +setTipoDoc(t: TipoDoc): void
+  +getTipoDoc():TipoDoc
+  +setNroDoc(n: string): void
+  +getNroDoc(): string
+  +nuevoCheckIn(c: DatosCheckIn): void
+  +nuevoCheckOut(c: DatosCheckOut): void
+  +ocuparHabitacion(): bool
+  +getEdad(): int
+  +equals(o: Object): bool
+  +hashCode(): int
 }
 
 class DatosPersonales {
@@ -289,10 +351,9 @@ class Pago {
   -monto: float
   -medioPago: MedioPago
   -fechaPago: Date
-  +getRespPago(): ResponsablePago
   +getMonto(): float
-  +setFechaPago(f: Date): void
-  +setMedioPago(m: MedioPago): void
+  +fechaPago(): LocalDate
+  +medioPago(): MedioPago
 }
 
 class Factura {
@@ -302,6 +363,7 @@ class Factura {
   -montoTotal: float
   -montoIVA: float
   -montoNeto: float
+  -destinatario: string
   -IVA: int
   -destinatario: string
   +setFecha(f: date): void
@@ -318,29 +380,63 @@ class NotaCredito {
   +getMontoNC(): float
 }
 class Reserva{
+  -idreserva: Long
   -fechaInicio: Date
   -fechaFin: Date
   -estado : string
+  -nombre: string
+  -apellido: string
+  -telefono: string
+  -listaHabbitaciones: List<Habitacion>
   +getTipoHab(): TipoHabitacion
-  +getFechaInicio(): Date
+  +...()
   +getFechaFin(): Date
+  +setTipoHab(): TipoHabitacion
+  +...()
+  +setFechaFin(): Date
+  +agregarHabitacion(habitacion: habitacion): void
+  +equals(o: Object): bool
+  +hashCode(): int
 }
 }
 class GestorHabitaciones #LightBlue {
-  +cancelarEstadia(): bool
-  +listarHabitaciones(inicio: Date, fin: Date): List<Habitacion>
-  +facturar(e: Estadia): Factura
-  +reservarHabitacion(): void
-  +ocuparHabitacion(): void
+  -reservaDAO: ReservaDAO
+  +setHabitacionDAO(hab: HabitacionDAO): void
+  +setReservaDAO(res: ReservaDAO): void
+  +setEstadiaDAO(est: EstadiaDAO): void
+  +setAlojadoDAO(a: AlojadoDAO): void
+  +setCheckInDAO(c: DatosCheckInDAO): void
+  +crearReserva(reserva: Reserva, listaIDHabitacion: List<Long>): void
+  +ocuparHabitacion(idHab: Long, cHues: CriteriosBusq, cInv: List<CriteriosBusq>, fechaInicio: LocalDate, fechaFin: LocalDate): void
 }
 
-
 class GestorAlojamiento #LightBlue  {
-  +altaAlojado(h: Huesped): void
-  +modifAlojado(h: Huesped): void
-  +bajaAlojado(h: Huesped): void
-  +checkIn(d: DatosCheckIn): void
-  +checkOut(d: DatosCheckOut): void
+  -alojadoDAO: AlojadoDAO
+  +dniExiste(dni: string, t: TipoDoc): bool
+  +buscarAlojado(c: CriteriosBusq): List<Alojado>
+  +buscarHuesped(c: CriteriosBusq): List<Huesped>
+  +daDeAltaHuesped(a: Alojado): void
+  +modificarHuesped(a: Alojado, am: Alojado): void
+  +huespedSeAlojo(c: CriteriosBusq): ResumenHistorialHuesped
+  +eliminarAlojado(h: Huesped): void
+  +historialHuesped(a: Alojado): ResumenHistorialHuesped
+  +obtenerAlojadoPorDNI(n: string, t, TipoDoc): Alojado
+}
+
+class GestorAutenticacion{
+  -usuarioDAO: UsuarioDAO
+  +autentificar(nom: String, pass: String): Usuario
+}
+
+class Sesion{
+  -instancia: Usuario
+  -finalizarSesion()
+  +iniciarSesion(u: Usuario)
+  +getUsuarioLogueado(): Usuario
+}
+
+interface UsuarioDAO #Wheat{
+  +BuscarPorNombre(nom: String): Optional<Usuario>
 }
 
 class GestorContabilidad #LightBlue  {
@@ -387,6 +483,7 @@ class ResponsablePagoDTO #MintCream{
 }
 
 class ServicioDTO #MintCream{
+  -idServicio: Long
   -tipoServicio: TipoServicio
 }
 
@@ -443,105 +540,116 @@ class DatosPersonalesDTO #MintCream{
 }
 
 interface EstadiaDAO #Wheat{
-  +create(e: Estadia): void
-  +read(id: int): Estadia
-  +update(e: Estadia): void
-  +delete(e: Estadia): void
-}
+    +crear(e: Estadia): void
+    +actualizar(e: Estadia): void
+    +eliminar(e: Estadia): void
+    +listar(): List<Estadia>
+    +listarPorFecha(f: LocalDate): List<Estadia>
+    +listarPorHuesped(h: Huesped): List<Estadia>
+    +listarPorFechayHuesped(f: LocalDate, h: Huesped): List<Estadia>
+  }
 
 interface DatosAlojadoDAO #Wheat{
-  +create(e: DatosAlojado): void
-  +read(id: int): DatosAlojado
-  +update(e: DatosAlojado): void
-  +delete(e: DatosAlojado): void
+  +crearDatosAlojado(e: DatosAlojado): void
+  +actualizarDatosAlojado(e: DatosAlojado): void
+  +eliminarDatosAlojado(e: DatosAlojado): void
+  +buscarDatosAlojado(doc: String, t: tipo): DatosAlojado
 }
 
 interface HabitacionDAO #Wheat {
-  +readAll(): List<HabitacionDTO>
-  +create(h: Habitacion): void
-  +read(id: int): Habitacion
-  +update(h: Habitacion): void
-  +delete(h: Habitacion): void
+  +crear(h: Habitacion): void
+  +actualizar(h: Habitacion): void
+  +eliminar(h: Habitacion): void
+  +listar(): List<Habitacion>
+  +listarPorTipo(t: TipoHab): List<Habitacion>
+  +buscarPorNumer(n: Long): Habitacion
 }
 
 interface ServicioDAO #Wheat{
-  +create(s: Servicio): void
-  +read(id: int): Servicio
-  +update(s: Servicio): void
-  +delete(s: Servicio): void
+  +crear(s: Servicio): void
+  +crear(t: TipoServicio): void
+  +actualizar(s: Servicio): void
+  +eliminar(s: Servicio): void
+  +listar(): List<Servicio>
 }
 
 interface PagoDAO #Wheat{
-  +create(p: Pago): void
-  +read(id: int): Pago
-  +update(p: Pago): void
-  +delete(p: Pago): void
+  +crearPago(p: Pago): void
+  +actualizarPago(p: Pago): void
+  +eliminarPago(p: Pago): void
+  +listar(): List<Pago>
+  +listarPorFecha(f: LocalDate): List<Pago>
+  +listarPorResponsable(r: ResponsablePago): List<Pago>
+  +listarPorFechayResponsable(f: LocalDate, r: ResponsablePago): List<Pago>
 }
 
 interface FacturaDAO #Wheat{
-  +create(f: Factura): void
-  +read(id: int): Factura
-  +update(f: Factura): void
-  +delete(f: Factura): void
+  +crearFactura(f: Factura): void
+  +actualizarFactura(f: Factura): void
+  +eliminarFactura(f: Factura): void
+  +listarFacturas(): List<FacturaDTO>
+  buscarPorNumero(n: int, t: TipoFactura): FacturaDTO
 }
 
 interface AlojadoDAO #Wheat{
-  +create(a: Alojado): void
-  +read(id: int): Alojado
-  +update(a: Alojado): void
-  +delete(a: Alojado): void
+  +crearAlojado(a: Alojado): void
+  +actualizarAlojado(a: Alojado): void
+  +eliminarAlojado(a: Alojado): void
+  +buscarHuespedDAO(c: CriteriosBusq): List<Alojado>
+  +listarAlojados(): List<Alojado>
+  +buscarPorDNI(doc: String, t: TipoDoc): Alojado
 }
 
 interface ResponsablePagoDAO #Wheat{
-  +create(r: ResponsablePago): void
-  +read(id: int): ResponsablePago
-  +update(r: ResponsablePago): void
-  +delete(r: ResponsablePago): void
+  +crear(r: ResponsablePago): void
+  +actualizarA(r: ResponsablePago): void
+  +eliminar(r: ResponsablePago): void
+  +listar(): List<ResponsablePago>
+  +buscarPorCUIT(CUIT: String): ResponsablePago
 }
 
 ' Nuevos DAOs agregados
 interface ReservaDAO #Wheat{
-  +readDate(Date: ini, Date: end): List<ReservaDTO>
-  +create(dp: Reserva): void
-  +read(id: int): Reserva
-  +update(dp: Reserva): void
-  +delete(dp: Reserva): void
+    +crear(e: Reserva): void
+    +actualizar(e: Reserva): void
+    +eliminar(e: Reserva): void
+    +listar(): List<Reserva>
+    +listarPorFecha(f: LocalDate): List<Reserva>
 }
 
 interface DatosPersonalesDAO #Wheat{
   +create(dp: DatosPersonales): void
-  +read(id: int): DatosPersonales
   +update(dp: DatosPersonales): void
   +delete(dp: DatosPersonales): void
 }
 
 interface DatosContactoDAO #Wheat{
-  +create(dc: DatosContacto): void
-  +read(id: int): DatosContacto
-  +update(dc: DatosContacto): void
-  +delete(dc: DatosContacto): void
+  +crear(dc: DatosContacto): void
+  +actualizar(dc: DatosContacto): void
+  +eliinar(dc: DatosContacto):void
+  +buscarDatosContacto(doc: String, t: TipoDoc): DatosContacto
 }
 
 interface DatosResidenciaDAO #Wheat{
-  +create(dr: DatosResidencia): void
-  +read(id: int): DatosResidencia
-  +update(dr: DatosResidencia): void
-  +delete(dr: DatosResidencia): void
+  +crear(dr: DatosResidencia): void
+  +actualizar(dr: DatosResidencia): void
+  +eliminar(dr: DatosResidencia): void
+  +buscar(doc: String, t: Tipo): DatosResidencia
 }
 
 
 interface DatosCheckInDAO #Wheat{
-  +create(dci: DatosCheckIn): void
-  +read(id: int): DatosCheckIn
-  +update(dci: DatosCheckIn): void
-  +delete(dci: DatosCheckIn): void
+  +crearDatosCheckIn(dci: DatosCheckIn): void
+  +actualizarDatosCheckIn(dci: DatosCheckIn): void
+  +eliminarDatosCheckIn(dci: DatosCheckIn): void
+  +listarDatosCheckIn(): List<DatosCheckIn>
 }
 
 interface DatosCheckOutDAO #Wheat{
-  +create(dco: DatosCheckOut): void
-  +read(id: int): DatosCheckOut
-  +update(dco: DatosCheckOut): void
-  +delete(dco: DatosCheckOut): void
+  +crearDatosCheckOut(dco: DatosCheckOut): void
+  +actualizarDatosCheckOut(dco: DatosCheckOut): void
+  +eliminarDatosCheckOut(dco: DatosCheckOut): void
+  +listarDatosCheckOut(doc: String, t: TipoDoc): List<DatosCheckOut>
 }
 
 
@@ -552,6 +660,7 @@ GestorHabitaciones ..> ReservaDAO
 GestorHabitaciones ..> HabitacionDAO
 GestorHabitaciones ..> ServicioDAO
 GestorHabitaciones ..> DatosAlojadoDAO
+GestorHabitaciones ..> CriteriosBusq
 
 GestorAlojamiento ..> AlojadoDAO
 GestorAlojamiento ..> DatosPersonalesDAO
@@ -560,6 +669,7 @@ GestorAlojamiento ..> DatosResidenciaDAO
 GestorAlojamiento ..> DatosCheckInDAO
 GestorAlojamiento ..> DatosCheckOutDAO
 GestorAlojamiento ..> DatosAlojadoDAO
+GestorAlojamiento ..> CriteriosBusq
 
 GestorContabilidad ..> EstadiaDAO
 GestorContabilidad ..> PagoDAO
@@ -569,6 +679,7 @@ GestorContabilidad ..> DatosPersonalesDAO
 GestorContabilidad ..> DatosContactoDAO
 
 ' Dependencias de DAOs a sus entidades correspondientes
+UsuarioDAO ..> Usuario
 EstadiaDAO ..> Estadia
 DatosAlojadoDAO ..> DatosAlojado
 ReservaDAO ..> Reserva
@@ -598,6 +709,7 @@ GestorContabilidad ..> EstadiaDTO
 GestorAlojamiento ..> DatosAlojadoDTO
 GestorAlojamiento ..> DatosCheckInDTO
 GestorAlojamiento ..> DatosCheckOutDTO
+GestorAlojamiento ..> FactoryAlojado
 
 
 GestorHabitaciones ..> DatosAlojadoDTO
@@ -621,13 +733,15 @@ EstadiaDTO "0..*" --> "0..*" ServicioDTO
 EstadiaDTO "0..*" --> "1..*" HabitacionDTO
 
 ' Relaciones de asociación y composición
-Estadia "0..*" --> "1" Huesped
-Estadia "0..*" --> "0..*" Invitado
-Estadia "0..*" --> "0..*" Habitacion
+Estadia "1..*" --> "1" Huesped
+Estadia "1..*" --> "0..*" Invitado
+Estadia "0..*" --> "1" Habitacion
 Estadia "0..*" --> "0..*" Servicio
-Reserva "0..*" --> "0..*" Habitacion
+Pago "0..*" -->"1" Estadia
+Reserva "1..*" --> "1..*" Habitacion
 Reserva "0..*" --> "1" Huesped
 
+FactoryAlojado ..> Alojado
 Alojado <|-- Huesped
 Alojado <|-- Invitado
 Estadia "1" --> "1" DatosCheckIn
@@ -639,17 +753,21 @@ DatosAlojado "1" *-- "1" DatosPersonales
 DatosAlojado "1" *-- "1" DatosResidencia
 DatosAlojado "1" *-- "1" DatosContacto
 
-Alojado "1" --> "1" DatosAlojado
+Alojado "1" *--> "1" DatosAlojado
 
 Pago "0..*" <-- "1" Estadia
-Factura "1" --> "1" Pago
+Factura "1" --> "1..*" Pago
 Factura "1" --> "0..*" NotaCredito
 ResponsablePago "1" <-- "0..*" Pago
+Sesion "1"-"1" Usuario
 
-Usuario .down..> GestorAlojamiento
-Usuario .down..> GestorContabilidad
-Usuario .down..> GestorHabitaciones
+GestorAutenticacion ..> UsuarioDAO 
+GestorAutenticacion ..> Usuario
+GestorAutenticacion ..> Sesion
+GestorAlojamiento ...> Sesion
+GestorContabilidad ...> Sesion
+GestorHabitaciones ...> Sesion
+
 }
 
-@enduml 
-
+@enduml

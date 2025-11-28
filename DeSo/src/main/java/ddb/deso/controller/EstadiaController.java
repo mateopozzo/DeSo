@@ -15,10 +15,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:63342")
 public class EstadiaController {
 
-    private final GestorHabitacion gestorHabitacion;
 
-    @Autowired
-    public EstadiaController(GestorHabitacion gestorHabitacion) {this.gestorHabitacion = gestorHabitacion;}
 
     @PostMapping("/api/ocupar-habitacion")
     public ResponseEntity<CrearEstadiaDTO> crearEstadia(@RequestBody CrearEstadiaDTO estadiaDTO) {
