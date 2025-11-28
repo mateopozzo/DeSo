@@ -6,6 +6,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -72,7 +73,20 @@ public class InterfazBusqueda {
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        var listaAlojados = gestorAlojamiento.buscarHuesped(criterios_busq);
+        List<Alojado> alojadosEncontrados = null;
+        try{
+            alojadosEncontrados = gestorAlojamiento.buscarHuesped(criterios_busq);
+        } catch (AlojadosSinCoincidenciasException e){
+            System.out.println(e.getMessage());
+            this.sin_coincidencias();
+        }
+
+        var alojadosDTO = alojadosEncontrados.stream()
+                .map(AlojadoDTO::new)
+                .toList();
+
+        this.seleccion(alojadosDTO);
+
     }
 
     /**

@@ -9,6 +9,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.FactoryAlojado;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import ddb.deso.presentacion.InterfazBusqueda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class GestorAlojamiento {
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
-    public List<Alojado> buscarHuesped(CriteriosBusq criterios_busq) {
+    public List<Alojado> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, busca todos los alojados
 
@@ -46,9 +47,12 @@ public class GestorAlojamiento {
         Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
-        List<Alojado> encontrados;
-        if(encontrados == null || )
-        return alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);;
+
+        if(encontrados == null || encontrados.isEmpty())
+            throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojado disponibles para el criterio dado");
+
+        return encontrados;
     }
 
     /**

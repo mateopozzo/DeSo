@@ -7,6 +7,7 @@ import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import ddb.deso.repository.AlojadoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import java.util.List;
  * Escucha las peticiones web y las delega al GestorAlojamiento.
  */
 @RestController
-@RequestMapping("/api/huesped")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AlojadoController {
 
@@ -40,7 +40,7 @@ public class AlojadoController {
      * @param alojadoDTO Los datos del nuevo alojado (vienen en el body del POST en formato JSON)
      * @return El AlojadoDTO creado con un código 201 (Created).
      */
-    @PostMapping
+    @PostMapping("/api/huesped")
     public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
         ddb.deso.alojamiento.Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
@@ -65,15 +65,22 @@ public class AlojadoController {
     }
 
 
-    @GetMapping("/ocupar-habitacion")
-    List<Alojado> obtenerAlojados(CriteriosBusq criteriosBusq) {
+    @GetMapping("/api/ocupar-habitacion")
+    List<Alojado> obtenerAlojados(@RequestBody CriteriosBusq criteriosBusq) {
 
         if(criteriosBusq == null){
             return null;
         }
 
+        List<Alojado> alojadosEncontrados;
+        try {
+            alojadosEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
+        } catch (AlojadosSinCoincidenciasException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
 
-
+        return alojadosEncontrados;
     }
 
 
