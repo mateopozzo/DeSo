@@ -20,7 +20,7 @@ public interface EstadiaDAO {
     List<Estadia> listar();
     
     //  devuelve todas las estadias activas durante la fecha
-    List<Estadia> listarPorFecha(LocalDate fecha);   
+    List<Estadia> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin);
     
     List<Estadia> listarPorHuesped(Huesped huesped);
     
