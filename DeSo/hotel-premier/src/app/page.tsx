@@ -23,8 +23,9 @@ export default function Home() {
       <h3 className="text-2xl dark:text-white text-[#141414] mb-8">
         Sistema de gestión hotelera
       </h3>
-      <p className="text-2xl dark:text-white text-[#141414] mb-8">
-        Si estás viendo esto, significa que el caso de uso terminó
+      <p className="text-xl dark:text-white text-[#141414] mb-8">
+        Disfruta de nuestro hotel falso en Santa Fe con vista a la laguna
+        Setúbal
       </p>
 
       <Link href="/alta-huesped">

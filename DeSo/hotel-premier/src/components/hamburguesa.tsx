@@ -91,31 +91,37 @@ export default function hamburguesa({ isOpen, onClose }: HamburguesaProps) {
         <div className="flex-1 overflow-y-auto py-6 px-4">
           <ul className="flex flex-col gap-2">
             <MenuLink
-              href="/habitaciones"
+              href="#"
               icon="/hab.svg"
               label="Habitaciones"
               onClose={onClose}
             />
+            <CasoUsoSub
+              href="/alta-huesped"
+              label="Dar de alta huésped"
+              desc="Registra un nuevo huésped en el sistema"
+              onClose={onClose}
+            />
+
             <MenuLink
-              href="/reservas"
+              href="#"
               icon="/reserva.svg"
               label="Reservas"
               onClose={onClose}
             />
+            <CasoUsoSub
+              href="/ocupar-hab"
+              label="Ocupar habitación"
+              desc="Ingresa a los huéspedes a sus habitaciones"
+              onClose={onClose}
+            />
             <MenuLink
-              href="/facturacion"
+              href="#"
               icon="/fac.svg"
               label="Facturación"
               onClose={onClose}
             />
           </ul>
-        </div>
-
-        {/* Footer del menú */}
-        <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-xs text-gray-400 text-center uppercase tracking-wider font-semibold">
-            Hotel Premier © 2025
-          </p>
         </div>
       </aside>
     </div>
@@ -152,6 +158,33 @@ function MenuLink({
         <span className="font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
           {label}
         </span>
+      </Link>
+    </li>
+  );
+}
+
+function CasoUsoSub({
+  href,
+  label,
+  desc,
+  onClose,
+}: {
+  href: string;
+  label: string;
+  desc: string;
+  onClose: () => void;
+}) {
+  return (
+    <li className="list-none">
+      <Link
+        href={href}
+        onClick={onClose}
+        className="flex flex-col items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group active:scale-95 duration-200"
+      >
+        <span className="font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+          {label}
+        </span>
+        <p>{desc}</p>
       </Link>
     </li>
   );
