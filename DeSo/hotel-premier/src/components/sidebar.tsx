@@ -29,7 +29,7 @@ const MENU_ITEMS: opciones[] = [
     icon: "/reserva.svg",
     alt: "Reservas",
     width: 40,
-    options: [{ label: "Reservar habitación", href: "/" }],
+    options: [{ label: "Reservar habitación", href: "/reservar-hab" }],
   },
   {
     id: "facturacion",

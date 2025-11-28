@@ -35,7 +35,7 @@ export default function Home() {
         />
 
         <Card
-          href="/"
+          href="/reservar-hab"
           iconSrc="/reserva.svg"
           gestor="Reservas"
           title="Reservar habitación"
