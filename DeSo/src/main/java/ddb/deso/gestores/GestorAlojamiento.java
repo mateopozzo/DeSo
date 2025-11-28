@@ -1,16 +1,13 @@
 package ddb.deso.gestores;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.FactoryAlojado;
+import ddb.deso.alojamiento.Huesped;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
-import ddb.deso.presentacion.InterfazBusqueda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +36,7 @@ public class GestorAlojamiento {
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
-    public List<Alojado> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+    public List<Alojado> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, busca todos los alojados
 
@@ -47,12 +44,28 @@ public class GestorAlojamiento {
         Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
-        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);;
+        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
 
         if(encontrados == null || encontrados.isEmpty())
             throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojado disponibles para el criterio dado");
 
         return encontrados;
+    }
+
+    public List<Huesped> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+        try{
+            var listaAlojados = this.buscarAlojado(criterios_busq);
+            List<Huesped> listaHuespedes = listaAlojados.stream()
+                    .filter(alojado -> alojado instanceof Huesped)
+                    .map(alojado -> (Huesped) alojado)
+                    .toList();
+            if(listaHuespedes == null || listaHuespedes.isEmpty()){
+                throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Huesped disponibles para el criterio dado");
+            }
+            return listaHuespedes;
+        } catch (AlojadosSinCoincidenciasException e){
+            throw e;
+        }
     }
 
     /**

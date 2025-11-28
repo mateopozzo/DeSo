@@ -27,7 +27,7 @@ import static java.lang.Integer.parseInt;
  * </ul>
  * <p>
 
- * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)
+ * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
  */
 public class InterfazBusqueda {
     private final Scanner scanner;
@@ -43,7 +43,7 @@ public class InterfazBusqueda {
      * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
      * <p>
      * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
-     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarHuesped}
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarAlojado}
      * para iniciar el proceso de búsqueda.
      * </p>
      */
