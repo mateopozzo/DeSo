@@ -2,6 +2,8 @@ package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JPA.AlojadoDAOJPA;
+import ddb.deso.alojamiento.Alojado;
+import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
@@ -9,6 +11,8 @@ import ddb.deso.repository.AlojadoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controlador REST para gestionar las operaciones de Huéspedes.
@@ -59,6 +63,20 @@ public class AlojadoController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
     }
+
+
+    @GetMapping("/ocupar-habitacion")
+    List<Alojado> obtenerAlojados(CriteriosBusq criteriosBusq) {
+
+        if(criteriosBusq == null){
+            return null;
+        }
+
+
+
+    }
+
+
 
     // @GetMapping -> para buscar
     // @PutMapping -> para modificar

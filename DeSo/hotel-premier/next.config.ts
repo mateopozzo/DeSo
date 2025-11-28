@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+  //output: 'export', -- Para compilar static
 };
 
-export default nextConfig;
+//module.exports = nextConfig;
+ export default nextConfig;

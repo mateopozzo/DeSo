@@ -72,7 +72,7 @@ public class InterfazBusqueda {
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        gestorAlojamiento.buscarHuesped(criterios_busq);
+        var listaAlojados = gestorAlojamiento.buscarHuesped(criterios_busq);
     }
 
     /**

@@ -12,8 +12,8 @@ import ddb.deso.alojamiento.DatosResidencia;
  * @author mat
  */
 public interface DatosResidenciaDAO {
-    void crearDatosResidencia(DatosResidencia datosResidencia);
-    void actualizarDatosResidenciado(DatosResidencia datosResidencia);
-    void eliminarDatosResidencia(DatosResidencia datosResidencia);
-    DatosResidencia buscarDatosResidencia(String documento, TipoDoc tipo);
+    void crear(DatosResidencia datosResidencia);
+    void actualizar(DatosResidencia datosResidencia);
+    void eliminar(DatosResidencia datosResidencia);
+    DatosResidencia buscar(String documento, TipoDoc tipo);
 }

@@ -38,30 +38,17 @@ public class GestorAlojamiento {
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
-    public void buscarHuesped(CriteriosBusq criterios_busq) {
+    public List<Alojado> buscarHuesped(CriteriosBusq criterios_busq) {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
-        Llama al DAO, que llama a DAOJSON y busca todos los alojados
-        Cuando los encuentra, crea un DTO y los va colando en una lista "encontrados"
+        Llama al DAO, busca todos los alojados
 
         Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
         Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
-        InterfazBusqueda ui = new InterfazBusqueda();
         List<Alojado> encontrados;
-        encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
-
-        List<AlojadoDTO> encontradosDTO = new ArrayList<AlojadoDTO>();
-        for(var a : encontrados){
-            AlojadoDTO adto = new AlojadoDTO(a);
-            encontradosDTO.add(adto);
-        }
-
-        if (encontrados == null || encontrados.isEmpty()) {
-            ui.sin_coincidencias();
-        } else {
-            ui.seleccion(encontradosDTO);
-        }
+        if(encontrados == null || )
+        return alojadoDAO.buscarHuespedDAO(criterios_busq);
     }
 
     /**
@@ -103,7 +90,7 @@ public class GestorAlojamiento {
      */
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
-        // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
+
         List<Alojado> listaAlojados = alojadoDAO.buscarHuespedDAO(criterios);
 
         if (listaAlojados == null || listaAlojados.isEmpty()) {

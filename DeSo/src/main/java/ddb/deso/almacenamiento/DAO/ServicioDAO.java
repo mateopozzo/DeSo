@@ -13,9 +13,9 @@ import java.util.List;
  * @author mat
  */
 public interface ServicioDAO {
-    void crearServicio(Servicio servicio);
-    void crearServicio(TipoServicio tipoServicio);
-    void actualizarServicio(Servicio servicio);
-    void eliminarServicio(Servicio servicio);
+    void crear(Servicio servicio);
+    void crear(TipoServicio tipoServicio);
+    void actualizar(Servicio servicio);
+    void eliminar(Servicio servicio);
     List<Servicio> listar();
 }
