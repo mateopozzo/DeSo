@@ -15,8 +15,6 @@ enum TipoHabitacion {
 
 enum EstadoHabitacion {
   Disponible
-  Ocupada
-  Reservada
   EnMantenimiento
 }
 
@@ -31,7 +29,7 @@ enum MedioPago {
 enum TipoDoc {
   DNI
   LE
-  CI
+  LC
   Pasaporte
   Otro
 }
@@ -50,7 +48,7 @@ enum TipoServicio {
 }
 }
 package "Implementaciones DAO" {
-  
+
   interface EstadiaDAO #Wheat
   class EstadiaDAOBdd #LightGray implements EstadiaDAO {
     +create(e: Estadia): void
@@ -184,12 +182,39 @@ class Estadia {
 }
 
 class Alojado {
-  -datosAlojado: DatosAlojado
-  +setAlojado(): void
-  +getAlojado(): void
-  +checkIn(a: Alojado): void
-  +checkOut(a: Alojado): void
-  +esMayor(a: Alojado): bool
+  -id: AlojadoID
+  -datos: DatosAlojado
+  -listaReservas: List<Reserva>
+  -listaEstadia: List<Estadia>
+  +esMayor(): bool
+  +completarDTO(dto AlojadoDTO): void
+  +equals(o: Object): bool
+  +hashCode(): int
+}
+
+class AlojadoID{
+  -nroDoc: string
+  -tipoDoc: TipoDoc
+  +equals(o: Object): bool
+  +hashCode(): int
+}
+
+class CriteriosBusq{
+  -apellido: string
+  -nombre: string
+  -tipoDoc: TipoDoc
+  -nroDoc: string
+  +getTipoDoc(): TipoDoc
+  +setTipoDoc(t: TipoDoc): void
+  +getNroDoc(): string
+  +setNroDoc(n: string): void
+  +getApellido(): string
+  +setApellido(a: string): void
+  +getNombre(): string
+  +setNombre(n: string): void
+  +equals(o: Object): bool
+  +hashCode(): int
+  +no_es_vacio(c: string): bool
 }
 
 class Invitado {
@@ -203,6 +228,23 @@ class Huesped {
 }
 
 class DatosAlojado {
+  -idAlojado: AlojadoID
+  -datos_contacto: DatosContacto
+  -datos_residencia: DatosResidencia
+  -datos_personales: DatosPersonales
+  -checkIns: List<DatosCheckIn>
+  -checkOut: List<DatosCheckOut>
+  -wireOwnerAfterLoad(): void
+  +setTipoDoc(t: TipoDoc): void
+  +getTipoDoc():TipoDoc
+  +setNroDoc(n: string): void
+  +getNroDoc(): string
+  +nuevoCheckIn(c: DatosCheckIn): void
+  +nuevoCheckOut(c: DatosCheckOut): void
+  +ocuparHabitacion(): bool
+  +getEdad(): int
+  +equals(o: Object): bool
+  +hashCode(): int
 }
 
 class DatosPersonales {
@@ -289,10 +331,9 @@ class Pago {
   -monto: float
   -medioPago: MedioPago
   -fechaPago: Date
-  +getRespPago(): ResponsablePago
   +getMonto(): float
-  +setFechaPago(f: Date): void
-  +setMedioPago(m: MedioPago): void
+  +fechaPago(): LocalDate
+  +medioPago(): MedioPago
 }
 
 class Factura {
@@ -302,6 +343,7 @@ class Factura {
   -montoTotal: float
   -montoIVA: float
   -montoNeto: float
+  -destinatario: string
   -IVA: int
   -destinatario: string
   +setFecha(f: date): void
@@ -443,105 +485,116 @@ class DatosPersonalesDTO #MintCream{
 }
 
 interface EstadiaDAO #Wheat{
-  +create(e: Estadia): void
-  +read(id: int): Estadia
-  +update(e: Estadia): void
-  +delete(e: Estadia): void
-}
+    +crear(e: Estadia): void
+    +actualizar(e: Estadia): void
+    +eliminar(e: Estadia): void
+    +listar(): List<Estadia>
+    +listarPorFecha(f: LocalDate): List<Estadia>
+    +listarPorHuesped(h: Huesped): List<Estadia>
+    +listarPorFechayHuesped(f: LocalDate, h: Huesped): List<Estadia>
+  }
 
 interface DatosAlojadoDAO #Wheat{
-  +create(e: DatosAlojado): void
-  +read(id: int): DatosAlojado
-  +update(e: DatosAlojado): void
-  +delete(e: DatosAlojado): void
+  +crearDatosAlojado(e: DatosAlojado): void
+  +actualizarDatosAlojado(e: DatosAlojado): void
+  +eliminarDatosAlojado(e: DatosAlojado): void
+  +buscarDatosAlojado(doc: String, t: tipo): DatosAlojado
 }
 
 interface HabitacionDAO #Wheat {
-  +readAll(): List<HabitacionDTO>
-  +create(h: Habitacion): void
-  +read(id: int): Habitacion
-  +update(h: Habitacion): void
-  +delete(h: Habitacion): void
+  +crear(h: Habitacion): void
+  +actualizar(h: Habitacion): void
+  +eliminar(h: Habitacion): void
+  +listar(): List<Habitacion>
+  +listarPorTipo(t: TipoHab): List<Habitacion>
+  +buscarPorNumer(n: Long): Habitacion
 }
 
 interface ServicioDAO #Wheat{
-  +create(s: Servicio): void
-  +read(id: int): Servicio
-  +update(s: Servicio): void
-  +delete(s: Servicio): void
+  +crear(s: Servicio): void
+  +crear(t: TipoServicio): void
+  +actualizar(s: Servicio): void
+  +eliminar(s: Servicio): void
+  +listar(): List<Servicio>
 }
 
 interface PagoDAO #Wheat{
-  +create(p: Pago): void
-  +read(id: int): Pago
-  +update(p: Pago): void
-  +delete(p: Pago): void
+  +crearPago(p: Pago): void
+  +actualizarPago(p: Pago): void
+  +eliminarPago(p: Pago): void
+  +listar(): List<Pago>
+  +listarPorFecha(f: LocalDate): List<Pago>
+  +listarPorResponsable(r: ResponsablePago): List<Pago>
+  +listarPorFechayResponsable(f: LocalDate, r: ResponsablePago): List<Pago>
 }
 
 interface FacturaDAO #Wheat{
-  +create(f: Factura): void
-  +read(id: int): Factura
-  +update(f: Factura): void
-  +delete(f: Factura): void
+  +crearFactura(f: Factura): void
+  +actualizarFactura(f: Factura): void
+  +eliminarFactura(f: Factura): void
+  +listarFacturas(): List<FacturaDTO>
+  buscarPorNumero(n: int, t: TipoFactura): FacturaDTO
 }
 
 interface AlojadoDAO #Wheat{
-  +create(a: Alojado): void
-  +read(id: int): Alojado
-  +update(a: Alojado): void
-  +delete(a: Alojado): void
+  +crearAlojado(a: Alojado): void
+  +actualizarAlojado(a: Alojado): void
+  +eliminarAlojado(a: Alojado): void
+  +buscarHuespedDAO(c: CriteriosBusq): List<Alojado>
+  +listarAlojados(): List<Alojado>
+  +buscarPorDNI(doc: String, t: TipoDoc): Alojado
 }
 
 interface ResponsablePagoDAO #Wheat{
-  +create(r: ResponsablePago): void
-  +read(id: int): ResponsablePago
-  +update(r: ResponsablePago): void
-  +delete(r: ResponsablePago): void
+  +crear(r: ResponsablePago): void
+  +actualizarA(r: ResponsablePago): void
+  +eliminar(r: ResponsablePago): void
+  +listar(): List<ResponsablePago>
+  +buscarPorCUIT(CUIT: String): ResponsablePago
 }
 
 ' Nuevos DAOs agregados
 interface ReservaDAO #Wheat{
-  +readDate(Date: ini, Date: end): List<ReservaDTO>
-  +create(dp: Reserva): void
-  +read(id: int): Reserva
-  +update(dp: Reserva): void
-  +delete(dp: Reserva): void
+    +crear(e: Reserva): void
+    +actualizar(e: Reserva): void
+    +eliminar(e: Reserva): void
+    +listar(): List<Reserva>
+    +listarPorFecha(f: LocalDate): List<Reserva>
 }
 
 interface DatosPersonalesDAO #Wheat{
   +create(dp: DatosPersonales): void
-  +read(id: int): DatosPersonales
   +update(dp: DatosPersonales): void
   +delete(dp: DatosPersonales): void
 }
 
 interface DatosContactoDAO #Wheat{
-  +create(dc: DatosContacto): void
-  +read(id: int): DatosContacto
-  +update(dc: DatosContacto): void
-  +delete(dc: DatosContacto): void
+  +crear(dc: DatosContacto): void
+  +actualizar(dc: DatosContacto): void
+  +eliinar(dc: DatosContacto):void
+  +buscarDatosContacto(doc: String, t: TipoDoc): DatosContacto
 }
 
 interface DatosResidenciaDAO #Wheat{
-  +create(dr: DatosResidencia): void
-  +read(id: int): DatosResidencia
-  +update(dr: DatosResidencia): void
-  +delete(dr: DatosResidencia): void
+  +crear(dr: DatosResidencia): void
+  +actualizar(dr: DatosResidencia): void
+  +eliminar(dr: DatosResidencia): void
+  +buscar(doc: String, t: Tipo): DatosResidencia
 }
 
 
 interface DatosCheckInDAO #Wheat{
-  +create(dci: DatosCheckIn): void
-  +read(id: int): DatosCheckIn
-  +update(dci: DatosCheckIn): void
-  +delete(dci: DatosCheckIn): void
+  +crearDatosCheckIn(dci: DatosCheckIn): void
+  +actualizarDatosCheckIn(dci: DatosCheckIn): void
+  +eliminarDatosCheckIn(dci: DatosCheckIn): void
+  +listarDatosCheckIn(): List<DatosCheckIn>
 }
 
 interface DatosCheckOutDAO #Wheat{
-  +create(dco: DatosCheckOut): void
-  +read(id: int): DatosCheckOut
-  +update(dco: DatosCheckOut): void
-  +delete(dco: DatosCheckOut): void
+  +crearDatosCheckOut(dco: DatosCheckOut): void
+  +actualizarDatosCheckOut(dco: DatosCheckOut): void
+  +eliminarDatosCheckOut(dco: DatosCheckOut): void
+  +listarDatosCheckOut(doc: String, t: TipoDoc): List<DatosCheckOut>
 }
 
 
@@ -651,5 +704,4 @@ Usuario .down..> GestorContabilidad
 Usuario .down..> GestorHabitaciones
 }
 
-@enduml 
-
+@enduml
