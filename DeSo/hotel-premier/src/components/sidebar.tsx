@@ -20,8 +20,8 @@ const MENU_ITEMS: opciones[] = [
     alt: "Habitaciones",
     width: 40,
     options: [
-      { label: "Ocupar habitación", href: "/ocupar-hab" },
       { label: "Dar de alta huésped", href: "/alta-huesped" },
+      { label: "Ocupar habitación", href: "/ocupar-hab" },
     ],
   },
   {
@@ -29,14 +29,14 @@ const MENU_ITEMS: opciones[] = [
     icon: "/reserva.svg",
     alt: "Reservas",
     width: 40,
-    options: [{ label: "Reservar", href: "/" }],
+    options: [{ label: "Reservar habitación", href: "/" }],
   },
   {
     id: "facturacion",
     icon: "/fac.svg",
     alt: "Facturación",
     width: 50,
-    options: [{ label: "Ingresar pago", href: "/" }],
+    options: [{ label: "Generar factura", href: "/" }],
   },
 ];
 
