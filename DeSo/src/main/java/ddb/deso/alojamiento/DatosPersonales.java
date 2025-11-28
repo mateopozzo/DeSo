@@ -60,39 +60,34 @@ public class DatosPersonales {
     }
 
     public String getNroDoc() {
-        if (alojadoOwner == null) {
-            return null;
-        }
-        return alojadoOwner.getNroDoc();
-    }
-
-    public void setFechanac(LocalDate f){
-        fechanac=f;
-    }
-
-    public LocalDate getFechanac() {
-        return fechanac;
+        if(alojadoOwner!=null)
+            return alojadoOwner.getNroDoc();
+        return this.nroDoc;
     }
 
     public TipoDoc getTipoDoc() {
-        if (alojadoOwner == null) {
-            return null;
-        }
-        return alojadoOwner.getTipoDoc();
+        if(alojadoOwner!=null)
+            return alojadoOwner.getTipoDoc();
+        return this.tipoDoc;
     }
 
     public void setNroDoc(String nroDoc) {
         if (alojadoOwner != null) {
             alojadoOwner.setNroDoc(nroDoc);
+            alojadoOwner.getIdAlojado().setNroDoc(nroDoc);
         }
+        this.nroDoc=nroDoc;
     }
 
     public void setTipoDoc(TipoDoc tipoDoc) {
         if (alojadoOwner != null) {
+            alojadoOwner.getIdAlojado().setTipoDoc(tipoDoc);
             alojadoOwner.setTipoDoc(tipoDoc);
         }
+        this.tipoDoc = tipoDoc;
     }
-     public int getEdad() {
+
+    public int getEdad() {
         if (fechanac == null) return 0;
         //LocalDate nacimiento = fechanac.atStartOfDay(ZoneId.systemDefault()).toInstant();
         LocalDate hoy = LocalDate.now();

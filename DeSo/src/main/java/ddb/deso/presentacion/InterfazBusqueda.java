@@ -73,7 +73,7 @@ public class InterfazBusqueda {
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        List<Alojado> alojadosEncontrados = null;
+        List<Huesped> alojadosEncontrados = null;
         try{
             alojadosEncontrados = gestorAlojamiento.buscarHuesped(criterios_busq);
         } catch (AlojadosSinCoincidenciasException e){

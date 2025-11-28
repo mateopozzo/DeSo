@@ -1,0 +1,306 @@
+2025-11-28 16:50:58,248 [   1384]   WARN - #c.i.o.v.n.p.FSRecords - Records storage [/home/mat/.cache/JetBrains/IntelliJIdea2024.3/caches/records.dat] was in use by process [OwnershipInfo{owner pid: 213079, acquired at: 1764350832879}] which is not exist now (wasn't closed properly/crashed?) -> re-acquiring forcibly
+2025-11-28 16:50:58,393 [   1529]   WARN - #c.i.o.v.n.p.PersistentFSLoader - [VFS load problem]: VFS wasn't safely shut down: records.wasClosedProperly is false
+2025-11-28 16:50:58,810 [   1946]   WARN - c.i.o.u.r.overrides - Conflicting registry key definition for key kotlin.mpp.tests.force.gradle: it was defined by plugin org.jetbrains.kotlin but redefined by plugin org.jetbrains.kotlin. Consider adding overrides="true" for one of the plugins, see the documentation for com.intellij.openapi.util.registry.RegistryKeyBean.overrides for more details.
+2025-11-28 16:50:58,827 [   1963]   WARN - c.i.o.u.r.overrides - Conflicting registry key definition for key domains.spring.component.by.name.endpoint: it was defined by plugin com.intellij.spring but redefined by plugin com.intellij.spring.data. Consider adding overrides="true" for one of the plugins, see the documentation for com.intellij.openapi.util.registry.RegistryKeyBean.overrides for more details.
+2025-11-28 16:51:00,708 [   3844]   WARN - #c.i.o.v.n.p.PersistentFSLoader - [VFS load problem]: NOT_CLOSED_PROPERLY recovered, no problems remain
+Gtk-Message: 16:51:01.480: Failed to load module "appmenu-gtk-module": 'gtk_module_display_init': /usr/lib/x86_64-linux-gnu/gtk-3.0/modules/libwindow-decorations-gtk-module.so: undefined symbol: gtk_module_display_init
+2025-11-28 16:51:04,423 [   7559]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=org.jetbrains.kotlin.idea.search.refIndex.KotlinCompilerReferenceIndexService, plugin=org.jetbrains.kotlin)
+2025-11-28 16:51:04,424 [   7560]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.project.MavenProjectsManagerEx, plugin=org.jetbrains.idea.maven)
+2025-11-28 16:51:04,424 [   7560]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.navigator.MavenProjectsNavigator, plugin=org.jetbrains.idea.maven)
+2025-11-28 16:51:04,424 [   7560]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.tasks.MavenShortcutsManager, plugin=org.jetbrains.idea.maven)
+2025-11-28 16:51:04,425 [   7561]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=com.jetbrains.rdserver.toolWindow.BackendServerToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2025-11-28 16:51:04,425 [   7561]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.users.BackendUserManager, plugin=com.jetbrains.codeWithMe)
+2025-11-28 16:51:04,426 [   7562]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.ports.CwmPortForwardingToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2025-11-28 16:51:04,426 [   7562]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.FollowMeManagerService, plugin=com.jetbrains.codeWithMe)
+2025-11-28 16:51:11,632 [  14768]   WARN - #c.i.o.a.i.ActionUpdater - 3491 ms total to grab EDT 5 times to expand ToolWindowHeader$2#expandGroup@ToolwindowTitle (com.intellij.toolWindow.ToolWindowHeader$2). Use `ActionUpdateThread.BGT`.
+2025-11-28 16:51:12,158 [  15294]   WARN - #c.i.i.s.i.StartupManagerImpl - Migrate com.jetbrains.edu.learning.stepik.hyperskill.HyperskillStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+com.intellij.diagnostic.PluginException: Migrate com.jetbrains.edu.learning.stepik.hyperskill.HyperskillStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+	at com.intellij.ide.startup.impl.StartupManagerImpl.doRunPostStartupActivities(StartupManagerImpl.kt:293)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.access$doRunPostStartupActivities(StartupManagerImpl.kt:70)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invokeSuspend(StartupManagerImpl.kt:196)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3.invokeSuspend(StartupManagerImpl.kt:195)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.UndispatchedCoroutine.afterResume(CoroutineContext.kt:277)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:99)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2025-11-28 16:51:12,163 [  15299]   WARN - #c.i.i.s.i.StartupManagerImpl - Migrate com.jetbrains.edu.learning.marketplace.MarketplaceStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+com.intellij.diagnostic.PluginException: Migrate com.jetbrains.edu.learning.marketplace.MarketplaceStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+	at com.intellij.ide.startup.impl.StartupManagerImpl.doRunPostStartupActivities(StartupManagerImpl.kt:293)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.access$doRunPostStartupActivities(StartupManagerImpl.kt:70)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invokeSuspend(StartupManagerImpl.kt:196)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3.invokeSuspend(StartupManagerImpl.kt:195)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.UndispatchedCoroutine.afterResume(CoroutineContext.kt:277)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:99)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2025-11-28 16:51:18,400 [  21536]   WARN - #c.i.j.w.n.WebTypesNpmLoader - Failed to fetch packages for '@web-types' (Full Text): Request failed with status code 429
+2025-11-28 16:51:25,187 [  28323]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2025-11-28 16:51:25,451 [  28587]   WARN - JetBrains UI DSL - Row should not be empty
+2025-11-28 16:52:16,632 [  79768]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2025-11-28 16:53:28,166 [ 151302]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:28.166798 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:32,427 [ 155563]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:32.427760 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:34,922 [ 158058]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:34.922607 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:44,324 [ 167460]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:44.324167 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:44,438 [ 167574]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:44.438305 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:47,206 [ 170342]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:47.206467 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:47,419 [ 170555]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:47.419610 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:47,547 [ 170683]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:47.547433 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:47,838 [ 170974]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:47.838705 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:49,043 [ 172179]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:49.43514 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:49,119 [ 172255]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:49.119876 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:49,244 [ 172380]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:49.244391 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:50,124 [ 173260]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:50.124533 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:50,159 [ 173295]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:50.159713 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:50,324 [ 173460]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:50.324291 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:51,180 [ 174316]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:51.180492 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:53:51,405 [ 174541]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:53:51.405469 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:07,389 [ 190525]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:07.389184 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:07,544 [ 190680]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:07.544203 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:07,591 [ 190727]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:07.591298 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:10,609 [ 193745]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:10.608891 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:11,948 [ 195084]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:11.948890 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:12,420 [ 195556]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:12.420664 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:12,600 [ 195736]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:12.600632 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:12,687 [ 195823]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:12.687266 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:12,808 [ 195944]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:12.808260 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:12,909 [ 196045]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:12.909191 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,112 [ 196248]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.112582 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,208 [ 196344]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.208812 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,300 [ 196436]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.300161 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,438 [ 196574]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.438451 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,500 [ 196636]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.500267 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:13,645 [ 196781]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:13.645233 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:22,989 [ 206125]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:22.989872 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:23,071 [ 206207]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:23.71391 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:23,981 [ 207117]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:23.981594 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:24,104 [ 207240]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:24.103990 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:24,827 [ 207963]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:24.827866 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:25,438 [ 208574]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:25.438378 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:25,855 [ 208991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:25.855813 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:25,973 [ 209109]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:25.973619 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:26,626 [ 209762]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:26.626553 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:26,854 [ 209990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:26.854498 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:27,321 [ 210457]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:27.321719 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:27,438 [ 210574]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:27.438232 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:28,396 [ 211532]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:54:28.396339 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:54:42,581 [ 225717]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2025-11-28 16:55:29,076 [ 272212]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.codeInsight.navigation.BackgroundUpdaterTaskBase.<init>(BackgroundUpdaterTaskBase.java:34)
+2025-11-28 16:57:07,344 [ 370480]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:07.344402 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:07,377 [ 370513]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:07.377224 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:08,182 [ 371318]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:08.182255 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:10,338 [ 373474]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:10.338686 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:10,991 [ 374127]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:10.991077 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:11,403 [ 374539]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:11.403135 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:11,868 [ 375004]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:11.867814 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:12,244 [ 375380]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:12.244205 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:19,411 [ 382547]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:19.411872 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:19,461 [ 382597]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:19.461412 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:19,639 [ 382775]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:19.639109 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:20,183 [ 383319]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:20.182982 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:20,487 [ 383623]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:20.487856 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:22,452 [ 385588]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:22.452840 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:22,563 [ 385699]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:22.563265 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:24,361 [ 387497]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:24.361408 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:24,758 [ 387894]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:24.758195 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:25,363 [ 388499]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:25.363183 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:25,414 [ 388550]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:25.414336 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:25,571 [ 388707]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:25.571399 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:28,980 [ 392116]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:28.979897 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:29,059 [ 392195]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:29.59727 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:29,142 [ 392278]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:29.142848 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:29,886 [ 393022]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:29.886071 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:29,929 [ 393065]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:29.929861 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:30,361 [ 393497]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:30.361829 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:30,663 [ 393799]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:30.663314 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:57,668 [ 420804]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:57.668466 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:57,958 [ 421094]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:57.958076 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:58,209 [ 421345]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:58.209580 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:58,888 [ 422024]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:58.888361 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise
+2025-11-28 16:57:58,889 [ 422025]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - ' during execution
+
+2025-11-28 16:57:59,791 [ 422927]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:59.790864 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:57:59,905 [ 423041]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:57:59.905709 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:00,116 [ 423252]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:00.116156 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:00,232 [ 423368]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:00.232057 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:01,957 [ 425093]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:01.957465 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:02,248 [ 425384]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:02.248276 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:02,311 [ 425447]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:02.311002 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:02,479 [ 425615]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:02.479057 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:02,605 [ 425741]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:02.605870 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:04,630 [ 427766]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:04.630661 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:04,741 [ 427877]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:04.741500 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:04,820 [ 427956]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:04.820659 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:04,984 [ 428120]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:04.983895 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:05,023 [ 428159]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:05.23638 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:05,125 [ 428261]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:05.125921 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:05,618 [ 428754]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:05.618786 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:07,028 [ 430164]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:07.28518 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:07,148 [ 430284]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:07.147841 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:58:07,844 [ 430980]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:58:07.844425 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:39,830 [ 522966]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:39.829996 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:39,968 [ 523104]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:39.968300 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:40,118 [ 523254]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:40.117722 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:43,275 [ 526411]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:43.275932 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:43,522 [ 526658]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:43.522879 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:43,615 [ 526751]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:43.615726 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:43,810 [ 526946]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:43.809961 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:43,947 [ 527083]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:43.947487 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:44,058 [ 527194]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:44.58667 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:44,185 [ 527321]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:44.185377 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:44,975 [ 528111]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:44.974965 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:45,086 [ 528222]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:45.86163 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:45,188 [ 528324]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:45.188104 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:45,307 [ 528443]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:45.307221 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:46,556 [ 529692]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:46.556141 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:48,407 [ 531543]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:48.407538 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:48,449 [ 531585]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:48.449723 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:48,539 [ 531675]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:48.539888 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:48,664 [ 531800]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:48.664325 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:49,254 [ 532390]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:49.254725 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 16:59:49,481 [ 532617]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 19:59:49.481875 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-11-28 17:00:18,908 [ 562044]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2025-11-28 17:00:54,580 [ 597716]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.GotItTooltip.<init>(GotItTooltip.kt:94)
+2025-11-28 17:02:15,609 [ 678745] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:15,610 [ 678746] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:15,652 [ 678788] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:15,653 [ 678789] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:30,909 [ 694045] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:30,910 [ 694046] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:36,050 [ 699186] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26
+2025-11-28 17:02:36,051 [ 699187] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 26 >= 26

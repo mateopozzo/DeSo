@@ -4,25 +4,36 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "alojado")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_alojado", discriminatorType = DiscriminatorType.STRING)
 public abstract class Alojado {
 
+    public Alojado(DatosAlojado da){
+        this.datos = da;
+        this.id = this.getDatos().getIdAlojado();
+        this.listaEstadias=new ArrayList<>();
+        this.listaReservas=new ArrayList<>();
+    }
+
     @EmbeddedId
     private AlojadoID id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("id")
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
@@ -52,4 +63,6 @@ public abstract class Alojado {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }
