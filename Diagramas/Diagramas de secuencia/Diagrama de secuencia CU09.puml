@@ -1,0 +1,104 @@
+@startuml
+title CU09: Dar alta de Huesped
+' Actor y participantes
+actor "Conserje" as Conserje
+boundary "GUI" as UI
+participant "Gestor Alojamiento" as GestorAlojamiento
+participant "Huesped" as Hues <<Class>> 
+participant "AlojadoDAO" as ADAO <<Interface>>
+database "Base de datos" as BDD <<Database>>
+
+
+' Precondición
+group Precondicion: Buscar Hueped con exito
+  rnote across: Inicio del caso de uso
+  
+  loop Carga : Mientras presione SI 
+    Conserje -> UI : Iniciar alta
+    activate Conserje
+    activate UI
+  
+    UI --> Conserje : Mostrar todos los campos
+    Conserje -> UI : Enviar campos completos
+    
+    alt Cancelar
+      Conserje -> UI : Boton cancelar
+      UI --> Conserje : Mensaje seguridad
+      alt Si : Conserje presiona Si
+        Conserje -> UI : Si
+        deactivate UI 
+        deactivate Conserje
+        rnote over Conserje : Fin del caso de uso
+      end
+      alt No : Conserje presiona No
+      end
+    end
+    
+    Conserje -> UI : Siguiente
+    activate UI 
+    activate Conserje
+    UI -> UI : validarCampos()
+    activate UI
+    deactivate UI
+    
+    loop Incompleto: Conserje dejo campo(s) incompleto(s)
+      UI --> Conserje : Mensaje error
+      UI --> Conserje : Mostrar omisiones
+      Conserje -> UI : Enviar campos completos
+      Conserje -> UI : Siguiente
+      UI -> UI : validarCampos()
+      activate UI
+      deactivate UI
+    end
+    
+    loop Existencia : Tipo y numero de documento repetido
+      UI --> Conserje : Cartel error
+      UI --> Conserje : Opciones
+      alt Corregir : Conserje presiona Corregir
+        Conserje -> UI : Opcion corregir
+        UI --> Conserje : Focus campos Tipo y numero documento
+        Conserje -> UI  : Tipo y numero de documento
+        UI -> UI : validarCampos()
+        activate UI
+        deactivate UI
+      end
+      alt Corregir : Conserje presiona Aceptar igualmente
+        Conserje -> UI : Aceptar igualmente
+        break
+      end
+    end
+  end
+    
+  UI -> GestorAlojamiento : altaHuesped(Huesped(Datos))
+  activate GestorAlojamiento
+  GestorAlojamiento -> Hues : create(Huesped(Datos))
+  activate Hues
+  Hues --> GestorAlojamiento  : Huesped
+  deactivate Hues
+  GestorAlojamiento -> ADAO :  create(Huésped)
+  activate ADAO
+  ADAO -> BDD : create(Huesped)
+  activate BDD
+  BDD --> ADAO
+  deactivate BDD
+  ADAO --> GestorAlojamiento
+  deactivate ADAO
+  GestorAlojamiento --> UI 
+  deactivate GestorAlojamiento
+  
+  UI --> Conserje : Mensaje cargar otro
+  
+  Conserje -> UI : No
+  
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondicion (exito) -- Los datos del huesped nuevo se guardan en el sistema.
+  Postcondicion (fracaso) -- La operacion no se puede concretar.
+end note
+
+@enduml
+ 
+ 
+

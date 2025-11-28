@@ -1,0 +1,88 @@
+@startuml
+title CU05: Mostrar estado de habitaciones
+' Actor y participantes
+actor "Conserje" as Conserje <<Usuario>>
+boundary "GUI" as UI <<Interfaz grafica>>
+participant "Gestor de habitaciones" as Gestor
+participant "Habitacion DAO" as DAO <<Interface>>
+database "Habitacion BDD" as BDD <<Database>>
+participant "Habitacion" as Habitacion <<Class>>
+
+' Precondición
+group Precondicion: Conserje autenticado en el sistema
+  rnote across: Inicio del caso de uso
+  opt Cancelar
+    Conserje -> UI : Boton cancelar
+    rnote over Conserje : Fin del caso de uso
+  end
+  
+  activate Conserje
+  Conserje -> UI : Ver estado de habitaciones
+  activate UI
+  UI --> Conserje : Campos "Desde" y "Hasta"
+  Conserje -> UI : Enter o click en campo "Desde"
+  UI --> Conserje : Focus input fecha de inicio
+  Conserje -> UI : Fecha de inicio
+  
+  
+  UI -> UI : Verificacion
+  activate UI
+  deactivate UI
+
+  
+  loop Verificacion: La fecha de inicio es invalida
+    UI --> Conserje : Mensaje de error
+    UI --> Conserje : Focus input fecha de inicio
+    Conserje -> UI : Fecha de inicio
+    UI -> UI : Verificacion
+    activate UI
+    deactivate UI
+  end
+  
+  UI --> Conserje : Focus input fecha de finalizacion
+  Conserje -> UI : Fecha de finalizacion
+  
+  loop Verificacion: La fecha de finalizacion es invalida
+    UI --> Conserje : Mensaje de error
+    UI --> Conserje : Focus input fecha de finalizacion
+    Conserje -> UI : Fecha de finalizacion
+    UI -> UI : Verificacion
+    activate UI
+    deactivate UI
+  end
+  
+  
+  UI -> Gestor : listarHabitaciones (inicio, fin)
+  activate Gestor
+  Gestor -> DAO : readAll()
+  activate DAO
+  DAO -> BDD : readAll()
+  activate BDD
+  BDD --> DAO
+  deactivate BDD
+  DAO -> Habitacion : create (listaHabitaciones)
+  activate Habitacion
+  Habitacion--> DAO : Habitaciones <list>
+  deactivate Habitacion
+  DAO --> Gestor : Habitaciones <list>
+  deactivate DAO
+  Gestor -> Gestor : Asignar color a cada estado
+
+  Gestor --> UI : Habitaciones <list>
+  deactivate Gestor 
+  UI --> Conserje : Tabla con habitaciones y estados codificados en colores
+  deactivate UI
+  deactivate Conserje
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondición (éxito) -- Las habitaciones se muestran en la pantalla con su correspondiente estado.
+  Postcondición (fracaso) -- Las habitaciones no se muestran en pantalla.
+end note
+
+@enduml
+ 
+
+
+ 

@@ -15,12 +15,10 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Data
 @DiscriminatorValue("Invitado")
 public class Invitado extends ddb.deso.alojamiento.Alojado {
     public Invitado (DatosAlojado da){
-        this.datos=da;
-        this.datos.getDatos_personales().setCUIT(null);
+        super(da);
     }
     public Invitado (){
         this.datos=new DatosAlojado();
