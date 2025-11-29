@@ -81,6 +81,10 @@ class ServicioDAOPostGre  #LightGray implements ServicioDAO {
   +update(s: Servicio): void
   +delete(s: Servicio): void
 }
+interface UsuarioDAO #Wheat
+class UsuarioDAOPostGre  #LightGray implements UsuarioDAO {
+  +BuscarPorNombre(nom: String): Optional<Usuario>
+}
 interface PagoDAO #Wheat
 class PagoDAOPostGre #LightGray  implements PagoDAO {
   +create(p: Pago): void
@@ -146,13 +150,7 @@ class DatosCheckOutDAOPostGre  #LightGray implements DatosCheckOutDAO {
   +update(dco: DatosCheckOut): void
   +delete(dco: DatosCheckOut): void
 }
-interface UsuarioDAO #Wheat
-class UsuarioDAOPostGre  #LightGray implements UsuarioDAO {
-  +create(dco: DatosCheckOut): void
-  +read(id: int): DatosCheckOut
-  +update(dco: DatosCheckOut): void
-  +delete(dco: DatosCheckOut): void
-}
+
 EstadiaDAO -[hidden]down- AlojadoDAOPostGre
 }
 
@@ -765,9 +763,10 @@ Sesion "1"-"1" Usuario
 
 GestorAutenticacion ..> UsuarioDAO 
 GestorAutenticacion ..> Usuario
-GestorAlojamiento .up..> Usuario
-GestorContabilidad .up..> Usuario
-GestorHabitaciones .up..> Usuario
+GestorAutenticacion ..> Sesion
+GestorAlojamiento ...> Sesion
+GestorContabilidad ...> Sesion
+GestorHabitaciones ...> Sesion
 
 }
 
