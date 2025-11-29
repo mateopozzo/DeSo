@@ -245,6 +245,13 @@ class Huesped {
   +setRazonSocial(): void
 }
 
+class FactoryAlojado {
+  + _HUESPED : int
+  + _INVITADO : int
+  + create(tipo : int, DatosAlojado da) : Alojado
+  + createFromDTO(AlojadoDTO) : Alojado
+}
+
 class DatosAlojado {
   -idAlojado: AlojadoID
   -datos_contacto: DatosContacto
@@ -407,7 +414,6 @@ class GestorHabitaciones #LightBlue {
   +crearReserva(reserva: Reserva, listaIDHabitacion: List<Long>): void
   +ocuparHabitacion(idHab: Long, cHues: CriteriosBusq, cInv: List<CriteriosBusq>, fechaInicio: LocalDate, fechaFin: LocalDate): void
 }
-
 
 class GestorAlojamiento #LightBlue  {
   -alojadoDAO: AlojadoDAO
@@ -701,6 +707,7 @@ GestorContabilidad ..> EstadiaDTO
 GestorAlojamiento ..> DatosAlojadoDTO
 GestorAlojamiento ..> DatosCheckInDTO
 GestorAlojamiento ..> DatosCheckOutDTO
+GestorAlojamiento ..> FactoryAlojado
 
 
 GestorHabitaciones ..> DatosAlojadoDTO
@@ -732,6 +739,7 @@ Pago "0..*" -->"1" Estadia
 Reserva "1..*" --> "1..*" Habitacion
 Reserva "0..*" --> "1" Huesped
 
+FactoryAlojado ..> Alojado
 Alojado <|-- Huesped
 Alojado <|-- Invitado
 Estadia "1" --> "1" DatosCheckIn
