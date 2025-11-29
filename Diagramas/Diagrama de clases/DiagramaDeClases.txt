@@ -433,6 +433,12 @@ class GestorAutenticacion{
   +autentificar(nom: String, pass: String): Usuario
 }
 
+class SingletonUsuario{
+  -instancia: SingletonUsuario
+  -singleton()
+  +getSingletonInstancia(): SingletonUsuario
+}
+
 class UsuarioDao #Wheat{
   +BuscarPorNombre(nom: String): Optional<Usuario>
 }
@@ -757,7 +763,9 @@ Pago "0..*" <-- "1" Estadia
 Factura "1" --> "1..*" Pago
 Factura "1" --> "0..*" NotaCredito
 ResponsablePago "1" <-- "0..*" Pago
+SingletonUsuario o--> SingletonUsuario
 
+Usuario .down..> SingletonUsuario
 Usuario .down..> GestorAlojamiento
 Usuario .down..> GestorContabilidad
 Usuario .down..> GestorHabitaciones
