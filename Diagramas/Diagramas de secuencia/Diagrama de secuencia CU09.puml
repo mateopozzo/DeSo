@@ -6,6 +6,7 @@ boundary "GUI" as UI
 participant "Gestor Alojamiento" as GestorAlojamiento
 participant "Huesped" as Hues <<Class>> 
 participant "AlojadoDAO" as ADAO <<Interface>>
+participant "FactoryAlojado" as FALOJ <<Factory>>
 database "Base de datos" as BDD <<Database>>
 
 
@@ -69,15 +70,15 @@ group Precondicion: Buscar Hueped con exito
     end
   end
     
-  UI -> GestorAlojamiento : altaHuesped(Huesped(Datos))
+  UI -> GestorAlojamiento : altaHuesped(AlojadoDTO)
   activate GestorAlojamiento
-  GestorAlojamiento -> Hues : create(Huesped(Datos))
-  activate Hues
-  Hues --> GestorAlojamiento  : Huesped
-  deactivate Hues
-  GestorAlojamiento -> ADAO :  create(Huésped)
+  GestorAlojamiento -> FALOJ : create(HUESPED, Datos)
+  activate FALOJ
+  FALOJ --> GestorAlojamiento  : Huesped
+  deactivate FALOJ
+  GestorAlojamiento -> ADAO :  crearAlojado(Huésped)
   activate ADAO
-  ADAO -> BDD : create(Huesped)
+  ADAO -> BDD : Huesped
   activate BDD
   BDD --> ADAO
   deactivate BDD
