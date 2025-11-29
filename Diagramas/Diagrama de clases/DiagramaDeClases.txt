@@ -1,5 +1,3 @@
- 
- 
 @startuml
 title Diagrama de clases de diseño - Grupo 22
 scale 2
@@ -48,7 +46,6 @@ enum TipoServicio {
 }
 }
 package "Implementaciones DAO" {
-
   interface EstadiaDAO #Wheat
   class EstadiaDAOPostGre #LightGray implements EstadiaDAO {
     +create(e: Estadia): void
@@ -433,13 +430,14 @@ class GestorAutenticacion{
   +autentificar(nom: String, pass: String): Usuario
 }
 
-class SingletonUsuario{
-  -instancia: SingletonUsuario
-  -singleton()
-  +getSingletonInstancia(): SingletonUsuario
+class Sesion{
+  -instancia: Usuario
+  -finalizarSesion()
+  +iniciarSesion(u: Usuario)
+  +getUsuarioLogueado(): Usuario
 }
 
-class UsuarioDao #Wheat{
+interface UsuarioDAO #Wheat{
   +BuscarPorNombre(nom: String): Optional<Usuario>
 }
 
@@ -683,7 +681,7 @@ GestorContabilidad ..> DatosPersonalesDAO
 GestorContabilidad ..> DatosContactoDAO
 
 ' Dependencias de DAOs a sus entidades correspondientes
-Usuario ..>UsuarioDao
+UsuarioDAO ..> Usuario
 EstadiaDAO ..> Estadia
 DatosAlojadoDAO ..> DatosAlojado
 ReservaDAO ..> Reserva
@@ -763,12 +761,13 @@ Pago "0..*" <-- "1" Estadia
 Factura "1" --> "1..*" Pago
 Factura "1" --> "0..*" NotaCredito
 ResponsablePago "1" <-- "0..*" Pago
-SingletonUsuario o--> SingletonUsuario
+Sesion "1"-"1" Usuario
 
-Usuario .down..> SingletonUsuario
-Usuario .down..> GestorAlojamiento
-Usuario .down..> GestorContabilidad
-Usuario .down..> GestorHabitaciones
+GestorAutenticacion ..> UsuarioDAO 
+GestorAutenticacion ..> Usuario
+GestorAlojamiento .up..> Usuario
+GestorContabilidad .up..> Usuario
+GestorHabitaciones .up..> Usuario
 
 }
 
