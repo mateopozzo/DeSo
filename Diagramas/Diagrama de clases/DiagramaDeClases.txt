@@ -769,6 +769,7 @@ Usuario .down..> SingletonUsuario
 Usuario .down..> GestorAlojamiento
 Usuario .down..> GestorContabilidad
 Usuario .down..> GestorHabitaciones
+
 }
 
 @enduml
