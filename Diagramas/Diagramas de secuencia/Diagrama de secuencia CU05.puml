@@ -4,9 +4,9 @@ title CU05: Mostrar estado de habitaciones
 actor "Conserje" as Conserje <<Usuario>>
 boundary "GUI" as UI <<Interfaz grafica>>
 participant "Gestor de habitaciones" as Gestor
-participant "Habitacion DAO" as DAO <<Interface>>
+participant "ReservaDAO" as RDAO <<Interface>>
+participant "EstadiaDAO" as EDAO <<Interface>>
 database "Habitacion BDD" as BDD <<Database>>
-participant "Habitacion" as Habitacion <<Class>>
 
 ' Precondición
 group Precondicion: Conserje autenticado en el sistema
@@ -52,24 +52,37 @@ group Precondicion: Conserje autenticado en el sistema
   end
   
   
-  UI -> Gestor : listarHabitaciones (inicio, fin)
+  UI -> Gestor : listarHabitaciones(inicio, fin)
   activate Gestor
-  Gestor -> DAO : readAll()
-  activate DAO
-  DAO -> BDD : readAll()
+  Gestor -> EDAO : listarEstadias(inicio, fin)
+  activate EDAO
+  EDAO -> BDD : listarEstadias(inicio, fin)
   activate BDD
-  BDD --> DAO
+  BDD --> EDAO
   deactivate BDD
-  DAO -> Habitacion : create (listaHabitaciones)
-  activate Habitacion
-  Habitacion--> DAO : Habitaciones <list>
-  deactivate Habitacion
-  DAO --> Gestor : Habitaciones <list>
-  deactivate DAO
-  Gestor -> Gestor : Asignar color a cada estado
+  EDAO -> EDAO : filtrarEstadias(inicio, fin)
+  activate EDAO
+  deactivate EDAO
+  EDAO --> Gestor : List<Estadia>
+  deactivate EDAO
+  
+  Gestor -> RDAO : listarReservas(inicio, fin)
+  activate RDAO
+  RDAO -> BDD : listarReservas(inicio, fin)
+  activate BDD
+  BDD --> RDAO
+  deactivate BDD
+  RDAO -> RDAO : filtrarReservas(inicio, fin)
+  activate RDAO
+  deactivate RDAO
+  RDAO --> Gestor : List<ReservaDAO>
+  deactivate RDAO
+  
+  Gestor -> Gestor : Determinar estado habitaciones (listaReservas, listaEstadias)
 
-  Gestor --> UI : Habitaciones <list>
+  Gestor --> UI : List<Habitacion>
   deactivate Gestor 
+  UI -> UI : Asignar color a cada estado
   UI --> Conserje : Tabla con habitaciones y estados codificados en colores
   deactivate UI
   deactivate Conserje

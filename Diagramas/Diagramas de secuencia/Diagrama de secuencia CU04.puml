@@ -1,93 +1,107 @@
+title CU04: Reservar habitacion
 @startuml
 ' Actor y participantes
-actor "Cliente" as Huesped
-actor "Conserje" as Conserje
-participant "Interfaz de Usuario" as UI
-participant "Sistema" as Sistema
-participant "Base de datos" as Base
+actor "Conserje" as Conserje <<Usuario>>
+boundary "GUI" as UI <<Interfaz grafica>>
+participant "GestorAlojamiento" as Sistema
+participant "GestorHabitaciones" as Habitaciones
+participant "Reserva" as R
+participant "ReservaDAO" as RDAO <<Interface>>
+database "Base de datos" as Base <<Database>>
 
 ' Precondición
-alt Precondición: Conserje autenticado en el sistema
+group Precondicion: Conserje autenticado en el sistema
 
   note across: Inicio del caso de uso
-  activate Huesped
-  Huesped -> Conserje : Desea reservar habitaciones
   activate Conserje
   Conserje -> UI : Inicia reserva de habitaciones
   activate UI
-  UI --> Sistema : mostrarEstadoHabitaciones()
-  activate Sistema
-  Sistema -> UI : mostrarGrid(renderGrilla)
-  deactivate Sistema
+  UI --> Habitaciones : mostrarEstadoHabitaciones()
+  activate Habitaciones
+  Habitaciones -> UI : Grilla
+  deactivate Habitaciones
   
   note across: Verificacion de disponibilidad de habitaciones
-  alt Existencia: No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.
-    Conserje --> Huesped : Informa indisponibiliad
+  alt Existencia: No hay habitaciones disponibles
     deactivate Conserje 
-    deactivate Huesped
     deactivate UI
-    note over Huesped, Conserje
-      Finaliza Caso de uso
+    note over Conserje
+      Finaliza caso de uso
     end note
   end
+  
+  UI --> Conserje : Mostrar Grilla, campos fechaDesde, fechaHasta
+  activate Conserje
   Conserje -> UI : Ingresa habitaciones y rango de fechas
-  activate Conserje 
-  activate Huesped
   activate UI
-  UI --> Sistema : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
-  activate Sistema
-  Sistema -> UI : mostrarGrid(renderGrilla)
-  deactivate Sistema
-  loop Disponibilidad: mientras seleccione habitacion no disponible
+  UI -> UI : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
+  activate UI
+  deactivate UI
+  loop Disponibilidad: Mientras seleccione habitacion no disponible
+    UI --> Conserje : Mostrar Error, Grilla, campos fechaDesde, fechaHasta
     Conserje -> UI : Ingresa habitaciones y rango de fechas
-    UI --> Sistema : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
-    activate Sistema
-    Sistema -> UI : mostrarGrid(renderGrilla, mensaje)
-    deactivate Sistema
+    UI -> UI : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
+    activate UI
+    deactivate UI
   end
-  Conserje -> UI : siguiente
+  Conserje -> UI : Siguiente
   
   note across: Verificacion de dias y habitaciones
   UI -> UI : mostrarListadoReservas()
+  activate UI
+  deactivate UI
   alt rechaza: Conserje presiona rechazar
-    Conserje -> UI : rechazar
-    UI -> UI : deshacerGrilla(Grilla)
+    Conserje -> UI : Rechazar
     deactivate Conserje 
-    deactivate Huesped
+    UI -> UI : deshacerGrilla(Grilla)
     deactivate UI
-    note over Huesped, Conserje
+    note over Conserje
       Finaliza Caso de uso
     end note
   end
-  Conserje -> UI : aceptar
+  Conserje -> UI : Aceptar
   activate Conserje 
-  activate Huesped
   activate UI
   note across: Cargar responsable de reserva
   UI -> UI : ingresarResponsableReserva()
-  Conserje -> Huesped : solicita datos
-  Huesped --> Conserje : entrega datos
-  Conserje -> UI : completa campos
-  alt Campo incompleto: Conserje no completa uno o mas campos
+  activate UI
+  deactivate UI
+  Conserje -> UI : Completa campos
+  loop Campo incompleto: Conserje no completa uno o mas campos
     UI -> UI : mostrarCartelError()
-    UI -> UI : pone foco en primer campo faltante
-    Conserje -> UI : completa campos
+    activate UI
+    deactivate UI
+    UI -> UI : Foco en primer campo faltante
+    activate UI
+    deactivate UI
+    Conserje -> UI : Completa campos
   end
   
   note across: Guardar reserva en Sistema
-  UI --> Sistema : Reserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
-  Sistema -> Base : crear(Reserva)
+  UI --> Sistema : crearReserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
+  activate Sistema
+  Sistema -> Sistema : validarReserva()
+  activate Sistema
+  deactivate Sistema 
+  Sistema -> R : Reserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
+  activate R
+  R -> RDAO : crear(Reserva)
+  activate RDAO
+  RDAO -> Base : crear(Reserva)
   activate Base
-  Base --> Sistema : ok
+  Base  --> RDAO
   deactivate Base
-  
+  RDAO --> R
+  deactivate RDAO
+  R --> Sistema
+  deactivate R
+  Sistema --> UI
+  deactivate Sistema
   opt Cancelar
     Conserje -> UI : Presiona "CANCELAR"
-    UI --> Sistema : solicitarCancelacion()
-    activate Sistema
-    Sistema -> UI : confirmarCancelacion()
-    deactivate Sistema
     UI -> Conserje : Mensaje: caso de uso finalizado
+    deactivate Conserje
+    deactivate UI
   end
 end
 
@@ -99,3 +113,4 @@ end note
 
 @enduml
  
+
