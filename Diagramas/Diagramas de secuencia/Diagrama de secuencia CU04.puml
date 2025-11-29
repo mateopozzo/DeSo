@@ -85,16 +85,16 @@ group Precondicion: Conserje autenticado en el sistema
   deactivate Sistema 
   Sistema -> R : Reserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
   activate R
-  R -> RDAO : crear(Reserva)
+  R-->Sistema
+  deactivate R
+  Sistema -> RDAO : crear(Reserva)
   activate RDAO
   RDAO -> Base : crear(Reserva)
   activate Base
   Base  --> RDAO
   deactivate Base
-  RDAO --> R
+  RDAO --> Sistema
   deactivate RDAO
-  R --> Sistema
-  deactivate R
   Sistema --> UI
   deactivate Sistema
   opt Cancelar
@@ -113,4 +113,3 @@ end note
 
 @enduml
  
-

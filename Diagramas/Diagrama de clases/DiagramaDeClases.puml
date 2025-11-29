@@ -735,7 +735,7 @@ EstadiaDTO "0..*" --> "1..*" HabitacionDTO
 ' Relaciones de asociación y composición
 Estadia "1..*" --> "1" Huesped
 Estadia "1..*" --> "0..*" Invitado
-Estadia "0..*" --> "0..*" Habitacion
+Estadia "0..*" --> "1" Habitacion
 Estadia "0..*" --> "0..*" Servicio
 Pago "0..*" -->"1" Estadia
 Reserva "1..*" --> "1..*" Habitacion
