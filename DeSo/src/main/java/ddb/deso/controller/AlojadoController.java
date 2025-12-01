@@ -20,7 +20,7 @@ import java.util.List;
  * Escucha las peticiones web y las delega al GestorAlojamiento.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins ={"http://localhost:3000/", "http://localhost:8080"})
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;
@@ -60,6 +60,8 @@ public class AlojadoController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         }
+
+        gestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
     }
@@ -111,10 +113,14 @@ public class AlojadoController {
 
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
+        System.out.println(tipoDoc.toString());
+
         if(criteriosBusq == null)
             criteriosBusq = new CriteriosBusq();
 
         List<Huesped> huespedesEncontrados;
+
+
         try {
             huespedesEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
@@ -122,9 +128,10 @@ public class AlojadoController {
             return null;
         }
 
+        System.out.println("Cantidad encontrada " + huespedesEncontrados.size());
+
         return conversionAlojadoToCriterio(huespedesEncontrados);
     }
-
 
 
     // @GetMapping -> para buscar

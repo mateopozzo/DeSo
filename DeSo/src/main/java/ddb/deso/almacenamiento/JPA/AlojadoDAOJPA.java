@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia.
  * Actúa como un adaptador entre la interfaz DAO y los repositorios JPA.
  *
- * NOTA: Para que 'buscarHuespedDAO' funcione, AlojadoRepository DEBE extender
+ * NOTA: Para que 'buscarAlojadoDAO' funcione, AlojadoRepository DEBE extender
  * JpaSpecificationExecutor<Alojado, AlojadoID>
  *
  * Ejemplo:
@@ -83,7 +83,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public List<Alojado> buscarHuespedDAO(CriteriosBusq criterios) {
+    public List<Alojado> buscarAlojadoDAO(CriteriosBusq criterios) {
 
         // Si el Documento esta entero se aprovecha
         if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank() && criterios.getTipoDoc() != null) {

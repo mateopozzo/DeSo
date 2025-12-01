@@ -45,7 +45,7 @@ public interface AlojadoDAO {
      * @param criterios objeto {@link CriteriosBusq} que define los parámetros de búsqueda (apellido, documento, etc.).
      * @return una lista de {@link Alojado} que cumplen con los criterios.
      */
-    List<Alojado> buscarHuespedDAO(CriteriosBusq criterios);
+    List<Alojado> buscarAlojadoDAO(CriteriosBusq criterios);
 
      /**
      * Obtiene una lista completa de todos los huéspedes alojados registrados.

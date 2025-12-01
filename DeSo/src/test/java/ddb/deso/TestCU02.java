@@ -2,17 +2,28 @@ package ddb.deso;
 
 //import static ddb.deso.gestores.GestorAlojamiento.buscarAlojado;
 
-
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
 public class TestCU02 {
+
+    private FactoryAlojado FA;
+
     @Autowired
     private GestorAlojamiento gestorAlojamiento;
 
@@ -21,44 +32,68 @@ public class TestCU02 {
         this.gestorAlojamiento = gestorAlojamiento;
     }
 
+    @MockitoBean
+    AlojadoDAO mockitoDAO;
+
     @Test
     public void busquedaRegular() {
-        /**CON TILDE EN BDD, SIN TILDE EN BÚSQUEDA - Todos los criterios ------")*/
-        // "BÚSQUEDA: Gómez, Juan LE 47183532 ----------------------------\n");
-        CriteriosBusq crit2 = new CriteriosBusq("Gómez", "Juan", TipoDoc.LE, "47183532");
-        gestorAlojamiento.buscarHuesped(crit2);
+        CriteriosBusq crit2 = new CriteriosBusq("Gomez", "Juan", TipoDoc.LE, "47183532");
+        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit2), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarHuesped(crit2);
+        assertEquals(1, lista.size());
+        assertEquals("GOMEZ", lista.getFirst().getDatos().getDatos_personales().getApellido());
+        assertEquals("JUAN", lista.getFirst().getDatos().getDatos_personales().getNombre());
+        assertEquals(TipoDoc.LE, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
+        assertEquals("47183532", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
     }
 
     @Test
     public void busquedaConTildes  (){
-        /** CON TILDE EN BUSQUEDA, SIN TILDE EN BDD - Todos los criterios ------") */
-        System.out.println("BÚSQUEDA: Fernandez, Domingo DNI 87800466 ----------------------------\n");
         CriteriosBusq crit5 = new CriteriosBusq("Fernández", "Domingo", TipoDoc.DNI, "87800466");
-        gestorAlojamiento.buscarHuesped(crit5);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarHuesped(crit5);
+        assertEquals(1, lista.size());
+        assertEquals("FERNANDEZ", lista.getFirst().getDatos().getDatos_personales().getApellido());
+        assertEquals("DOMINGO", lista.getFirst().getDatos().getDatos_personales().getNombre());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
+        assertEquals("87800466", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
     }
 
     @Test
     public void busquedaCriterioUnicoNombre() {
-        /**SOLO NOMBRE - MÁS DE UNA COINCIDENCIA ------------------------------")*/
-        //"BÚSQUEDA: Juan ----------------------------------------------\n")
         CriteriosBusq crit3 = new CriteriosBusq(null,"Juan", null, null);
-        gestorAlojamiento.buscarHuesped(crit3);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit3), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarHuesped(crit3);
+        assertNotEquals(1, lista.size());
+        for(var h : lista){
+            assert(h instanceof Huesped);
+            assertEquals("JUAN", h.getDatos().getDatos_personales().getNombre());
+        }
     }
 
     @Test
     public void busquedaCriterioUnicoDocumento() {
-        /**SOLO NUM DOC ------------------------------")*/
-        //BÚSQUEDA: 45510538 --------------------------------------------------\n");
         CriteriosBusq crit4 = new CriteriosBusq(null,null, null, "45510538");
-        gestorAlojamiento.buscarHuesped(crit4);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit4), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarHuesped(crit4);
+        assertNotEquals(1, lista.size());
+        for(var h : lista){
+            assert(h instanceof Huesped);
+            assertEquals("45510538", h.getDatos().getDatos_personales().getNroDoc());
+        }
     }
 
     @Test
     public void buscarSinExito(){
         /**SIN COINCIDENCIAS ---------------------------------------------------")*/
-        //System.out.println("BÚSQUEDA: Perez Mateo OTRO 5940490 ---------\n");
-        CriteriosBusq crit1 = new CriteriosBusq("Perez","Carlos", TipoDoc.LC, "5940490");
-        gestorAlojamiento.buscarHuesped(crit1);
+        //System.out.println("BÚSQUEDA: Perez Mateo LC 3 ---------\n");
+        CriteriosBusq crit1 = new CriteriosBusq("Perez","Carlos", TipoDoc.LC, "3");
+        when(mockitoDAO.buscarAlojadoDAO(crit1)).thenReturn(null);
+        GestorAlojamiento gestorVacio = new GestorAlojamiento(mockitoDAO);
+        assertThrows(
+                AlojadosSinCoincidenciasException.class,
+                () -> gestorVacio.buscarHuesped(crit1)
+        );
     }
 
     @Test
@@ -66,7 +101,106 @@ public class TestCU02 {
         /**"ENCUENTRA TODOS ---------------------------------------------------");*/
         //System.out.println("BÚSQUEDA: Todos los campos null ---------\n");
         CriteriosBusq crit7 = new CriteriosBusq(null,null, null, null);
-        gestorAlojamiento.buscarHuesped(crit7);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit7), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarHuesped(crit7);
+        assertEquals(32, lista.size());
+    }
+
+    @Test
+    public void buscarHuespedFiltraUnInvitado(){
+        var lh = listaDeMuchosHuespedes();
+        var li = listaDeUnInvitado();
+        var lfinal = lh;
+        lfinal.addAll(li);
+        Collections.shuffle(lfinal);
+        CriteriosBusq crit = new CriteriosBusq();
+        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(lfinal);
+        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
+        var lconsulta = gestor.buscarHuesped(crit);
+        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
+        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
+        //El retorno de la consulta tiene que contener los mismos huespedes que lh
+        assertEquals(comparadorOriginal, comparadorRetorno);
+    }
+
+    @Test
+    public void buscarHuespedFiltraMuchosInvitados(){
+        var lh = listaDeMuchosHuespedes();
+        var li = listaDeMuchosInvitados();
+        var lfinal = lh;
+        lfinal.addAll(li);
+        Collections.shuffle(lfinal);
+        CriteriosBusq crit = new CriteriosBusq();
+        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(lfinal);
+        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
+        var lconsulta = gestor.buscarHuesped(crit);
+        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
+        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
+        //El retorno de la consulta tiene que contener los mismos huespedes que lh
+        assertEquals(comparadorOriginal, comparadorRetorno);
+    }
+
+    @Test
+    public void buscarHuespedFiltraInvitadosDeListaAlojados(){
+        List<Alojado> lista = listaDeMuchosInvitados();
+        Set<Alojado> set = new HashSet<>();
+        for(var a : lista) if(a instanceof Huesped) set.add(a);
+        when(mockitoDAO.buscarAlojadoDAO())
+    }
+
+    private List<Alojado> listaDeUnAlojado(){
+        double aleatorioDouble = Math.random();
+        int resultado = (int) (aleatorioDouble * 2);
+        DatosAlojado da = GeneradorDatosAleatorios.generarDatosAlojadoAleatorio();
+        Alojado a = FactoryAlojado.create(resultado, da);
+        return listOf(a);
+    }
+
+    private List<Alojado> listaDeMuchosAlojados(){
+        List<Alojado> la = new ArrayList<>();
+        Random random = new Random();
+        int n=random.nextInt(10)+1;
+        for(int i=0;i<n;i++){
+            la.addAll(listaDeUnAlojado());
+        }
+        Collections.shuffle(la);
+        return la;
+    }
+
+    private List<Alojado> listaDeUnInvitado(){
+        int tipo = 1;
+        DatosAlojado da = GeneradorDatosAleatorios.generarDatosAlojadoAleatorio();
+        Alojado a = FactoryAlojado.create(tipo, da);
+        return listOf(a);
+    }
+
+    private List<Alojado> listaDeMuchosInvitados(){
+        List<Alojado> li = new ArrayList<>();
+        Random random = new Random();
+        int n=random.nextInt(10)+1;
+        for(int i=0;i<n;i++){
+            li.addAll(listaDeUnInvitado());
+        }
+        Collections.shuffle(li);
+        return li;
+    }
+
+    private List<Alojado> listaDeUnHuesped(){
+        int tipo=0;
+        DatosAlojado da = GeneradorDatosAleatorios.generarDatosAlojadoAleatorio();
+        Alojado a = FactoryAlojado.create(tipo, da);
+        return listOf(a);
+    }
+
+    private List<Alojado> listaDeMuchosHuespedes(){
+        List<Alojado> lh = new ArrayList<>();
+        Random random = new Random();
+        int n=random.nextInt(10)+1;
+        for(int i=0;i<n;i++){
+            lh.addAll(listaDeUnHuesped());
+        }
+        Collections.shuffle(lh);
+        return lh;
     }
 
 }
