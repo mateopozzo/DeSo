@@ -1,17 +1,16 @@
 package ddb.deso;
 
-//import static ddb.deso.gestores.GestorAlojamiento.buscarAlojado;
-
-import com.jayway.jsonpath.Criteria;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,48 +18,39 @@ import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@Transactional
-public class TestCU02 {
 
+@ExtendWith(MockitoExtension.class)
+public class TestCU02Unitario {
     private FactoryAlojado FA;
 
-    @Autowired
-    private GestorAlojamiento gestorAlojamiento;
+    @InjectMocks
+    private GestorAlojamiento gestor;
 
-    @Autowired
-    public TestCU02(GestorAlojamiento gestorAlojamiento){
-        this.gestorAlojamiento = gestorAlojamiento;
-    }
-
-    @MockitoBean
+    @Mock
     AlojadoDAO mockitoDAO;
 
-    @Test public void buscarHuespedArrojaExcepcionSiDAODevuelveNull(){
+    @Test
+    public void buscarHuespedArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(null);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
     }
 
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(null);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
     }
 
     @Test public void buscarHuespedArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(new ArrayList<Alojado>());
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
     }
 
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(new ArrayList<Alojado>());
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
     }
 
@@ -69,7 +59,6 @@ public class TestCU02 {
         var li = listaDeMuchosInvitados();
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(li);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertThrows(AlojadosSinCoincidenciasException.class,()->gestor.buscarHuesped(crit));
     }
 
@@ -82,7 +71,6 @@ public class TestCU02 {
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(lfinal);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertDoesNotThrow(()->gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
         Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
@@ -100,7 +88,6 @@ public class TestCU02 {
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(lfinal);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         assertDoesNotThrow(() -> gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
         Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
@@ -120,7 +107,6 @@ public class TestCU02 {
         }
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.listarAlojados()).thenReturn(lista);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         List<? extends Alojado> lconsulta = new ArrayList<>();
         try{
             lconsulta = gestor.buscarHuesped(crit);
@@ -136,7 +122,6 @@ public class TestCU02 {
         var lista = listaDeMuchosAlojados();
         String nombreFiltro = lista.getFirst().getDatos().getDatos_personales().getNombre();
         when(mockitoDAO.listarAlojados()).thenReturn(lista);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         CriteriosBusq critNombre = new CriteriosBusq(null,nombreFiltro,null,null);
         assertDoesNotThrow(()->gestor.buscarAlojado(critNombre));
         var listaBusqueda = gestor.buscarAlojado(critNombre);
@@ -151,7 +136,6 @@ public class TestCU02 {
         var lista = listaDeMuchosAlojados();
         String apellidoFiltro = lista.getFirst().getDatos().getDatos_personales().getApellido();
         when(mockitoDAO.listarAlojados()).thenReturn(lista);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         CriteriosBusq critApellido = new CriteriosBusq(apellidoFiltro,null,null,null);
         assertDoesNotThrow(()->gestor.buscarAlojado(critApellido));
         var listaBusqueda = gestor.buscarAlojado(critApellido);
@@ -166,7 +150,6 @@ public class TestCU02 {
         var lista = listaDeMuchosAlojados();
         TipoDoc tipoDocFiltro = lista.getFirst().getDatos().getDatos_personales().getTipoDoc();
         when(mockitoDAO.listarAlojados()).thenReturn(lista);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         CriteriosBusq critTipoDoc = new CriteriosBusq(null,null,tipoDocFiltro,null);
         assertDoesNotThrow(()->gestor.buscarAlojado(critTipoDoc));
         var listaBusqueda = gestor.buscarAlojado(critTipoDoc);
@@ -181,7 +164,6 @@ public class TestCU02 {
         var lista = listaDeMuchosAlojados();
         String nroDodFiltro = lista.getFirst().getDatos().getDatos_personales().getNroDoc();
         when(mockitoDAO.listarAlojados()).thenReturn(lista);
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
         CriteriosBusq critNroDoc = new CriteriosBusq(null,null,null,nroDodFiltro);
         assertDoesNotThrow(()->gestor.buscarAlojado(critNroDoc));
         var listaBusqueda = gestor.buscarAlojado(critNroDoc);
@@ -209,7 +191,6 @@ public class TestCU02 {
         CriteriosBusq crit = new CriteriosBusq(null, nombreFiltro, null, null);
         when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
 
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
 
         if (resultadoEsperado.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
@@ -242,7 +223,6 @@ public class TestCU02 {
         CriteriosBusq crit = new CriteriosBusq(apellidoFiltro, null, null, null);
         when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
 
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
 
         if (resultadoEsperado.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
@@ -271,7 +251,6 @@ public class TestCU02 {
         CriteriosBusq crit = new CriteriosBusq(null, null, tipoDocFiltro, null);
         when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
 
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
 
         if (resultadoEsperado.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
@@ -299,7 +278,6 @@ public class TestCU02 {
         CriteriosBusq crit = new CriteriosBusq(null, null, null, nroDocFiltro);
         when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
 
-        GestorAlojamiento gestor = new GestorAlojamiento(mockitoDAO);
 
         if (resultadoEsperado.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
@@ -310,64 +288,6 @@ public class TestCU02 {
         }
     }
 
-
-    // De aca en adelante de integracion
-
-    @Test
-    public void busquedaRegular() {
-        CriteriosBusq crit2 = new CriteriosBusq("Gomez", "Juan", TipoDoc.LE, "47183532");
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit2), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit2);
-        assertEquals(1, lista.size());
-        assertEquals("GOMEZ", lista.getFirst().getDatos().getDatos_personales().getApellido());
-        assertEquals("JUAN", lista.getFirst().getDatos().getDatos_personales().getNombre());
-        assertEquals(TipoDoc.LE, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("47183532", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
-    }
-
-    @Test
-    public void busquedaConTildes  (){
-        CriteriosBusq crit5 = new CriteriosBusq("Fernández", "Domingo", TipoDoc.DNI, "87800466");
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit5);
-        assertEquals(1, lista.size());
-        assertEquals("FERNANDEZ", lista.getFirst().getDatos().getDatos_personales().getApellido());
-        assertEquals("DOMINGO", lista.getFirst().getDatos().getDatos_personales().getNombre());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("87800466", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
-    }
-
-    @Test
-    public void busquedaCriterioUnicoNombre() {
-        CriteriosBusq crit3 = new CriteriosBusq(null,"Juan", null, null);
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit3), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit3);
-        assertNotEquals(1, lista.size());
-        for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("JUAN", h.getDatos().getDatos_personales().getNombre());
-        }
-    }
-
-    @Test
-    public void busquedaCriterioUnicoDocumento() {
-        CriteriosBusq crit4 = new CriteriosBusq(null,null, null, "45510538");
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit4), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit4);
-        assertNotEquals(1, lista.size());
-        for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("45510538", h.getDatos().getDatos_personales().getNroDoc());
-        }
-    }
-
-    @Test
-    public void buscarTodos() {
-        CriteriosBusq crit7 = new CriteriosBusq(null,null, null, null);
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit7), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit7);
-        assertEquals(32, lista.size());
-    }
 
     private List<Alojado> listaDeUnAlojado(){
         double aleatorioDouble = Math.random();
@@ -414,14 +334,14 @@ public class TestCU02 {
     }
 
     private List<Alojado> listaDeMuchosHuespedes(){
-        List<Alojado> lh = new ArrayList<>();
-        Random random = new Random();
-        int n=random.nextInt(100)+1;
-        for(int i=0;i<n;i++){
-            lh.addAll(listaDeUnHuesped());
+            List<Alojado> lh = new ArrayList<>();
+            Random random = new Random();
+            int n=random.nextInt(100)+1;
+            for(int i=0;i<n;i++){
+                lh.addAll(listaDeUnHuesped());
+            }
+            Collections.shuffle(lh);
+            return lh;
         }
-        Collections.shuffle(lh);
-        return lh;
-    }
 
 }
