@@ -10,10 +10,7 @@ import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,20 +67,17 @@ public class HabitacionController {
         return listaDisponibilidades;
     }
 
-    public class RangoFechas{
-        LocalDate fecha_inicio;
-        LocalDate fecha_fin;
-    }
 
     @GetMapping("/api/habitaciones-disponibilidad")
-    public ResponseEntity<List<DisponibilidadDTO>> disponibilidadHabitaciones(@RequestBody RangoFechas rango) {
+    public ResponseEntity<List<DisponibilidadDTO>>
+    disponibilidadHabitaciones(@RequestParam LocalDate fecha_inicio, @RequestParam LocalDate fecha_fin) {
 
-        if(rango.fecha_inicio.isAfter(rango.fecha_fin)){
+        if(fecha_inicio.isAfter(fecha_fin)){
             return ResponseEntity.badRequest().build();
         }
 
-        var listaReservas = gestorHabitacion.listarReservas(rango.fecha_inicio, rango.fecha_fin);
-        var listaEstadias = gestorHabitacion.listarEstadias(rango.fecha_inicio, rango.fecha_fin);
+        var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
+        var listaEstadias = gestorHabitacion.listarEstadias(fecha_inicio, fecha_fin);
 
         List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
 
