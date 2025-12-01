@@ -12,6 +12,8 @@ export interface grillaHab {
 }
 
 export default async function EstadoHabitaciones() {
+  const [error, setError] = useState<string | null>(null);
+
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
   // meto las habs que recibo de back y con > las meto en un nuevo arreglo
@@ -20,12 +22,14 @@ export default async function EstadoHabitaciones() {
 
   const handleBuscar = async () => {
     if (!fechaDesde || !fechaHasta) {
-      // agregar mensaje html de no puede estar vacio
+      setError(`El formato de fecha no es válido.`);
       return;
     }
 
     if (fechaDesde > fechaHasta) {
-      // agregar mensaje html de la fecha de inicio no puede ser mayor a la de fin
+      setError(
+        `La fecha "desde" ${fechaDesde} no puede ser mayor a la fecha "hasta" ${fechaHasta}.`
+      );
       return;
     }
 
@@ -41,6 +45,11 @@ export default async function EstadoHabitaciones() {
     <div className="flex flex-col gap-6 p-4 rounded-xl  dark:bg-gray-950 dark:text-white">
       <div className="flex gap-4 items-end">
         <div>
+          {error && (
+            <div className="bg-[#914d45] text-white p-2 mb-4 rounded font-semibold">
+              {error}
+            </div>
+          )}
           <label className="block text-sm mb-1 dark:text-gray-300">
             Desde fecha
           </label>
