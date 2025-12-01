@@ -4,7 +4,7 @@ import ddb.deso.TipoDoc;
 import java.util.Objects;
 
 /**
- * Clase que encapsula los **criterios de búsqueda** para identificar a una
+ * Clase que encapsula los criterios de búsqueda para identificar a una
  * persona alojada, incluyendo datos personales básicos.
  * <p>
  * Contiene campos para el apellido, nombre, tipo de documento y número de documento.

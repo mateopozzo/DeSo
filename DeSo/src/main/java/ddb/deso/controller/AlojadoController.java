@@ -1,5 +1,6 @@
 package ddb.deso.controller;
 
+import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.FactoryAlojado;
@@ -64,7 +65,7 @@ public class AlojadoController {
 
 
     @GetMapping("/api/ocupar-habitacion")
-    List<Alojado> obtenerAlojados(@RequestBody CriteriosBusq criteriosBusq) {
+    List<Alojado> obtenerAlojados(@RequestParam CriteriosBusq criteriosBusq) {
 
         if(criteriosBusq == null){
             return null;
@@ -83,13 +84,14 @@ public class AlojadoController {
 
 
     @GetMapping("/api/buscar-huesped")
-    List<Huesped> obtenerHuespedes(@RequestBody CriteriosBusq criteriosBusq) {
+    List<Huesped> obtenerHuespedes(@RequestParam (required = false) String apellido,
+                                   @RequestParam(required = false) String nombre,
+                                   @RequestParam(required = false) TipoDoc tipoDoc,
+                                   @RequestParam(required = false) String nroDoc) {
 
-        if(criteriosBusq == null){
-            return null;
-        }
-
+        CriteriosBusq criteriosBusq = new CriteriosBusq(apellido, nombre, tipoDoc, nroDoc);
         List<Huesped> huespedesEncontrados;
+
         try {
             huespedesEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
