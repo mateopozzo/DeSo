@@ -33,7 +33,7 @@ export default function hamburguesa({ isOpen, onClose }: HamburguesaProps) {
       />
 
       <aside
-        className={`relative w-72 h-full bg-white dark:bg-gray-900 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`relative w-72 h-full bg-white dark:bg-gray-950 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -90,32 +90,31 @@ export default function hamburguesa({ isOpen, onClose }: HamburguesaProps) {
 
         <div className="flex-1 overflow-y-auto py-6 px-4">
           <ul className="flex flex-col gap-2">
+            <p className="text-center text-xl font-bold">Habitaciones</p>
             <MenuLink
-              href="/habitaciones"
+              href="/alta-huesped"
               icon="/hab.svg"
-              label="Habitaciones"
+              label="Dar alta de huésped"
+              desc="Registra un nuevo huésped en el sistema"
               onClose={onClose}
             />
+            <p className="text-center text-xl font-bold">Reservas</p>
             <MenuLink
-              href="/reservas"
+              href="/ocupar-hab"
               icon="/reserva.svg"
-              label="Reservas"
+              label="Ocupar habitación"
+              desc="Ingresa a los huéspedes a sus habitaciones"
               onClose={onClose}
             />
+            <p className="text-center text-xl font-bold">Facturación</p>
             <MenuLink
-              href="/facturacion"
+              href="#"
               icon="/fac.svg"
-              label="Facturación"
+              label="Generar factura"
+              desc="Ingresa un pago y genera una nueva factura"
               onClose={onClose}
             />
           </ul>
-        </div>
-
-        {/* Footer del menú */}
-        <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-xs text-gray-400 text-center uppercase tracking-wider font-semibold">
-            Hotel Premier © 2025
-          </p>
         </div>
       </aside>
     </div>
@@ -126,11 +125,13 @@ function MenuLink({
   href,
   icon,
   label,
+  desc,
   onClose,
 }: {
   href: string;
   icon: string;
   label: string;
+  desc: string;
   onClose: () => void;
 }) {
   return (
@@ -138,9 +139,9 @@ function MenuLink({
       <Link
         href={href}
         onClick={onClose}
-        className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group active:scale-95 duration-200"
+        className="flex flex-col gap-2 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition-all group active:scale-95 duration-200"
       >
-        <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
+        <div className="p-2 flex flex-row justify-center gap-2 border rounded-2xl dark:border-gray-500 border-gray-900 bg-gray-100 dark:bg-gray-950  group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
           <img
             src={icon}
             alt={label}
@@ -148,9 +149,13 @@ function MenuLink({
             height={24}
             className="dark:invert opacity-70 group-hover:opacity-100 transition-opacity"
           />
+          <span className="text-md font-bold text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+            {label}
+          </span>
         </div>
-        <span className="font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-          {label}
+
+        <span className="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+          {desc}
         </span>
       </Link>
     </li>

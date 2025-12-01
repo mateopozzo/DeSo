@@ -26,7 +26,7 @@ export default function RootLayout({
         <Sidebar />
         <div className="flex-1 flex flex-col h-full relative">
           <Navbar />
-          <main className="flex-1 overflow-y-auto p-8 bg-[#f5f7fa] dark:bg-gray-950">
+          <main className="flex-1 overflow-y-auto p-4 bg-[#f5f7fa] dark:bg-gray-950">
             <div className="max-w-7xl mx-auto w-full">{children}</div>
 
             <div className="mt-10">

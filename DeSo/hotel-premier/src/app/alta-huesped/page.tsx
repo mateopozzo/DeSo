@@ -1,8 +1,9 @@
-// componentes server != a componente client, lo necesito para usar hooks
+// componente server != componente client, lo necesito para usar state
 "use client";
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { crearHuesped, HuespedDTO } from "@/services/huespedes.service";
 
 export default function AltaHuesped() {
   const router = useRouter();
@@ -38,74 +39,71 @@ export default function AltaHuesped() {
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-    const enviarDatos = async (forzar: boolean = false) => {
-        const url = forzar
-            ? "http://localhost:8080/api/huesped?force=true"
-            : "http://localhost:8080/api/huesped";
 
-
-    const dataDTO = {
-            apellido: formData.apellido,
-            nombre: formData.nombre,
-            nacionalidad: formData.nacionalidad,
-            fechanac: formData.fechaNacimiento,
-            tipoDoc: formData.tipo_documento,
-            nroDoc: formData.numeroDocumento,
-            telefono: formData.telefono,
-            email: formData.email,
-            calle: formData.calle,
-            nroCalle: formData.numeroCalle,
-            piso: formData.piso,
-            codPost: formData.codPostal,
-            pais: formData.paisResidencia,
-            prov: formData.provincia,
-            localidad: formData.localidad,
-            ocupacion: formData.ocupacion,
-            cuit: formData.cuit,
-            posicionIva: formData.iva,
+  const enviarDatos = async (forzar: boolean = false) => {
+    const dataDTO: HuespedDTO = {
+      apellido: formData.apellido,
+      nombre: formData.nombre,
+      nacionalidad: formData.nacionalidad,
+      fechanac: formData.fechaNacimiento,
+      tipoDoc: formData.tipo_documento,
+      nroDoc: formData.numeroDocumento,
+      telefono: formData.telefono,
+      email: formData.email,
+      calle: formData.calle,
+      nroCalle: formData.numeroCalle,
+      piso: formData.piso,
+      codPost: formData.codPostal,
+      pais: formData.paisResidencia,
+      prov: formData.provincia,
+      localidad: formData.localidad,
+      ocupacion: formData.ocupacion,
+      cuit: formData.cuit,
+      posicionIva: formData.iva,
     };
 
     try {
-    const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dataDTO),
-   });
+      const response = await crearHuesped(dataDTO, forzar);
 
-   if (response.status === 409) {
-   const sobreescribir = confirm(`¡CUIDADO! El documento ${formData.tipo_documento} ${formData.numeroDocumento} ya existe.\n\nACEPTAR: Sobreescribir los datos viejos con estos nuevos.\nCANCELAR: Corregir el número de documento.`);
+      if (response.status === 409) {
+        const sobreescribir = confirm(
+          `¡CUIDADO! El documento ${formData.tipo_documento} ${formData.numeroDocumento} ya existe.\n\nACEPTAR: Sobreescribir los datos viejos con estos nuevos.\nCANCELAR: Corregir el número de documento.`
+        );
 
-   if (sobreescribir){
-      enviarDatos(true);
-   } else {
+        if (sobreescribir) {
+          enviarDatos(true);
+        } else {
+          const inputDoc = document.querySelector<HTMLInputElement>(
+            'input[name="numeroDocumento"]'
+          );
+          if (inputDoc) inputDoc.focus();
+        }
+        return;
+      }
 
-   const inputDoc = document.querySelector<HTMLInputElement>('input[name="numeroDocumento"]');
-   if(inputDoc) {
-   inputDoc.focus();
-   }
-   }
-   return;
-   }
-   if (!response.ok) {
-       alert("Error desconocido. Código: " + response.status);
-       return;
-   }
+      if (!response.ok) {
+        alert("Error. Código: " + response.status);
+        return;
+      }
 
-   const confirmar = confirm(
-       `El huésped ${formData.nombre} ha sido cargado/actualizado.\n\n¿Desea cargar otro?`
-   );
+      const confirmar = confirm(
+        `El huésped ${formData.nombre} ${formData.apellido} ha sido satisfactoriamente cargado al sistema.\n\n¿Desea cargar otro?`
+      );
 
-   if (confirmar) {
-       setFormData(form_limpio);
-       document.querySelector<HTMLInputElement>('input[name="apellido"]')?.focus();
-   } else {
-       router.push("/");
-   }
+      if (confirmar) {
+        setFormData(form_limpio);
+        document
+          .querySelector<HTMLInputElement>('input[name="apellido"]')
+          ?.focus();
+      } else {
+        router.push("/");
+      }
     } catch (err) {
-        alert("Error de conexión con el servidor");
-        console.error(err);
+      alert("Error al conectarse al servidor");
+      console.error(err);
     }
-    };
+  };
+
   // cuando se presione enviar, se verifican campos, se forma objeto, se envia a back, se procesa response
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -148,7 +146,7 @@ export default function AltaHuesped() {
   return (
     <div className="dark:bg-gray-950 dark:text-white">
       <h1 className="text-[#141414] dark:text-white  mb-8 text-5xl font-bold pb-2">
-        Dar de alta un huésped
+        Dar alta de huésped
       </h1>
 
       {/* INICIO DEL FORM */}
@@ -160,7 +158,7 @@ export default function AltaHuesped() {
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-4 gap-5 dark:bg-gray-950 dark:text-white"
+        className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 dark:bg-gray-950 dark:text-white"
       >
         <InputGroup
           label="Apellido"
