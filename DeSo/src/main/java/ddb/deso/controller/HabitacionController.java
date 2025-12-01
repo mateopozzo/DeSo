@@ -101,7 +101,7 @@ public class HabitacionController {
 
     }
 
-    /*
+
     @GetMapping("/api/habitaciones-disponibilidad")
     public ResponseEntity<List<DisponibilidadDTO>> disponibilidadHabitaciones() {
 
@@ -123,5 +123,5 @@ public class HabitacionController {
         return ResponseEntity.ok(listaDisponibilidades);
 
     }
-    */
+
 }
