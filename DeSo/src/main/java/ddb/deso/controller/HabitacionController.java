@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8080")
 public class HabitacionController {
 
     @Autowired
@@ -63,7 +63,7 @@ public class HabitacionController {
                     idHab,
                     reserva.getFecha_inicio(),
                     reserva.getFecha_fin(),
-                    EstadoHab.OCUPADA
+                    EstadoHab.RESERVADA
             );
             listaDisponibilidades.add(disponibilidad);
         }

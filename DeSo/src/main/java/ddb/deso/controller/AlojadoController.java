@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  * Escucha las peticiones web y las delega al GestorAlojamiento.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8080")
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;
@@ -84,14 +85,18 @@ public class AlojadoController {
 
 
     @GetMapping("/api/buscar-huesped")
-    List<Huesped> obtenerHuespedes(@RequestParam (required = false) String apellido,
-                                   @RequestParam(required = false) String nombre,
-                                   @RequestParam(required = false) TipoDoc tipoDoc,
-                                   @RequestParam(required = false) String nroDoc) {
+    List <CriteriosBusq> obtenerHuespedes(@RequestParam (required = false) String apellido,
+                                          @RequestParam(required = false) String nombre,
+                                          @RequestParam(required = false) TipoDoc tipoDoc,
+                                          @RequestParam(required = false) String nroDoc) {
 
-        CriteriosBusq criteriosBusq = new CriteriosBusq(apellido, nombre, tipoDoc, nroDoc);
+        CriteriosBusq criteriosBusq = new CriteriosBusq();
+        if(nombre!=null)criteriosBusq.setNombre(nombre);
+        if(apellido!=null)criteriosBusq.setApellido(apellido);
+        if(tipoDoc!=null)criteriosBusq.setTipoDoc(tipoDoc);
+        if(nroDoc!=null)criteriosBusq.setNroDoc(nroDoc);
+
         List<Huesped> huespedesEncontrados;
-
         try {
             huespedesEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
@@ -99,7 +104,20 @@ public class AlojadoController {
             return null;
         }
 
-        return huespedesEncontrados;
+        List <CriteriosBusq> retornoEncontrados = new ArrayList<>();
+
+        for(var h : huespedesEncontrados) {
+            retornoEncontrados.add(
+                new CriteriosBusq(
+                     h.getDatos().getDatos_personales().getApellido(),
+                     h.getDatos().getDatos_personales().getNombre(),
+                     h.getDatos().getTipoDoc(),
+                     h.getDatos().getNroDoc()
+                )
+            );
+        }
+
+        return retornoEncontrados;
     }
 
 

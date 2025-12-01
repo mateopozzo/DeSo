@@ -1,6 +1,6 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.DTO.CrearEstadiaDTO;
+import ddb.deso.almacenamiento.DTO.EstadiaDTO;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.gestores.GestorHabitacion;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,8 @@ public class TestCU15 {
         this.gestorHabitacion = gestorHabitacion;
     }
 
-    private CrearEstadiaDTO funcionarCrearEstadia() {
-        CrearEstadiaDTO estadiaDTO = new CrearEstadiaDTO();
+    private EstadiaDTO funcionarCrearEstadia() {
+        EstadiaDTO estadiaDTO = new EstadiaDTO();
         estadiaDTO.setIdHabitacion(101L);
         LocalDate fi = LocalDate.parse("2025-11-26");
         LocalDate ff = LocalDate.parse("2025-11-28");

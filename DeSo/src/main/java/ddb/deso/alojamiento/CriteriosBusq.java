@@ -41,6 +41,10 @@ public class CriteriosBusq {
         }
     }
 
+    public CriteriosBusq() {
+
+    }
+
     public String getApellido() {
         return apellido;
     }

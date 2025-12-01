@@ -1,6 +1,5 @@
 package ddb.deso.controller;
 
-import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Reserva;
@@ -8,11 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@CrossOrigin("localhost:63342")
+@CrossOrigin(origins = "http://localhost:8080")
 public class ReservaController {
     private final GestorHabitacion gestorHabitacion;
 
@@ -20,13 +18,13 @@ public class ReservaController {
         this.gestorHabitacion = gestorHabitacion;
     }
 
-    public class EstructuraPost{
+    public class PostDTO {
         ReservaDTO reservaDTO;
         List<Long> listaIDHabitaciones;
     }
 
     @PostMapping("/api/reserva")
-    public ResponseEntity<ReservaDTO> crearReserva (@RequestBody EstructuraPost estructura) {
+    public ResponseEntity<ReservaDTO> crearReserva (@RequestBody PostDTO estructura) {
 
         ReservaDTO reservaDTO = estructura.reservaDTO;
         List<Long> listaIDHabitaciones  = estructura.listaIDHabitaciones;

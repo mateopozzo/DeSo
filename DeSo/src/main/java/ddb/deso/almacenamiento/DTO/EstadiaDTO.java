@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 
-public class CrearEstadiaDTO {
+public class EstadiaDTO {
     Long idHabitacion;
     LocalDate fechaInicio, fechaFin;
     CriteriosBusq encargado;

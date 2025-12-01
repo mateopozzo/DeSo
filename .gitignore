@@ -12,6 +12,5 @@ posta.txt
 /.target/
 /mate
 /mate/*
-DeSo/DeSo/src/main/resources/static/*
 DeSo/src/main/resources/static/
 nohup.out
