@@ -41,8 +41,15 @@ public class CriteriosBusq {
         }
     }
 
-    public CriteriosBusq() {
 
+    /**
+     * Constructor Vacio genera un criterio genérico que devuelve todos los alojados
+     */
+    public CriteriosBusq() {
+        apellido = "";
+        nombre = "";
+        tipoDoc = null;
+        nroDoc = "";
     }
 
     public String getApellido() {

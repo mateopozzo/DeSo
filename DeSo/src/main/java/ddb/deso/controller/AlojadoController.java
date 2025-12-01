@@ -64,13 +64,32 @@ public class AlojadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
     }
 
+    private List<CriteriosBusq> conversionAlojadoToCriterio(List<? extends Alojado> listaAlojado) {
+        List<CriteriosBusq>retornoEncontrados = new ArrayList<>();
+        for(var a: listaAlojado){
+            retornoEncontrados.add(
+                    new CriteriosBusq(
+                            a.getDatos().getDatos_personales().getApellido(),
+                            a.getDatos().getDatos_personales().getNombre(),
+                            a.getDatos().getTipoDoc(),
+                            a.getId().getNroDoc()
+                    )
+            );
+        }
+        return retornoEncontrados;
+    }
+
 
     @GetMapping("/api/ocupar-habitacion")
-    List<Alojado> obtenerAlojados(@RequestParam CriteriosBusq criteriosBusq) {
+    List<CriteriosBusq> obtenerAlojados(@RequestParam(required = false) String apellido,
+                                        @RequestParam(required = false) String nombre,
+                                        @RequestParam(required = false) TipoDoc tipoDoc,
+                                        @RequestParam(required = false) String nroDoc) {
 
-        if(criteriosBusq == null){
-            return null;
-        }
+        CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
+
+        if(criteriosBusq == null)
+            criteriosBusq = new CriteriosBusq();
 
         List<Alojado> alojadosEncontrados;
         try {
@@ -80,21 +99,20 @@ public class AlojadoController {
             return null;
         }
 
-        return alojadosEncontrados;
+        return conversionAlojadoToCriterio(alojadosEncontrados);
     }
 
 
     @GetMapping("/api/buscar-huesped")
-    List <CriteriosBusq> obtenerHuespedes(@RequestParam (required = false) String apellido,
+    List <CriteriosBusq> obtenerHuespedes(@RequestParam(required = false) String apellido,
                                           @RequestParam(required = false) String nombre,
                                           @RequestParam(required = false) TipoDoc tipoDoc,
                                           @RequestParam(required = false) String nroDoc) {
 
-        CriteriosBusq criteriosBusq = new CriteriosBusq();
-        if(nombre!=null)criteriosBusq.setNombre(nombre);
-        if(apellido!=null)criteriosBusq.setApellido(apellido);
-        if(tipoDoc!=null)criteriosBusq.setTipoDoc(tipoDoc);
-        if(nroDoc!=null)criteriosBusq.setNroDoc(nroDoc);
+        CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
+
+        if(criteriosBusq == null)
+            criteriosBusq = new CriteriosBusq();
 
         List<Huesped> huespedesEncontrados;
         try {
@@ -104,20 +122,7 @@ public class AlojadoController {
             return null;
         }
 
-        List <CriteriosBusq> retornoEncontrados = new ArrayList<>();
-
-        for(var h : huespedesEncontrados) {
-            retornoEncontrados.add(
-                new CriteriosBusq(
-                     h.getDatos().getDatos_personales().getApellido(),
-                     h.getDatos().getDatos_personales().getNombre(),
-                     h.getDatos().getTipoDoc(),
-                     h.getDatos().getNroDoc()
-                )
-            );
-        }
-
-        return retornoEncontrados;
+        return conversionAlojadoToCriterio(huespedesEncontrados);
     }
 
 
