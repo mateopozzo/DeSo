@@ -15,10 +15,11 @@ public class NotaCredito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     private Float monto_n_credito;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     Factura idFactura;
 
     public NotaCredito(Float monto_n_credito) {

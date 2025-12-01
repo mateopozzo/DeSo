@@ -1,5 +1,6 @@
 package ddb.deso.contabilidad;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import ddb.deso.habitaciones.Estadia;
@@ -7,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 
 /**
@@ -28,21 +30,23 @@ public class Pago {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private float monto;
-    private Date fecha_pago;
+    Long id;
 
-    @OneToOne(fetch=FetchType.EAGER)
+    private float monto;
+    private LocalDate fecha_pago;
+
+    @OneToOne(fetch=FetchType.LAZY)
     Factura factura;
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     ResponsablePago responsable_pago;
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     Estadia estadia_pago;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medio_pago_id", referencedColumnName = "id")
     private MedioDePago medioDePago;
 
 
-    public Pago(float monto, Date fecha_pago) {
+    public Pago(float monto, LocalDate fecha_pago) {
         this.monto = monto;
         this.fecha_pago = fecha_pago;
     }
