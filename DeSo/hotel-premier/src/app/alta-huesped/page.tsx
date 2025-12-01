@@ -166,6 +166,8 @@ export default function AltaHuesped() {
           value={formData.apellido}
           onChange={handleChange}
           placeholder="Doe"
+          maxLength={50}
+          type="text"
         />
         <InputGroup
           label="Nombre"
@@ -174,6 +176,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="John"
           type="text"
+          maxLength={50}
         />
         <InputGroup
           label="Nacionalidad"
@@ -182,6 +185,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Argentina"
           type="text"
+          maxLength={50}
         />
 
         <div className="flex flex-col">
@@ -222,6 +226,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Sin guiones ni puntos"
           type="text"
+          maxLength={20}
         />
         <InputGroup
           label="Teléfono"
@@ -230,6 +235,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           type="tel"
           placeholder="Cod. de área + número de teléfono"
+          maxLength={20}
         />
         <InputGroup
           label="Email"
@@ -238,6 +244,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           type="email"
           placeholder="Opcional"
+          maxLength={50}
         />
 
         <InputGroup
@@ -247,6 +254,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Lavaisse"
           type="text"
+          maxLength={30}
         />
         <InputGroup
           label="Número"
@@ -255,6 +263,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="610"
           type="number"
+          maxLength={20}
         />
         <InputGroup
           label="Piso"
@@ -263,6 +272,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Opcional"
           type="number"
+          maxLength={10}
         />
         <InputGroup
           label="Código Postal"
@@ -271,6 +281,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="3000"
           type="text"
+          maxLength={20}
         />
 
         <InputGroup
@@ -280,6 +291,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Argentina"
           type="text"
+          maxLength={30}
         />
         <InputGroup
           label="Provincia"
@@ -288,6 +300,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Santa Fe"
           type="text"
+          maxLength={30}
         />
         <InputGroup
           label="Localidad"
@@ -296,6 +309,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Santa Fe"
           type="text"
+          maxLength={30}
         />
 
         <InputGroup
@@ -305,6 +319,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Empleado"
           type="text"
+          maxLength={30}
         />
         <InputGroup
           label="CUIT"
@@ -313,6 +328,7 @@ export default function AltaHuesped() {
           onChange={handleChange}
           placeholder="Opcional. Sin guiones ni puntos"
           type="text"
+          maxLength={11}
         />
 
         <div className="flex flex-col">
