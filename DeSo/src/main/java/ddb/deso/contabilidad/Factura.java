@@ -1,8 +1,12 @@
 package ddb.deso.contabilidad;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import ddb.deso.TipoFactura;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Representa un **documento contable** o factura.
@@ -13,8 +17,17 @@ import ddb.deso.TipoFactura;
  *
  * @see ddb.deso.TipoFactura
  */
+
+@Getter
+@Setter
+@Entity
+@Table(name="factura")
+@NoArgsConstructor
 public class Factura {
-    private Date fecha_factura;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private LocalDate fecha_factura;
     private int num_factura;
     private TipoFactura tipo_factura;
     private float importe_total;
@@ -22,7 +35,7 @@ public class Factura {
     private float importe_neto;
     private String destinatario;
 
-    public Factura(Date fecha_factura, int num_factura, TipoFactura tipo_factura, float importe_total, float importe_iva, float importe_neto, String destinatario) {
+    public Factura(LocalDate fecha_factura, int num_factura, TipoFactura tipo_factura, float importe_total, float importe_iva, float importe_neto, String destinatario) {
         this.fecha_factura = fecha_factura;
         this.num_factura = num_factura;
         this.tipo_factura = tipo_factura;
@@ -31,7 +44,7 @@ public class Factura {
         this.importe_neto = importe_neto;
         this.destinatario = destinatario;
     }
-    public Date getFecha_factura() {
+    public LocalDate getFecha_factura() {
         return fecha_factura;
     }
     public int getNum_factura() {
