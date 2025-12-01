@@ -1,8 +1,14 @@
 package ddb.deso.contabilidad;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-import ddb.deso.MedioPago;
+import ddb.deso.habitaciones.Estadia;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 
 /**
@@ -12,26 +18,37 @@ import ddb.deso.MedioPago;
  * (ej: efectivo, tarjeta) y la fecha en que se procesó.
  * </p>
  *
- * @see ddb.deso.MedioPago
+ * @see ddb.deso.contabilidad.MedioDePago
  */
-public class Pago {
-    private float monto;
-    private MedioPago medio_pago;
-    private Date fecha_pago;
 
-    public Pago(float monto, MedioPago medio_pago, Date fecha_pago) {
+@Getter
+@Setter
+@Entity
+@Table(name="pago")
+@NoArgsConstructor
+public class Pago {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    Long id;
+
+    private float monto;
+    private LocalDate fecha_pago;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    Factura factura;
+    @ManyToOne(fetch=FetchType.LAZY)
+    ResponsablePago responsable_pago;
+    @ManyToOne(fetch=FetchType.LAZY)
+    Estadia estadia_pago;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medio_pago_id", referencedColumnName = "id")
+    private MedioDePago medioDePago;
+
+
+    public Pago(float monto, LocalDate fecha_pago) {
         this.monto = monto;
-        this.medio_pago = medio_pago;
         this.fecha_pago = fecha_pago;
-    }
-    public float getMonto() {
-        return monto;
-    }
-    public MedioPago getMedio_pago() {
-        return medio_pago;
-    }
-    public Date getFecha_pago() {
-        return fecha_pago;
     }
 
 }

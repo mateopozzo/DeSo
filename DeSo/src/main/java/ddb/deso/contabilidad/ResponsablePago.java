@@ -1,6 +1,10 @@
 package ddb.deso.contabilidad;
 
 import ddb.deso.alojamiento.DatosResidencia;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
@@ -13,13 +17,23 @@ import ddb.deso.alojamiento.DatosResidencia;
  *
  * @see ddb.deso.alojamiento.DatosResidencia
  */
+
+@Getter
+@Setter
+@Entity
+@Table(name="responsable_de_pago")
+@NoArgsConstructor
 public class ResponsablePago {
+
+    @Id
+    private Long cuit;
     private String razonSocial;
-    private int cuit;
     private DatosResidencia direccion;
     private int telefono;
 
-    public ResponsablePago(String razonSocial, int cuit, DatosResidencia direccion, int telefono) {
+
+
+    public ResponsablePago(String razonSocial, Long cuit, DatosResidencia direccion, int telefono) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.direccion = direccion;
@@ -29,7 +43,7 @@ public class ResponsablePago {
     public String getRazonSocial() {
         return razonSocial;
     }
-    public int getCuit() {
+    public Long getCuit() {
         return cuit;
     }
     public DatosResidencia getDireccion() {
