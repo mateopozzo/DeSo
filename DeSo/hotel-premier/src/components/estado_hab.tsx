@@ -71,10 +71,7 @@ export default async function EstadoHabitaciones() {
       </div>
 
       <div className="border rounded-lg p-4 min-h-[300px] bg-gray-50 dark:bg-gray-800">
-        <p className="text-gray-500 mb-4">
-          (Aquí renderizas la grilla. Eje X: Días, Eje Y: Habitaciones agrupadas
-          por categoría)
-        </p>
+        <p className="text-gray-500 mb-4"></p>
       </div>
     </div>
   );
