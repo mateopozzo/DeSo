@@ -9,14 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
+import static org.postgresql.hostchooser.HostRequirement.any;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +32,41 @@ public class TestCU02Unitario {
     @Mock
     AlojadoDAO mockitoDAO;
 
+
+    private List<Alojado> funcionMocoFiltro(CriteriosBusq criteriosBusq, List<? extends Alojado> listaInicial) {
+
+        Function<Alojado, Boolean> funcionFiltro = (Alojado a) -> {
+            if(criteriosBusq.getNombre() != null && !criteriosBusq.getNombre().isEmpty()){
+                if(!(a.getDatos().getDatos_personales().getNombre().equals(criteriosBusq.getNombre()))){
+                    return false;
+                }
+            }
+            if(criteriosBusq.getApellido() != null && !criteriosBusq.getApellido().isEmpty()){
+                if(!(a.getDatos().getDatos_personales().getApellido().equals(criteriosBusq.getApellido()))){
+                    return false;
+                }
+            }
+            if(criteriosBusq.getNroDoc() != null && !criteriosBusq.getNroDoc().isEmpty()){
+                if(!(a.getDatos().getDatos_personales().getNroDoc().equals(criteriosBusq.getNroDoc()))){
+                    return false;
+                }
+            }
+            if(criteriosBusq.getTipoDoc() != null){
+                return a.getDatos().getDatos_personales().getTipoDoc().equals(criteriosBusq.getTipoDoc());
+            }
+            return true;
+        };
+
+
+        List<Alojado> ret = new ArrayList<>();
+        for(var a : listaInicial){
+            if(funcionFiltro.apply(a)){
+                ret.add(a);
+            }
+        }
+        return ret;
+    }
+
     /**
      * Verifica que se lance {@link AlojadosSinCoincidenciasException} cuando el DAO
      * retorna {@code null} al buscar huéspedes.
@@ -40,7 +78,7 @@ public class TestCU02Unitario {
     @Test
     public void buscarHuespedArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(null);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(null);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
     }
 
@@ -54,7 +92,7 @@ public class TestCU02Unitario {
      */
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(null);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(null);
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
     }
 
@@ -68,7 +106,7 @@ public class TestCU02Unitario {
      */
     @Test public void buscarHuespedArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(new ArrayList<Alojado>());
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(new ArrayList<Alojado>());
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
     }
 
@@ -82,7 +120,7 @@ public class TestCU02Unitario {
      */
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(new ArrayList<Alojado>());
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(new ArrayList<Alojado>());
         assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
     }
 
@@ -99,7 +137,7 @@ public class TestCU02Unitario {
     public void buscarHuespedNoEncuentraHuespedes(){
         var li = listaDeMuchosInvitados();
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(li);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(li);
         assertThrows(AlojadosSinCoincidenciasException.class,()->gestor.buscarHuesped(crit));
     }
 
@@ -116,11 +154,12 @@ public class TestCU02Unitario {
     public void buscarHuespedFiltraUnInvitado(){
         var lh = listaDeMuchosHuespedes();
         var li = listaDeUnInvitado();
-        var lfinal = lh;
+        List<Alojado> lfinal = new ArrayList<>();
+        lfinal.addAll(lh);
         lfinal.addAll(li);
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(lfinal);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
         assertDoesNotThrow(()->gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
         Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
@@ -141,11 +180,12 @@ public class TestCU02Unitario {
     public void buscarHuespedFiltraMuchosInvitados() {
         var lh = listaDeMuchosHuespedes();
         var li = listaDeMuchosInvitados();
-        var lfinal = lh;
+        List<Alojado> lfinal = new ArrayList<>();
+        lfinal.addAll(lh);
         lfinal.addAll(li);
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(lfinal);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
         assertDoesNotThrow(() -> gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
         Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
@@ -166,13 +206,12 @@ public class TestCU02Unitario {
      */
     @Test
     public void buscarHuespedFiltraInvitadosDeListaAlojados(){
-        List<Alojado> lista = listaDeMuchosInvitados();
+        List<Alojado> lista = listaDeMuchosAlojados();
         Set<Alojado> setAlojado = new HashSet<>();
-        for(var a : lista) if(a instanceof Huesped) {
+        for(var a : lista) if(a instanceof Huesped)
             setAlojado.add(a);
-        }
         CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.listarAlojados()).thenReturn(lista);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lista);
         List<? extends Alojado> lconsulta = new ArrayList<>();
         try{
             lconsulta = gestor.buscarHuesped(crit);
@@ -195,8 +234,13 @@ public class TestCU02Unitario {
     public void buscarAlojadoFiltraNombre(){
         var lista = listaDeMuchosAlojados();
         String nombreFiltro = lista.getFirst().getDatos().getDatos_personales().getNombre();
-        when(mockitoDAO.listarAlojados()).thenReturn(lista);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class)))
+                .thenAnswer(invocation -> {
+                    CriteriosBusq critArgumento = invocation.getArgument(0);
+                    return funcionMocoFiltro(critArgumento, lista);
+                });
         CriteriosBusq critNombre = new CriteriosBusq(null,nombreFiltro,null,null);
+
         assertDoesNotThrow(()->gestor.buscarAlojado(critNombre));
         var listaBusqueda = gestor.buscarAlojado(critNombre);
         for(var a : listaBusqueda){
@@ -204,6 +248,7 @@ public class TestCU02Unitario {
             assertEquals(a.getDatos().getDatos_personales().getNombre(), nombreFiltro);
         }
     }
+
 
     /**
      * Verifica que {@code buscarAlojado} filtre y retorne correctamente los alojados
@@ -217,7 +262,11 @@ public class TestCU02Unitario {
     public void buscarAlojadoFiltraApellido(){
         var lista = listaDeMuchosAlojados();
         String apellidoFiltro = lista.getFirst().getDatos().getDatos_personales().getApellido();
-        when(mockitoDAO.listarAlojados()).thenReturn(lista);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class)))
+                .thenAnswer(invocation -> {
+                    CriteriosBusq critArgumento = invocation.getArgument(0);
+                    return funcionMocoFiltro(critArgumento, lista);
+                });
         CriteriosBusq critApellido = new CriteriosBusq(apellidoFiltro,null,null,null);
         assertDoesNotThrow(()->gestor.buscarAlojado(critApellido));
         var listaBusqueda = gestor.buscarAlojado(critApellido);
@@ -238,7 +287,11 @@ public class TestCU02Unitario {
     public void buscarAlojadoFiltraTipoDoc(){
         var lista = listaDeMuchosAlojados();
         TipoDoc tipoDocFiltro = lista.getFirst().getDatos().getDatos_personales().getTipoDoc();
-        when(mockitoDAO.listarAlojados()).thenReturn(lista);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class)))
+                .thenAnswer(invocation -> {
+                    CriteriosBusq critArgumento = invocation.getArgument(0);
+                    return funcionMocoFiltro(critArgumento, lista);
+                });
         CriteriosBusq critTipoDoc = new CriteriosBusq(null,null,tipoDocFiltro,null);
         assertDoesNotThrow(()->gestor.buscarAlojado(critTipoDoc));
         var listaBusqueda = gestor.buscarAlojado(critTipoDoc);
@@ -259,7 +312,11 @@ public class TestCU02Unitario {
     public void buscarAlojadoFiltraNroDoc(){
         var lista = listaDeMuchosAlojados();
         String nroDodFiltro = lista.getFirst().getDatos().getDatos_personales().getNroDoc();
-        when(mockitoDAO.listarAlojados()).thenReturn(lista);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class)))
+                .thenAnswer(invocation -> {
+                    CriteriosBusq critArgumento = invocation.getArgument(0);
+                    return funcionMocoFiltro(critArgumento, lista);
+                });
         CriteriosBusq critNroDoc = new CriteriosBusq(null,null,null,nroDodFiltro);
         assertDoesNotThrow(()->gestor.buscarAlojado(critNroDoc));
         var listaBusqueda = gestor.buscarAlojado(critNroDoc);
@@ -288,14 +345,13 @@ public class TestCU02Unitario {
                 .filter(a -> a.getDatos().getDatos_personales().getNombre().equals(nombreFiltro))
                 .toList();
 
-
         List<Huesped> resultadoEsperado = respuestaDAO.stream()
                 .filter(a -> a instanceof Huesped)
                 .map(a -> (Huesped) a)
                 .toList();
 
         CriteriosBusq crit = new CriteriosBusq(null, nombreFiltro, null, null);
-        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
         if (resultadoEsperado.isEmpty()) {
@@ -336,7 +392,8 @@ public class TestCU02Unitario {
                 .toList();
 
         CriteriosBusq crit = new CriteriosBusq(apellidoFiltro, null, null, null);
-        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
+
 
 
         if (resultadoEsperado.isEmpty()) {
@@ -353,7 +410,7 @@ public class TestCU02Unitario {
      * Verifica que el método de búsqueda de huéspedes aplique correctamente el filtrado
      * por tipo de documento.
      * <p>
-     * Comprueba que al buscar por un {@link ddb.deso.TipoDoc} específico, el resultado
+     * Comprueba que al buscar por un {@link TipoDoc} específico, el resultado
      * contenga exclusivamente objetos Huesped con ese tipo de documento, manejando
      * correctamente la respuesta simulada del DAO.
      * </p>
@@ -373,7 +430,8 @@ public class TestCU02Unitario {
                 .toList();
 
         CriteriosBusq crit = new CriteriosBusq(null, null, tipoDocFiltro, null);
-        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
+
 
 
         if (resultadoEsperado.isEmpty()) {
@@ -409,7 +467,7 @@ public class TestCU02Unitario {
                 .toList();
 
         CriteriosBusq crit = new CriteriosBusq(null, null, null, nroDocFiltro);
-        when(mockitoDAO.buscarAlojadoDAO(crit)).thenReturn(respuestaDAO);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
         if (resultadoEsperado.isEmpty()) {

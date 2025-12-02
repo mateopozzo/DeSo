@@ -105,7 +105,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     */
 
     @Override
-    public List<Alojado> buscarAlojadoDAO(CriteriosBusq criterios_busq){
+    public List<Alojado> buscarAlojado(CriteriosBusq criterios_busq){
         // Tengo la lista de todos los alojados del archivo Alojado.JSON
         List<Alojado> lista_alojados = listarAlojados();
 

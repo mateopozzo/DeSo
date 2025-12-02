@@ -105,9 +105,9 @@ public class GestorHabitacion {
 
     public void ocuparHabitacion(Long IDHabitacion, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
 
-        Huesped huesped = (Huesped) alojadoDAO.buscarAlojadoDAO(criteriosHuesped).getFirst();
+        Huesped huesped = (Huesped) alojadoDAO.buscarAlojado(criteriosHuesped).getFirst();
         List<Alojado> alojados = criteriosinvitados.stream()
-                .map(criteriosBusq -> alojadoDAO.buscarAlojadoDAO(criteriosBusq).getFirst())
+                .map(criteriosBusq -> alojadoDAO.buscarAlojado(criteriosBusq).getFirst())
                 .toList();
         Habitacion habitacion = habitacionDAO.buscarPorNumero(IDHabitacion);
 

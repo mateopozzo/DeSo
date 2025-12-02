@@ -1,35 +1,28 @@
 package ddb.deso;
 
-//import static ddb.deso.gestores.GestorAlojamiento.buscarAlojado;
-
-import com.jayway.jsonpath.Criteria;
-import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
-import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
-public class TestCU02 {
+public class TestCU02Integracion {
 
     @Autowired
     private GestorAlojamiento gestorAlojamiento;
 
     @Autowired
-    public TestCU02(GestorAlojamiento gestorAlojamiento){
+    public TestCU02Integracion(GestorAlojamiento gestorAlojamiento){
         this.gestorAlojamiento = gestorAlojamiento;
     }
+
 
     /**
      * Test de integración para una búsqueda regular exitosa "caminito feliz".
