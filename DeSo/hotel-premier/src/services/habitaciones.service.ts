@@ -6,9 +6,18 @@ export interface DisponibilidadDTO {
   estado: string;
 }
 
+export interface RequestReserva {
+  fechaDesde: string;
+  fechaHasta: string;
+  habitaciones: string[];
+}
+
+const PUERTO = "http://localhost:8080/api/";
+
 export async function buscarEstadoHabitaciones(
   fechaInicio: string,
   fechaFin: string
+  // promise como en javascript, es lo mismo que await
 ): Promise<DisponibilidadDTO[]> {
   const params = new URLSearchParams({
     desde: fechaInicio,
@@ -17,23 +26,33 @@ export async function buscarEstadoHabitaciones(
 
   try {
     const response = await fetch(
-      `http://localhost:8080/api/habitaciones-disponibilidad${params}`,
+      `${PUERTO}/habitaciones-disponibilidad?` + params.toString(),
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        // para que no se quede pegado con datos viejos
         cache: "no-store",
       }
     );
 
-    if (!response.ok) {
-      alert("Error buscar habitaciones disponibles");
-    }
-
     return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error("Error buscando estados: " + error);
     return [];
+  }
+}
+
+export async function crearReserva(reserva: RequestReserva) {
+  try {
+    const response = await fetch(`${PUERTO}/reservas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reserva),
+    });
+
+    return await response.status;
+  } catch (error) {
+    console.error("Error creando reserva: " + error);
+    throw error;
   }
 }

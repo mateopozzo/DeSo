@@ -1,10 +1,11 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import GrillaHabitaciones from "@/components/estado_hab";
 
 export default function AltaHuesped() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  return <div>hola</div>;
+  return <p>holi</p>;
 }
