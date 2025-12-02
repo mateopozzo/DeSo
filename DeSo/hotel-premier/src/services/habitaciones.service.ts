@@ -7,9 +7,14 @@ export interface DisponibilidadDTO {
 }
 
 export interface RequestReserva {
-  fechaDesde: string;
-  fechaHasta: string;
-  habitaciones: string[];
+  reservaDTO: {
+    fecha_inicio: string;
+    fecha_fin: string;
+    nombre: string;
+    apellido: string;
+    telefono: string;
+  };
+  listaIDHabitaciones: string[];
 }
 
 const PUERTO = "http://localhost:8080/api/";

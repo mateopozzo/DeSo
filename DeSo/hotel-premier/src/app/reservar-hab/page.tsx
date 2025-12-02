@@ -12,12 +12,17 @@ import {
 export default function ReservarHab() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
   const [estados, setEstados] = useState<DisponibilidadDTO[]>([]);
   const [seleccion, setSeleccion] = useState<
     { idhab: number | string; fecha: string }[]
   >([]);
+
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [telefono, setTelefono] = useState("");
 
   const buscarEstado = async () => {
     if (!desde || !hasta) {
@@ -35,19 +40,27 @@ export default function ReservarHab() {
   };
 
   const confirmarReserva = async () => {
+    if (!nombre || !apellido || !telefono) {
+      alert("EDITAR ESTO: Debe completar todos los datos");
+      return;
+    }
     const habitaciones = Array.from(
       new Set(seleccion.map((x) => String(x.idhab)))
     );
 
     const datosRes = {
-      fechaDesde: desde,
-      fechaHasta: hasta,
-      habitaciones,
+      reservaDTO: {
+        fecha_inicio: desde,
+        fecha_fin: hasta,
+        nombre,
+        apellido,
+        telefono,
+      },
+      listaIDHabitaciones: habitaciones,
     };
     try {
-      const r = await crearReserva(datosRes);
+      await crearReserva(datosRes);
       alert("Reserva creada correctamente");
-      console.log("Reserva:", r);
     } catch (err) {
       alert("Error al crear reserva");
     }
@@ -98,13 +111,42 @@ export default function ReservarHab() {
         />
       )}
       {seleccion.length > 0 && (
-        <div className="mt-4">
-          <button
-            onClick={confirmarReserva}
-            className="px-4 py-2 bg-green-600 text-white rounded"
-          >
-            Seleccionar ({seleccion.length})
-          </button>
+        <div className="mt-6">
+          <h2 className="text-2xl font-bold">Reserva a nombre de</h2>
+
+          <div className="mt-3 flex flex-col gap-2 w-80">
+            <input
+              type="text"
+              placeholder="Apellido"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              className="border px-2 py-1"
+              maxLength={20}
+            />
+            <input
+              type="text"
+              placeholder="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="border px-2 py-1"
+              maxLength={20}
+            />
+            <input
+              type="text"
+              placeholder="Teléfono"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              className="border px-2 py-1"
+              maxLength={25}
+            />
+
+            <button
+              onClick={confirmarReserva}
+              className="mt-2 px-4 py-2 bg-green-600 text-white rounded"
+            >
+              Confirmar reserva
+            </button>
+          </div>
         </div>
       )}
     </div>
