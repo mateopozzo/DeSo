@@ -34,7 +34,6 @@ export default function Home() {
           desc="Ingresa un nuevo huésped en el sistema"
         />
 
-
         <Card
           href="/reservar-hab"
           iconSrc="/reserva.svg"
@@ -78,8 +77,8 @@ export default function Home() {
           title="Ocupar habitación"
           desc="Ingresa un huésped a su habitación"
         />
-        <Card href="" iconSrc="" gestor="" title="" desc=""/>
-        <Card href="" iconSrc="" gestor="" title="" desc=""/>
+        <div></div>
+        <div></div>
         <Card
           href="/buscar-huesped"
           iconSrc="/hab.svg"
