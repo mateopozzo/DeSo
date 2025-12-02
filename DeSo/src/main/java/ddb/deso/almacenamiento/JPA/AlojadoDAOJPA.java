@@ -5,6 +5,7 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
+import jakarta.persistence.criteria.Path;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia.
  * Actúa como un adaptador entre la interfaz DAO y los repositorios JPA.
  *
- * NOTA: Para que 'buscarHuespedDAO' funcione, AlojadoRepository DEBE extender
+ * NOTA: Para que 'buscarAlojado' funcione, AlojadoRepository DEBE extender
  * JpaSpecificationExecutor<Alojado, AlojadoID>
  *
  * Ejemplo:
@@ -83,7 +84,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     @Override
-    public List<Alojado> buscarHuespedDAO(CriteriosBusq criterios) {
+    public List<Alojado> buscarAlojado(CriteriosBusq criterios) {
 
         // Si el Documento esta entero se aprovecha
         if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank() && criterios.getTipoDoc() != null) {
@@ -99,7 +100,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             // Alojado -> DatosAlojado
             Join<Alojado, DatosAlojado> datosAlojado = root.join("datos");
             // DatosAlojado -> DatosPersonales
-            Join<DatosAlojado, DatosPersonales> datosPersonales = datosAlojado.join("datos_personales");
+            Path<DatosPersonales> datosPersonales = datosAlojado.get("datos_personales");
 
             List<Predicate> predicates = new ArrayList<>();
 

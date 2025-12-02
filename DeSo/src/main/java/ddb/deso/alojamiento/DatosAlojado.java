@@ -11,6 +11,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "datos_alojado")
 public class DatosAlojado {
 
@@ -23,6 +24,7 @@ public class DatosAlojado {
     @Embedded
     private DatosPersonales datos_personales;
 
+    /* TODO -> revisar usos y debuggear
     public DatosAlojado(){
         var dr = new DatosResidencia();
         var dc = new DatosContacto();
@@ -34,6 +36,8 @@ public class DatosAlojado {
         checkIns = new ArrayList<>();
         checkOuts = new ArrayList<>();
     }
+
+     */
 
     @OneToMany(
             mappedBy = "alojado",

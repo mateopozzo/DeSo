@@ -26,7 +26,7 @@ public class GestorAlojamiento {
             return false;
         }
         CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
-        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarAlojado(criterios_busq);
         return encontrados != null && !encontrados.isEmpty();
     }
 
@@ -44,7 +44,7 @@ public class GestorAlojamiento {
         Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
         */
 
-        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarAlojado(criterios_busq);
 
         if(encontrados == null || encontrados.isEmpty())
             throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojado disponibles para el criterio dado");
@@ -108,7 +108,7 @@ public class GestorAlojamiento {
 
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
 
-        List<Alojado> listaAlojados = alojadoDAO.buscarHuespedDAO(criterios);
+        List<Alojado> listaAlojados = alojadoDAO.buscarAlojado(criterios);
 
         if (listaAlojados == null || listaAlojados.isEmpty()) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
@@ -202,7 +202,7 @@ public class GestorAlojamiento {
             return null;
         }
         CriteriosBusq criterios_busq = new CriteriosBusq(null, null, tipo, dni);
-        List<Alojado> encontrados = alojadoDAO.buscarHuespedDAO(criterios_busq);
+        List<Alojado> encontrados = alojadoDAO.buscarAlojado(criterios_busq);
         Alojado encontrado = encontrados.stream()
                 .findFirst()
                 .orElse(null);

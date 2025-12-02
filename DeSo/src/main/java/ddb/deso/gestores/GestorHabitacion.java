@@ -7,7 +7,6 @@ import ddb.deso.almacenamiento.DAO.*;
 import ddb.deso.alojamiento.*;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
@@ -106,9 +105,9 @@ public class GestorHabitacion {
 
     public void ocuparHabitacion(Long IDHabitacion, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
 
-        Huesped huesped = (Huesped) alojadoDAO.buscarHuespedDAO(criteriosHuesped).getFirst();
+        Huesped huesped = (Huesped) alojadoDAO.buscarAlojado(criteriosHuesped).getFirst();
         List<Alojado> alojados = criteriosinvitados.stream()
-                .map(criteriosBusq -> alojadoDAO.buscarHuespedDAO(criteriosBusq).getFirst())
+                .map(criteriosBusq -> alojadoDAO.buscarAlojado(criteriosBusq).getFirst())
                 .toList();
         Habitacion habitacion = habitacionDAO.buscarPorNumero(IDHabitacion);
 
