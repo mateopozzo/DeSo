@@ -38,6 +38,7 @@ export default function ReservarHab() {
     const resp = await buscarEstadoHabitaciones(desde, hasta);
     if (resp.length === 0) {
       console.log("No hay habitaciones disponibles en esas fechas");
+      console.log("FIN CASO DE USO");
     }
     setEstados(resp);
   };

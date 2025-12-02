@@ -8,6 +8,9 @@ import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +33,11 @@ public class HabitacionController {
     /**
      * DTO destinado a la comunicación de reservas y estadias en su rango de fecha
      */
+    @Getter
+    @Setter
+    @NoArgsConstructor
     @AllArgsConstructor
-    public class DisponibilidadDTO {
+    public static class DisponibilidadDTO {
 
         public DisponibilidadDTO(Estadia estadia) {
             this.tipo = estadia.getHabitacion().getTipo_hab();
