@@ -17,7 +17,7 @@ export interface RequestReserva {
   listaIDHabitaciones: string[];
 }
 
-const PUERTO = "http://localhost:8080/api/";
+const PUERTO = "http://localhost:8080/api";
 
 export async function buscarEstadoHabitaciones(
   fechaInicio: string,
@@ -25,13 +25,14 @@ export async function buscarEstadoHabitaciones(
   // promise como en javascript, es lo mismo que await
 ): Promise<DisponibilidadDTO[]> {
   const params = new URLSearchParams({
-    desde: fechaInicio,
-    hasta: fechaFin,
+    fecha_inicio: fechaInicio,
+    fecha_fin: fechaFin,
   });
 
   try {
     const response = await fetch(
-      `${PUERTO}/habitaciones-disponibilidad?` + params.toString(),
+      // va con ? porque si no piensa que es una url de verdad y no que le estoy dando parametroa
+      `${PUERTO}/habitaciones-disponibilidad?${params.toString()}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -49,13 +50,13 @@ export async function buscarEstadoHabitaciones(
 
 export async function crearReserva(reserva: RequestReserva) {
   try {
-    const response = await fetch(`${PUERTO}/reservas`, {
+    const response = await fetch(`${PUERTO}/reserva`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reserva),
     });
 
-    return await response.status;
+    return response.status;
   } catch (error) {
     console.error("Error creando reserva: " + error);
     throw error;

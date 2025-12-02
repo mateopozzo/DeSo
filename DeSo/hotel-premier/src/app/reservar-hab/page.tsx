@@ -36,6 +36,9 @@ export default function ReservarHab() {
     }
 
     const resp = await buscarEstadoHabitaciones(desde, hasta);
+    if (resp.length === 0) {
+      console.log("No hay habitaciones disponibles en esas fechas");
+    }
     setEstados(resp);
   };
 
@@ -120,7 +123,7 @@ export default function ReservarHab() {
               placeholder="Apellido"
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
-              className="border px-2 py-1"
+              className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
               maxLength={20}
             />
             <input
@@ -128,21 +131,21 @@ export default function ReservarHab() {
               placeholder="Nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="border px-2 py-1"
+              className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
               maxLength={20}
             />
             <input
-              type="text"
+              type="tel"
               placeholder="Teléfono"
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
-              className="border px-2 py-1"
+              className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
               maxLength={25}
             />
 
             <button
               onClick={confirmarReserva}
-              className="mt-2 px-4 py-2 bg-green-600 text-white rounded"
+              className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655]"
             >
               Confirmar reserva
             </button>
