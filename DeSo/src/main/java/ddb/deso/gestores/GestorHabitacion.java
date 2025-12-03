@@ -99,7 +99,7 @@ public class GestorHabitacion {
             if (reserva.getFecha_fin() == null || reserva.getFecha_inicio() == null)
                 throw new ReservaInvalidaException("Fechas nulas");
 
-            if (reserva.getFecha_fin().isAfter(reserva.getFecha_inicio()))
+            if (reserva.getFecha_inicio().isAfter(reserva.getFecha_fin()))
                 throw new ReservaInvalidaException("Fechas invertidas");
 
             if (reserva.getNombre() == null || reserva.getNombre().isEmpty())
@@ -156,10 +156,9 @@ public class GestorHabitacion {
         checkIn.setAlojado(huesped.getDatos());
         huesped.getDatos().nuevoCheckIn(checkIn);
         checkInDAO.crearDatosCheckIn(checkIn);
-//        alojadoDAO.crearAlojado(huesped);     spring actualiza solo
+
         for(var id : alojados) {
             id.getDatos().nuevoCheckIn(checkIn);
-//            alojadoDAO.crearAlojado(id);
         }
 
         Estadia estadia = new Estadia();
