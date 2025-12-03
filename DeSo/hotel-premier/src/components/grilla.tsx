@@ -69,9 +69,16 @@ export default function Grilla({
   return (
     <div className="flex flex-col justify-between items-center mb-2 bg-[#f5f7fa] dark:bg-gray-950">
       <div className="flex flex-col items-center justify-center md:flex-row mb-8">
-        <p className="md:mr-12 text-md font-semibold ">
-          Habitaciones desde {fecha_inicio} hasta {fecha_fin}
-        </p>
+        <div>
+          <p className="md:mr-12 text-sm italic  ">
+            Para seleccionar, haga click en la fecha inicial y luego en la fecha
+            final.
+          </p>
+          <p className="md:mr-12 text-md font-semibold ">
+            Habitaciones desde {fecha_inicio} hasta {fecha_fin}
+          </p>
+        </div>
+
         <button className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655]">
           Confirmar
         </button>

@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d69e9f34-8257-4d9b-a136-62de3d9c3bd6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/hotel-premier/src/components/grilla.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/components/grilla.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="d69e9f34-8257-4d9b-a136-62de3d9c3bd6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -96,7 +94,7 @@
       <updated>1764739376015</updated>
       <workItem from="1764739378747" duration="174000" />
       <workItem from="1764739565235" duration="834000" />
-      <workItem from="1764740812272" duration="7094000" />
+      <workItem from="1764740812272" duration="7399000" />
     </task>
     <servers />
   </component>
