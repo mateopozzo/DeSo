@@ -1,8 +1,8 @@
 export interface DisponibilidadDTO {
   idHabitacion: number;
   tipoHab: string;
-  fechaDesde: string;
-  fechaHasta: string;
+  fecha_inicio: string;
+  fecha_fin: string;
   estado: string;
 }
 
@@ -17,7 +17,28 @@ export interface RequestReserva {
   listaIDHabitaciones: string[];
 }
 
+export interface Habitacion {
+  nroHab: number;
+  tipo_hab: string;
+  estado_hab: string;
+}
+
 const PUERTO = "http://localhost:8080/api";
+
+export async function pedirHabs(): Promise<Habitacion[]> {
+  try {
+    const response = await fetch(`${PUERTO}/habitacion`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error pidiendo habitaciones: " + error);
+    return [];
+  }
+}
 
 export async function buscarEstadoHabitaciones(
   fechaInicio: string,

@@ -22,11 +22,11 @@ export default function ActionCard({
     >
       <div className="flex gap-2 justify-center">
         <img src={iconSrc} alt={gestor} width="30px" className="dark:invert" />
-        <div className="text-lg font-semibold text-gray-900 group-hover:text-white dark:text-white">
+        <div className="text-lg font-semibold text-gray-900 dark:group-hover:text-white dark:text-white">
           {title}
         </div>
       </div>
-      <p className="text-sm text-gray-500 group-hover:text-white dark:text-gray-400">
+      <p className="text-sm text-gray-500 dark:group-hover:text-white dark:text-gray-400">
         {desc}
       </p>
     </Link>
