@@ -2,7 +2,6 @@ package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
@@ -14,9 +13,24 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+/**
+ * Clase de pruebas unitarias para el Caso de Uso 09 (CU09): Alta de Huésped/Alojado.
+ * <p>
+ * Esta clase verifica la lógica de negocio contenida en {@link GestorAlojamiento},
+ * asegurando que las validaciones de datos (campos obligatorios, nulidad, vacuidad)
+ * funcionen correctamente antes de intentar la persistencia.
+ * </p>
+ * <p>
+ * Se utiliza {@link SpringBootTest} para levantar el contexto necesario y
+ * {@link MockitoBean} para aislar la capa de persistencia ({@link AlojadoDAO}),
+ * permitiendo probar el gestor sin impactar la base de datos real.
+ * </p>
+ *
+ * @see GestorAlojamiento
+ * @see AlojadoDAO
+ */
 @SpringBootTest
-public class TestCU09ServiceUnitario {
+public class TestCU09GestoresUnitario {
 
     @Autowired
     GestorAlojamiento gestor;
@@ -24,6 +38,18 @@ public class TestCU09ServiceUnitario {
     @MockitoBean
     AlojadoDAO dao;
 
+    /**
+     * Método auxiliar para construir un {@link AlojadoDTO} válido y completo.
+     * <p>
+     * Sirve como base para las pruebas:
+     * <ul>
+     * <li>Se usa tal cual para pruebas de camino feliz (Happy Path).</li>
+     * <li>Se modifica puntualmente para pruebas de casos negativos (validación de errores).</li>
+     * </ul>
+     * </p>
+     *
+     * @return Una instancia de AlojadoDTO con todos sus campos obligatorios poblados correctamente.
+     */
     private AlojadoDTO crearAlojadoDTO(){
         AlojadoDTO ret = new AlojadoDTO();
         ret.setApellido("Daverio");
@@ -47,11 +73,24 @@ public class TestCU09ServiceUnitario {
         return ret;
     }
 
+    /**
+     * Verifica que el gestor rechace un objeto {@code null} como argumento.
+     * <p>
+     * Se espera que se lance una {@link AlojadoInvalidoException} inmediatamente.
+     * </p>
+     */
     @Test
     public void gestorRecibeNulo(){
         assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(null));
     }
 
+    /**
+     * Verifica la validación de campos obligatorios cuando estos son {@code null}.
+     * <p>
+     * Escenario: Se crea un alojado válido y se fuerza el campo 'Nombre' a null.
+     * Resultado esperado: {@link AlojadoInvalidoException}.
+     * </p>
+     */
     @Test
     public void campoObligatorioNulo(){
         var a = crearAlojadoDTO();
@@ -60,6 +99,13 @@ public class TestCU09ServiceUnitario {
         assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(alojado));
     }
 
+    /**
+     * Verifica la validación de campos obligatorios cuando estos son cadenas vacías.
+     * <p>
+     * Escenario: Se crea un alojado válido y se fuerza el campo 'Nombre' a "" (string vacío).
+     * Resultado esperado: {@link AlojadoInvalidoException}.
+     * </p>
+     */
     @Test
     public void campoObligatorioQuedaVacio(){
         var a = crearAlojadoDTO();
@@ -68,6 +114,13 @@ public class TestCU09ServiceUnitario {
         assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(alojado));
     }
 
+    /**
+     * Verifica el "caminito feliz" del gestor.
+     * <p>
+     * Escenario: Se crea un alojado válido.
+     * Resultado esperado: void.
+     * </p>
+     */
     @Test
     public void gestorRecibeAljadoValido(){
         var a = crearAlojadoDTO();

@@ -2,7 +2,9 @@ package ddb.deso.controller;
 
 import ddb.deso.EstadoHab;
 import ddb.deso.TipoHab;
+import ddb.deso.almacenamiento.DTO.EstadiaDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionDTO;
+import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
@@ -10,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -116,6 +119,64 @@ public class HabitacionController {
         return ResponseEntity.ok(listaDisponibilidades);
 
     }
+
+    @PostMapping("/api/ocupar-habitacion")
+    public ResponseEntity<EstadiaDTO> crearEstadia(@RequestBody EstadiaDTO estadiaDTO) {
+
+        if(     estadiaDTO == null ||
+                estadiaDTO.getEncargado() == null ||
+                estadiaDTO.getFechaFin() == null ||
+                estadiaDTO.getFechaInicio() == null ||
+                estadiaDTO.getListaInvitados() == null ||
+                estadiaDTO.getIdHabitacion() == null
+        ) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+
+        gestorHabitacion.ocuparHabitacion(
+                estadiaDTO.getIdHabitacion(),
+                estadiaDTO.getEncargado(), estadiaDTO.getListaInvitados(),
+                estadiaDTO.getFechaInicio(),
+                estadiaDTO.getFechaFin()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(estadiaDTO);
+
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class PostDTO {
+        private ReservaDTO reservaDTO;
+        private List<Long> listaIDHabitaciones;
+    }
+
+    @PostMapping("/api/reserva")
+    public ResponseEntity<ReservaDTO> crearReserva (@RequestBody PostDTO estructura) {
+
+        ReservaDTO reservaDTO = estructura.reservaDTO;
+        List<Long> listaIDHabitaciones  = estructura.listaIDHabitaciones;
+
+        if(reservaDTO == null || listaIDHabitaciones == null || listaIDHabitaciones.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Reserva reserva = new Reserva(
+                reservaDTO.getFecha_inicio(),
+                reservaDTO.getFecha_fin(),
+                "Reservado",
+                reservaDTO.getNombre(),
+                reservaDTO.getApellido(),
+                reservaDTO.getTelefono()
+        );
+
+        gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
+    }
+
 
 /*
     @GetMapping("/api/habitaciones-disponibilidad")

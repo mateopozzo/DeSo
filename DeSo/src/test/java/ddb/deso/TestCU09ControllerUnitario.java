@@ -23,6 +23,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Pruebas unitarias para el controlador del Caso de Uso 09 (Alta de Huésped).
+ * <p>
+ * Utiliza {@link WebMvcTest} para validar exclusivamente la capa web (endpoints, serialización JSON,
+ * códigos HTTP) aislando la lógica de negocio mediante un mock de {@link GestorAlojamiento}.
+ * </p>
+ */
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(AlojadoController.class)
 public class TestCU09ControllerUnitario {
@@ -43,6 +50,10 @@ public class TestCU09ControllerUnitario {
     private boolean forzar = false;
     private ObjectMapper objectMapper;
 
+    /**
+     * Genera un DTO válido para usar como base en las peticiones HTTP.
+     * @return Instancia de {@link AlojadoDTO} con datos completos.
+     */
     private AlojadoDTO crearAlojadoDTO(){
         AlojadoDTO ret = new AlojadoDTO();
         ret.setApellido("Daverio");
@@ -66,14 +77,26 @@ public class TestCU09ControllerUnitario {
         return ret;
     }
 
+    /**
+     * Configura el parámetro 'force' de la petición.
+     * @param valorDeVerdad Entero positivo para true, 0 para false.
+     */
     private void setForzar(int valorDeVerdad){
         forzar = valorDeVerdad > 0;
     }
 
+    /**
+     * Configura el comportamiento del mock {@code gestor.dniExiste()}.
+     * @param valorDeVerdad Entero positivo hace que el mock retorne true.
+     */
     private void setDniExiste(int valorDeVerdad){
         when(gestorMock.dniExiste(any(String.class), any(TipoDoc.class))).thenReturn(valorDeVerdad>0);
     }
 
+    /**
+     * Configura si el método {@code gestor.darDeAltaHuesped()} debe lanzar excepción.
+     * @param valorDeVerdad Entero positivo provoca una {@link AlojadoInvalidoException}.
+     */
     private void setGestorDevuelveExcepcion(int valorDeVerdad){
         if(valorDeVerdad>0){
             doThrow(new AlojadoInvalidoException("Alojado invalido")).when(gestorMock).darDeAltaHuesped(any(Alojado.class));
@@ -84,12 +107,20 @@ public class TestCU09ControllerUnitario {
 
 
     /**
-     * Método que prueba todas las combinaciones de la capa controller.
-     * Las combinaciones se definen por los valores de los siguientes parametros
-     * Los valores de verdad se definen por el valor que toma el primer, segundo o tercer bit de un entero
-     *
-     * FORZAR       DNI_EXISTE      EXCEPCION_GESTOR
-     * 1 & 4           1 & 2             1 & 1
+     * Ejecuta una prueba combinatoria exhaustiva de los escenarios del controlador.
+     * <p>
+     * Utiliza un bucle de 0 a 7 (representación binaria de 3 bits) para alternar las condiciones:
+     * <ul>
+     * <li><b>Bit 2 (4):</b> Parámetro {@code force} (true/false).</li>
+     * <li><b>Bit 1 (2):</b> Mock {@code dniExiste} (true/false).</li>
+     * <li><b>Bit 0 (1):</b> Mock lanza {@code Exception} (true/false).</li>
+     * </ul>
+     * Se validan los códigos de estado HTTP resultantes:
+     * <ul>
+     * <li><b>201 Created:</b> Escenarios válidos (0, 4, 6).</li>
+     * <li><b>400 Bad Request:</b> Cuando el gestor lanza excepción (1, 5, 7).</li>
+     * <li><b>409 Conflict:</b> Cuando el DNI existe y no se fuerza la creación (2, 3).</li>
+     * </ul>
      */
     @Test
     public void combinacionesCapaController() throws Exception {

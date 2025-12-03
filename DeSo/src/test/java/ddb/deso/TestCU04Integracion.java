@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
-public class TestCU04 {
+public class TestCU04Integracion {
 
     @Autowired
     private HabitacionDAO habitacionDAO;
