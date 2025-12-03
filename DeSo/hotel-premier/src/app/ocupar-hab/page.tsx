@@ -32,14 +32,11 @@ export default function OcuparHabPage() {
   );
   const [error, setError] = useState<string | null>(null);
 
-  // DATOS
   const [fecha_inicio, setDesde] = useState("");
   const [fecha_fin, setHasta] = useState("");
   const [estados, setEstados] = useState<DisponibilidadDTO[]>([]);
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
-  const [busquedaRealizada, setBusquedaRealizada] = useState(false); // Para saber si ya buscó
-
-  // CARGA SECUENCIAL
+  const [busquedaRealizada, setBusquedaRealizada] = useState(false);
   const [colaReservas, setColaReservas] = useState<ReservaCola[]>([]);
   const [indiceActual, setIndiceActual] = useState(0);
   const [estadiasListas, setEstadiasListas] = useState<EstadiaDTO[]>([]);
@@ -52,7 +49,6 @@ export default function OcuparHabPage() {
     []
   );
 
-  // EFECTO DE CARGA INICIAL (Solo habitaciones estructurales)
   useEffect(() => {
     const cargarHabitaciones = async () => {
       try {
@@ -80,7 +76,6 @@ export default function OcuparHabPage() {
     }
     setError(null);
     try {
-      // Marcamos que ya se intentó buscar para habilitar el renderizado
       setBusquedaRealizada(true);
 
       const resp = await buscarEstadoHabitaciones(fecha_inicio, fecha_fin);
@@ -92,8 +87,7 @@ export default function OcuparHabPage() {
     }
   };
 
-  // ESTA FUNCIÓN CONECTA LA GRILLA CON EL SIGUIENTE PASO
-  // Recibe el rango seleccionado directamente desde el componente Grilla
+  // recibe el seleccionado directamente desde el componente Grilla
   const procesarSeleccionGrilla = (datos: {
     idHabitacion: number;
     fechaInicio: string;
@@ -101,14 +95,13 @@ export default function OcuparHabPage() {
   }) => {
     console.log("Selección recibida de la grilla:", datos);
 
-    // Creamos la cola de reservas directamente con el rango recibido
     const nuevaReserva: ReservaCola = {
       idhab: datos.idHabitacion,
       fecha_inicio: datos.fechaInicio,
       fecha_fin: datos.fechaFin,
     };
 
-    setColaReservas([nuevaReserva]); // Por ahora manejamos una sola reserva a la vez
+    setColaReservas([nuevaReserva]);
     setPaso("CARGA");
     setIndiceActual(0);
     setError(null);

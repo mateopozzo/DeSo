@@ -276,7 +276,7 @@ export default function CrearReservaPage() {
           <div className="bg-[#f5f7fa] dark:bg-gray-950 p-8 rounded-2xl shadow-2xl flex flex-col items-center">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#52a173] border-t-transparent mb-4"></div>
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-              Procesando Reserva...
+              Procesando reserva...
             </h2>
           </div>
         </div>
@@ -288,11 +288,8 @@ export default function CrearReservaPage() {
             ✓
           </div>
           <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-            ¡Reserva Exitosa!
+            Reserva creada con éxito
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg">
-            La habitación ha sido reservada correctamente.
-          </p>
           <div className="flex gap-4">
             <button
               onClick={() => {

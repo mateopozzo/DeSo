@@ -9,7 +9,6 @@ export default function navbar() {
     <>
       <nav className="h-20 w-full flex flex-row items-center justify-between px-6 bg-white dark:bg-gray-950  z-20 sticky top-0">
         <div className="flex items-center gap-4">
-          {/* oculto en pantallas grandes */}
           <button
             onClick={() => setIsHamburguesaOpen(true)}
             className="lg:hidden p-2 -ml-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"

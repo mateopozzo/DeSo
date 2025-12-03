@@ -17,12 +17,10 @@ export default function GrillaHabitaciones({
   estados,
   seleccionDias,
 }: GrillaProps) {
-  // LOGICA RANGOS LOCAL: { idHabitacion: { inicio: "2023-01-01", fin: "2023-01-05" } }
   const [rangosSeleccionados, setRangosSeleccionados] = useState<
     Record<number, { inicio: string; fin: string | null }>
   >({});
 
-  // GENERAR FECHAS
   const fechas = useMemo(() => {
     const arr: string[] = [];
     if (!desde || !hasta) return arr;
@@ -37,7 +35,6 @@ export default function GrillaHabitaciones({
     return arr;
   }, [desde, hasta]);
 
-  // VERIFICAR SI ESTÁ OCUPADA EN BACKEND
   const obtenerEstadoBackend = (idHab: number, fecha: string) => {
     const ocupada = estados.find(
       (res) =>
@@ -48,13 +45,12 @@ export default function GrillaHabitaciones({
     return ocupada ? ocupada.estado : "DISPONIBLE";
   };
 
-  // MANEJAR CLICKS (Lógica de Rangos: Click 1 = Inicio, Click 2 = Fin)
   const handleCellClick = (
     idHab: number,
     fecha: string,
     estadoActual: string
   ) => {
-    if (estadoActual !== "DISPONIBLE") return; // No dejar seleccionar ocupadas
+    if (estadoActual !== "DISPONIBLE") return;
 
     setRangosSeleccionados((prev) => {
       const nuevo = { ...prev };
@@ -123,7 +119,6 @@ export default function GrillaHabitaciones({
       }
     }
 
-    // C. Defecto
     return "bg-white text-black hover:bg-green-200 dark:bg-gray-950 dark:text-white cursor-pointer transition-colors";
   };
 
