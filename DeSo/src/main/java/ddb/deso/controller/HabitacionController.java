@@ -2,19 +2,14 @@ package ddb.deso.controller;
 
 import ddb.deso.EstadoHab;
 import ddb.deso.TipoHab;
-import ddb.deso.almacenamiento.DAO.EstadiaDAO;
-import ddb.deso.almacenamiento.DAO.ReservaDAO;
 import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +22,8 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class HabitacionController {
 
-    @Autowired
     private final GestorHabitacion gestorHabitacion;
 
-    @Autowired
     public HabitacionController(GestorHabitacion gestorHabitacion) {this.gestorHabitacion = gestorHabitacion;}
 
     /**
@@ -81,8 +74,9 @@ public class HabitacionController {
         var iteradorHabitaciones = reserva.getListaHabitaciones().iterator();
         List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
         while(iteradorHabitaciones.hasNext()){
-            Long idHab = iteradorHabitaciones.next().getNroHab();
-            var  tipoH = iteradorHabitaciones.next().getTipo_hab();
+            var habitacion = iteradorHabitaciones.next();
+            Long idHab = habitacion.getNroHab();
+            var  tipoH = habitacion.getTipo_hab();
             var disponibilidad = new DisponibilidadDTO(
                     tipoH,
                     idHab,

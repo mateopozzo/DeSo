@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class EstadiaController {
+
+
     private final GestorHabitacion gestorHabitacion;
 
     public EstadiaController(GestorHabitacion gestorHabitacion) {

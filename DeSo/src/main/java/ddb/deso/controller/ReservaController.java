@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins ={"http://localhost:3000/", "http://localhost:8080"})
 public class ReservaController {
+
     private final GestorHabitacion gestorHabitacion;
 
     public ReservaController(GestorHabitacion gestorHabitacion) {
