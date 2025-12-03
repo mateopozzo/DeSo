@@ -5,7 +5,6 @@ import {
   DisponibilidadDTO,
 } from "../services/habitaciones.service";
 
-// 1. Exportamos este tipo para que el Padre sepa qué formato esperar
 export type DatosSeleccion = {
   idHabitacion: number;
   fechaInicio: string;
@@ -17,7 +16,6 @@ interface GrillaProps {
   fecha_fin: string;
   habitaciones: Habitacion[];
   reservas: DisponibilidadDTO[];
-  // 2. Propiedad nueva: Función que recibe los datos cuando el usuario confirma
   onConfirmarSeleccion?: (datos: DatosSeleccion) => void;
 }
 
