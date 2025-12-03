@@ -43,7 +43,6 @@ export async function pedirHabs(): Promise<Habitacion[]> {
 export async function buscarEstadoHabitaciones(
   fechaInicio: string,
   fechaFin: string
-  // promise como en javascript, es lo mismo que await
 ): Promise<DisponibilidadDTO[]> {
   const params = new URLSearchParams({
     fecha_inicio: fechaInicio,

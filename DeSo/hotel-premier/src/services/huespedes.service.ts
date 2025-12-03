@@ -1,5 +1,4 @@
-// cada service necesita: objeto que se va a intercambiar + llamda al back
-// del manejo de response se encarga cada página
+
 export interface HuespedDTO {
   apellido: string;
   nombre: string;
