@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -60,7 +61,7 @@ public class HabitacionController {
         var listaHabitaciones = gestorHabitacion.listarHabitaciones();
 
         if(listaHabitaciones == null){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.badRequest().body(null);
         }
 
         List<HabitacionDTO> habitacionesDTO = new ArrayList<>();
@@ -68,6 +69,10 @@ public class HabitacionController {
         for(var h : listaHabitaciones){
             HabitacionDTO hdto = new HabitacionDTO(h.getNroHab(), h.getTipo_hab(), h.getEstado_hab());
             habitacionesDTO.add(hdto);
+        }
+
+        if(listaHabitaciones==null || listaHabitaciones.isEmpty()){
+            return ResponseEntity.badRequest().body(null);
         }
 
         return ResponseEntity.ok(habitacionesDTO);
@@ -106,12 +111,12 @@ public class HabitacionController {
 
         List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
 
-        listaReservas.forEach(
+        if(listaReservas!=null) listaReservas.forEach(
                 reserva -> listaDisponibilidades.addAll(listarPorReserva(reserva)
                 )
         );
 
-        listaEstadias.forEach(
+        if(listaEstadias!=null) listaEstadias.forEach(
                 estadia -> listaDisponibilidades.add(new DisponibilidadDTO(estadia)
                 )
         );
@@ -159,9 +164,11 @@ public class HabitacionController {
         ReservaDTO reservaDTO = estructura.reservaDTO;
         List<Long> listaIDHabitaciones  = estructura.listaIDHabitaciones;
 
-        if(reservaDTO == null || listaIDHabitaciones == null || listaIDHabitaciones.isEmpty()) {
+        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones))
             return ResponseEntity.badRequest().build();
-        }
+
+        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(reservaDTO);
 
         Reserva reserva = new Reserva(
                 reservaDTO.getFecha_inicio(),
@@ -175,6 +182,47 @@ public class HabitacionController {
         gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
+    }
+
+    private boolean creacionReservaValida(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
+        if(reservaDTO == null || listaIDHabitaciones == null || listaIDHabitaciones.isEmpty()) {
+            return false;
+        }
+        if(reservaDTO.getFecha_inicio()==null || reservaDTO.getFecha_fin()==null)
+            return false;
+        if(reservaDTO.getFecha_inicio().isAfter(LocalDate.now())) {
+            return false;
+        }
+        if(reservaDTO.getFecha_fin().isBefore(LocalDate.now())) {
+            return false;
+        }
+
+        if(reservaDTO.getNombre()==null || reservaDTO.getNombre().isEmpty()) {
+            return false;
+        }
+        if(reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()) {
+            return false;
+        }
+        if(reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verificarDisponibilidadDeHabitaciones(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
+        // Verificacion de disponibilidad de reserva
+        var listaDisponibilidad = disponibilidadHabitaciones(reservaDTO.getFecha_inicio(), reservaDTO.getFecha_fin()).getBody();
+        var habitacionesDeReserva = new HashSet<Long>(listaIDHabitaciones);
+
+        if(listaDisponibilidad!=null) for(var disponibilidad : listaDisponibilidad){
+            if(habitacionesDeReserva.contains(disponibilidad.idHabitacion)){
+
+                //CONFLICTO -> Una estadia o reserva ya ocupa la habitacion en la fecha seleccionada
+
+                return false;
+            }
+        }
+        return true;
     }
 
 
