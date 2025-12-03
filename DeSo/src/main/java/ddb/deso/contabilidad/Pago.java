@@ -1,14 +1,12 @@
 package ddb.deso.contabilidad;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import ddb.deso.habitaciones.Estadia;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 
 /**
