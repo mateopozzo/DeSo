@@ -61,7 +61,7 @@ export default function Grilla({
   };
 
   const manejarClick = (idHab: number, fecha: string, estadoActual: string) => {
-    if (estadoActual === "OCUPADA" || estadoActual === "MANTENIMIENTO") {
+    if (estadoActual === "OCUPADA" || estadoActual === "EN MANTENIMIENTO") {
       return;
     }
 
@@ -112,20 +112,17 @@ export default function Grilla({
   const pintarEstado = (estado: string) => {
     const estadoUpper = estado ? estado.toUpperCase() : "DISPONIBLE";
     switch (estadoUpper) {
-      case "RESERVADA":
-        return "bg-yellow-500 text-white cursor-pointer opacity-90";
+      case "MANTENIMIENTO":
+        return "bg-red-500 text-white cursor-not-allowed";
         break;
       case "SELECCIONADA":
         return "bg-blue-600 text-white font-bold cursor-pointer ring-2 ring-blue-300 z-10 scale-105 shadow-md";
         break;
-      case "MANTENIMIENTO":
-        return "bg-red-500 text-white cursor-not-allowed";
-        break;
       case "OCUPADA":
-        return "dark:text-black dark:bg-white bg-black text-white cursor-not-allowed opacity-80";
+        return "dark:bg-white bg-black text-white cursor-not-allowed opacity-80";
         break;
       default:
-        return "dark:bg-gray-950 dark:text-white bg-[#f5f7fa] text-black hover:bg-green-500 cursor-pointer";
+        return "dark:bg-gray-950 dark:text-white bg-[#f5f7fa] dark:bg-gray-950 text-black hover:bg-green-500 cursor-pointer";
     }
   };
 
