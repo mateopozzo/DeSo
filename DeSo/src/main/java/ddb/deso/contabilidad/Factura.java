@@ -29,6 +29,7 @@ public class Factura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private LocalDate fecha_factura;
     private int num_factura;
     private TipoFactura tipo_factura;
