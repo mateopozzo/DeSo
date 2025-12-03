@@ -37,7 +37,6 @@ export default function OcuparHabPage() {
   const [fecha_inicio, setDesde] = useState("");
   const [fecha_fin, setHasta] = useState("");
   const [estados, setEstados] = useState<DisponibilidadDTO[]>([]);
-  // NUEVO: Estado para guardar las habitaciones y pasarlas a la grilla
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
 
   const [seleccionConfirmada, setSeleccionConfirmada] = useState<
@@ -62,7 +61,6 @@ export default function OcuparHabPage() {
     const cargarHabitaciones = async () => {
       try {
         const data = await pedirHabs();
-        // Ordenamos por numero de habitacion
         setListaHabitaciones(data.sort((a, b) => a.nroHab - b.nroHab));
       } catch (err) {
         console.error("Error cargando habitaciones:", err);

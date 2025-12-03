@@ -370,9 +370,6 @@ export default function AltaHuesped() {
             Siguiente
           </button>
         </div>
-        {/* FIN DE BOTONES */}
-
-        {/* FIN DEL FORM */}
       </form>
     </div>
   );

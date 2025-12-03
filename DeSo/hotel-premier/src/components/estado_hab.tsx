@@ -3,10 +3,10 @@ import React, { useState, useMemo } from "react";
 import { DisponibilidadDTO, Habitacion } from "@/services/habitaciones.service";
 
 interface GrillaProps {
-  desde: string; // ANTES: fecha_inicio
-  hasta: string; // ANTES: fecha_fin
+  desde: string;
+  hasta: string;
   habitaciones: Habitacion[];
-  estados: DisponibilidadDTO[]; // Usamos 'estados' para coincidir con lo que envia la pagina
+  estados: DisponibilidadDTO[];
   seleccionDias: (sel: { idhab: string | number; fecha: string }[]) => void;
 }
 
@@ -18,12 +18,10 @@ export default function GrillaHabitaciones({
                                              seleccionDias,
                                            }: GrillaProps) {
 
-  // LOGICA RANGOS LOCAL: { idHabitacion: { inicio: "2023-01-01", fin: "2023-01-05" } }
   const [rangosSeleccionados, setRangosSeleccionados] = useState<
       Record<number, { inicio: string; fin: string | null }>
   >({});
 
-  // 1. GENERAR FECHAS
   const fechas = useMemo(() => {
     const arr: string[] = [];
     if (!desde || !hasta) return arr;
@@ -38,7 +36,6 @@ export default function GrillaHabitaciones({
     return arr;
   }, [desde, hasta]);
 
-  // 2. VERIFICAR SI ESTÁ OCUPADA EN BACKEND
   const obtenerEstadoBackend = (idHab: number, fecha: string) => {
     const ocupada = estados.find(
         (res) =>
@@ -49,7 +46,6 @@ export default function GrillaHabitaciones({
     return ocupada ? ocupada.estado : "DISPONIBLE";
   };
 
-  // 3. MANEJAR CLICKS (Lógica de Rangos: Click 1 = Inicio, Click 2 = Fin)
   const handleCellClick = (idHab: number, fecha: string, estadoActual: string) => {
     if (estadoActual !== "DISPONIBLE") return; // No dejar seleccionar ocupadas
 
@@ -57,26 +53,19 @@ export default function GrillaHabitaciones({
       const nuevo = { ...prev };
       const rangoActual = nuevo[idHab];
 
-      // CASO 1: No hay nada seleccionado para esta habitación -> Nuevo Inicio
       if (!rangoActual) {
         nuevo[idHab] = { inicio: fecha, fin: null };
       }
-      // CASO 2: Ya hay inicio, falta fin -> Definir Rango
       else if (rangoActual.inicio && !rangoActual.fin) {
         if (fecha < rangoActual.inicio) {
-          // Si clickeo una fecha ANTERIOR al inicio, esa se vuelve el nuevo inicio
           nuevo[idHab] = { inicio: fecha, fin: null };
         } else {
-          // Si es posterior, cerramos el rango
           nuevo[idHab] = { inicio: rangoActual.inicio, fin: fecha };
         }
       }
-      // CASO 3: Ya hay rango completo -> Resetear y empezar uno nuevo
       else {
         nuevo[idHab] = { inicio: fecha, fin: null };
       }
-
-      // Notificar al padre
       actualizarPadre(nuevo);
       return nuevo;
     });
@@ -105,25 +94,21 @@ export default function GrillaHabitaciones({
     seleccionDias(seleccionPlana);
   };
 
-  // 4. ESTILOS DE CELDA
   const getClaseCelda = (idHab: number, fecha: string, estadoBackend: string) => {
-    // A. Prioridad Backend
     if (estadoBackend === "OCUPADA") return "bg-black text-white dark:bg-white dark:text-black cursor-not-allowed opacity-50";
     if (estadoBackend === "RESERVADA") return "bg-yellow-500 text-white cursor-not-allowed";
     if (estadoBackend === "EN MANTENIMIENTO") return "bg-red-400 text-white cursor-not-allowed";
 
-    // B. Prioridad Selección Local
     const rango = rangosSeleccionados[idHab];
     if (rango) {
       if (fecha === rango.inicio || fecha === rango.fin) {
-        return "bg-blue-600 text-white font-bold ring-2 ring-blue-300 z-10"; // Puntas del rango
+        return "bg-blue-600 text-white font-bold ring-2 ring-blue-300 z-10";
       }
       if (rango.fin && fecha > rango.inicio && fecha < rango.fin) {
-        return "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200"; // Medio del rango
+        return "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
       }
     }
 
-    // C. Defecto
     return "bg-white text-black hover:bg-green-200 dark:bg-gray-950 dark:text-white cursor-pointer transition-colors";
   };
 
