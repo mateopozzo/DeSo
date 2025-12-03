@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import GrillaHabitaciones from "@/components/estado_hab";
 import BuscadorPersona from "@/components/buscador_persona";
 import {
   pedirHabs,
@@ -37,12 +36,8 @@ export default function OcuparHabPage() {
   const [fecha_inicio, setDesde] = useState("");
   const [fecha_fin, setHasta] = useState("");
   const [estados, setEstados] = useState<DisponibilidadDTO[]>([]);
-  // NUEVO: Estado para guardar las habitaciones y pasarlas a la grilla
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
-
-  const [seleccionConfirmada, setSeleccionConfirmada] = useState<
-    { idhab: number | string; fecha: string }[]
-  >([]);
+  const [busquedaRealizada, setBusquedaRealizada] = useState(false); // Para saber si ya buscó
 
   // CARGA SECUENCIAL
   const [colaReservas, setColaReservas] = useState<ReservaCola[]>([]);
@@ -57,12 +52,11 @@ export default function OcuparHabPage() {
     []
   );
 
-  // EFECTO DE CARGA INICIAL
+  // EFECTO DE CARGA INICIAL (Solo habitaciones estructurales)
   useEffect(() => {
     const cargarHabitaciones = async () => {
       try {
         const data = await pedirHabs();
-        // Ordenamos por numero de habitacion
         setListaHabitaciones(data.sort((a, b) => a.nroHab - b.nroHab));
       } catch (err) {
         console.error("Error cargando habitaciones:", err);
@@ -78,58 +72,43 @@ export default function OcuparHabPage() {
     }
   };
 
-  const resetearFormulario = () => {
-    setPaso("GRILLA");
-    setEstados([]);
-    setSeleccionConfirmada([]);
-    setColaReservas([]);
-    setIndiceActual(0);
-    setEstadiasListas([]);
-    setEncargadoActual(null);
-    setInvitadosActuales([]);
-    setError(null);
-  };
-
   const buscarDisponibilidad = async () => {
+    console.log("Buscando disponibilidad habitaciones");
     if (!fecha_inicio || !fecha_fin || fecha_inicio > fecha_fin) {
       setError("Fechas inválidas o incompletas.");
       return;
     }
     setError(null);
     try {
+      // Marcamos que ya se intentó buscar para habilitar el renderizado
+      setBusquedaRealizada(true);
+
       const resp = await buscarEstadoHabitaciones(fecha_inicio, fecha_fin);
       setEstados(resp);
+      console.log("Fin busqueda de habitaciones", resp);
     } catch (e) {
       console.error(e);
       setError("Error al traer estados de habitaciones.");
     }
   };
 
-  const iniciarCargaHuespedes = () => {
-    if (seleccionConfirmada.length === 0) {
-      setError("Debe seleccionar y confirmar días en la grilla.");
-      return;
-    }
+  // ESTA FUNCIÓN CONECTA LA GRILLA CON EL SIGUIENTE PASO
+  // Recibe el rango seleccionado directamente desde el componente Grilla
+  const procesarSeleccionGrilla = (datos: {
+    idHabitacion: number;
+    fechaInicio: string;
+    fechaFin: string;
+  }) => {
+    console.log("Selección recibida de la grilla:", datos);
 
-    const grupos = new Map<number, string[]>();
-    seleccionConfirmada.forEach((sel) => {
-      const id = Number(sel.idhab);
-      const fechas = grupos.get(id) || [];
-      fechas.push(sel.fecha);
-      grupos.set(id, fechas);
-    });
+    // Creamos la cola de reservas directamente con el rango recibido
+    const nuevaReserva: ReservaCola = {
+      idhab: datos.idHabitacion,
+      fecha_inicio: datos.fechaInicio,
+      fecha_fin: datos.fechaFin,
+    };
 
-    const colaProcesada: ReservaCola[] = [];
-    grupos.forEach((fechas, id) => {
-      fechas.sort();
-      colaProcesada.push({
-        idhab: id,
-        fecha_inicio: fechas[0],
-        fecha_fin: fechas[fechas.length - 1],
-      });
-    });
-
-    setColaReservas(colaProcesada);
+    setColaReservas([nuevaReserva]); // Por ahora manejamos una sola reserva a la vez
     setPaso("CARGA");
     setIndiceActual(0);
     setError(null);
@@ -239,33 +218,22 @@ export default function OcuparHabPage() {
             </button>
           </div>
 
-          {estados.length > 0 && listaHabitaciones.length > 0 && (
-            <>
-              <div className="border rounded-xl overflow-hidden shadow-sm">
-                <GrillaHabitaciones
-                  desde={fecha_inicio}
-                  hasta={fecha_fin}
-                  habitaciones={listaHabitaciones}
-                  estados={estados}
-                  seleccionDias={setSeleccionConfirmada}
-                />
-              </div>
-              <div className="flex justify-end pt-4">
-                <button
-                  onClick={iniciarCargaHuespedes}
-                  disabled={seleccionConfirmada.length === 0}
-                  className={`px-8 py-3 rounded-xl font-bold text-lg shadow-lg transition-all ${
-                    seleccionConfirmada.length > 0
-                      ? "bg-green-600 text-white hover:bg-green-700"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  Continuar (
-                  {new Set(seleccionConfirmada.map((s) => s.idhab)).size} habs)
-                  →
-                </button>
-              </div>
-            </>
+          {busquedaRealizada && listaHabitaciones.length > 0 ? (
+            <div className="mt-4">
+              <Grilla
+                fecha_inicio={fecha_inicio}
+                fecha_fin={fecha_fin}
+                habitaciones={listaHabitaciones}
+                reservas={estados}
+                onConfirmarSeleccion={procesarSeleccionGrilla}
+              />
+            </div>
+          ) : (
+            busquedaRealizada && (
+              <p className="text-gray-500">
+                No se encontraron habitaciones cargadas en el sistema.
+              </p>
+            )
           )}
         </div>
       )}
@@ -293,7 +261,7 @@ export default function OcuparHabPage() {
                   </div>
                   <button
                     onClick={() => setEncargadoActual(null)}
-                    className="text-red-500 font-bold"
+                    className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
                   >
                     Cambiar
                   </button>
@@ -306,7 +274,7 @@ export default function OcuparHabPage() {
               }`}
             >
               <h2 className="text-xl font-bold mb-4 text-purple-600">
-                2. Ocupantes adicionales
+                Ocupantes adicionales
               </h2>
               <BuscadorPersona
                 titulo="Buscar Acompañante"
@@ -372,7 +340,6 @@ export default function OcuparHabPage() {
         </div>
       )}
 
-      {/* VISTAS FINALES */}
       {paso === "GUARDANDO" && (
         <div className="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
           <h2 className="text-2xl font-bold text-black">Guardando...</h2>
@@ -380,7 +347,9 @@ export default function OcuparHabPage() {
       )}
       {paso === "EXITO" && (
         <div className="text-center py-20">
-          <h2 className="text-4xl font-bold text-green-600 mb-4">¡Éxito!</h2>
+          <h2 className="text-4xl font-bold text-green-600 mb-4">
+            Check-in exitoso
+          </h2>
           <button
             onClick={() => router.push("/")}
             className="bg-gray-800 text-white px-6 py-3 rounded-xl"
