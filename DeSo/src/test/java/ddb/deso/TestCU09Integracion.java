@@ -24,7 +24,7 @@ import static org.springframework.test.util.AssertionErrors.*;
 @SpringBootTest
 @Transactional
 @Rollback
-public class TestCU09 {
+public class TestCU09Integracion {
 
     @Autowired
     GestorAlojamiento gestor;
@@ -33,7 +33,7 @@ public class TestCU09 {
      * @param gestor Instancia inyectada de GestorAlojamiento.
      */
     @Autowired
-    public TestCU09(GestorAlojamiento gestor) {this.gestor = gestor;}
+    public TestCU09Integracion(GestorAlojamiento gestor) {this.gestor = gestor;}
 
     /**
      * Crea y retorna un objeto Alojado (Invitado) con datos específicos.

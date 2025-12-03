@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HabitacionDTO {
-    private int nroHab;
+    private Long nroHab;
     private TipoHab tipo_hab;
     private EstadoHab estado_hab;
 }

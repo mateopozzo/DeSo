@@ -7,6 +7,7 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.alojamiento.Alojado;
 import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.alojamiento.Huesped;
+import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +90,10 @@ public class GestorAlojamiento {
     }
 
 
-    public void darDeAltaHuesped(Alojado alojadoNuevo){
+    public void darDeAltaHuesped(Alojado alojadoNuevo) throws AlojadoInvalidoException {
+        if(alojadoNuevo == null || !alojadoNuevo.verificarCamposObligatorios()){
+            throw new AlojadoInvalidoException("Los campos obligatorios no están completos");
+        }
         alojadoDAO.crearAlojado(alojadoNuevo);
     }
 

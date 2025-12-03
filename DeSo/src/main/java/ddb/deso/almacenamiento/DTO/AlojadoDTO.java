@@ -8,6 +8,7 @@ import ddb.deso.TipoDoc;
 import ddb.deso.alojamiento.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -129,6 +130,24 @@ public class AlojadoDTO {
             return false;
         }
         return this.tipoDoc == other.tipoDoc;
+    }
+
+
+    public boolean verificarCamposObligatorios(){
+        return  this.getNombre() != null          && !this.getNombre().isEmpty()        &&
+                this.getApellido() != null        && !this.getApellido().isEmpty()      &&
+                this.getTipoDoc() != null         &&
+                this.getNroDoc() != null          && !this.getNroDoc().isEmpty()        &&
+                this.getFechanac() != null        && !this.getFechanac().isEmpty()      &&  !(LocalDate.parse(this.getFechanac())).isAfter(LocalDate.now()) &&
+                this.getNacionalidad() != null    && !this.getNacionalidad().isEmpty()  &&
+                this.getCalle() != null           && !this.getCalle().isEmpty()         &&
+                this.getNroCalle() != null        && !this.getNroCalle().isEmpty()      &&
+                this.getCodPost() != null         && !this.getCodPost().isEmpty()       &&
+                this.getPais() != null            && !this.getPais().isEmpty()          &&
+                this.getProv() != null            && !this.getProv().isEmpty()          &&
+                this.getLocalidad() != null       && !this.getLocalidad().isEmpty()     &&
+                this.getPosicionIva() != null     && !this.getPosicionIva().isEmpty()   &&
+                this.getOcupacion() != null       && !this.getOcupacion().isEmpty();
     }
     
     

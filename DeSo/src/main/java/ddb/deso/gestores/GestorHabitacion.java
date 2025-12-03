@@ -59,6 +59,9 @@ public class GestorHabitacion {
         this.checkInDAO = checkInDAO;
     }
 
+    public List<Habitacion> listarHabitaciones(){
+        return habitacionDAO.listar();
+    }
 
     public List<Reserva> listarReservas() {
 

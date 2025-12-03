@@ -4,13 +4,16 @@ import ddb.deso.EstadoHab;
 import ddb.deso.TipoHab;
 import ddb.deso.almacenamiento.DAO.EstadiaDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.habitaciones.Estadia;
+import ddb.deso.habitaciones.Habitacion;
 import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +56,25 @@ public class HabitacionController {
         LocalDate fecha_fin;
         EstadoHab estado;
 
+    }
+
+    @GetMapping("api/habitacion")
+    public ResponseEntity<List<HabitacionDTO>> listarTodaHabitacion(){
+
+        var listaHabitaciones = gestorHabitacion.listarHabitaciones();
+
+        if(listaHabitaciones == null){
+            return ResponseEntity.noContent().build();
+        }
+
+        List<HabitacionDTO> habitacionesDTO = new ArrayList<>();
+
+        for(var h : listaHabitaciones){
+            HabitacionDTO hdto = new HabitacionDTO(h.getNroHab(), h.getTipo_hab(), h.getEstado_hab());
+            habitacionesDTO.add(hdto);
+        }
+
+        return ResponseEntity.ok(habitacionesDTO);
     }
 
     private List<DisponibilidadDTO> listarPorReserva(Reserva reserva){

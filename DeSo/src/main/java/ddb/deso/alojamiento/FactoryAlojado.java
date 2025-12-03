@@ -56,6 +56,10 @@ public class FactoryAlojado {
         if (dto == null) return null;
 
         DatosAlojado datos = new DatosAlojado();
+        datos.setDatos_personales(new DatosPersonales());
+        datos.setDatos_residencia(new DatosResidencia());
+        datos.setDatos_contacto(new DatosContacto());
+
 
         // ==== Datos personales ====
         if (datos.getDatos_personales() != null) {

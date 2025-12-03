@@ -37,7 +37,7 @@ public class HabitacionDAOJPA implements HabitacionDAO {
 
     @Override
     public List<Habitacion> listar() {
-        return List.of();
+        return habitacionRepository.findAll();
     }
 
     @Override

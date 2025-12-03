@@ -16,15 +16,11 @@ import java.util.function.Function;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
-import static org.postgresql.hostchooser.HostRequirement.any;
 
 
 @ExtendWith(MockitoExtension.class)
 public class TestCU02Unitario {
-    private FactoryAlojado FA;
 
     @InjectMocks
     private GestorAlojamiento gestor;
