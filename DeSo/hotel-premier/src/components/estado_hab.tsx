@@ -11,17 +11,18 @@ interface GrillaProps {
 }
 
 export default function GrillaHabitaciones({
-                                             desde,
-                                             hasta,
-                                             habitaciones,
-                                             estados,
-                                             seleccionDias,
-                                           }: GrillaProps) {
-
+  desde,
+  hasta,
+  habitaciones,
+  estados,
+  seleccionDias,
+}: GrillaProps) {
+  // LOGICA RANGOS LOCAL: { idHabitacion: { inicio: "2023-01-01", fin: "2023-01-05" } }
   const [rangosSeleccionados, setRangosSeleccionados] = useState<
-      Record<number, { inicio: string; fin: string | null }>
+    Record<number, { inicio: string; fin: string | null }>
   >({});
 
+  // GENERAR FECHAS
   const fechas = useMemo(() => {
     const arr: string[] = [];
     if (!desde || !hasta) return arr;
@@ -36,17 +37,23 @@ export default function GrillaHabitaciones({
     return arr;
   }, [desde, hasta]);
 
+  // VERIFICAR SI ESTÁ OCUPADA EN BACKEND
   const obtenerEstadoBackend = (idHab: number, fecha: string) => {
     const ocupada = estados.find(
-        (res) =>
-            res.idHabitacion === idHab &&
-            fecha >= res.fecha_inicio &&
-            fecha <= res.fecha_fin
+      (res) =>
+        res.idHabitacion === idHab &&
+        fecha >= res.fecha_inicio &&
+        fecha <= res.fecha_fin
     );
     return ocupada ? ocupada.estado : "DISPONIBLE";
   };
 
-  const handleCellClick = (idHab: number, fecha: string, estadoActual: string) => {
+  // MANEJAR CLICKS (Lógica de Rangos: Click 1 = Inicio, Click 2 = Fin)
+  const handleCellClick = (
+    idHab: number,
+    fecha: string,
+    estadoActual: string
+  ) => {
     if (estadoActual !== "DISPONIBLE") return; // No dejar seleccionar ocupadas
 
     setRangosSeleccionados((prev) => {
@@ -55,15 +62,13 @@ export default function GrillaHabitaciones({
 
       if (!rangoActual) {
         nuevo[idHab] = { inicio: fecha, fin: null };
-      }
-      else if (rangoActual.inicio && !rangoActual.fin) {
+      } else if (rangoActual.inicio && !rangoActual.fin) {
         if (fecha < rangoActual.inicio) {
           nuevo[idHab] = { inicio: fecha, fin: null };
         } else {
           nuevo[idHab] = { inicio: rangoActual.inicio, fin: fecha };
         }
-      }
-      else {
+      } else {
         nuevo[idHab] = { inicio: fecha, fin: null };
       }
       actualizarPadre(nuevo);
@@ -71,7 +76,9 @@ export default function GrillaHabitaciones({
     });
   };
 
-  const actualizarPadre = (mapaRangos: Record<number, { inicio: string; fin: string | null }>) => {
+  const actualizarPadre = (
+    mapaRangos: Record<number, { inicio: string; fin: string | null }>
+  ) => {
     const seleccionPlana: { idhab: number; fecha: string }[] = [];
 
     Object.entries(mapaRangos).forEach(([idStr, rango]) => {
@@ -85,7 +92,7 @@ export default function GrillaHabitaciones({
         while (cursor <= limite) {
           seleccionPlana.push({
             idhab: id,
-            fecha: cursor.toISOString().split("T")[0]
+            fecha: cursor.toISOString().split("T")[0],
           });
           cursor.setDate(cursor.getDate() + 1);
         }
@@ -94,10 +101,17 @@ export default function GrillaHabitaciones({
     seleccionDias(seleccionPlana);
   };
 
-  const getClaseCelda = (idHab: number, fecha: string, estadoBackend: string) => {
-    if (estadoBackend === "OCUPADA") return "bg-black text-white dark:bg-white dark:text-black cursor-not-allowed opacity-50";
-    if (estadoBackend === "RESERVADA") return "bg-yellow-500 text-white cursor-not-allowed";
-    if (estadoBackend === "EN MANTENIMIENTO") return "bg-red-400 text-white cursor-not-allowed";
+  const getClaseCelda = (
+    idHab: number,
+    fecha: string,
+    estadoBackend: string
+  ) => {
+    if (estadoBackend === "OCUPADA")
+      return "bg-black text-white dark:bg-white dark:text-black cursor-not-allowed opacity-50";
+    if (estadoBackend === "RESERVADA")
+      return "bg-yellow-500 text-white cursor-not-allowed";
+    if (estadoBackend === "EN MANTENIMIENTO")
+      return "bg-red-400 text-white cursor-not-allowed";
 
     const rango = rangosSeleccionados[idHab];
     if (rango) {
@@ -113,56 +127,67 @@ export default function GrillaHabitaciones({
   };
 
   return (
-      <div className="flex flex-col mb-2 bg-[#f5f7fa] dark:bg-gray-950 p-4 rounded-xl">
-        <div className="mb-4">
-          <p className="text-sm italic text-gray-500">
-            Click en una fecha para <span className="font-bold text-blue-600">INICIAR</span> rango.
-            Click en otra posterior para <span className="font-bold text-blue-600">CERRAR</span> rango.
-          </p>
-        </div>
+    <div className="flex flex-col mb-2 bg-[#f5f7fa] dark:bg-gray-950 p-4 rounded-xl">
+      <div className="mb-4">
+        <p className="text-sm italic text-gray-500">
+          Click en una fecha para{" "}
+          <span className="font-bold text-blue-600">INICIAR</span> rango. Click
+          en otra posterior para{" "}
+          <span className="font-bold text-blue-600">CERRAR</span> rango.
+        </p>
+      </div>
 
-        <div className="overflow-auto max-h-[60vh] relative border rounded-lg shadow-inner dark:border-gray-800">
-          <table className="w-full border-collapse">
-            <thead>
+      <div className="overflow-auto max-h-[60vh] relative border rounded-lg shadow-inner dark:border-gray-800">
+        <table className="w-full border-collapse">
+          <thead>
             <tr>
               <th className="p-3 bg-white dark:bg-gray-900 border-b dark:border-gray-800 sticky left-0 top-0 z-30 min-w-[100px] text-left shadow-sm">
                 Fecha
               </th>
               {habitaciones.map((h) => (
-                  <th key={h.nroHab} className="p-2 min-w-24 bg-[#f5f7fa] dark:bg-gray-900 sticky top-0 z-20 border-b dark:border-gray-800">
-                    <div className="flex flex-col items-center">
-                      <span className="font-bold text-gray-800 dark:text-gray-200">{h.nroHab}</span>
-                      <span className="text-[10px] uppercase text-gray-500">{h.tipo_hab}</span>
-                    </div>
-                  </th>
+                <th
+                  key={h.nroHab}
+                  className="p-2 min-w-24 bg-[#f5f7fa] dark:bg-gray-900 sticky top-0 z-20 border-b dark:border-gray-800"
+                >
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold text-gray-800 dark:text-gray-200">
+                      {h.nroHab}
+                    </span>
+                    <span className="text-[10px] uppercase text-gray-500">
+                      {h.tipo_hab}
+                    </span>
+                  </div>
+                </th>
               ))}
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             {fechas.map((fecha) => (
-                <tr key={fecha} className="border-b dark:border-gray-800">
-                  <td className="p-2 bg-white dark:bg-gray-900 font-mono text-sm sticky left-0 z-10 font-bold text-gray-700 dark:text-gray-300 border-r dark:border-gray-800">
-                    {fecha}
-                  </td>
-                  {habitaciones.map((hab) => {
-                    const estadoBack = obtenerEstadoBackend(hab.nroHab, fecha);
-                    const clase = getClaseCelda(hab.nroHab, fecha, estadoBack);
+              <tr key={fecha} className="border-b dark:border-gray-800">
+                <td className="p-2 bg-white dark:bg-gray-900 font-mono text-sm sticky left-0 z-10 font-bold text-gray-700 dark:text-gray-300 border-r dark:border-gray-800">
+                  {fecha}
+                </td>
+                {habitaciones.map((hab) => {
+                  const estadoBack = obtenerEstadoBackend(hab.nroHab, fecha);
+                  const clase = getClaseCelda(hab.nroHab, fecha, estadoBack);
 
-                    return (
-                        <td
-                            key={`${hab.nroHab}-${fecha}`}
-                            className={`p-2 border-l border-r dark:border-gray-800 text-center text-xs select-none ${clase}`}
-                            onClick={() => handleCellClick(hab.nroHab, fecha, estadoBack)}
-                        >
-                          {estadoBack === "DISPONIBLE" ? "" : estadoBack.charAt(0)}
-                        </td>
-                    );
-                  })}
-                </tr>
+                  return (
+                    <td
+                      key={`${hab.nroHab}-${fecha}`}
+                      className={`p-2 border-l border-r dark:border-gray-800 text-center text-xs select-none ${clase}`}
+                      onClick={() =>
+                        handleCellClick(hab.nroHab, fecha, estadoBack)
+                      }
+                    >
+                      {estadoBack === "DISPONIBLE" ? "" : estadoBack.charAt(0)}
+                    </td>
+                  );
+                })}
+              </tr>
             ))}
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
+    </div>
   );
 }
