@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.postgresql.hostchooser.HostRequirement.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -307,12 +308,38 @@ public class TestCU04ControllerUnitario {
         e.setApellido("mo");
         e.setEstado("RESERVADO");
         e.setIdReserva(1L);
-        Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
-        h1.setNroHab(101L);
-        h2.setNroHab(202L);
-        e.setListaHabitaciones(List.of(h2,h1));
+
+        e.setListaHabitaciones(crearListaHabitaciones());
         return List.of(e);
     }
 
+    @Test
+    public void listaHabitacionesDevuelveNull() throws Exception {
+        when(gestorHabitacion.listarHabitaciones())
+                .thenReturn(null);
+        mockMvc.perform(get("/api/habitacion")).andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void listaHabitacionesDevuelveVacio() throws Exception {
+        when(gestorHabitacion.listarHabitaciones())
+                .thenReturn(List.of());
+        mockMvc.perform(get("/api/habitacion")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void listaHabitacionesDevuelveAlgo() throws Exception {
+        when(gestorHabitacion.listarHabitaciones())
+                .thenReturn(crearListaHabitaciones());
+        mockMvc.perform(get("/api/habitacion")).andExpect(status().isOk());
+    }
+
+    private List<Habitacion> crearListaHabitaciones() {
+        Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
+        h1.setNroHab(101L);
+        h2.setNroHab(202L);
+        return List.of(h1,h2);
+    }
 
 }

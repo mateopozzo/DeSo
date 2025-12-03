@@ -1,10 +1,13 @@
 package ddb.deso.gestores;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ddb.deso.almacenamiento.DAO.*;
 import ddb.deso.alojamiento.*;
+import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,10 +92,47 @@ public class GestorHabitacion {
 
 
     public void crearReserva(Reserva reserva, List<Long> listaIDHabitaciones) {
+        {   //  validaciones
+            if (reserva == null)
+                throw new ReservaInvalidaException("Reserva nula");
+
+            if (reserva.getFecha_fin() == null || reserva.getFecha_inicio() == null)
+                throw new ReservaInvalidaException("Fechas nulas");
+
+            if (reserva.getFecha_fin().isAfter(reserva.getFecha_inicio()))
+                throw new ReservaInvalidaException("Fechas invertidas");
+
+            if (reserva.getNombre() == null || reserva.getNombre().isEmpty())
+                throw new ReservaInvalidaException("No se asigna nombre");
+
+            if (reserva.getTelefono() == null || reserva.getTelefono().isEmpty())
+                throw new ReservaInvalidaException("No se asigna telefono");
+
+            if (reserva.getApellido() == null || reserva.getApellido().isEmpty())
+                throw new ReservaInvalidaException("No se asigna apellido");
+
+            if (listaIDHabitaciones == null)
+                throw new HabitacionInexistenteException("No se asignan habitaciones a la Reserva");
+        }
+
+
+        var listaEstadias = listarEstadias(reserva.getFecha_inicio(), reserva.getFecha_fin());
+        var listaReservas = listarReservas(reserva.getFecha_inicio(), reserva.getFecha_fin());
+        Set<Habitacion> habitacionesNoDisponibles = new HashSet<>();
+
+        if(listaEstadias != null) for(var e : listaEstadias){
+            habitacionesNoDisponibles.add(e.getHabitacion());
+        }
+        if(listaReservas != null) for(var r : listaReservas){
+            habitacionesNoDisponibles.addAll(r.getListaHabitaciones());
+        }
 
         for(var id : listaIDHabitaciones) {
             Habitacion habitacion = habitacionDAO.buscarPorNumero(id);
             if(habitacion != null) {
+                if(habitacionesNoDisponibles.contains(habitacion)) {
+                    throw new ReservaInvalidaException("La habitacion " + habitacion.getNroHab() + " no está disponible" );
+                }
                 reserva.agregarHabitacion(habitacion);
             } else {
                 throw new HabitacionInexistenteException("Habitacion " + id + " no encontrada");

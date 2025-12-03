@@ -6,6 +6,8 @@ import ddb.deso.almacenamiento.DTO.EstadiaDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
+import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.habitaciones.Estadia;
 import ddb.deso.habitaciones.Reserva;
 import lombok.AllArgsConstructor;
@@ -61,7 +63,7 @@ public class HabitacionController {
         var listaHabitaciones = gestorHabitacion.listarHabitaciones();
 
         if(listaHabitaciones == null){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(List.of());
         }
 
         List<HabitacionDTO> habitacionesDTO = new ArrayList<>();
@@ -72,7 +74,7 @@ public class HabitacionController {
         }
 
         if(listaHabitaciones==null || listaHabitaciones.isEmpty()){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(List.of());
         }
 
         return ResponseEntity.ok(habitacionesDTO);
@@ -179,7 +181,12 @@ public class HabitacionController {
                 reservaDTO.getTelefono()
         );
 
-        gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
+        try{
+            gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
+        } catch (ReservaInvalidaException | HabitacionInexistenteException excepcion){
+            System.out.println(excepcion.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
     }
