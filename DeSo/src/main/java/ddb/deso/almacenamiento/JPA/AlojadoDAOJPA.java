@@ -109,7 +109,9 @@ public class AlojadoDAOJPA implements AlojadoDAO {
                 predicates.add(cb.like(cb.lower(datosPersonales.get("apellido")), "%" + normalizar(criterios.getApellido().toLowerCase()) + "%"));
             }
             if (criterios.getNombre() != null && !criterios.getNombre().isBlank()) {
-                predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), "%" + normalizar(criterios.getNombre().toLowerCase() + "%")));
+                // El "%" va SOLO al final para indicar que sea solo prefijos
+                String patron = normalizar(criterios.getNombre().toLowerCase()) + "%";
+                predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), patron));
             }
 
             // Los campos de ID están en la entidad DatosAlojado (en el EmbeddedId idAlojado)

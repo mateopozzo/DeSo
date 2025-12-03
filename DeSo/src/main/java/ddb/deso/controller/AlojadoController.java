@@ -98,7 +98,7 @@ public class AlojadoController {
     }
 
 
-    @GetMapping("/api/ocupar-habitacion")
+    @GetMapping("/api/buscar-alojados")
     List<CriteriosBusq> obtenerAlojados(@RequestParam(required = false) String apellido,
                                         @RequestParam(required = false) String nombre,
                                         @RequestParam(required = false) TipoDoc tipoDoc,

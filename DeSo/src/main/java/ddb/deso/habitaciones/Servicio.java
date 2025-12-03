@@ -30,5 +30,6 @@ public class Servicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idServicio;
+
     private TipoServicio tipo_servicio;
 }
