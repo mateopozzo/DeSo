@@ -77,22 +77,35 @@ export default function Grilla({
         </button>
       </div>
 
-      <div className="bg-[#f5f7fa] dark:bg-gray-950 overflow-auto">
+      <div className="bg-[#f5f7fa] dark:bg-gray-950 overflow-auto max-h-[60vh] relative">
         <table className="w-full border-collapse bg-[#f5f7fa] dark:bg-gray-950">
           <thead>
             <tr>
-              <th className="p-2 border dark:text-white">Fecha</th>
+              <th className="p-2 border dark:text-white sticky left-0 top-0 z-30 min-w-[100px] text-left">
+                Fecha
+              </th>
               {habitaciones.map((h) => (
-                <th key={h.nroHab} className="p-2 border">
-                  Hab {h.nroHab}
+                <th
+                  key={h.nroHab}
+                  className="p-2 min-w-20 bg-[#f5f7fa] dark:bg-gray-950 sticky top-0 z-20"
+                >
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold">Hab {h.nroHab}</span>
+                    <span className="text-[10px] font-normal text-gray-500">
+                      {h.tipo_hab}
+                    </span>
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {fechas.map((fecha) => (
-              <tr key={fecha}>
-                <td className="p-2 border font-bold dark:text-white">
+              <tr
+                key={fecha}
+                className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+              >
+                <td className="p-2 border font-bold dark:text-white sticky left-0 z-10">
                   {fecha}
                 </td>
                 {habitaciones.map((hab) => {
