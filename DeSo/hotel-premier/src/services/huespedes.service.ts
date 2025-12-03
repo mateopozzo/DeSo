@@ -22,6 +22,7 @@ export interface HuespedDTO {
 }
 
 export async function crearHuesped(data: HuespedDTO, forzar: boolean = false) {
+  console.log(data);
   const baseUrl = "http://localhost:8080/api/huesped";
   const url = forzar ? `${baseUrl}?force=true` : baseUrl;
 

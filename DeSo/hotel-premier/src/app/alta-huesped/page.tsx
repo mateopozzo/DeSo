@@ -85,7 +85,6 @@ export default function AltaHuesped() {
         alert("Error. Código: " + response.status);
         return;
       }
-
       const confirmar = confirm(
         `El huésped ${formData.nombre} ${formData.apellido} ha sido satisfactoriamente cargado al sistema.\n\n¿Desea cargar otro?`
       );
@@ -121,7 +120,6 @@ export default function AltaHuesped() {
       { key: "codPostal", etiq: "cód. postal" },
       { key: "paisResidencia", etiq: "país" },
       { key: "provincia", etiq: "provincia" },
-      { key: "localidad", etiq: "localidad" },
       { key: "ocupacion", etiq: "ocupación" },
       { key: "iva", etiq: "posición frente al IVA" },
     ];
