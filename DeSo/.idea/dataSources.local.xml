@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-252.28238.7">
+    <data-source name="defaultdb@discipulos-discipulos.k.aivencloud.com" uuid="4e2b6438-e4f8-45e1-b8d9-28584d0199ce">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>avnadmin</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   pedirHabs,
   buscarEstadoHabitaciones,
@@ -9,6 +10,7 @@ import {
 import Grilla from "../../components/grilla";
 
 export default function ReservarHab() {
+  const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -22,7 +24,7 @@ export default function ReservarHab() {
   const [busquedaRealizada, setBusquedaRealizada] = useState(false);
 
   const handleBuscar = async () => {
-    console.log("1. Botón presionado. Fechas:", fecha_inicio, fecha_fin);
+    console.log("Botón presionado. Fechas:", fecha_inicio, fecha_fin);
 
     if (!fecha_inicio || !fecha_fin) {
       alert("Por favor selecciona ambas fechas");
@@ -33,14 +35,14 @@ export default function ReservarHab() {
       setCargando(true);
       setBusquedaRealizada(true);
 
-      console.log("2. Iniciando peticiones al back...");
+      console.log("Pidiendo datos al back...");
 
       const [habsData, reservasData] = await Promise.all([
         pedirHabs(),
         buscarEstadoHabitaciones(fecha_inicio, fecha_fin),
       ]);
 
-      console.log("3. Datos recibidos:", {
+      console.log("Datos recibidos:", {
         habs: habsData.length,
         reservas: reservasData.length,
       });
@@ -51,29 +53,39 @@ export default function ReservarHab() {
       console.error("ERROR en la búsqueda:", error);
       alert("Ocurrió un error al buscar disponibilidad.");
     } finally {
-      console.log("4. Finalizando carga");
+      console.log("Fin de carga");
       setCargando(false);
+    }
+  };
+
+  const cancelarCasoUso = () => {
+    if (confirm("¿Seguro que desea cancelar todo el proceso?")) {
+      router.push("/");
     }
   };
 
   return (
     <div className="dark:bg-gray-950 dark:text-white bg-[#f5f7fa] min-h-screen p-8">
-      <h1 className="text-[#141414] dark:text-white mb-4 text-5xl font-bold pb-2">
+      <h1 className="text-[#141414] dark:text-white  text-5xl font-bold pb-2">
         Reservar habitación
       </h1>
+      <p className="dark:text-white mb-8">
+        Indique las fechas deseadas para verificar disponibilidad de
+        habitaciones
+      </p>
 
-      <div className="flex flex-col w-sm gap-4 mb-4">
-        <label className="text-lg">Desde fecha: </label>
+      <div className="flex flex-col w-sm mb-4">
+        <label className="text-lg">Desde: </label>
         <input
           type="date"
-          className="border p-2 rounded-xl text-black dark:text-white"
+          className="border p-2 rounded-xl text-black dark:text-white mb-2"
           value={fecha_inicio}
           onChange={(e) => setDesde(e.target.value)}
         />
-        <label className="text-lg">Hasta fecha: </label>
+        <label className="text-lg">Hasta: </label>
         <input
           type="date"
-          className="border p-2 rounded-xl text-black dark:text-white"
+          className="border p-2 rounded-xl text-black dark:text-white mb-2"
           value={fecha_fin}
           onChange={(e) => setHasta(e.target.value)}
         />
@@ -81,7 +93,7 @@ export default function ReservarHab() {
         <button
           onClick={handleBuscar}
           disabled={cargando}
-          className={`px-8 py-2 rounded-xl font-bold transition duration-300 text-white 
+          className={`px-8 py-2 mt-4 rounded-xl font-bold transition duration-300 text-white 
             ${
               cargando
                 ? "bg-gray-400 cursor-not-allowed"
@@ -89,6 +101,12 @@ export default function ReservarHab() {
             }`}
         >
           {cargando ? "Buscando..." : "Buscar"}
+        </button>
+        <button
+          onClick={cancelarCasoUso}
+          className="cursor-pointer mt-4 px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
+        >
+          Cancelar
         </button>
       </div>
 
