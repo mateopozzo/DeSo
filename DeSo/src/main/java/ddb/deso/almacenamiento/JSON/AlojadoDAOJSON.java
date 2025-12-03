@@ -63,8 +63,6 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         escribirListaEnArchivo(listaAlojados);
     }
 
-    // REVISAR ESTO --------------
-    // Actualiza la instancia de alojado guardada en JSON
 
     @Override
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo){
