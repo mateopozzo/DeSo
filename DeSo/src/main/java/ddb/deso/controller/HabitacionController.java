@@ -71,7 +71,7 @@ public class HabitacionController {
 
         for(var h : listaHabitaciones){
             HabitacionDTO hdto = new HabitacionDTO(h.getNroHab(), h.getTipo_hab(), h.getEstado_hab());
-            habitacionesDTO.add(hdto);
+            habitacionesDTO.add(hdto); 
         }
 
         return ResponseEntity.ok(habitacionesDTO);
