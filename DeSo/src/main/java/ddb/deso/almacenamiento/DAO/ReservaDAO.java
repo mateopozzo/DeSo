@@ -20,13 +20,7 @@ public interface ReservaDAO {
     void eliminar(Reserva reserva);
     List<Reserva> listar();
     
-    //  Devuelve las instancias de reserva que ocurren durante la fecha
+    //  devuelve las instancias de reserva que ocurren durante la fecha
     List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin);
-//
-//    List<Estadia> listarPorHuesped(Huesped huesped);
-//
-//    //  devuelve todas las estadias del huesped que ocupo durante la fecha
-//    List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
-//
-    
+
 }

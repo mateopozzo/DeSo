@@ -18,14 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia.
- * Actúa como un adaptador entre la interfaz DAO y los repositorios JPA.
- *
- * NOTA: Para que 'buscarAlojado' funcione, AlojadoRepository DEBE extender
- * JpaSpecificationExecutor<Alojado, AlojadoID>
- *
- * Ejemplo:
- * public interface AlojadoRepository extends JpaRepository<Alojado, AlojadoID>, JpaSpecificationExecutor<Alojado> { }
+ * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia
+ * Actúa como un adaptador entre la interfaz DAO y los repositorios JPA
  */
 @Repository
 public class AlojadoDAOJPA implements AlojadoDAO {
@@ -92,8 +86,8 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             return (alojado != null) ? List.of(alojado) : List.of(); // Devuelve lista con 1 o 0 elementos
         }
 
-        // --- Búsqueda dinámica con JPA Specifications ---
-        // Esto crea una consulta SQL dinámica (WHERE ... AND ... AND ...)
+        // Búsqueda dinámica con JPA Specifications
+        // Esto crea una consulta SQL dinámica
         Specification<Alojado> spec = (root, query, cb) -> {
 
             // "JOIN" en la consulta para acceder a las tablas anidadas
@@ -104,17 +98,14 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            // Añadir predicados (condiciones WHERE) solo si el criterio no es nulo/vacío
             if (criterios.getApellido() != null && !criterios.getApellido().isBlank()) {
                 predicates.add(cb.like(cb.lower(datosPersonales.get("apellido")), "%" + normalizar(criterios.getApellido().toLowerCase()) + "%"));
             }
             if (criterios.getNombre() != null && !criterios.getNombre().isBlank()) {
-                // El "%" va SOLO al final para indicar que sea solo prefijos
                 String patron = normalizar(criterios.getNombre().toLowerCase()) + "%";
                 predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), patron));
             }
 
-            // Los campos de ID están en la entidad DatosAlojado (en el EmbeddedId idAlojado)
             if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank()) {
                 predicates.add(cb.equal(datosAlojado.get("idAlojado").get("nroDoc"), criterios.getNroDoc()));
             }
@@ -125,10 +116,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             // Combina todos los predicados con un "AND"
             return cb.and(predicates.toArray(new Predicate[0]));
         };
-        // 1. Ejecuta la búsqueda con la especificación dinámica
-        //    (Requiere que AlojadoRepository extienda JpaSpecificationExecutor)
 
-        // 2. Convierte los resultados a DTO
         return alojadoRepository.findAll(spec);
     }
 

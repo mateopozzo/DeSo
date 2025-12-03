@@ -46,13 +46,9 @@ public class AlojadoController {
 
         ddb.deso.alojamiento.Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
 
-//        System.out.println(nuevoAlojado.getDatos().getDatos_personales().getNombre());
-//        System.out.println(nuevoAlojado.getDatos().getDatos_contacto().getEmail());
-//        System.out.println(nuevoAlojado.getDatos().getDatos_residencia().getCalle());
 
         if (nuevoAlojado == null) {
             // No pudo crear=>Devuelve 400 Bad Request
-//            System.out.println("No pudo crear");
             return ResponseEntity.badRequest().build();
         }
 
@@ -68,7 +64,6 @@ public class AlojadoController {
         }
 
         if(!nuevoAlojado.verificarCamposObligatorios() || !alojadoDTO.verificarCamposObligatorios() ){
-//            System.out.println("Algun campo esta mal\naloj:" + nuevoAlojado.verificarCamposObligatorios() + "\ndto: " +  alojadoDTO.verificarCamposObligatorios() );
             return ResponseEntity.badRequest().build();
         }
 
@@ -129,8 +124,6 @@ public class AlojadoController {
 
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
-//        System.out.println(tipoDoc.toString());
-
         if(criteriosBusq == null)
             criteriosBusq = new CriteriosBusq();
 
@@ -143,8 +136,6 @@ public class AlojadoController {
             System.out.println(e.getMessage());
             return null;
         }
-
-//        System.out.println("Cantidad encontrada " + huespedesEncontrados.size());
 
         return conversionAlojadoToCriterio(huespedesEncontrados);
     }

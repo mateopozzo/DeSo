@@ -232,29 +232,4 @@ public class HabitacionController {
         return true;
     }
 
-
-/*
-    @GetMapping("/api/habitaciones-disponibilidad")
-    public ResponseEntity<List<DisponibilidadDTO>> disponibilidadHabitaciones() {
-
-        var listaReservas = gestorHabitacion.listarReservas();
-        var listaEstadias = gestorHabitacion.listarEstadias();
-
-        List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
-
-        listaReservas.forEach(
-                reserva -> listaDisponibilidades.addAll(listarPorReserva(reserva)
-                )
-        );
-
-        listaEstadias.forEach(
-                estadia -> listaDisponibilidades.add(new DisponibilidadDTO(estadia)
-                )
-        );
-
-        return ResponseEntity.ok(listaDisponibilidades);
-
-    }
-    */
-
 }
