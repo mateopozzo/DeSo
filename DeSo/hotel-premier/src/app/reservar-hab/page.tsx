@@ -11,7 +11,7 @@ import {
 } from "../../services/habitaciones.service";
 import Grilla, { DatosSeleccion } from "../../components/grilla";
 
-export default function CrearReservaPage() {
+export default function ReservarHab() {
   const router = useRouter();
 
   const [paso, setPaso] = useState<
@@ -37,6 +37,12 @@ export default function CrearReservaPage() {
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
 
+  const fecha_hoy = new Date();
+  const mes = String(fecha_hoy.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha_hoy.getDate()).padStart(2, "0");
+
+  const hoy_fecha = `${fecha_hoy.getFullYear()}-${mes}-${dia}`;
+
   useEffect(() => {
     const cargarHabitaciones = async () => {
       try {
@@ -51,14 +57,21 @@ export default function CrearReservaPage() {
   }, []);
 
   const buscarDisponibilidad = async () => {
-    if (
-      !fecha_inicio_busq ||
-      !fecha_fin_busq ||
-      fecha_inicio_busq > fecha_fin_busq
-    ) {
-      setError("Por favor ingrese un rango de fechas válido.");
+    if (!fecha_inicio_busq || !fecha_fin_busq) {
+      setError("Por favor, ingrese fechas válidas.");
       return;
     }
+
+    if (fecha_inicio_busq > fecha_fin_busq) {
+      setError("La fecha inicial no puede ser mayor a la final");
+      return;
+    }
+
+    if (fecha_inicio_busq < hoy_fecha) {
+      setError("Las fechas no pueden ser anteriores al día actual");
+      return;
+    }
+
     setError(null);
     try {
       setBusquedaRealizada(true);

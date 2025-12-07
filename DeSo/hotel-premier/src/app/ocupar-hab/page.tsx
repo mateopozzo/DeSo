@@ -49,6 +49,12 @@ export default function OcuparHabPage() {
     []
   );
 
+  const fecha_hoy = new Date();
+  const mes = String(fecha_hoy.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha_hoy.getDate()).padStart(2, "0");
+
+  const hoy_fecha = `${fecha_hoy.getFullYear()}-${mes}-${dia}`;
+
   useEffect(() => {
     const cargarHabitaciones = async () => {
       try {
@@ -69,11 +75,23 @@ export default function OcuparHabPage() {
   };
 
   const buscarDisponibilidad = async () => {
-    console.log("Buscando disponibilidad habitaciones");
-    if (!fecha_inicio || !fecha_fin || fecha_inicio > fecha_fin) {
-      setError("Fechas inválidas o incompletas.");
+    if (!fecha_inicio || !fecha_fin) {
+      setError("Por favor, ingrese fechas válidas.");
       return;
     }
+
+    if (fecha_inicio > fecha_fin) {
+      setError("La fecha inicial no puede ser mayor a la final");
+      return;
+    }
+
+    if (fecha_inicio < hoy_fecha) {
+      setError("Las fechas no pueden ser anteriores al día actual");
+      return;
+    }
+
+    console.log("Buscando disponibilidad habitaciones");
+
     setError(null);
     try {
       setBusquedaRealizada(true);
