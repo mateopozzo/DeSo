@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,67 +78,46 @@ public class AlojadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
     }
 
-    private List<CriteriosBusq> conversionAlojadoToCriterio(List<? extends Alojado> listaAlojado) {
-        List<CriteriosBusq>retornoEncontrados = new ArrayList<>();
-        for(var a: listaAlojado){
-            retornoEncontrados.add(
-                    new CriteriosBusq(
-                            a.getDatos().getDatos_personales().getApellido(),
-                            a.getDatos().getDatos_personales().getNombre(),
-                            a.getDatos().getTipoDoc(),
-                            a.getId().getNroDoc()
-                    )
-            );
-        }
-        return retornoEncontrados;
-    }
 
 
     @GetMapping("/api/buscar-alojados")
-    List<CriteriosBusq> obtenerAlojados(@RequestParam(required = false) String apellido,
+    public ResponseEntity<List<CriteriosBusq>> obtenerAlojados(@RequestParam(required = false) String apellido,
                                         @RequestParam(required = false) String nombre,
                                         @RequestParam(required = false) TipoDoc tipoDoc,
                                         @RequestParam(required = false) String nroDoc) {
 
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
-        if(criteriosBusq == null)
-            criteriosBusq = new CriteriosBusq();
-
-        List<Alojado> alojadosEncontrados;
+        List<CriteriosBusq> alojadosEncontrados;
         try {
             alojadosEncontrados = gestorAlojamiento.buscarAlojado(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
             System.out.println(e.getMessage());
-            return null;
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
-        return conversionAlojadoToCriterio(alojadosEncontrados);
+        return ResponseEntity.ok(alojadosEncontrados);
     }
 
 
     @GetMapping("/api/buscar-huesped")
-    List <CriteriosBusq> obtenerHuespedes(@RequestParam(required = false) String apellido,
+    private ResponseEntity<List <CriteriosBusq>> obtenerHuespedes(@RequestParam(required = false) String apellido,
                                           @RequestParam(required = false) String nombre,
                                           @RequestParam(required = false) TipoDoc tipoDoc,
                                           @RequestParam(required = false) String nroDoc) {
 
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
-        if(criteriosBusq == null)
-            criteriosBusq = new CriteriosBusq();
-
-        List<Huesped> huespedesEncontrados;
-
+        List<CriteriosBusq> huespedesEncontrados;
 
         try {
             huespedesEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
             System.out.println(e.getMessage());
-            return null;
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
-        return conversionAlojadoToCriterio(huespedesEncontrados);
+        return ResponseEntity.ok(huespedesEncontrados);
     }
 
 

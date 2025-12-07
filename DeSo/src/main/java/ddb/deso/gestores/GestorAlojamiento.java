@@ -1,5 +1,6 @@
 package ddb.deso.gestores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
@@ -37,7 +38,7 @@ public class GestorAlojamiento {
      @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
      */
 
-    public List<Alojado> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+    public List<CriteriosBusq> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, busca todos los alojados
 
@@ -50,12 +51,12 @@ public class GestorAlojamiento {
         if(encontrados == null || encontrados.isEmpty())
             throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojado disponibles para el criterio dado");
 
-        return encontrados;
+        return conversionAlojadoToCriterio(encontrados);
     }
 
-    public List<Huesped> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+    public List<CriteriosBusq> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         try{
-            var listaAlojados = this.buscarAlojado(criterios_busq);
+            var listaAlojados = alojadoDAO.buscarAlojado(criterios_busq);
             List<Huesped> listaHuespedes = listaAlojados.stream()
                     .filter(alojado -> alojado instanceof Huesped)
                     .map(alojado -> (Huesped) alojado)
@@ -63,7 +64,7 @@ public class GestorAlojamiento {
             if(listaHuespedes == null || listaHuespedes.isEmpty()){
                 throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Huesped disponibles para el criterio dado");
             }
-            return listaHuespedes;
+            return conversionAlojadoToCriterio(listaHuespedes);
         } catch (AlojadosSinCoincidenciasException e){
             throw e;
         }
@@ -212,5 +213,21 @@ public class GestorAlojamiento {
                 .orElse(null);
         return encontrado;
     }
+
+    private List<CriteriosBusq> conversionAlojadoToCriterio(List<? extends Alojado> listaAlojado) {
+        List<CriteriosBusq>retornoEncontrados = new ArrayList<>();
+        for(var a: listaAlojado){
+            retornoEncontrados.add(
+                    new CriteriosBusq(
+                            a.getDatos().getDatos_personales().getApellido(),
+                            a.getDatos().getDatos_personales().getNombre(),
+                            a.getDatos().getTipoDoc(),
+                            a.getId().getNroDoc()
+                    )
+            );
+        }
+        return retornoEncontrados;
+    }
+
 }
 
