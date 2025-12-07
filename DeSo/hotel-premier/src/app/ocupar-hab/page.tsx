@@ -239,6 +239,7 @@ export default function OcuparHabPage() {
                 habitaciones={listaHabitaciones}
                 reservas={estados}
                 onConfirmarSeleccion={procesarSeleccionGrilla}
+                casoDeUso="OCUPAR"
               />
             </div>
           ) : (

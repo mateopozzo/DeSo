@@ -17,6 +17,7 @@ interface GrillaProps {
   habitaciones: Habitacion[];
   reservas: DisponibilidadDTO[];
   onConfirmarSeleccion?: (datos: DatosSeleccion) => void;
+  casoDeUso: "RESERVAR" | "OCUPAR";
 }
 
 type Seleccion = {
@@ -31,6 +32,7 @@ export default function Grilla({
   habitaciones,
   reservas,
   onConfirmarSeleccion,
+  casoDeUso,
 }: GrillaProps) {
   const [seleccion, setSeleccion] = useState<Seleccion | null>(null);
 
@@ -117,7 +119,13 @@ export default function Grilla({
       case "OCUPADA":
         return "dark:bg-white dark:text-black bg-black text-white cursor-not-allowed opacity-80";
       case "RESERVADA":
-        return "bg-yellow-500 text-white cursor-not-allowed opacity-80";
+        if (casoDeUso == "OCUPAR") {
+          return "bg-yellow-500 text-white cursor-pointer opacity-80";
+        }
+        if (casoDeUso == "RESERVAR") {
+          return "bg-yellow-500 text-white cursor-not-allowed opacity-80";
+        }
+
       default:
         return "dark:bg-gray-950 dark:text-white bg-[#f5f7fa] dark:bg-gray-950 text-black hover:bg-green-500 cursor-pointer";
     }
@@ -178,7 +186,7 @@ export default function Grilla({
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border dark:border-gray-700 dark:text-white sticky left-0 top-0 z-30 min-w-[100px] text-left bg-[#f5f7fa] dark:bg-gray-950">
+              <th className="p-2 border border-gray-300  dark:border-gray-700 dark:text-white sticky left-0 top-0 z-30 min-w-[100px] text-left bg-[#f5f7fa] dark:bg-gray-950">
                 Fecha
               </th>
               {habitaciones.map((h) => (
@@ -202,7 +210,7 @@ export default function Grilla({
                 key={fecha}
                 className="hover:bg-gray-100 dark:hover:bg-gray-900"
               >
-                <td className="p-2 border dark:border-gray-700 font-bold dark:text-white sticky left-0 z-10 bg-[#f5f7fa] dark:bg-gray-950">
+                <td className="p-2 border-gray-300 dark:border-gray-700 font-bold dark:text-white sticky left-0 z-10 bg-[#f5f7fa] dark:bg-gray-950">
                   {fecha}
                 </td>
                 {habitaciones.map((hab) => {
