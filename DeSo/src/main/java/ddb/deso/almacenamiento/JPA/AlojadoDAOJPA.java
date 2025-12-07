@@ -88,20 +88,24 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         // Esto crea una consulta SQL dinámica
         Specification<Alojado> spec = (root, query, cb) -> {
 
-            // "JOIN" en la consulta para acceder a las tablas anidadas
-            // Alojado -> DatosAlojado
+            // Alojado join DatosAlojado
             Join<Alojado, DatosAlojado> datosAlojado = root.join("datos");
-            // DatosAlojado -> DatosPersonales
+            // DatosAlojado join DatosPersonales
             Path<DatosPersonales> datosPersonales = datosAlojado.get("datos_personales");
 
             List<Predicate> predicates = new ArrayList<>();
 
             if (criterios.getApellido() != null && !criterios.getApellido().isBlank()) {
-                predicates.add(cb.like(cb.lower(datosPersonales.get("apellido")), "%" + normalizar(criterios.getApellido().toLowerCase()) + "%"));
+                String patron = normalizar(criterios.getApellido()).toLowerCase() + "%";
+                predicates.add(cb.like(cb.function(
+                        "unaccent",  String.class,
+                        cb.lower(datosPersonales.get("apellido"))), patron));
             }
             if (criterios.getNombre() != null && !criterios.getNombre().isBlank()) {
-                String patron = normalizar(criterios.getNombre().toLowerCase()) + "%";
-                predicates.add(cb.like(cb.lower(datosPersonales.get("nombre")), patron));
+                String patron = normalizar(criterios.getNombre()).toLowerCase() + "%";
+                predicates.add(cb.like(cb.function(
+                        "unaccent", String.class,
+                        cb.lower(datosPersonales.get("nombre"))), patron));
             }
 
             if (criterios.getNroDoc() != null && !criterios.getNroDoc().isBlank()) {
@@ -111,7 +115,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
                 predicates.add(cb.equal(datosAlojado.get("idAlojado").get("tipoDoc"), criterios.getTipoDoc()));
             }
 
-            // Combina todos los predicados con un "AND"
+            // Combina predicados con ans
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
