@@ -760,6 +760,7 @@ Factura "1" --> "1..*" Pago
 Factura "1" --> "0..*" NotaCredito
 ResponsablePago "1" <-- "0..*" Pago
 Sesion "1"-"1" Usuario
+Estadia "0..n" --> "0..1" Reserva
 
 GestorAutenticacion ..> UsuarioDAO 
 GestorAutenticacion ..> Usuario
