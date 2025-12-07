@@ -1,11 +1,14 @@
 package ddb.deso.gestores;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DAO.*;
+import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
+import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
+import ddb.deso.almacenamiento.DTO.HabitacionDTO;
+import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.service.alojamiento.CriteriosBusq;
@@ -29,6 +32,7 @@ public class GestorHabitacion {
     private EstadiaDAO estadiaDAO;
     private AlojadoDAO alojadoDAO;
     private DatosCheckInDAO checkInDAO;
+    private GestorAlojamiento gestorAlojamiento;
 
 
     @Autowired
@@ -65,36 +69,89 @@ public class GestorHabitacion {
         this.checkInDAO = checkInDAO;
     }
 
-    public List<Habitacion> listarHabitaciones(){
-        return habitacionDAO.listar();
-    }
+    public List<HabitacionDTO> listarHabitaciones(){
+        var listaHabitaciones = habitacionDAO.listar();
 
-    public List<Reserva> listarReservas() {
+        if(listaHabitaciones == null){
+            return null;
+        }
 
-        return reservaDAO.listar();
+        List<HabitacionDTO> habitacionesDTO = new ArrayList<>();
 
-    }
+        for(var h : listaHabitaciones){
+            HabitacionDTO hdto = new HabitacionDTO(h.getNroHab(), h.getTipo_hab(), h.getEstado_hab());
+            habitacionesDTO.add(hdto);
+        }
 
-    public List<Reserva> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
-
-        return reservaDAO.listarPorFecha(fechaInicio, fechaFin);
-
-    }
-
-    public List<Estadia> listarEstadias() {
-
-        return estadiaDAO.listar();
+        return habitacionesDTO;
 
     }
 
-    public List<Estadia> listarEstadias(LocalDate fechaInicio, LocalDate fechaFin){
+    public List<DisponibilidadDTO> listarReservas() {
 
-        return estadiaDAO.listarPorFecha(fechaInicio, fechaFin);
+        var reservas = reservaDAO.listar();
+
+        List<DisponibilidadDTO> disponibilidades = new ArrayList<>();
+
+        if(reservas != null) for (Reserva reserva : reservas) {
+            disponibilidades.addAll(listarDisponibilidadesPorReserva(reserva));
+        }
+
+        return disponibilidades;
+
+    }
+
+    public List<DisponibilidadDTO> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
+
+        var reservas = reservaDAO.listarPorFecha(fechaInicio, fechaFin);
+
+        List<DisponibilidadDTO> disponibilidadesEnFecha = new ArrayList<>();
+
+        if(reservas != null) for (Reserva reserva : reservas) {
+            disponibilidadesEnFecha.addAll(listarDisponibilidadesPorReserva(reserva));
+        }
+
+        return disponibilidadesEnFecha;
+    }
+
+    public List<DisponibilidadDTO> listarEstadias() {
+
+        var estadias = estadiaDAO.listar();
+
+        List<DisponibilidadDTO> disponibilidades = new ArrayList<>();
+
+        if(estadias!=null) estadias.
+                forEach(estadia ->  disponibilidades.add(new DisponibilidadDTO(estadia)));
+
+        return disponibilidades;
+
+    }
+
+    public List<DisponibilidadDTO> listarEstadias(LocalDate fechaInicio, LocalDate fechaFin){
+
+        var estadias = estadiaDAO.listarPorFecha(fechaInicio, fechaFin);
+
+        List<DisponibilidadDTO> disponibilidades = new ArrayList<>();
+
+        if(estadias!=null) estadias.
+                forEach(estadia ->  disponibilidades.add(new DisponibilidadDTO(estadia)));
+
+        return disponibilidades;
 
     }
 
 
-    public void crearReserva(Reserva reserva, List<Long> listaIDHabitaciones) {
+    public void crearReserva(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
+
+        Reserva reserva = new Reserva(
+                reservaDTO.getFecha_inicio(),
+                reservaDTO.getFecha_fin(),
+                "Reservado",
+                reservaDTO.getNombre(),
+                reservaDTO.getApellido(),
+                reservaDTO.getTelefono()
+        );
+
         {   //  validaciones
             if (reserva == null)
                 throw new ReservaInvalidaException("Reserva nula");
@@ -124,10 +181,14 @@ public class GestorHabitacion {
         Set<Habitacion> habitacionesNoDisponibles = new HashSet<>();
 
         if(listaEstadias != null) for(var e : listaEstadias){
-            habitacionesNoDisponibles.add(e.getHabitacion());
+            var habitacion = habitacionDAO.buscarPorNumero(e.getIdHabitacion());
+            if(habitacion == null) continue;
+            habitacionesNoDisponibles.add(habitacion);
         }
         if(listaReservas != null) for(var r : listaReservas){
-            habitacionesNoDisponibles.addAll(r.getListaHabitaciones());
+            var habitacion = habitacionDAO.buscarPorNumero(r.getIdHabitacion());
+            if(habitacion == null) continue;
+            habitacionesNoDisponibles.add(habitacion);
         }
 
         for(var id : listaIDHabitaciones) {
@@ -170,5 +231,34 @@ public class GestorHabitacion {
         estadia.setDatosCheckIn(checkIn);
         estadia.setHabitacion(habitacion);
         estadiaDAO.crear(estadia);
+    }
+
+    private List<DisponibilidadDTO> listarDisponibilidadesPorReserva(Reserva reserva){
+        var iteradorHabitaciones = reserva.getListaHabitaciones().iterator();
+        List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
+        while(iteradorHabitaciones.hasNext()){
+            var habitacion = iteradorHabitaciones.next();
+            Long idHab = habitacion.getNroHab();
+            var  tipoH = habitacion.getTipo_hab();
+            var disponibilidad = new DisponibilidadDTO(
+                    tipoH,
+                    idHab,
+                    reserva.getFecha_inicio(),
+                    reserva.getFecha_fin(),
+                    EstadoHab.RESERVADA
+            );
+            listaDisponibilidades.add(disponibilidad);
+        }
+        return listaDisponibilidades;
+    }
+
+    public Collection<ReservaDTO> consultarReservas(ConsultarReservasDTO rango) {
+
+        var fechaInicio = LocalDate.parse(rango.getFechaInicio());
+        var fechaFin = LocalDate.parse(rango.getFechaFin());
+
+        if(Localrango.getFechaFin())
+
+        reservaDAO.listarPorFecha(LocalDate.parse(rango.getFechaInicio()))
     }
 }

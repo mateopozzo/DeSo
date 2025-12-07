@@ -1,18 +1,18 @@
 package ddb.deso.controller;
 
-import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
+import ddb.deso.service.habitaciones.Habitacion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -26,43 +26,13 @@ public class HabitacionController {
     @GetMapping("api/habitacion")
     public ResponseEntity<List<HabitacionDTO>> listarTodaHabitacion(){
 
-        var listaHabitaciones = gestorHabitacion.listarHabitaciones();
+        var habitacionesDTO = gestorHabitacion.listarHabitaciones();
 
-        if(listaHabitaciones == null){
-            return ResponseEntity.badRequest().body(List.of());
-        }
-
-        List<HabitacionDTO> habitacionesDTO = new ArrayList<>();
-
-        for(var h : listaHabitaciones){
-            HabitacionDTO hdto = new HabitacionDTO(h.getNroHab(), h.getTipo_hab(), h.getEstado_hab());
-            habitacionesDTO.add(hdto);
-        }
-
-        if(listaHabitaciones==null || listaHabitaciones.isEmpty()){
+        if(habitacionesDTO==null || habitacionesDTO.isEmpty()){
             return ResponseEntity.badRequest().body(List.of());
         }
 
         return ResponseEntity.ok(habitacionesDTO);
-    }
-
-    private List<DisponibilidadDTO> listarPorReserva(Reserva reserva){
-        var iteradorHabitaciones = reserva.getListaHabitaciones().iterator();
-        List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
-        while(iteradorHabitaciones.hasNext()){
-            var habitacion = iteradorHabitaciones.next();
-            Long idHab = habitacion.getNroHab();
-            var  tipoH = habitacion.getTipo_hab();
-            var disponibilidad = new DisponibilidadDTO(
-                    tipoH,
-                    idHab,
-                    reserva.getFecha_inicio(),
-                    reserva.getFecha_fin(),
-                    EstadoHab.RESERVADA
-            );
-            listaDisponibilidades.add(disponibilidad);
-        }
-        return listaDisponibilidades;
     }
 
 
@@ -77,19 +47,9 @@ public class HabitacionController {
         var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
         var listaEstadias = gestorHabitacion.listarEstadias(fecha_inicio, fecha_fin);
 
-        List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
+        listaReservas.addAll(listaEstadias);
 
-        if(listaReservas!=null) listaReservas.forEach(
-                reserva -> listaDisponibilidades.addAll(listarPorReserva(reserva)
-                )
-        );
-
-        if(listaEstadias!=null) listaEstadias.forEach(
-                estadia -> listaDisponibilidades.add(new DisponibilidadDTO(estadia)
-                )
-        );
-
-        return ResponseEntity.ok(listaDisponibilidades);
+        return ResponseEntity.ok(listaReservas);
 
     }
 
@@ -130,23 +90,32 @@ public class HabitacionController {
         if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones))
             return ResponseEntity.status(HttpStatus.CONFLICT).body(reservaDTO);
 
-        Reserva reserva = new Reserva(
-                reservaDTO.getFecha_inicio(),
-                reservaDTO.getFecha_fin(),
-                "Reservado",
-                reservaDTO.getNombre(),
-                reservaDTO.getApellido(),
-                reservaDTO.getTelefono()
-        );
-
         try{
-            gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
+            gestorHabitacion.crearReserva(reservaDTO, listaIDHabitaciones);
         } catch (ReservaInvalidaException | HabitacionInexistenteException excepcion){
             System.out.println(excepcion.getMessage());
             return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
+    }
+
+    @GetMapping("/api/obtener-reservas")
+    public ResponseEntity<Set<ReservaDTO>> consultaReserva(@RequestBody List<ConsultarReservasDTO> listaConsultas) {
+
+        if(listaConsultas == null || listaConsultas.isEmpty()){
+            return ResponseEntity.ok(new HashSet<>());
+        }
+
+        Set<ReservaDTO> reservasCoincidentes = new HashSet<>();
+
+        listaConsultas
+                .forEach(rango -> {
+                    reservasCoincidentes.addAll(gestorHabitacion.consultarReservas(rango));
+                });
+
+        return ResponseEntity.ok(reservasCoincidentes);
+
     }
 
     private boolean creacionReservaValida(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
@@ -168,10 +137,7 @@ public class HabitacionController {
         if(reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()) {
             return false;
         }
-        if(reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()){
-            return false;
-        }
-        return true;
+        return reservaDTO.getTelefono() != null && !reservaDTO.getTelefono().isEmpty();
     }
 
     private boolean verificarDisponibilidadDeHabitaciones(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
