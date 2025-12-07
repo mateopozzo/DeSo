@@ -65,7 +65,6 @@ public class HabitacionController {
             return ResponseEntity.badRequest().body(null);
         }
 
-
         gestorHabitacion.ocuparHabitacion(
                 estadiaDTO.getIdHabitacion(),
                 estadiaDTO.getEncargado(), estadiaDTO.getListaInvitados(),

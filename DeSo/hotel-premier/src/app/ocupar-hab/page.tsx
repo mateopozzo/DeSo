@@ -63,7 +63,7 @@ export default function OcuparHabPage() {
   }, []);
 
   const cancelarCasoUso = () => {
-    if (confirm("¿Seguro que desea cancelar todo el proceso?")) {
+    if (confirm("¿Desea cancelar todo el proceso?")) {
       router.push("/");
     }
   };
@@ -235,12 +235,12 @@ export default function OcuparHabPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 xl:grid-cols-3 gap-8">
           <div className="xl:col-span-2 space-y-8">
             <div className="bg-[#f5f7fa] dark:bg-gray-950 p-6 rounded-xl border border-gray-200 shadow-sm">
-              <h2 className="text-xl font-bold mb-4 text-blue-600">
-                Seleccionar encargado
+              <h2 className="text-xl font-bold mb-4 text-blue-500">
+                Seleccionar encargado de habitación
               </h2>
               {!encargadoActual ? (
                 <BuscadorPersona
-                  titulo="Buscar Responsable"
+                  titulo="Buscar alojados"
                   onBuscar={busqueda}
                   onSeleccionar={setEncargadoActual}
                 />
@@ -266,11 +266,11 @@ export default function OcuparHabPage() {
                 !encargadoActual ? "opacity-50 pointer-events-none" : ""
               }`}
             >
-              <h2 className="text-xl font-bold mb-4 text-purple-600">
+              <h2 className="text-xl font-bold mb-4 text-blue-500">
                 Ocupantes adicionales
               </h2>
               <BuscadorPersona
-                titulo="Buscar Acompañante"
+                titulo="Buscar alojados"
                 onBuscar={buscarAlojados}
                 onSeleccionar={(p) =>
                   setInvitadosActuales([...invitadosActuales, p])

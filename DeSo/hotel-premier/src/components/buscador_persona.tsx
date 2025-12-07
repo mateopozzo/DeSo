@@ -53,7 +53,7 @@ export default function BuscadorPersona({
   };
 
   return (
-    <div className="border border-gray-200 p-5 rounded-xl bg-white dark:bg-gray-900 shadow-sm mb-6">
+    <div className="border border-gray-200 p-5 rounded-xl bg-white dark:bg-gray-950 shadow-sm mb-6">
       <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100 border-b pb-2">
         {titulo}
       </h3>
@@ -67,21 +67,21 @@ export default function BuscadorPersona({
           placeholder="Apellido"
           value={form.apellido}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
         />
         <input
           name="nombre"
           placeholder="Nombre"
           value={form.nombre}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
         />
 
         <select
           name="tipoDoc"
           value={form.tipoDoc}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
         >
           <option value="">Tipo Doc</option>
           <option value="DNI">DNI</option>
@@ -96,14 +96,14 @@ export default function BuscadorPersona({
             placeholder="Nro Doc"
             value={form.nroDoc}
             onChange={handleChange}
-            className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm flex-1 bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
           />
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="bg-green-400/70 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-colors disabled:opacity-50"
           >
-            {loading ? "..." : "🔍"}
+            <img src="search.svg" alt="" width={25} className="dark:invert" />
           </button>
         </div>
       </form>
@@ -116,7 +116,7 @@ export default function BuscadorPersona({
             </div>
           ) : (
             <table className="w-full text-sm text-left">
-              <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs uppercase sticky top-0">
+              <thead className="bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300 text-xs uppercase sticky top-0">
                 <tr>
                   <th className="px-3 py-2">Nombre</th>
                   <th className="px-3 py-2">Documento</th>
@@ -131,7 +131,7 @@ export default function BuscadorPersona({
                       key={i}
                       className={`transition-colors ${
                         disabled
-                          ? "opacity-50 bg-gray-50 dark:bg-gray-800"
+                          ? "opacity-50 bg-gray-50 dark:bg-gray-950"
                           : "hover:bg-blue-50 dark:hover:bg-blue-900/20"
                       }`}
                     >
