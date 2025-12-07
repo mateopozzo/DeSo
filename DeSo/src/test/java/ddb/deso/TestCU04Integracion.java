@@ -5,7 +5,7 @@ import ddb.deso.almacenamiento.DAO.ReservaDAO;
 
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
-import ddb.deso.habitaciones.Reserva;
+import ddb.deso.service.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

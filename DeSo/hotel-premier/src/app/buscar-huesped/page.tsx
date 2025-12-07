@@ -44,10 +44,8 @@ export default function buscarHuesped() {
     setResultados([]);
 
     try {
-      // esta vez await me devuelve un array y no un codigo
       const datos = await busqueda(dataDTO);
 
-      // termina await: guardo resultados, aviso ue ya busque y dejo de cargar
       setResultados(datos);
       setBusquedaRealizada(true);
       setLoading(false);

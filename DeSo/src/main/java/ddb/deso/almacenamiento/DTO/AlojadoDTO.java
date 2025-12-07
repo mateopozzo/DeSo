@@ -5,7 +5,9 @@
 package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.*;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.DatosCheckIn;
+import ddb.deso.service.alojamiento.DatosCheckOut;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -60,7 +62,7 @@ public class AlojadoDTO {
      * (check-in/check-out) desde el objeto de dominio {@code Alojado} de origen.</p>
      * * @param i Cualquier instancia concreta de {@code Alojado} ({@code Huesped} o {@code Invitado}).
      */
-    public AlojadoDTO(ddb.deso.alojamiento.Alojado i) {
+    public AlojadoDTO(Alojado i) {
         // Datos Personales
         this.setNombre(i.getDatos().getDatos_personales().getNombre());
         this.setApellido(i.getDatos().getDatos_personales().getApellido());

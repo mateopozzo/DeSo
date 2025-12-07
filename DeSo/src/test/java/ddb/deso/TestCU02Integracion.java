@@ -1,14 +1,14 @@
 package ddb.deso;
 
-import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.Huesped;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

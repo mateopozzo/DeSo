@@ -1,19 +1,10 @@
 package ddb.deso.controller;
 
 import ddb.deso.EstadoHab;
-import ddb.deso.TipoHab;
-import ddb.deso.almacenamiento.DTO.EstadiaDTO;
-import ddb.deso.almacenamiento.DTO.HabitacionDTO;
-import ddb.deso.almacenamiento.DTO.ReservaDTO;
+import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Reserva;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,31 +22,6 @@ public class HabitacionController {
     private final GestorHabitacion gestorHabitacion;
 
     public HabitacionController(GestorHabitacion gestorHabitacion) {this.gestorHabitacion = gestorHabitacion;}
-
-    /**
-     * DTO destinado a la comunicación de reservas y estadias en su rango de fecha
-     */
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class DisponibilidadDTO {
-
-        public DisponibilidadDTO(Estadia estadia) {
-            this.tipo = estadia.getHabitacion().getTipo_hab();
-            this.idHabitacion = estadia.getHabitacion().getNroHab();
-            this.fecha_inicio = estadia.getFecha_inicio();
-            this.fecha_fin = estadia.getFecha_fin();
-            this.estado = EstadoHab.OCUPADA;
-        }
-
-        TipoHab tipo;
-        Long idHabitacion;
-        LocalDate fecha_inicio;
-        LocalDate fecha_fin;
-        EstadoHab estado;
-
-    }
 
     @GetMapping("api/habitacion")
     public ResponseEntity<List<HabitacionDTO>> listarTodaHabitacion(){
@@ -152,19 +118,11 @@ public class HabitacionController {
 
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class PostDTO {
-        private ReservaDTO reservaDTO;
-        private List<Long> listaIDHabitaciones;
-    }
-
     @PostMapping("/api/reserva")
-    public ResponseEntity<ReservaDTO> crearReserva (@RequestBody PostDTO estructura) {
+    public ResponseEntity<ReservaDTO> crearReserva (@RequestBody ReservaHabitacionesDTO estructura) {
 
-        ReservaDTO reservaDTO = estructura.reservaDTO;
-        List<Long> listaIDHabitaciones  = estructura.listaIDHabitaciones;
+        ReservaDTO reservaDTO = estructura.getReservaDTO();
+        List<Long> listaIDHabitaciones  = estructura.getListaIDHabitaciones();
 
         if(!creacionReservaValida(reservaDTO, listaIDHabitaciones))
             return ResponseEntity.badRequest().build();
@@ -222,7 +180,7 @@ public class HabitacionController {
         var habitacionesDeReserva = new HashSet<Long>(listaIDHabitaciones);
 
         if(listaDisponibilidad!=null) for(var disponibilidad : listaDisponibilidad){
-            if(habitacionesDeReserva.contains(disponibilidad.idHabitacion)){
+            if(habitacionesDeReserva.contains(disponibilidad.getIdHabitacion())){
 
                 //CONFLICTO -> Una estadia o reserva ya ocupa la habitacion en la fecha seleccionada
 

@@ -4,9 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Reserva;
+import ddb.deso.service.habitaciones.Reserva;
 import java.time.LocalDate;
 import java.util.List;
 

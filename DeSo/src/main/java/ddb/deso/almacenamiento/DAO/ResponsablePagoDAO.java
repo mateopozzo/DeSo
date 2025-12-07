@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.contabilidad.ResponsablePago;
+import ddb.deso.service.contabilidad.ResponsablePago;
 import java.util.List;
 
 /**

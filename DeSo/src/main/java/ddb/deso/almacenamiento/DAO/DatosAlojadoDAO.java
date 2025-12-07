@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.DatosAlojado;
+import ddb.deso.service.alojamiento.DatosAlojado;
 
 /**
  * Interfaz DAO responsable del acceso y manipulación de los datos

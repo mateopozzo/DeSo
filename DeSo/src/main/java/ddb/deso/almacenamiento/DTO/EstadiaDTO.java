@@ -1,5 +1,5 @@
 package ddb.deso.almacenamiento.DTO;
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.CriteriosBusq;
 import lombok.Data;
 
 import java.time.LocalDate;

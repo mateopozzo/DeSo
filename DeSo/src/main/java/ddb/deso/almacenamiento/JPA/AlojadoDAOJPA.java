@@ -2,8 +2,7 @@ package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.*;
+import ddb.deso.service.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
 import jakarta.persistence.criteria.Path;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,6 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia

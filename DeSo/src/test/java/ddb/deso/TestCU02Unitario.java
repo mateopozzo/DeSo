@@ -1,9 +1,9 @@
 package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.service.alojamiento.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

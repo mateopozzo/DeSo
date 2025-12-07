@@ -1,11 +1,8 @@
 package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
-import ddb.deso.almacenamiento.DTO.DatosCheckInDTO;
-import ddb.deso.alojamiento.DatosCheckIn;
+import ddb.deso.service.alojamiento.DatosCheckIn;
 import ddb.deso.repository.CheckInRepository;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

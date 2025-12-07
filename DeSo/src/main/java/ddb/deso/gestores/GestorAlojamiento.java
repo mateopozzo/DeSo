@@ -4,9 +4,9 @@ import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.Huesped;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,13 +77,13 @@ public class GestorAlojamiento {
      * convertir ambos objetos de dominio a sus respectivos DTO (Data Transfer Objects)
      * y luego invoca al DAO ({@link AlojadoDAO}) para que persista la actualización.
      *
-     * @param alojadoOriginal El objeto {@link ddb.deso.alojamiento.Alojado} con los datos tal como se encontraban
+     * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
      * antes de la modificación.
-     * @param alojadoModificado El objeto {@link ddb.deso.alojamiento.Alojado} que contiene los nuevos datos
+     * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
      * a guardar en el sistema.
      */
 
-    public void modificarHuesped(ddb.deso.alojamiento.Alojado alojadoOriginal, ddb.deso.alojamiento.Alojado alojadoModificado) {
+    public void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
         System.out.println("Modificando huésped...");
         // Usa el campo 'alojadoDAO' inyectado
         alojadoDAO.actualizarAlojado(alojadoOriginal, alojadoModificado);
@@ -141,7 +141,7 @@ public class GestorAlojamiento {
      @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
      */
 
-    public void eliminarAlojado(ddb.deso.alojamiento.Alojado alojado) {
+    public void eliminarAlojado(Alojado alojado) {
         // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
         alojadoDAO.eliminarAlojado(alojado);
     }
@@ -166,7 +166,7 @@ public class GestorAlojamiento {
      @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
 
-    public ResumenHistorialHuesped historialHuesped(ddb.deso.alojamiento.Alojado alojado){
+    public ResumenHistorialHuesped historialHuesped(Alojado alojado){
         var nombre = alojado.getDatos().getDatos_personales().getNombre();
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
         var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
@@ -201,7 +201,7 @@ public class GestorAlojamiento {
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
      */
 
-    public ddb.deso.alojamiento.Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
+    public Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;
         }

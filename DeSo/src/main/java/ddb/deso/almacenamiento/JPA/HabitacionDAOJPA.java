@@ -2,9 +2,8 @@ package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.TipoHab;
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
-import ddb.deso.habitaciones.Habitacion;
+import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.repository.HabitacionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

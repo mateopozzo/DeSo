@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import ddb.deso.almacenamiento.DAO.UsuarioDAO;
-import ddb.deso.login.Usuario;
+import ddb.deso.service.login.Usuario;
 
 /**
  * Implementación de {@link UsuarioDAO} que utiliza un archivo JSON

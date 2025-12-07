@@ -3,10 +3,10 @@ package ddb.deso.gestores;
 import java.util.Optional;
 
 import ddb.deso.almacenamiento.DAO.UsuarioDAO;
-import ddb.deso.login.Sesion;
-import ddb.deso.login.Usuario;
-import ddb.deso.login.excepciones.CredencialesInvalidasException;
-import ddb.deso.login.excepciones.UsuarioNoEncontradoException;
+import ddb.deso.service.login.Sesion;
+import ddb.deso.service.login.Usuario;
+import ddb.deso.service.login.excepciones.CredencialesInvalidasException;
+import ddb.deso.service.login.excepciones.UsuarioNoEncontradoException;
 
 /**
  * Clase encargada de gestionar el proceso de autenticación de usuarios.
