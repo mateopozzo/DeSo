@@ -82,7 +82,7 @@ export default function CrearReservaPage() {
 
   const confirmarReservaFinal = async () => {
     if (!nombre.trim() || !apellido.trim() || !telefono.trim()) {
-      alert("Por favor complete Nombre, Apellido y Teléfono.");
+      alert("Por favor complete nombre, apellido y teléfono.");
       return;
     }
     if (!seleccion) return;
@@ -97,11 +97,12 @@ export default function CrearReservaPage() {
           nombre: nombre,
           apellido: apellido,
           telefono: telefono,
+          estado: "Reservada",
         },
         listaIDHabitaciones: [String(seleccion.idHabitacion)],
       };
 
-      console.log("Enviando Payload:", JSON.stringify(payload));
+      console.log("Enviando payload:", JSON.stringify(payload));
 
       const status = await crearReserva(payload);
 
@@ -245,7 +246,7 @@ export default function CrearReservaPage() {
                 </label>
                 <input
                   type="tel"
-                  placeholder="Ej: +54 9 11 1234 5678"
+                  placeholder="Ej: 5491112345678"
                   value={telefono}
                   onChange={(e) => setTelefono(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring-2 focus:ring-[#52a173] outline-none transition"

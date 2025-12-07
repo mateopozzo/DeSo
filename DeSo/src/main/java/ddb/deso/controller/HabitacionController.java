@@ -5,6 +5,7 @@ import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
+import ddb.deso.service.habitaciones.Reserva;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -122,14 +123,18 @@ public class HabitacionController {
     public ResponseEntity<ReservaDTO> crearReserva (@RequestBody ReservaHabitacionesDTO estructura) {
 
         ReservaDTO reservaDTO = estructura.getReservaDTO();
+        System.out.println(reservaDTO);
         List<Long> listaIDHabitaciones  = estructura.getListaIDHabitaciones();
+        System.out.println(listaIDHabitaciones);
 
-        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones))
+        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones)) {
+            System.out.println("creacionReservaValida FALSE");
             return ResponseEntity.badRequest().build();
-
-        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones))
+        }
+        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones)) {
+            System.out.println("verificarDisponibilidadDeHabitaciones FALSE");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(reservaDTO);
-
+        }
         Reserva reserva = new Reserva(
                 reservaDTO.getFecha_inicio(),
                 reservaDTO.getFecha_fin(),
@@ -142,6 +147,7 @@ public class HabitacionController {
         try{
             gestorHabitacion.crearReserva(reserva, listaIDHabitaciones);
         } catch (ReservaInvalidaException | HabitacionInexistenteException excepcion){
+            System.out.println("Excepcion");
             System.out.println(excepcion.getMessage());
             return ResponseEntity.badRequest().build();
         }
@@ -151,24 +157,32 @@ public class HabitacionController {
 
     private boolean creacionReservaValida(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
         if(reservaDTO == null || listaIDHabitaciones == null || listaIDHabitaciones.isEmpty()) {
+            System.out.println("reservaDTO == null || listaIDHabitaciones == null || listaIDHabitaciones.isEmpty()");
             return false;
         }
-        if(reservaDTO.getFecha_inicio()==null || reservaDTO.getFecha_fin()==null)
-            return false;
-        if(reservaDTO.getFecha_inicio().isAfter(LocalDate.now())) {
+        if(reservaDTO.getFecha_inicio()==null || reservaDTO.getFecha_fin()==null){
+            System.out.println("reservaDTO.getFecha_inicio()==null || reservaDTO.getFecha_fin()==null");
+            return false;}
+
+        if(reservaDTO.getFecha_inicio().isBefore(LocalDate.now())) {
+            System.out.println("reservaDTO.getFecha_inicio().isAfter(LocalDate.now())");
             return false;
         }
         if(reservaDTO.getFecha_fin().isBefore(LocalDate.now())) {
+            System.out.println("reservaDTO.getFecha_fin().isBefore(LocalDate.now())");
             return false;
         }
 
         if(reservaDTO.getNombre()==null || reservaDTO.getNombre().isEmpty()) {
+            System.out.println("reservaDTO.getNombre()==null || reservaDTO.getNombre().isEmpty()");
             return false;
         }
         if(reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()) {
+            System.out.println("reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()");
             return false;
         }
         if(reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()){
+            System.out.println("reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()");
             return false;
         }
         return true;
