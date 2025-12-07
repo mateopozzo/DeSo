@@ -1,6 +1,5 @@
 package ddb.deso.controller;
 
-import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,14 +83,6 @@ public class HabitacionController {
         ReservaDTO reservaDTO = estructura.getReservaDTO();
         List<Long> listaIDHabitaciones  = estructura.getListaIDHabitaciones();
 
-        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones)) {
-            System.out.println("creacionReservaValida FALSE");
-            return ResponseEntity.badRequest().build();
-        }
-        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones)) {
-            System.out.println("verificarDisponibilidadDeHabitaciones FALSE");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(reservaDTO);
-
         try{
             gestorHabitacion.crearReserva(reservaDTO, listaIDHabitaciones);
         } catch (ReservaInvalidaException | HabitacionInexistenteException excepcion){
@@ -140,10 +130,7 @@ public class HabitacionController {
         if(reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()) {
             return false;
         }
-        if(reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()){
-            return false;
-        }
-        return true;
+        return reservaDTO.getTelefono() != null && !reservaDTO.getTelefono().isEmpty();
     }
 
     private boolean verificarDisponibilidadDeHabitaciones(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
