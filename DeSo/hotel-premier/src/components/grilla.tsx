@@ -112,13 +112,12 @@ export default function Grilla({
     switch (estadoUpper) {
       case "MANTENIMIENTO":
         return "bg-red-500 text-white cursor-not-allowed";
-        break;
       case "SELECCIONADA":
         return "bg-blue-600 text-white font-bold cursor-pointer ring-2 ring-blue-300 z-10 scale-105 shadow-md";
-        break;
       case "OCUPADA":
-        return "dark:bg-white bg-black text-white cursor-not-allowed opacity-80";
-        break;
+        return "dark:bg-white dark:text-black bg-black text-white cursor-not-allowed opacity-80";
+      case "RESERVADA":
+        return "bg-yellow-500 text-white cursor-not-allowed opacity-80";
       default:
         return "dark:bg-gray-950 dark:text-white bg-[#f5f7fa] dark:bg-gray-950 text-black hover:bg-green-500 cursor-pointer";
     }
