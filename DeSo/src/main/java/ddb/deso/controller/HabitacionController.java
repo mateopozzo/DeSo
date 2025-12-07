@@ -40,7 +40,10 @@ public class HabitacionController {
     disponibilidadHabitaciones(@RequestParam LocalDate fecha_inicio, @RequestParam LocalDate fecha_fin) {
 
         if(fecha_inicio.isAfter(fecha_fin)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok(List.of());
+        }
+        if(fecha_inicio.isEqual(LocalDate.now())){
+            return ResponseEntity.ok(List.of());
         }
 
         var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
