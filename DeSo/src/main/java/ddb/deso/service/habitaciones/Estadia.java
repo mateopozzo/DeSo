@@ -50,9 +50,12 @@ public class Estadia {
     DatosCheckIn datosCheckIn;
     @OneToOne(fetch = FetchType.LAZY)
     DatosCheckOut datosCheckOut;
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    private Reserva reserva;
 
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
+
 
     public Estadia(LocalDate fecha_inicio, LocalDate fecha_fin) {
         this.fecha_inicio = fecha_inicio;
