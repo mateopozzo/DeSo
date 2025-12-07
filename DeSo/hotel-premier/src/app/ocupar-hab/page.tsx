@@ -49,6 +49,12 @@ export default function OcuparHabPage() {
     []
   );
 
+  const fecha_hoy = new Date();
+  const mes = String(fecha_hoy.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha_hoy.getDate()).padStart(2, "0");
+
+  const hoy_fecha = `${fecha_hoy.getFullYear()}-${mes}-${dia}`;
+
   useEffect(() => {
     const cargarHabitaciones = async () => {
       try {
@@ -69,11 +75,23 @@ export default function OcuparHabPage() {
   };
 
   const buscarDisponibilidad = async () => {
-    console.log("Buscando disponibilidad habitaciones");
-    if (!fecha_inicio || !fecha_fin || fecha_inicio > fecha_fin) {
-      setError("Fechas inválidas o incompletas.");
+    if (!fecha_inicio || !fecha_fin) {
+      setError("Por favor, ingrese fechas válidas.");
       return;
     }
+
+    if (fecha_inicio > fecha_fin) {
+      setError("La fecha inicial no puede ser mayor a la final");
+      return;
+    }
+
+    if (fecha_inicio < hoy_fecha) {
+      setError("Las fechas no pueden ser anteriores al día actual");
+      return;
+    }
+
+    console.log("Buscando disponibilidad habitaciones");
+
     setError(null);
     try {
       setBusquedaRealizada(true);
@@ -158,6 +176,8 @@ export default function OcuparHabPage() {
         Indique las fechas deseadas para verificar disponibilidad de
         habitaciones
       </p>
+      <hr className="mb-8 dark:text-white/50 text-black/50" />
+
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           {paso === "GRILLA" && "Verificar disponibilidad de habitaciones"}
@@ -176,7 +196,7 @@ export default function OcuparHabPage() {
       </div>
 
       {error && (
-        <div className="bg-red-700 text-white p-4 mb-4 rounded shadow-sm font-bold">
+        <div className="bg-red-600 text-white p-4 rounded-xl mb-6 font-bold shadow-md">
           {error}
         </div>
       )}
@@ -190,7 +210,7 @@ export default function OcuparHabPage() {
                 type="date"
                 value={fecha_inicio}
                 onChange={(e) => setDesde(e.target.value)}
-                className="px-8 py-2 rounded-xl text-black bg-[#f5f7fa] dark:bg-gray-950 dark:text-white border border-black dark:border-white"
+                className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring focus:ring-blue-400 outline-none transition"
               />
             </div>
 
@@ -200,7 +220,7 @@ export default function OcuparHabPage() {
                 type="date"
                 value={fecha_fin}
                 onChange={(e) => setHasta(e.target.value)}
-                className="px-8 py-2 rounded-xl text-black bg-[#f5f7fa] dark:bg-gray-950 dark:text-white border border-black dark:border-white"
+                className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring focus:ring-blue-400 outline-none transition"
               />
             </div>
             <button
