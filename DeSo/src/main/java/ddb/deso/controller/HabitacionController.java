@@ -130,7 +130,6 @@ public class HabitacionController {
         if(reservaDTO.getFecha_fin().isBefore(LocalDate.now())) {
             return false;
         }
-
         if(reservaDTO.getNombre()==null || reservaDTO.getNombre().isEmpty()) {
             return false;
         }

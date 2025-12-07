@@ -16,6 +16,7 @@ import ddb.deso.service.alojamiento.DatosCheckIn;
 import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.service.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
@@ -257,8 +258,29 @@ public class GestorHabitacion {
         var fechaInicio = LocalDate.parse(rango.getFechaInicio());
         var fechaFin = LocalDate.parse(rango.getFechaFin());
 
-        if(Localrango.getFechaFin())
+        if(fechaFin.isBefore(fechaInicio)){
+            return List.of();
+        }
 
-        reservaDAO.listarPorFecha(LocalDate.parse(rango.getFechaInicio()))
+        var reservas = reservaDAO.listarPorFecha(fechaInicio, fechaFin);
+
+        List<Reserva> reservasCoincidentes = new ArrayList<>();
+
+        for(var r : reservas){
+            if(rango.getIDHabitacion().equals(r.getIdReserva())){
+                reservasCoincidentes.add(r);
+            }
+        }
+
+        List<ReservaDTO> reservasDTOCoincidentes = new ArrayList<>();
+
+        for(var r : reservasCoincidentes){
+            var rdto = new ReservaDTO();
+            rdto.setNombre(r.getNombre());
+            rdto.setApellido(r.getApellido());
+            rdto.setTelefono(r.getTelefono());
+        }
+
+        return reservasDTOCoincidentes;
     }
 }
