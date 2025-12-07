@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class HabitacionController {
         var habitacionesDTO = gestorHabitacion.listarHabitaciones();
 
         if(habitacionesDTO==null || habitacionesDTO.isEmpty()){
-            return ResponseEntity.badRequest().body(List.of());
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
         return ResponseEntity.ok(habitacionesDTO);
@@ -40,7 +41,10 @@ public class HabitacionController {
     disponibilidadHabitaciones(@RequestParam LocalDate fecha_inicio, @RequestParam LocalDate fecha_fin) {
 
         if(fecha_inicio.isAfter(fecha_fin)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok(List.of());
+        }
+        if(fecha_inicio.isEqual(LocalDate.now())){
+            return ResponseEntity.ok(List.of());
         }
 
         var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
@@ -62,7 +66,7 @@ public class HabitacionController {
                 estadiaDTO.getListaInvitados() == null ||
                 estadiaDTO.getIdHabitacion() == null
         ) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(estadiaDTO);
         }
 
         gestorHabitacion.ocuparHabitacion(
@@ -86,7 +90,7 @@ public class HabitacionController {
             gestorHabitacion.crearReserva(reservaDTO, listaIDHabitaciones);
         } catch (ReservaInvalidaException | HabitacionInexistenteException excepcion){
             System.out.println(excepcion.getMessage());
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
