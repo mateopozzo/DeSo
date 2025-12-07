@@ -1,6 +1,5 @@
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.habitaciones.Habitacion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

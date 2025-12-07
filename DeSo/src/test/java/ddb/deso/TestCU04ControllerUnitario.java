@@ -1,15 +1,12 @@
 package ddb.deso;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
-import ddb.deso.alojamiento.DatosCheckIn;
-import ddb.deso.controller.AlojadoController;
 import ddb.deso.controller.HabitacionController;
 import ddb.deso.gestores.GestorHabitacion;
-import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Habitacion;
-import ddb.deso.habitaciones.Reserva;
+import ddb.deso.service.habitaciones.Estadia;
+import ddb.deso.service.habitaciones.Habitacion;
+import ddb.deso.service.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.postgresql.hostchooser.HostRequirement.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

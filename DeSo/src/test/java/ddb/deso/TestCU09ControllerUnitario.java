@@ -3,7 +3,7 @@ package ddb.deso;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.controller.AlojadoController;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;

@@ -1,18 +1,11 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.DTO.EstadiaDTO;
-import ddb.deso.alojamiento.CriteriosBusq;
 import ddb.deso.controller.HabitacionController;
-import ddb.deso.gestores.GestorHabitacion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @Transactional

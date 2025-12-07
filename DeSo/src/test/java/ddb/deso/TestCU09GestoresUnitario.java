@@ -2,7 +2,7 @@ package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.FactoryAlojado;
+import ddb.deso.service.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import org.junit.jupiter.api.Test;

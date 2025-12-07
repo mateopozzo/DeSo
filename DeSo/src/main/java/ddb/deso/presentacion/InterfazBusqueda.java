@@ -4,9 +4,9 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.service.alojamiento.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -187,7 +187,7 @@ public class InterfazBusqueda {
                         DatosResidencia res = new DatosResidencia(h_encontrado.getCalle(), h_encontrado.getDepto(), h_encontrado.getLocalidad(), h_encontrado.getProv(), h_encontrado.getPais(), h_encontrado.getNroCalle(), h_encontrado.getPiso(), h_encontrado.getCodPost());
                         DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getTipoDoc(), h_encontrado.getNroDoc(), h_encontrado.getCUIT(), LocalDate.parse(h_encontrado.getFechanac()));
                         DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
-                        ddb.deso.alojamiento.Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
+                        Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
 
                         InterfazModificarHuesped ui_modif = new InterfazModificarHuesped();
                         ui_modif.ejecutarModiHuesped(huesped_h);

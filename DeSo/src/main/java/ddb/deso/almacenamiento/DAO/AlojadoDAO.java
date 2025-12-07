@@ -2,8 +2,8 @@ package ddb.deso.almacenamiento.DAO;
 import java.util.List;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.CriteriosBusq;
 
 /**
  * Interfaz DAO (Data Access Object) que define las operaciones de acceso a datos

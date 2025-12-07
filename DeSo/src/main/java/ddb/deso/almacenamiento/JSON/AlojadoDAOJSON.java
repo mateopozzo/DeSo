@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.CriteriosBusq;
 
 
 /**
@@ -80,7 +80,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     
     /**
      Devuelve la lista completa de alojados almacenados.
-     @return una lista {@link ddb.deso.alojamiento.Alojado}
+     @return una lista {@link Alojado}
      */
 
     @Override

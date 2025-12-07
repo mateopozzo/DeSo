@@ -6,15 +6,18 @@ import java.util.List;
 import java.util.Set;
 
 import ddb.deso.almacenamiento.DAO.*;
-import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.habitaciones.Estadia;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.DatosCheckIn;
+import ddb.deso.service.alojamiento.Huesped;
+import ddb.deso.service.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
-import ddb.deso.habitaciones.Habitacion;
-import ddb.deso.habitaciones.Reserva;
+import ddb.deso.service.habitaciones.Habitacion;
+import ddb.deso.service.habitaciones.Reserva;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

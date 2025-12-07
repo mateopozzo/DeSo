@@ -1,7 +1,7 @@
 package ddb.deso;
 
-import ddb.deso.alojamiento.*;
 import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.alojamiento.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

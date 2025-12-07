@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.DAO;
 
 import ddb.deso.TipoServicio;
-import ddb.deso.habitaciones.Servicio;
+import ddb.deso.service.habitaciones.Servicio;
 import java.util.List;
 
 /**

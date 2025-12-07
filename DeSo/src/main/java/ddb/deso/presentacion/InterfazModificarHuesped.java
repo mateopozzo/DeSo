@@ -7,9 +7,9 @@ import java.util.Scanner;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.alojamiento.Validador;
+import ddb.deso.service.alojamiento.Validador;
 
 
 /**

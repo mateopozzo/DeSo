@@ -1,17 +1,12 @@
 package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Reserva;
-import ddb.deso.repository.AlojadoRepository;
+import ddb.deso.service.habitaciones.Reserva;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ddb.deso.repository.ReservaRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
 
 

@@ -7,11 +7,11 @@ import java.util.Scanner;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.DatosAlojado;
-import ddb.deso.alojamiento.FactoryAlojado;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.DatosAlojado;
+import ddb.deso.service.alojamiento.FactoryAlojado;
 import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.alojamiento.Validador;
+import ddb.deso.service.alojamiento.Validador;
 
 /**
  * Clase que representa la interfaz de consola para dar de alta a un nuevo huésped

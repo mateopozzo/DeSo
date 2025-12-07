@@ -1,10 +1,10 @@
 package ddb.deso.controller;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
-import ddb.deso.alojamiento.FactoryAlojado;
-import ddb.deso.alojamiento.Huesped;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.FactoryAlojado;
+import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
@@ -44,7 +44,7 @@ public class AlojadoController {
     @PostMapping("/api/huesped")
     public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
-        ddb.deso.alojamiento.Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
+        Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
 
 
         if (nuevoAlojado == null) {
