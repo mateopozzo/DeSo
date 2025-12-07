@@ -1,15 +1,16 @@
 package ddb.deso.controller;
 
+import ddb.deso.EstadoHab;
 import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.service.habitaciones.Habitacion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,10 +85,12 @@ public class HabitacionController {
         ReservaDTO reservaDTO = estructura.getReservaDTO();
         List<Long> listaIDHabitaciones  = estructura.getListaIDHabitaciones();
 
-        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones))
+        if(!creacionReservaValida(reservaDTO, listaIDHabitaciones)) {
+            System.out.println("creacionReservaValida FALSE");
             return ResponseEntity.badRequest().build();
-
-        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones))
+        }
+        if(!verificarDisponibilidadDeHabitaciones(reservaDTO, listaIDHabitaciones)) {
+            System.out.println("verificarDisponibilidadDeHabitaciones FALSE");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(reservaDTO);
 
         try{
@@ -130,13 +133,17 @@ public class HabitacionController {
         if(reservaDTO.getFecha_fin().isBefore(LocalDate.now())) {
             return false;
         }
+
         if(reservaDTO.getNombre()==null || reservaDTO.getNombre().isEmpty()) {
             return false;
         }
         if(reservaDTO.getApellido()==null || reservaDTO.getApellido().isEmpty()) {
             return false;
         }
-        return reservaDTO.getTelefono() != null && !reservaDTO.getTelefono().isEmpty();
+        if(reservaDTO.getTelefono() == null || reservaDTO.getTelefono().isEmpty()){
+            return false;
+        }
+        return true;
     }
 
     private boolean verificarDisponibilidadDeHabitaciones(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {

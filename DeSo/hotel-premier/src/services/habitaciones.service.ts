@@ -13,6 +13,7 @@ export interface RequestReserva {
     nombre: string;
     apellido: string;
     telefono: string;
+    estado: "Reservada";
   };
   listaIDHabitaciones: string[];
 }
@@ -69,15 +70,18 @@ export async function buscarEstadoHabitaciones(
 }
 
 export async function crearReserva(reserva: RequestReserva) {
+  console.log("Enviando reserva al back");
   try {
     const response = await fetch(`${PUERTO}/reserva`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reserva),
     });
+    console.log("Vuelta de back");
 
     return response.status;
   } catch (error) {
+    console.log("Error captado en service - Error guardando reserva");
     console.error("Error creando reserva: " + error);
     throw error;
   }

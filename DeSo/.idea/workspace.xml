@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d69e9f34-8257-4d9b-a136-62de3d9c3bd6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/DAO/ReservaDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/DAO/ReservaDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/JPA/AlojadoDAOJPA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/JPA/AlojadoDAOJPA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/JSON/AlojadoDAOJSON.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/JSON/AlojadoDAOJSON.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/AlojadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/AlojadoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/reservar-hab/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/reservar-hab/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/services/habitaciones.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/services/habitaciones.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/HabitacionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/HabitacionController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
