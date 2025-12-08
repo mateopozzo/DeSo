@@ -5,8 +5,10 @@ import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.service.alojamiento.FactoryAlojado;
 import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
@@ -91,11 +93,11 @@ public class GestorAlojamiento {
     }
 
 
-    public void darDeAltaHuesped(Alojado alojadoNuevo) throws AlojadoInvalidoException {
-        if(alojadoNuevo == null || !alojadoNuevo.verificarCamposObligatorios()){
+    public void darDeAltaHuesped(AlojadoDTO alojadoDTO) throws AlojadoInvalidoException {
+        if(alojadoDTO == null || !alojadoDTO.verificarCamposObligatorios()){
             throw new AlojadoInvalidoException("Los campos obligatorios no están completos");
         }
-        alojadoDAO.crearAlojado(alojadoNuevo);
+        alojadoDAO.crearAlojado(FactoryAlojado.createFromDTO(alojadoDTO));
     }
 
     /**

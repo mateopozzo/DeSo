@@ -43,39 +43,42 @@ public class AlojadoController {
      * @return El AlojadoDTO creado con un código 201 (Created).
      */
     @PostMapping("/api/huesped")
-    public ResponseEntity<AlojadoDTO> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
+    public ResponseEntity<String> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
-        Alojado nuevoAlojado = FactoryAlojado.createFromDTO(alojadoDTO);
-
-
-        if (nuevoAlojado == null) {
+        if (alojadoDTO == null) {
             // No pudo crear=>Devuelve 400 Bad Request
             return ResponseEntity.badRequest().build();
         }
 
         if (!force) {
             boolean existe_doc = gestorAlojamiento.dniExiste(
-                    nuevoAlojado.getDatos().getNroDoc(),
-                    nuevoAlojado.getDatos().getTipoDoc()
+                    alojadoDTO.getNroDoc(),
+                    alojadoDTO.getTipoDoc()
             );
 
             if(existe_doc) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                // Ya existe el alojado => conflicto
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El alojado " + alojadoDTO.getTipoDoc() + " " + alojadoDTO.getNroDoc() + "ya existe");
             }
         }
 
-        if(!nuevoAlojado.verificarCamposObligatorios() || !alojadoDTO.verificarCamposObligatorios() ){
-            return ResponseEntity.badRequest().build();
+        if(!alojadoDTO.verificarCamposObligatorios() ){
+            // Los campos obligatorios no estan llenos => badReq
+            return ResponseEntity.badRequest().body("Datos invalidos");
         }
 
         try{
-            gestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
+            gestorAlojamiento.darDeAltaHuesped(alojadoDTO);
         } catch (AlojadoInvalidoException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().build();
+            // Alojado invalido =>  BadReq
+            return ResponseEntity.badRequest().body("Error de aplicacion" + e.getMessage());
+        } catch (Exception e) {
+            // Excepcion impreviste => HTTP500
+            return ResponseEntity.internalServerError().body("Error de aplicacion" + e.getMessage());
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(alojadoDTO);
+        // EXITO
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
