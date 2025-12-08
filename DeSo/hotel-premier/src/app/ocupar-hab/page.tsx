@@ -183,7 +183,6 @@ export default function OcuparHabPage() {
           {paso === "GRILLA" && "Verificar disponibilidad de habitaciones"}
           {paso === "CARGA" && "Asignación de huéspedes"}
           {paso === "GUARDANDO" && "Guardando..."}
-          {paso === "EXITO" && "Check in exitoso"}
         </h1>
         {paso !== "EXITO" && paso !== "GUARDANDO" && (
           <button
@@ -256,7 +255,7 @@ export default function OcuparHabPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 xl:grid-cols-3 gap-8">
           <div className="xl:col-span-2 space-y-8">
             <div className="bg-[#f5f7fa] dark:bg-gray-950 p-6 rounded-xl border border-gray-200 shadow-sm">
-              <h2 className="text-xl font-bold mb-4 text-blue-500">
+              <h2 className="text-xl font-bold mb-4 dark:text-white text-black">
                 Seleccionar encargado de habitación
               </h2>
               {!encargadoActual ? (
@@ -266,7 +265,7 @@ export default function OcuparHabPage() {
                   onSeleccionar={setEncargadoActual}
                 />
               ) : (
-                <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg text-black">
+                <div className="flex justify-between items-center dark:text-white  bg-green-400/50 p-4 rounded-lg text-black">
                   <div>
                     <p className="font-bold">
                       {encargadoActual.apellido}, {encargadoActual.nombre}
@@ -275,7 +274,7 @@ export default function OcuparHabPage() {
                   </div>
                   <button
                     onClick={() => setEncargadoActual(null)}
-                    className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
+                    className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 border-2 dark:border-white dark:text-white bg-green-400/20 dark:hover:border-[#b92716] text-[#1a252f] border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
                   >
                     Cambiar
                   </button>
@@ -287,7 +286,7 @@ export default function OcuparHabPage() {
                 !encargadoActual ? "opacity-50 pointer-events-none" : ""
               }`}
             >
-              <h2 className="text-xl font-bold mb-4 text-blue-500">
+              <h2 className="text-xl font-bold mb-4 dark:text-white text-black">
                 Ocupantes adicionales
               </h2>
               <BuscadorPersona
@@ -313,7 +312,7 @@ export default function OcuparHabPage() {
                 <p className="font-bold text-sm uppercase">Ocupantes:</p>
                 {encargadoActual && (
                   <div className="text-blue-600 font-bold">
-                    ★ {encargadoActual.apellido} (Resp)
+                    ★ {encargadoActual.apellido} (Responsable de hab.)
                   </div>
                 )}
                 {invitadosActuales.map((inv, i) => (
@@ -321,7 +320,7 @@ export default function OcuparHabPage() {
                     key={i}
                     className="flex justify-between text-sm bg-gray-50 p-2 rounded text-black"
                   >
-                    {inv.apellido}{" "}
+                    {inv.apellido} {inv.nombre}{" "}
                     <button
                       onClick={() =>
                         setInvitadosActuales(
@@ -361,12 +360,13 @@ export default function OcuparHabPage() {
       )}
       {paso === "EXITO" && (
         <div className="text-center py-20">
-          <h2 className="text-4xl font-bold text-green-600 mb-4">
+          <img src="success.svg" alt="" width={20} className="dark:invert" />
+          <h2 className="text-4xl font-bold text-green-500 mb-4">
             Check-in exitoso
           </h2>
           <button
             onClick={() => router.push("/")}
-            className="bg-gray-800 text-white px-6 py-3 rounded-xl"
+            className="bg-gray-9500 dark:text-white dark:border dark:border-white text-black px-6 py-2 rounded-xl"
           >
             Volver al inicio
           </button>

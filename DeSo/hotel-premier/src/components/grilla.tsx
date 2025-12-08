@@ -37,32 +37,123 @@ export default function Grilla({
   const [seleccion, setSeleccion] = useState<Seleccion | null>(null);
 
   const obtenerEstado = (idHab: number, fecha: string) => {
-    const ocupada = reservas.find(
+    const conflictos = reservas.filter(
       (res) =>
         res.idHabitacion === idHab &&
         fecha >= res.fecha_inicio &&
         fecha <= res.fecha_fin
     );
-    if (ocupada) return ocupada.estado;
+
+    let estadoDB = "DISPONIBLE";
+
+    if (conflictos.length > 0) {
+      const bloqueoDuro = conflictos.find((c) =>
+        ["OCUPADA", "MANTENIMIENTO", "EN MANTENIMIENTO"].includes(
+          c.estado.toUpperCase()
+        )
+      );
+
+      if (bloqueoDuro) {
+        estadoDB = bloqueoDuro.estado;
+      } else {
+        estadoDB = conflictos[0].estado;
+      }
+    }
+
+    const estadoDBUpper = estadoDB.toUpperCase();
+
+    const esBloqueante =
+      estadoDBUpper === "OCUPADA" ||
+      estadoDBUpper === "EN MANTENIMIENTO" ||
+      (casoDeUso === "RESERVAR" && estadoDBUpper === "RESERVADA");
+
+    if (esBloqueante) {
+      return estadoDB;
+    }
 
     if (seleccion && seleccion.idHabitacion === idHab) {
-      if (fecha === seleccion.fecha_inicio_sel && !seleccion.fecha_fin_sel) {
-        return "SELECCIONADA";
+      let inicio = seleccion.fecha_inicio_sel;
+      let fin = seleccion.fecha_fin_sel;
+
+      if (fin && fin < inicio) {
+        [inicio, fin] = [fin, inicio];
       }
-      if (
-        seleccion.fecha_fin_sel &&
-        fecha >= seleccion.fecha_inicio_sel &&
-        fecha <= seleccion.fecha_fin_sel
-      ) {
+
+      if (fecha === inicio) return "SELECCIONADA";
+      if (fin && (fecha === fin || (fecha > inicio && fecha < fin))) {
         return "SELECCIONADA";
       }
     }
-    return "DISPONIBLE";
+
+    return estadoDB;
   };
 
   const manejarClick = (idHab: number, fecha: string, estadoActual: string) => {
-    if (estadoActual === "OCUPADA" || estadoActual === "EN MANTENIMIENTO") {
-      return;
+    const estadoUpper = estadoActual.toUpperCase();
+
+    const clickProhibido =
+      estadoUpper === "OCUPADA" ||
+      estadoUpper === "EN MANTENIMIENTO" ||
+      (casoDeUso === "RESERVAR" && estadoUpper === "RESERVADA");
+
+    if (clickProhibido) return;
+
+    if (
+      seleccion &&
+      seleccion.idHabitacion === idHab &&
+      !seleccion.fecha_fin_sel
+    ) {
+      let inicio = seleccion.fecha_inicio_sel;
+      let fin = fecha;
+
+      if (fin < inicio) {
+        [inicio, fin] = [fin, inicio];
+      }
+      const hayConflicto = reservas.some((res) => {
+        // 1. FILTRO GLOBAL
+        // Usamos String() para asegurar que no sea un problema de Number vs String
+        if (String(res.idHabitacion) !== String(idHab)) {
+          return false;
+        }
+
+        const seSolapan = !(inicio > res.fecha_fin || fin < res.fecha_inicio);
+        if (!seSolapan) {
+          return false;
+        }
+
+        // 2. VALIDACIÓN DE ESTADO
+        // Agregamos .trim() por si vienen espacios en blanco de la BD "RESERVADA "
+        const est = res.estado.toUpperCase().trim();
+
+        // --- LOG DE DEPURACIÓN ---
+        console.log(`Analizando conflicto Hab ${idHab}:`, {
+          reserva_id: res.idHabitacion, // o id de la reserva si tienes
+          estado_original: res.estado,
+          estado_procesado: est,
+          casoDeUso: casoDeUso,
+          es_reservada: est === "RESERVADA",
+          caso_es_ocupar: casoDeUso === "OCUPAR",
+          BLOQUEA:
+            casoDeUso === "OCUPAR" && est === "RESERVADA"
+              ? "NO (Permitido)"
+              : "SI (Potencialmente)",
+        });
+        // -------------------------
+
+        // Reglas de bloqueo
+        if (est === "OCUPADA" || est === "EN MANTENIMIENTO") return true;
+        if (casoDeUso === "RESERVAR" && est === "RESERVADA") return true;
+
+        if (casoDeUso === "OCUPAR" && est === "RESERVADA") return false;
+
+        // Si el estado es desconocido o no bloqueante, dejamos pasar
+        return false;
+      });
+
+      if (hayConflicto) {
+        alert("El rango seleccionado contiene fechas no disponibles.");
+        return;
+      }
     }
 
     setSeleccion((prev) => {
