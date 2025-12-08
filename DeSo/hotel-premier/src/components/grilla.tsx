@@ -17,6 +17,7 @@ interface GrillaProps {
   habitaciones: Habitacion[];
   reservas: DisponibilidadDTO[];
   onConfirmarSeleccion?: (datos: DatosSeleccion) => void;
+  casoDeUso: "RESERVAR" | "OCUPAR";
 }
 
 type Seleccion = {
@@ -31,36 +32,128 @@ export default function Grilla({
   habitaciones,
   reservas,
   onConfirmarSeleccion,
+  casoDeUso,
 }: GrillaProps) {
   const [seleccion, setSeleccion] = useState<Seleccion | null>(null);
 
   const obtenerEstado = (idHab: number, fecha: string) => {
-    const ocupada = reservas.find(
+    const conflictos = reservas.filter(
       (res) =>
         res.idHabitacion === idHab &&
         fecha >= res.fecha_inicio &&
         fecha <= res.fecha_fin
     );
-    if (ocupada) return ocupada.estado;
+
+    let estadoDB = "DISPONIBLE";
+
+    if (conflictos.length > 0) {
+      const bloqueoDuro = conflictos.find((c) =>
+        ["OCUPADA", "MANTENIMIENTO", "EN MANTENIMIENTO"].includes(
+          c.estado.toUpperCase()
+        )
+      );
+
+      if (bloqueoDuro) {
+        estadoDB = bloqueoDuro.estado;
+      } else {
+        estadoDB = conflictos[0].estado;
+      }
+    }
+
+    const estadoDBUpper = estadoDB.toUpperCase();
+
+    const esBloqueante =
+      estadoDBUpper === "OCUPADA" ||
+      estadoDBUpper === "EN MANTENIMIENTO" ||
+      (casoDeUso === "RESERVAR" && estadoDBUpper === "RESERVADA");
+
+    if (esBloqueante) {
+      return estadoDB;
+    }
 
     if (seleccion && seleccion.idHabitacion === idHab) {
-      if (fecha === seleccion.fecha_inicio_sel && !seleccion.fecha_fin_sel) {
-        return "SELECCIONADA";
+      let inicio = seleccion.fecha_inicio_sel;
+      let fin = seleccion.fecha_fin_sel;
+
+      if (fin && fin < inicio) {
+        [inicio, fin] = [fin, inicio];
       }
-      if (
-        seleccion.fecha_fin_sel &&
-        fecha >= seleccion.fecha_inicio_sel &&
-        fecha <= seleccion.fecha_fin_sel
-      ) {
+
+      if (fecha === inicio) return "SELECCIONADA";
+      if (fin && (fecha === fin || (fecha > inicio && fecha < fin))) {
         return "SELECCIONADA";
       }
     }
-    return "DISPONIBLE";
+
+    return estadoDB;
   };
 
   const manejarClick = (idHab: number, fecha: string, estadoActual: string) => {
-    if (estadoActual === "OCUPADA" || estadoActual === "EN MANTENIMIENTO") {
-      return;
+    const estadoUpper = estadoActual.toUpperCase();
+
+    const clickProhibido =
+      estadoUpper === "OCUPADA" ||
+      estadoUpper === "EN MANTENIMIENTO" ||
+      (casoDeUso === "RESERVAR" && estadoUpper === "RESERVADA");
+
+    if (clickProhibido) return;
+
+    if (
+      seleccion &&
+      seleccion.idHabitacion === idHab &&
+      !seleccion.fecha_fin_sel
+    ) {
+      let inicio = seleccion.fecha_inicio_sel;
+      let fin = fecha;
+
+      if (fin < inicio) {
+        [inicio, fin] = [fin, inicio];
+      }
+      const hayConflicto = reservas.some((res) => {
+        // 1. FILTRO GLOBAL
+        // Usamos String() para asegurar que no sea un problema de Number vs String
+        if (String(res.idHabitacion) !== String(idHab)) {
+          return false;
+        }
+
+        const seSolapan = !(inicio > res.fecha_fin || fin < res.fecha_inicio);
+        if (!seSolapan) {
+          return false;
+        }
+
+        // 2. VALIDACIÓN DE ESTADO
+        // Agregamos .trim() por si vienen espacios en blanco de la BD "RESERVADA "
+        const est = res.estado.toUpperCase().trim();
+
+        // --- LOG DE DEPURACIÓN ---
+        console.log(`Analizando conflicto Hab ${idHab}:`, {
+          reserva_id: res.idHabitacion, // o id de la reserva si tienes
+          estado_original: res.estado,
+          estado_procesado: est,
+          casoDeUso: casoDeUso,
+          es_reservada: est === "RESERVADA",
+          caso_es_ocupar: casoDeUso === "OCUPAR",
+          BLOQUEA:
+            casoDeUso === "OCUPAR" && est === "RESERVADA"
+              ? "NO (Permitido)"
+              : "SI (Potencialmente)",
+        });
+        // -------------------------
+
+        // Reglas de bloqueo
+        if (est === "OCUPADA" || est === "EN MANTENIMIENTO") return true;
+        if (casoDeUso === "RESERVAR" && est === "RESERVADA") return true;
+
+        if (casoDeUso === "OCUPAR" && est === "RESERVADA") return false;
+
+        // Si el estado es desconocido o no bloqueante, dejamos pasar
+        return false;
+      });
+
+      if (hayConflicto) {
+        alert("El rango seleccionado contiene fechas no disponibles.");
+        return;
+      }
     }
 
     setSeleccion((prev) => {
@@ -117,7 +210,13 @@ export default function Grilla({
       case "OCUPADA":
         return "dark:bg-white dark:text-black bg-black text-white cursor-not-allowed opacity-80";
       case "RESERVADA":
-        return "bg-yellow-500 text-white cursor-not-allowed opacity-80";
+        if (casoDeUso == "OCUPAR") {
+          return "bg-yellow-500 text-white cursor-pointer opacity-80";
+        }
+        if (casoDeUso == "RESERVAR") {
+          return "bg-yellow-500 text-white cursor-not-allowed opacity-80";
+        }
+
       default:
         return "dark:bg-gray-950 dark:text-white bg-[#f5f7fa] dark:bg-gray-950 text-black hover:bg-green-500 cursor-pointer";
     }
@@ -178,7 +277,7 @@ export default function Grilla({
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border dark:border-gray-700 dark:text-white sticky left-0 top-0 z-30 min-w-[100px] text-left bg-[#f5f7fa] dark:bg-gray-950">
+              <th className="p-2 border border-gray-300  dark:border-gray-700 dark:text-white sticky left-0 top-0 z-30 min-w-[100px] text-left bg-[#f5f7fa] dark:bg-gray-950">
                 Fecha
               </th>
               {habitaciones.map((h) => (
@@ -202,7 +301,7 @@ export default function Grilla({
                 key={fecha}
                 className="hover:bg-gray-100 dark:hover:bg-gray-900"
               >
-                <td className="p-2 border dark:border-gray-700 font-bold dark:text-white sticky left-0 z-10 bg-[#f5f7fa] dark:bg-gray-950">
+                <td className="p-2 border-gray-300 dark:border-gray-700 font-bold dark:text-white sticky left-0 z-10 bg-[#f5f7fa] dark:bg-gray-950">
                   {fecha}
                 </td>
                 {habitaciones.map((hab) => {

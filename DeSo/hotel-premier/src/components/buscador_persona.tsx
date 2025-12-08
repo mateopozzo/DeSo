@@ -53,7 +53,7 @@ export default function BuscadorPersona({
   };
 
   return (
-    <div className="border border-gray-200 p-5 rounded-xl bg-white dark:bg-gray-950 shadow-sm mb-6">
+    <div className="border border-gray-200 p-5 rounded-xl bg-[#f5f7fa] dark:bg-gray-950 shadow-sm mb-6">
       <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100 border-b pb-2">
         {titulo}
       </h3>
@@ -67,21 +67,21 @@ export default function BuscadorPersona({
           placeholder="Apellido"
           value={form.apellido}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-[#f5f7fa] dark:bg-gray-950 text-gray-900 dark:text-white"
         />
         <input
           name="nombre"
           placeholder="Nombre"
           value={form.nombre}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-[#f5f7fa] dark:bg-gray-950 text-gray-900 dark:text-white"
         />
 
         <select
           name="tipoDoc"
           value={form.tipoDoc}
           onChange={handleChange}
-          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
+          className="border border-gray-300 dark:border-gray-700 p-2 rounded-lg w-full text-sm bg-[#f5f7fa] dark:bg-gray-950 text-gray-900 dark:text-white"
         >
           <option value="">Tipo Doc</option>
           <option value="DNI">DNI</option>
@@ -101,7 +101,7 @@ export default function BuscadorPersona({
           <button
             type="submit"
             disabled={loading}
-            className="bg-green-400/70 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-colors disabled:opacity-50"
+            className="bg-green-400/70 text-white px-4 py-2 rounded-xl hover:bg-green-500 transition-colors disabled:opacity-50"
           >
             <img src="search.svg" alt="" width={25} className="dark:invert" />
           </button>

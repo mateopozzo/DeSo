@@ -165,7 +165,7 @@ export default function ReservarHab() {
         </h1>
         <button
           onClick={cancelarCasoUso}
-          className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
+          className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950  text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] dark:hover:border-[#b92716] hover:text-white hover:border-[#b92716]"
         >
           Cancelar
         </button>
@@ -213,6 +213,7 @@ export default function ReservarHab() {
                 habitaciones={listaHabitaciones}
                 reservas={estadosReservas}
                 onConfirmarSeleccion={procesarSeleccionGrilla}
+                casoDeUso="RESERVAR"
               />
             </div>
           ) : (
@@ -227,14 +228,16 @@ export default function ReservarHab() {
 
       {paso === "FORMULARIO" && seleccion && (
         <div className="max-w-2xl mx-auto animate-fade-in mt-8">
-          <div className="bg-[#f5f7fa] dark:bg-gray-950 border-2 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-[#f5f7fa] dark:bg-gray-950 border-2 dark:border-gray-700 border-gray-300 rounded-3xl shadow-2xl overflow-hidden">
             <div className="bg-[#f5f7fa] dark:bg-gray-950 p-6 text-white">
-              <h2 className="text-2xl font-bold">Completar datos</h2>
+              <h2 className="text-2xl font-bold dark:text-white text-black">
+                Completar datos
+              </h2>
               <p className="opacity-90 mt-2 text-sm flex gap-4">
-                <span className="bg-white/20 px-2 py-1 rounded">
+                <span className="dark:bg-blue-400/70 bg-blue-700/80 px-2 py-1 rounded">
                   Habitación <strong>{seleccion.idHabitacion}</strong>
                 </span>
-                <span className="bg-white/20 px-2 py-1 rounded">
+                <span className="dark:bg-blue-400/70 bg-blue-700/80 px-2 py-1 rounded">
                   Del <strong>{seleccion.fechaInicio}</strong> al{" "}
                   <strong>{seleccion.fechaFin}</strong>
                 </span>
@@ -285,7 +288,7 @@ export default function ReservarHab() {
               <div className="pt-6 flex gap-4">
                 <button
                   onClick={cancelar}
-                  className="flex-1 py-3 rounded-xl font-bold border border-gray-300 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800 transition"
+                  className="hover:bg-[#b92716] border dark:hover:border-[#b92716] hover:text-white hover:border-[#b92716] flex-1 py-3 rounded-xl font-bold  text-gray-600 dark:text-gray-300  transition"
                 >
                   Volver
                 </button>
