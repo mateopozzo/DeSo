@@ -1,7 +1,7 @@
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.EstadoHab;
-import ddb.deso.TipoHab;
+import ddb.deso.service.EstadoHab;
+import ddb.deso.service.TipoHab;
 import ddb.deso.service.habitaciones.Estadia;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -4,7 +4,7 @@
  */
 package ddb.deso.service.alojamiento;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import java.time.LocalDate;
 import java.time.Period;
 import jakarta.persistence.*;

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.controller.HabitacionController;
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.service.EstadoHab;
+import ddb.deso.service.TipoHab;
 import ddb.deso.service.habitaciones.Estadia;
 import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.service.habitaciones.Reserva;

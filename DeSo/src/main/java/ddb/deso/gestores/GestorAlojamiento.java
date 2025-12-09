@@ -3,7 +3,7 @@ package ddb.deso.gestores;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.alojamiento.Alojado;

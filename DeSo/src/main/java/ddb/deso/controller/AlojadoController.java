@@ -1,6 +1,6 @@
 package ddb.deso.controller;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;

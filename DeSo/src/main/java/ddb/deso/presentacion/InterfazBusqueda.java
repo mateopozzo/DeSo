@@ -1,6 +1,6 @@
 package ddb.deso.presentacion;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;

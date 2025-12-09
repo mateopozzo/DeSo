@@ -22,7 +22,7 @@ export async function busqueda(criterios: CriteriosBusq): Promise<ResultadoBusq[
   if (criterios.nroDoc) params.append("nroDoc", criterios.nroDoc);
 
   const res = await fetch(
-    `http://localhost:8080/api/buscar-huesped?${params}`,
+    `http://localhost:8080/api/buscar-alojados?${params}`,
     {
       method: "GET",
       headers: {

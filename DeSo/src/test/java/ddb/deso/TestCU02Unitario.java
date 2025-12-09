@@ -4,6 +4,7 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.service.alojamiento.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

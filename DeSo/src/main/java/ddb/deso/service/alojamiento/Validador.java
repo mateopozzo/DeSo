@@ -2,7 +2,7 @@ package ddb.deso.service.alojamiento;
 
 import java.time.LocalDate;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 
 
 /**

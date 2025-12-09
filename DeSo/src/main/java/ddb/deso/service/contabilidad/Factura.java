@@ -3,7 +3,7 @@ package ddb.deso.service.contabilidad;
 import java.time.LocalDate;
 import java.util.List;
 
-import ddb.deso.TipoFactura;
+import ddb.deso.service.TipoFactura;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
  * incluyendo fechas, importes desglosados (neto, IVA, total) y el destinatario.
  * </p>
  *
- * @see ddb.deso.TipoFactura
+ * @see TipoFactura
  */
 
 @Getter

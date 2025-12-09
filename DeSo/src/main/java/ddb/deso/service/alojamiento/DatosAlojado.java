@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import jakarta.persistence.*;
 import lombok.*;
 

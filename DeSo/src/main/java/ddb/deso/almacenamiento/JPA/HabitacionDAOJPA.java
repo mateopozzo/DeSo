@@ -1,6 +1,6 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.TipoHab;
+import ddb.deso.service.TipoHab;
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.repository.HabitacionRepository;

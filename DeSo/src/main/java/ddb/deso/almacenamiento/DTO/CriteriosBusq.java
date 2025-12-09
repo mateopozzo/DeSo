@@ -1,5 +1,5 @@
 package ddb.deso.almacenamiento.DTO;
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class CriteriosBusq {
      *
      * @param apellido El apellido a establecer como criterio de búsqueda.
      * @param nombre El nombre a establecer como criterio de búsqueda.
-     * @param tipoDoc El tipo de documento ({link ddb.deso.TipoDoc}) a establecer.
+     * @param tipoDoc El tipo de documento ({link ddb.deso.service.TipoDoc}) a establecer.
      * @param num_documento El número de documento a establecer.
      */
     public CriteriosBusq(String apellido, String nombre, TipoDoc tipoDoc, String num_documento) {

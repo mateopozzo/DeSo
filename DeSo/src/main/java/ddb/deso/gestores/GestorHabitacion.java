@@ -3,17 +3,17 @@ package ddb.deso.gestores;
 import java.time.LocalDate;
 import java.util.*;
 
-import ddb.deso.EstadoHab;
+import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.EstadoHab;
 import ddb.deso.almacenamiento.DAO.*;
 import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
 import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.TipoDoc;
+import ddb.deso.service.alojamiento.*;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.service.alojamiento.DatosCheckIn;
-import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.service.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -210,15 +210,56 @@ public class GestorHabitacion {
 
     public void ocuparHabitacion(Long IDHabitacion, Long idReserva, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
 
-        Huesped huesped = (Huesped) alojadoDAO.buscarAlojado(criteriosHuesped).getFirst();
+        // busqueda del encargado
+        var listaAlojados = alojadoDAO.buscarAlojado(criteriosHuesped);
+
+        if(listaAlojados == null || listaAlojados.isEmpty()){
+            throw new AlojadoInvalidoException("El alojado no existe en la base");
+        } else if(listaAlojados.size() > 1){
+            // Deberia existir un solo huesped con el id de criteriosBusqueda
+            throw new AlojadoInvalidoException("Existe mas de un alojado con " + criteriosHuesped.getTipoDoc() + " " + criteriosHuesped.getNroDoc());
+        }
+
+        Alojado huesped = listaAlojados.getFirst();
+
+        if(huesped == null){
+            throw new AlojadoInvalidoException("El alojado no existe en la base");
+        }
+        if(huesped instanceof Invitado){
+            String nroDoc = huesped.getDatos().getNroDoc();
+            String tipoDoc = huesped.getDatos().getTipoDoc().toString();
+            // Actualiza el tipo de alojado en la base de datos
+            alojadoDAO.promoverAHuesped(nroDoc, tipoDoc);
+            // vuelvo a traer al alojado desde la base, ahora actualizado
+            listaAlojados = alojadoDAO.buscarAlojado(criteriosHuesped);
+
+            if(listaAlojados == null || listaAlojados.isEmpty()){
+                throw new AlojadoInvalidoException("El alojado no existe en la base");
+            } else if(listaAlojados.size() > 1){
+                // Deberia existir un solo huesped con el id de criteriosBusqueda
+                throw new AlojadoInvalidoException("Existe mas de un alojado con " + criteriosHuesped.getTipoDoc() + " " + criteriosHuesped.getNroDoc());
+            }
+
+            huesped = listaAlojados.getFirst();
+        }
+
+        // busqueda de los invitados
         List<Alojado> alojados = criteriosinvitados.stream()
                 .map(criteriosBusq -> alojadoDAO.buscarAlojado(criteriosBusq).getFirst())
                 .toList();
+
+        // busqueda de las habitaciones
         Habitacion habitacion = habitacionDAO.buscarPorNumero(IDHabitacion);
 
+        if(habitacion == null){
+            throw new HabitacionInexistenteException("Habitacion " + IDHabitacion + " no encontrada");
+        }
+
+        // crear check in
         DatosCheckIn checkIn = new DatosCheckIn(fechaInicio);
         checkIn.setAlojado(huesped.getDatos());
         huesped.getDatos().nuevoCheckIn(checkIn);
+
         checkInDAO.crearDatosCheckIn(checkIn);
 
         for(var id : alojados) {

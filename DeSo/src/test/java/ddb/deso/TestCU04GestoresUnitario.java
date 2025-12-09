@@ -5,6 +5,8 @@ import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
 import ddb.deso.gestores.GestorHabitacion;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
+import ddb.deso.service.EstadoHab;
+import ddb.deso.service.TipoHab;
 import ddb.deso.service.habitaciones.Estadia;
 import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.service.habitaciones.Reserva;
@@ -45,7 +47,7 @@ public class TestCU04GestoresUnitario {
     }
 
     private List<Habitacion> crearListaHabitaciones() {
-        Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
+        Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR, EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
         h1.setNroHab(101L);
         h2.setNroHab(202L);
         return List.of(h1,h2);

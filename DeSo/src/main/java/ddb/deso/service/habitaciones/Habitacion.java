@@ -4,8 +4,8 @@
  */
 package ddb.deso.service.habitaciones;
 
-import ddb.deso.TipoHab;
-import ddb.deso.EstadoHab;
+import ddb.deso.service.EstadoHab;
+import ddb.deso.service.TipoHab;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +21,8 @@ import java.util.Objects;
  * incluyendo su tipo, tarifa, capacidad y número de identificación.
  * </p>
  *
- * @see ddb.deso.TipoHab
- * @see ddb.deso.EstadoHab
+ * @see TipoHab
+ * @see EstadoHab
  */
 @Getter
 @Setter

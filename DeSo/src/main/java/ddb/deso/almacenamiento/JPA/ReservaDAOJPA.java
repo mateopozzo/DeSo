@@ -42,6 +42,7 @@ public class ReservaDAOJPA implements ReservaDAO {
 
     @Override
     public Reserva buscarPorID(Long ID) {
+        if(ID == null) {return null;}
         var reserva = reservaRepository.findById(ID);
         return reserva.orElse(null);
 

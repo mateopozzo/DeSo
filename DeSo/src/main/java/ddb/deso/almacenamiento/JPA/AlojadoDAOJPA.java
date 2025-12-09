@@ -1,10 +1,12 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Path;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +26,8 @@ import java.util.Optional;
 public class AlojadoDAOJPA implements AlojadoDAO {
 
     private final AlojadoRepository alojadoRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * Inyección de dependencias por constructor.
@@ -57,6 +61,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
                 alojadoRepository.deleteById(id);
             }
         }
+        alojadoRepository.flush();
     }
 
     @Override
@@ -74,6 +79,13 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         Optional<Alojado> entidadOptional = alojadoRepository.findById(id);
 
         return entidadOptional.orElse(null);
+    }
+
+    @Override
+    public void promoverAHuesped(String nroDoc, String tipoDoc) {
+        alojadoRepository.promoverAHuesped(nroDoc, tipoDoc);
+        alojadoRepository.flush();
+        entityManager.clear();
     }
 
     @Override

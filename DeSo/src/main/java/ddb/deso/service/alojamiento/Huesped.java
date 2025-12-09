@@ -31,7 +31,7 @@ public class Huesped extends Alojado {
     private String razon_social;
 
     public Huesped (DatosAlojado da) {
-        this.datos=da;
+        super(da);
     }
 
     public void setRazon_social(String razon_social) {

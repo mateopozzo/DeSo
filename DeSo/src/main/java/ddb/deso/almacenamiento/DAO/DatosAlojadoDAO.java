@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.service.alojamiento.DatosAlojado;
 
 /**

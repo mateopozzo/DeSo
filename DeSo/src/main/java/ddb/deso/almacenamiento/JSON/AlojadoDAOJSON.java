@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
@@ -188,5 +188,10 @@ public class AlojadoDAOJSON implements AlojadoDAO {
                 .filter(a -> a.getDatos().getNroDoc().equals(documento) && a.getDatos().getDatos_personales().getTipoDoc().equals(tipo))
                 .findFirst() // Devuelve un Optional<AlojadoDTO>
                 .orElse(null); // Si no se encuentra devuelve null
+    }
+
+    @Override
+    public void promoverAHuesped(String nroDoc, String tipoDoc) {
+        return;
     }
 }

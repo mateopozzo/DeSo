@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.TipoFactura;
+import ddb.deso.service.TipoFactura;
 import ddb.deso.almacenamiento.DTO.FacturaDTO;
 import java.util.List;
 

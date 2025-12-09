@@ -1,4 +1,4 @@
-package ddb.deso;
+package ddb.deso.service;
 
 public enum TipoFactura {
     A,

@@ -1,7 +1,7 @@
 package ddb.deso.almacenamiento.DAO;
 import java.util.List;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
 import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
@@ -62,4 +62,6 @@ public interface AlojadoDAO {
      * @return el {@link Alojado} correspondiente si se encuentra, o {@code null} en caso contrario.
      */
     Alojado buscarPorDNI(String documento, TipoDoc tipo);
+
+    void promoverAHuesped(String nroDoc, String tipoDoc);
 }

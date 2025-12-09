@@ -2,6 +2,7 @@ package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins ={"http://localhost:3000/", "http://localhost:8080"})
 public class HabitacionController {
 
     private final GestorHabitacion gestorHabitacion;
@@ -71,14 +72,19 @@ public class HabitacionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(estadiaDTO);
         }
 
-        gestorHabitacion.ocuparHabitacion(
-                estadiaDTO.getIdHabitacion(),
-                estadiaDTO.getIdReserva(),
-                estadiaDTO.getEncargado(),
-                estadiaDTO.getListaInvitados(),
-                estadiaDTO.getFechaInicio(),
-                estadiaDTO.getFechaFin()
-        );
+        try {
+            gestorHabitacion.ocuparHabitacion(
+                    estadiaDTO.getIdHabitacion(),
+                    estadiaDTO.getIdReserva(),
+                    estadiaDTO.getEncargado(),
+                    estadiaDTO.getListaInvitados(),
+                    estadiaDTO.getFechaInicio(),
+                    estadiaDTO.getFechaFin()
+            );
+        } catch (AlojadoInvalidoException | HabitacionInexistenteException e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(estadiaDTO);
 

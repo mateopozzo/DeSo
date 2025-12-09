@@ -4,7 +4,7 @@
  */
 package ddb.deso.service.habitaciones;
 
-import ddb.deso.TipoServicio;
+import ddb.deso.service.TipoServicio;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
  * el cual es definido por el enumerador {@link TipoServicio}.
  * </p>
  *
- * @see ddb.deso.TipoServicio
+ * @see ddb.deso.service.TipoServicio
  */
 
 @Entity
