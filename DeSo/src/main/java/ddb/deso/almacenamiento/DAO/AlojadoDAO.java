@@ -3,7 +3,7 @@ import java.util.List;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 /**
  * Interfaz DAO (Data Access Object) que define las operaciones de acceso a datos

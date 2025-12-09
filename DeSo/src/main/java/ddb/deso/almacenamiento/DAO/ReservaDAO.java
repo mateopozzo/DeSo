@@ -17,6 +17,7 @@ public interface ReservaDAO {
     void actualizar(Reserva reserva);
     void eliminar(Reserva reserva);
     List<Reserva> listar();
+    Reserva buscarPorID(Long ID);
     
     //  devuelve las instancias de reserva que ocurren durante la fecha
     List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin);

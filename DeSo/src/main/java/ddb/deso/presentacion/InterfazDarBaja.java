@@ -1,6 +1,7 @@
 package ddb.deso.presentacion;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.service.alojamiento.Alojado;
 import ddb.deso.gestores.GestorAlojamiento;
@@ -166,7 +167,9 @@ public class InterfazDarBaja {
             return;
         }
 
-        gestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
+        AlojadoDTO aljoadoDTOParaEliminar = new AlojadoDTO(alojadoParaEliminar);
+
+        gestorAlojamiento.eliminarAlojado(aljoadoDTOParaEliminar);
 
         terminarCU11(alojadoParaEliminar);
     }

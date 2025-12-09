@@ -1,10 +1,7 @@
 package ddb.deso.controller;
 
 import ddb.deso.TipoDoc;
-import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.CriteriosBusq;
-import ddb.deso.service.alojamiento.FactoryAlojado;
-import ddb.deso.service.alojamiento.Huesped;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
@@ -13,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -84,17 +80,21 @@ public class AlojadoController {
 
 
     @GetMapping("/api/buscar-alojados")
-    public ResponseEntity<List<CriteriosBusq>> obtenerAlojados(@RequestParam(required = false) String apellido,
-                                        @RequestParam(required = false) String nombre,
-                                        @RequestParam(required = false) TipoDoc tipoDoc,
-                                        @RequestParam(required = false) String nroDoc) {
+    public ResponseEntity<List<CriteriosBusq>> obtenerAlojados(
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) TipoDoc tipoDoc,
+            @RequestParam(required = false) String nroDoc
+    ) {
 
+        // Arma criterio
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
         List<CriteriosBusq> alojadosEncontrados;
         try {
             alojadosEncontrados = gestorAlojamiento.buscarAlojado(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
+            // No se cumplen los criterios
             System.out.println(e.getMessage());
             return ResponseEntity.ok(Collections.emptyList());
         }
@@ -104,11 +104,14 @@ public class AlojadoController {
 
 
     @GetMapping("/api/buscar-huesped")
-    private ResponseEntity<List <CriteriosBusq>> obtenerHuespedes(@RequestParam(required = false) String apellido,
-                                          @RequestParam(required = false) String nombre,
-                                          @RequestParam(required = false) TipoDoc tipoDoc,
-                                          @RequestParam(required = false) String nroDoc) {
+    private ResponseEntity<List <CriteriosBusq>> obtenerHuespedes(
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) TipoDoc tipoDoc,
+            @RequestParam(required = false) String nroDoc
+    ) {
 
+        // Arma criterio
         CriteriosBusq criteriosBusq = new CriteriosBusq(apellido,nombre,tipoDoc,nroDoc);
 
         List<CriteriosBusq> huespedesEncontrados;
@@ -116,6 +119,7 @@ public class AlojadoController {
         try {
             huespedesEncontrados = gestorAlojamiento.buscarHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
+            // No se cumplen los criterios
             System.out.println(e.getMessage());
             return ResponseEntity.ok(Collections.emptyList());
         }

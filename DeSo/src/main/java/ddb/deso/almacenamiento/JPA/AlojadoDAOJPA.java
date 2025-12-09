@@ -2,6 +2,7 @@ package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
 import jakarta.persistence.criteria.Path;

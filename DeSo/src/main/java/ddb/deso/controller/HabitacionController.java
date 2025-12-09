@@ -57,7 +57,9 @@ public class HabitacionController {
     }
 
     @PostMapping("/api/ocupar-habitacion")
-    public ResponseEntity<EstadiaDTO> crearEstadia(@RequestBody EstadiaDTO estadiaDTO) {
+    public ResponseEntity<EstadiaDTO> crearEstadia(
+            @RequestBody EstadiaDTO estadiaDTO
+    ) {
 
         if(     estadiaDTO == null ||
                 estadiaDTO.getEncargado() == null ||
@@ -71,7 +73,9 @@ public class HabitacionController {
 
         gestorHabitacion.ocuparHabitacion(
                 estadiaDTO.getIdHabitacion(),
-                estadiaDTO.getEncargado(), estadiaDTO.getListaInvitados(),
+                estadiaDTO.getIdReserva(),
+                estadiaDTO.getEncargado(),
+                estadiaDTO.getListaInvitados(),
                 estadiaDTO.getFechaInicio(),
                 estadiaDTO.getFechaFin()
         );

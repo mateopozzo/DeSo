@@ -1,4 +1,4 @@
-package ddb.deso.service.alojamiento;
+package ddb.deso.almacenamiento.DTO;
 import ddb.deso.TipoDoc;
 
 import java.util.Objects;

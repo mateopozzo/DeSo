@@ -7,7 +7,7 @@ import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.alojamiento.FactoryAlojado;
 import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
@@ -144,9 +144,9 @@ public class GestorAlojamiento {
      @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
      */
 
-    public void eliminarAlojado(Alojado alojado) {
-        // AlojadoDAOJSON DAO = new AlojadoDAOJSON();
-        alojadoDAO.eliminarAlojado(alojado);
+    public void eliminarAlojado(AlojadoDTO alojado) {
+        var entidadEliminable = alojadoDAO.buscarPorDNI(alojado.getNroDoc(),alojado.getTipoDoc());
+        alojadoDAO.eliminarAlojado(entidadEliminable);
     }
 
     // Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
@@ -204,7 +204,7 @@ public class GestorAlojamiento {
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
      */
 
-    public Alojado obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
+    public AlojadoDTO obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;
         }
@@ -213,7 +213,11 @@ public class GestorAlojamiento {
         Alojado encontrado = encontrados.stream()
                 .findFirst()
                 .orElse(null);
-        return encontrado;
+
+        assert encontrado != null;
+        AlojadoDTO retorno = new AlojadoDTO(encontrado);
+
+        return retorno;
     }
 
     private List<CriteriosBusq> conversionAlojadoToCriterio(List<? extends Alojado> listaAlojado) {

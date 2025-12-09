@@ -41,6 +41,13 @@ public class ReservaDAOJPA implements ReservaDAO {
     }
 
     @Override
+    public Reserva buscarPorID(Long ID) {
+        var reserva = reservaRepository.findById(ID);
+        return reserva.orElse(null);
+
+    }
+
+    @Override
     public List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin) {
         var listaReservas = listar();
         listaReservas = listaReservas.stream().

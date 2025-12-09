@@ -11,12 +11,11 @@ import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.alojamiento.DatosCheckIn;
 import ddb.deso.service.alojamiento.Huesped;
 import ddb.deso.service.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
@@ -209,7 +208,7 @@ public class GestorHabitacion {
     }
 
 
-    public void ocuparHabitacion(Long IDHabitacion, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
+    public void ocuparHabitacion(Long IDHabitacion, Long idReserva, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
 
         Huesped huesped = (Huesped) alojadoDAO.buscarAlojado(criteriosHuesped).getFirst();
         List<Alojado> alojados = criteriosinvitados.stream()
@@ -226,11 +225,14 @@ public class GestorHabitacion {
             id.getDatos().nuevoCheckIn(checkIn);
         }
 
+        Reserva reserva = reservaDAO.buscarPorID(idReserva);
+
         Estadia estadia = new Estadia();
         estadia.setFecha_inicio(fechaInicio);
         estadia.setFecha_fin(fechaFin);
         estadia.setDatosCheckIn(checkIn);
         estadia.setHabitacion(habitacion);
+        estadia.setReserva(reserva);
         estadiaDAO.crear(estadia);
     }
 

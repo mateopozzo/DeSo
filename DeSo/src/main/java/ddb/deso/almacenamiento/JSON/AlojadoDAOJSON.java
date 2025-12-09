@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import ddb.deso.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 
 /**

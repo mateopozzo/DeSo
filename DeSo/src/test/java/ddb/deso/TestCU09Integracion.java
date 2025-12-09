@@ -1,5 +1,6 @@
 package ddb.deso;
 
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.service.alojamiento.*;
 import org.junit.jupiter.api.Test;
