@@ -1,5 +1,6 @@
 export interface DisponibilidadDTO {
   idHabitacion: number;
+  idReserva: number;
   tipoHab: string;
   fecha_inicio: string;
   fecha_fin: string;
