@@ -2493,3 +2493,170 @@ com.intellij.diagnostic.PluginException: Migrate com.jetbrains.edu.learning.mark
 
 2025-11-28 20:39:11,846 [13694982]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-11-28 23:39:11.845949 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
 
+2025-12-09 16:08:13,053 [   1459]   WARN - c.i.o.u.r.overrides - Conflicting registry key definition for key kotlin.mpp.tests.force.gradle: it was defined by plugin org.jetbrains.kotlin but redefined by plugin org.jetbrains.kotlin. Consider adding overrides="true" for one of the plugins, see the documentation for com.intellij.openapi.util.registry.RegistryKeyBean.overrides for more details.
+2025-12-09 16:08:13,063 [   1469]   WARN - c.i.o.u.r.overrides - Conflicting registry key definition for key domains.spring.component.by.name.endpoint: it was defined by plugin com.intellij.spring but redefined by plugin com.intellij.spring.data. Consider adding overrides="true" for one of the plugins, see the documentation for com.intellij.openapi.util.registry.RegistryKeyBean.overrides for more details.
+Gtk-Message: 16:08:13.544: Failed to load module "appmenu-gtk-module": 'gtk_module_display_init': /usr/lib/x86_64-linux-gnu/gtk-3.0/modules/libwindow-decorations-gtk-module.so: undefined symbol: gtk_module_display_init
+2025-12-09 16:08:16,259 [   4665]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=org.jetbrains.kotlin.idea.search.refIndex.KotlinCompilerReferenceIndexService, plugin=org.jetbrains.kotlin)
+2025-12-09 16:08:16,260 [   4666]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.project.MavenProjectsManagerEx, plugin=org.jetbrains.idea.maven)
+2025-12-09 16:08:16,260 [   4666]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.navigator.MavenProjectsNavigator, plugin=org.jetbrains.idea.maven)
+2025-12-09 16:08:16,260 [   4666]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=org.jetbrains.idea.maven.tasks.MavenShortcutsManager, plugin=org.jetbrains.idea.maven)
+2025-12-09 16:08:16,261 [   4667]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=com.jetbrains.rdserver.toolWindow.BackendServerToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2025-12-09 16:08:16,261 [   4667]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.users.BackendUserManager, plugin=com.jetbrains.codeWithMe)
+2025-12-09 16:08:16,261 [   4667]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.ports.CwmPortForwardingToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2025-12-09 16:08:16,261 [   4667]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.FollowMeManagerService, plugin=com.jetbrains.codeWithMe)
+2025-12-09 16:08:17,206 [   5612]   WARN - #c.i.o.f.i.EditorCompositeModelManager - Cannot use saved provider list (savedProviders={split-provider[text-editor;markdown-preview-editor]=[Element: <state/>]}, resolvedProvider=[])
+2025-12-09 16:08:20,533 [   8939]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.jcef.JBCefOsrComponent.<init>(JBCefOsrComponent.java:52)
+2025-12-09 16:08:22,896 [  11302]   WARN - #c.i.i.s.i.StartupManagerImpl - Migrate com.jetbrains.edu.learning.stepik.hyperskill.HyperskillStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+com.intellij.diagnostic.PluginException: Migrate com.jetbrains.edu.learning.stepik.hyperskill.HyperskillStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+	at com.intellij.ide.startup.impl.StartupManagerImpl.doRunPostStartupActivities(StartupManagerImpl.kt:293)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.access$doRunPostStartupActivities(StartupManagerImpl.kt:70)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invokeSuspend(StartupManagerImpl.kt:196)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3.invokeSuspend(StartupManagerImpl.kt:195)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2025-12-09 16:08:22,906 [  11312]   WARN - #c.i.i.s.i.StartupManagerImpl - Migrate com.jetbrains.edu.learning.marketplace.MarketplaceStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+com.intellij.diagnostic.PluginException: Migrate com.jetbrains.edu.learning.marketplace.MarketplaceStartupActivity to ProjectActivity [Plugin: com.jetbrains.edu]
+	at com.intellij.ide.startup.impl.StartupManagerImpl.doRunPostStartupActivities(StartupManagerImpl.kt:293)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.access$doRunPostStartupActivities(StartupManagerImpl.kt:70)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invokeSuspend(StartupManagerImpl.kt:196)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3$2.invoke(StartupManagerImpl.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runPostStartupActivities$3.invokeSuspend(StartupManagerImpl.kt:195)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2025-12-09 16:08:24,789 [  13195]   WARN - #c.i.o.a.i.ActionUpdater - 3375 ms total to grab EDT 5 times to expand ToolWindowHeader$2#expandGroup@ToolwindowTitle (com.intellij.toolWindow.ToolWindowHeader$2). Use `ActionUpdateThread.BGT`.
+2025-12-09 16:08:25,850 [  14256]   WARN - #c.i.j.w.n.WebTypesNpmLoader - Failed to fetch packages for '@web-types' (Full Text): Request failed with status code 429
+2025-12-09 16:08:27,200 [  15606]   WARN - #o.j.p.g.p.u.t.m.GHPRToolWindowProjectViewModel - Could not lookup a pull request for current branch
+org.jetbrains.plugins.github.exceptions.GithubStatusCodeException: 400 Bad Request - 
+<html>
+  <head>
+    <meta content="origin" name="referrer">
+    <title>Bad request &middot; GitHub</title>
+    <meta name="viewport" content="width=device-width">
+    <style type="text/css" media="screen">
+      body {
+        background-color: #f6f8fa;
+        color: rgba(0, 0, 0, 0.5);
+        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .c { margin: 50px auto; max-width: 600px; text-align: center; padding: 0 24px; }
+      a { text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      h1 { color: #24292e; line-height: 60px; font-size: 48px; font-weight: 300; margin: 0px; }
+      p { margin: 20px 0 40px; }
+      #s { margin-top: 35px; }
+      #s a {
+        color: #666666;
+        font-weight: 200;
+        font-size: 14px;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="c">
+      <h1>Whoa there!</h1>
+      <p>You have sent an invalid request. <br><br>
+        Please do not send this request again.
+      </p>
+      <div id="s">
+        <a href="https://support.github.com">Contact Support</a> &mdash;
+        <a href="https://githubstatus.com">GitHub Status</a> &mdash;
+        <a href="https://twitter.com/githubstatus">@githubstatus</a>
+      </div>
+    </div>
+  </body>
+</html>
+
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutor$Base.checkResponseCode(GithubApiRequestExecutor.kt:175)
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutor$Base.execute$lambda$1(GithubApiRequestExecutor.kt:107)
+	at com.intellij.util.io.HttpRequests.doProcess(HttpRequests.java:529)
+	at com.intellij.util.io.HttpRequests.process(HttpRequests.java:511)
+	at com.intellij.util.io.HttpRequests$RequestBuilderImpl.connect(HttpRequests.java:340)
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutor$Base.execute(GithubApiRequestExecutor.kt:98)
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutor$WithTokenAuth.execute(GithubApiRequestExecutor.kt:71)
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutorKt$executeSuspend$2.invokeSuspend$lambda$0(GithubApiRequestExecutor.kt:288)
+	at com.intellij.openapi.progress.CoroutinesKt.jobToIndicator$lambda$5(coroutines.kt:447)
+	at com.intellij.openapi.progress.ProgressManager.lambda$runProcess$0(ProgressManager.java:98)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$1(CoreProgressManager.java:223)
+	at com.intellij.platform.diagnostic.telemetry.helpers.TraceKt.use(trace.kt:45)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:222)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$14(CoreProgressManager.java:674)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:749)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:705)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:673)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:79)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:203)
+	at com.intellij.openapi.progress.ProgressManager.runProcess(ProgressManager.java:98)
+	at com.intellij.openapi.progress.CoroutinesKt.jobToIndicator(coroutines.kt:435)
+	at com.intellij.openapi.progress.CoroutinesKt.contextToIndicator(coroutines.kt:427)
+	at com.intellij.openapi.progress.CoroutinesKt.coroutineToIndicator(coroutines.kt:371)
+	at org.jetbrains.plugins.github.api.GithubApiRequestExecutorKt$executeSuspend$2.invokeSuspend(GithubApiRequestExecutor.kt:286)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.SoftLimitedDispatcher$Worker.run(SoftLimitedDispatcher.kt:125)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2025-12-09 16:08:35,507 [  23913]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2025-12-09 16:08:49,965 [  38371]   WARN - JetBrains UI DSL - Row should not be empty
+2025-12-09 16:09:08,158 [  56564]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.jcef.JBCefOsrComponent.<init>(JBCefOsrComponent.java:52)
+2025-12-09 16:22:56,190 [ 884596]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.jcef.JBCefOsrComponent.<init>(JBCefOsrComponent.java:52)
+2025-12-09 16:38:25,119 [1813525]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.codeInsight.hint.ParameterInfoControllerBase.<init>(ParameterInfoControllerBase.java:63)
+2025-12-09 16:38:48,913 [1837319]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:48.913367 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:49,031 [1837437]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:49.31001 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:49,142 [1837548]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:49.142824 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:49,298 [1837704]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:49.298545 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:49,974 [1838380]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:49.974561 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:50,458 [1838864]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:50.458543 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:50,677 [1839083]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:50.677166 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:50,742 [1839148]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:50.742843 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:50,908 [1839314]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:50.908404 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:51,675 [1840081]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:51.675659 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:52,223 [1840629]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:52.223326 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:52,430 [1840836]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:52.430856 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:52,722 [1841128]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:52.721919 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:53,672 [1842078]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:53.672879 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:54,110 [1842516]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:54.109991 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:55,010 [1843416]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.codeInsight.hint.ParameterInfoControllerBase.<init>(ParameterInfoControllerBase.java:63)
+2025-12-09 16:38:56,963 [1845369]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:56.963357 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:57,879 [1846285]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:57.879386 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2025-12-09 16:38:57,988 [1846394]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2025-12-09 19:38:57.988782 [flcc_grpc_inference_service.cpp:79:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+

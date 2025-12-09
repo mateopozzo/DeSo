@@ -43,10 +43,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit2), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit2);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -62,10 +62,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit5);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -81,10 +81,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit5);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -102,8 +102,7 @@ public class TestCU02Integracion {
         System.out.println("LA LISTA TIENE TAMAÑO: " + lista.size());
         assertNotEquals(1, lista.size());
         for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("JUAN", h.getDatos().getDatos_personales().getNombre().toUpperCase());
+            assertEquals("JUAN", h.getNombre().toUpperCase());
         }
     }
 
@@ -121,8 +120,7 @@ public class TestCU02Integracion {
         var lista = gestorAlojamiento.buscarHuesped(crit4);
         assertNotEquals(1, lista.size());
         for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("45510538", h.getDatos().getDatos_personales().getNroDoc());
+            assertEquals("45510538", h.getNroDoc());
         }
     }
 
@@ -140,7 +138,7 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit7), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit7);
         for (var a : lista){
-            System.out.println(a.getDatos().getDatos_personales().getTipoDoc().toString() + " " +a.getDatos().getDatos_personales().getNroDoc());
+            System.out.println(a.getTipoDoc().toString() + " " +a.getNroDoc());
         }
         assertEquals(35, lista.size());
     }

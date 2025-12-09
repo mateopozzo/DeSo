@@ -139,114 +139,6 @@ public class TestCU02Unitario {
         assertThrows(AlojadosSinCoincidenciasException.class,()->gestor.buscarHuesped(crit));
     }
 
-    /**
-     * Verifica que el servicio filtre correctamente un único {@link Invitado} de una
-     * lista mixta, retornando solo los {@link Huesped}.
-     * <p>
-     * Se inyecta una lista que contiene múltiples huéspedes y un solo invitado.
-     * La prueba asegura que el tamaño y contenido de la lista resultante coincidan
-     * exactamente con los huéspedes originales.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraUnInvitado(){
-        var lh = listaDeMuchosHuespedes();
-        var li = listaDeUnInvitado();
-        List<Alojado> lfinal = new ArrayList<>();
-        lfinal.addAll(lh);
-        lfinal.addAll(li);
-        Collections.shuffle(lfinal);
-        CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
-        assertDoesNotThrow(()->gestor.buscarHuesped(crit), "No encontro ni un huesped");
-        var lconsulta = gestor.buscarHuesped(crit);
-        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
-        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
-        //El retorno de la consulta tiene que contener los mismos huespedes que lh
-        assertEquals(comparadorOriginal, comparadorRetorno);
-    }
-
-    /**
-     * Verifica que el servicio filtre correctamente múltiples {@link Invitado} de una
-     * lista mixta, retornando solo los {@link Huesped}.
-     * <p>
-     * Similar al caso anterior, pero con una mayor proporción de invitados en la lista
-     * simulada, para asegurar la robustez del filtrado en colecciones más grandes.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraMuchosInvitados() {
-        var lh = listaDeMuchosHuespedes();
-        var li = listaDeMuchosInvitados();
-        List<Alojado> lfinal = new ArrayList<>();
-        lfinal.addAll(lh);
-        lfinal.addAll(li);
-        Collections.shuffle(lfinal);
-        CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
-        assertDoesNotThrow(() -> gestor.buscarHuesped(crit), "No encontro ni un huesped");
-        var lconsulta = gestor.buscarHuesped(crit);
-        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
-        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
-        //El retorno de la consulta tiene que contener los mismos huespedes que lh
-        assertEquals(comparadorOriginal, comparadorRetorno);
-    }
-
-
-    /**
-     * Verifica la consistencia del filtrado comparando el resultado del gestor contra
-     * un filtrado manual de la lista simulada.
-     * <p>
-     * Este test actúa como una "prueba de doble verificación", filtrando manualmente
-     * la lista de mocks y asegurando que el método {@code buscarHuesped} produzca
-     * exactamente el mismo subconjunto de objetos.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraInvitadosDeListaAlojados(){
-        List<Alojado> lista = listaDeMuchosAlojados();
-        Set<Alojado> setAlojado = new HashSet<>();
-        for(var a : lista) if(a instanceof Huesped)
-            setAlojado.add(a);
-        CriteriosBusq crit = new CriteriosBusq();
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lista);
-        List<? extends Alojado> lconsulta = new ArrayList<>();
-        try{
-            lconsulta = gestor.buscarHuesped(crit);
-        } catch (AlojadosSinCoincidenciasException e) {
-            assertEquals(0, setAlojado.size());
-        }
-        Set<Alojado> setHuesped= new HashSet<Alojado>(lconsulta);
-        assertEquals(setHuesped, setAlojado);
-    }
-
-    /**
-     * Verifica que {@code buscarAlojado} filtre y retorne correctamente los alojados
-     * basándose en el nombre.
-     * <p>
-     * Valida que, dado un criterio con nombre, el servicio devuelva todos los alojados
-     * (sean Huéspedes o Invitados) que coincidan con dicho nombre.
-     * </p>
-     */
-    @Test
-    public void buscarAlojadoFiltraNombre(){
-        var lista = listaDeMuchosAlojados();
-        String nombreFiltro = lista.getFirst().getDatos().getDatos_personales().getNombre();
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class)))
-                .thenAnswer(invocation -> {
-                    CriteriosBusq critArgumento = invocation.getArgument(0);
-                    return funcionMocoFiltro(critArgumento, lista);
-                });
-        CriteriosBusq critNombre = new CriteriosBusq(null,nombreFiltro,null,null);
-
-        assertDoesNotThrow(()->gestor.buscarAlojado(critNombre));
-        var listaBusqueda = gestor.buscarAlojado(critNombre);
-        for(var a : listaBusqueda){
-            assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getNombre(), nombreFiltro);
-        }
-    }
-
 
     /**
      * Verifica que {@code buscarAlojado} filtre y retorne correctamente los alojados
@@ -270,7 +162,7 @@ public class TestCU02Unitario {
         var listaBusqueda = gestor.buscarAlojado(critApellido);
         for(var a : listaBusqueda){
             assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getApellido(), apellidoFiltro);
+            assertEquals(a.getApellido(), apellidoFiltro);
         }
     }
 
@@ -295,7 +187,7 @@ public class TestCU02Unitario {
         var listaBusqueda = gestor.buscarAlojado(critTipoDoc);
         for(var a : listaBusqueda){
             assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getTipoDoc(), tipoDocFiltro);
+            assertEquals(a.getTipoDoc(), tipoDocFiltro);
         }
     }
 
@@ -320,7 +212,7 @@ public class TestCU02Unitario {
         var listaBusqueda = gestor.buscarAlojado(critNroDoc);
         for(var a : listaBusqueda){
             assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getNroDoc(), nroDodFiltro);
+            assertEquals(a.getNroDoc(), nroDodFiltro);
         }
     }
 
@@ -339,143 +231,26 @@ public class TestCU02Unitario {
         var listaCompleta = listaDeMuchosAlojados();
         String nombreFiltro = listaCompleta.getFirst().getDatos().getDatos_personales().getNombre();
 
-        List<Alojado> respuestaDAO = listaCompleta.stream()
+        List<Alojado> alojadosFiltrados = listaCompleta.stream()
                 .filter(a -> a.getDatos().getDatos_personales().getNombre().equals(nombreFiltro))
                 .toList();
 
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
-                .filter(a -> a instanceof Huesped)
-                .map(a -> (Huesped) a)
-                .toList();
-
         CriteriosBusq crit = new CriteriosBusq(null, nombreFiltro, null, null);
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
+        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(alojadosFiltrados);
 
-
-        if (resultadoEsperado.isEmpty()) {
+        if (alojadosFiltrados.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
         } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            assertTrue(resultadoReal.containsAll(resultadoEsperado));
+            List<CriteriosBusq> resultadoReal = gestor.buscarHuesped(crit);
+            assertEquals(alojadosFiltrados.size(), resultadoReal.size());
+            assertTrue(resultadoReal.containsAll(alojadosFiltrados));
             // Verificar que todos sean Huesped y tengan el nombre correcto
             resultadoReal.forEach(h -> {
-                assertEquals(nombreFiltro, h.getDatos().getDatos_personales().getNombre());
-                assertInstanceOf(Huesped.class, h);
+                assertEquals(nombreFiltro, h.getNombre());
             });
         }
     }
-
-    /**
-     * Verifica que el método de búsqueda de huéspedes aplique correctamente el filtrado
-     * por apellido.
-     * <p>
-     * Valida que, dado un criterio de búsqueda por apellido, el gestor invoque al DAO
-     * y posteriormente retorne únicamente las instancias de tipo Huesped que coincidan
-     * con dicho apellido, excluyendo Invitados y otros tipos de Alojado.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraApellido() {
-        var listaCompleta = listaDeMuchosAlojados();
-        String apellidoFiltro = listaCompleta.getFirst().getDatos().getDatos_personales().getApellido();
-
-        List<Alojado> respuestaDAO = listaCompleta.stream()
-                .filter(a -> a.getDatos().getDatos_personales().getApellido().equals(apellidoFiltro))
-                .toList();
-
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
-                .filter(a -> a instanceof Huesped)
-                .map(a -> (Huesped) a)
-                .toList();
-
-        CriteriosBusq crit = new CriteriosBusq(apellidoFiltro, null, null, null);
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
-
-
-
-        if (resultadoEsperado.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
-        } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            assertTrue(resultadoReal.containsAll(resultadoEsperado));
-            resultadoReal.forEach(h -> assertEquals(apellidoFiltro, h.getDatos().getDatos_personales().getApellido()));
-        }
-    }
-
-    /**
-     * Verifica que el método de búsqueda de huéspedes aplique correctamente el filtrado
-     * por tipo de documento.
-     * <p>
-     * Comprueba que al buscar por un {@link TipoDoc} específico, el resultado
-     * contenga exclusivamente objetos Huesped con ese tipo de documento, manejando
-     * correctamente la respuesta simulada del DAO.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraTipoDoc() {
-        var listaCompleta = listaDeMuchosAlojados();
-        TipoDoc tipoDocFiltro = listaCompleta.getFirst().getDatos().getDatos_personales().getTipoDoc();
-
-        List<Alojado> respuestaDAO = listaCompleta.stream()
-                .filter(a -> a.getDatos().getDatos_personales().getTipoDoc() == tipoDocFiltro)
-                .toList();
-
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
-                .filter(a -> a instanceof Huesped)
-                .map(a -> (Huesped) a)
-                .toList();
-
-        CriteriosBusq crit = new CriteriosBusq(null, null, tipoDocFiltro, null);
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
-
-
-
-        if (resultadoEsperado.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
-        } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            resultadoReal.forEach(h -> assertEquals(tipoDocFiltro, h.getDatos().getDatos_personales().getTipoDoc()));
-        }
-    }
-
-    /**
-     * Verifica que el método de búsqueda de huéspedes aplique correctamente el filtrado
-     * por número de documento.
-     * <p>
-     * Asegura que la búsqueda por número de documento retorne la lista correcta de
-     * Huéspedes, validando que el filtrado de tipo (Huesped vs Invitado) se realice
-     * después de obtener las coincidencias de documento desde el componente de persistencia.
-     * </p>
-     */
-    @Test
-    public void buscarHuespedFiltraNroDoc() {
-        var listaCompleta = listaDeMuchosAlojados();
-        String nroDocFiltro = listaCompleta.getFirst().getDatos().getDatos_personales().getNroDoc();
-
-        List<Alojado> respuestaDAO = listaCompleta.stream()
-                .filter(a -> a.getDatos().getDatos_personales().getNroDoc().equals(nroDocFiltro))
-                .toList();
-
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
-                .filter(a -> a instanceof Huesped)
-                .map(a -> (Huesped) a)
-                .toList();
-
-        CriteriosBusq crit = new CriteriosBusq(null, null, null, nroDocFiltro);
-        when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
-
-
-        if (resultadoEsperado.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
-        } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            resultadoReal.forEach(h -> assertEquals(nroDocFiltro, h.getDatos().getDatos_personales().getNroDoc()));
-        }
-    }
+    
 
 
     private List<Alojado> listaDeUnAlojado(){

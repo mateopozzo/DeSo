@@ -1,24 +1,5 @@
 # Desarrollo de Software: Diseño de gestión hotelera para Hotel Premier con Java
-## Autores 
-- ANTUÑA, Felipe
-
-    feliantuna@gmail.com
-
-    [*@felipeantuna*](https://github.com/felipeantuna)
-
-
-- BECKMANN, Francisco
-
-  franbeckmann@gmail.com
-
-  [*@franbeckmann*](https://github.com/franbeckmann)
-
-
-- GRASSI, Julieta
-
-  jjulietagrassi@gmail.com
-
-  [*@jjuligrassi*](https://github.com/jjuligrassi)
+## Autores
 
 
 - POZZO GALDÓN, Mateo
@@ -47,58 +28,44 @@
 
 **Lenguaje:** Java 17+, JDK 21
 
-**IDE:** VSCode (Felipe, Julieta, Lautaro), IntelliJ IDEA (Gael, Mateo)
+**IDE:** VSCode (Lautaro), IntelliJ IDEA (Gael, Mateo)
 
 **Build tool:** Maven
 
 **Documentación:** JavaDoc
 
+**Frameworks:** Next.js (front-end), Springboot (Back-end)
+
 **Librerías:** GSON (Manejo de JSON), JLine (Contraseña oculta).
 
 ----
 
-## Clonar el repositorio 
+## Clonar el repositorio
 Para clonar el repositorio, dirijase al directorio donde quiera clonarlo mediante `cd <nombre-directorio>` y luego, ejecute los siguientes comandos:
 
 ```
 git clone https://github.com/mateopozzo/DeSo.git
 cd DeSo
+git checkout entrega-final-diseño
 ```
 
 ----
 
+## Flujo de trabajo propuesto
+
+Existen tres formas de correr el sistema
+1. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, el front-end se podrá acceder desde localhost:8080/.
+2. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, luego dirijirse a DeSo/hotel-premier y ejecutar `npm run build`, accediendo al sistema desde localhost:3000/
+
+----
+
 ## Documentación
-En docs se encuentra la documentación relacionada a lo desarrollado en UML para Diseño: Diagrama de clases, diagramas de secuencia, DER.
-Cabe mencionar que los integrantes del grupo pertenecen a distintos grupos de diseño, por lo que si hay diferencias entre el diagrama de clase y la implementación que generen dudas, favor de consultar al grupo. 
+En /Diagramas se encuentra la documentación relacionada a lo desarrollado en UML para Diseño: Diagrama de clases, diagramas de secuencia, DER.
 
 ----
 
 ## Casos de uso implementados
 
-----
-### Caso de uso 01: Login
-Para la implementación se utilizaron las siguientes clases:
-
-**Usuario:** Clase que representa a los usuarios del sistema. Contiene atributos como nombre, contraseña y permisos.
-
-**UsuarioDAO (interfaz):** Define las operaciones de acceso a los datos de los usuarios, como la búsqueda por nombre. Su uso permite desacoplar la lógica de negocio del manejo de archivos, aplicando el patrón DAO.
-
-**UsuarioJSONDAO:** Implementación concreta de UsuarioDAO. Gestiona la lectura de los usuarios desde un archivo usuarios.JSON utilizando la librería Gson para la conversión entre objetos Java y JSON.
-
-**GestorAutenticacion:** Clase de la capa de negocio que centraliza la lógica del caso de uso. Se encarga de validar las credenciales ingresadas, consultando al DAO y lanzando excepciones personalizadas cuando corresponde.
-
-
-### Excepciones personalizadas:
-
-*UsuarioNoEncontradoException:* Se lanza cuando el nombre de usuario no existe en el sistema.
-
-*CredencialesInvalidasException:* Se lanza cuando la contraseña ingresada no coincide con la registrada.
-
-*InterfazLogin:* Clase perteneciente a la capa de presentación. Se comunica con el usuario por consola para solicitar las credenciales. Utiliza la librería JLine para permitir que la contraseña se escriba de forma oculta, mostrando asteriscos (*) en lugar de los caracteres reales.
-
-*Sesion:* Clase que implementa el patrón Singleton, asegurando que solo exista una única sesión activa en el sistema.
-
-----
 ### Caso de uso 02: Buscar huésped
 Para la implementación se utilizaron las siguientes clases:
 
@@ -106,7 +73,7 @@ Para la implementación se utilizaron las siguientes clases:
 
 **AlojadoDAO (interfaz):** Interfaz del patrón DAO que recibe la llamada desde el gestor para ejecutar la implementación de buscarHuespedDAO en AlojadoDAOJSON.
 
-**AlojadoDAOJSON:** Implementación concreta del DAO para una base de datos en archivos JSON donde se encuentra el método buscarHuespedDAO. Este lista todos los huéspedes existentes y por cada uno de ellos llama al método cumpleCriterio que devuelve un booleano: Si los criterios coinciden con los datos de este alojado, retorna TRUE y este se agrega a una lista de "Encontrados". 
+**AlojadoDAOJSON:** Implementación concreta del DAO para una base de datos en archivos JSON donde se encuentra el método buscarHuespedDAO. Este lista todos los huéspedes existentes y por cada uno de ellos llama al método cumpleCriterio que devuelve un booleano: Si los criterios coinciden con los datos de este alojado, retorna TRUE y este se agrega a una lista de "Encontrados".
 
 **AlojadoDTO:** Objeto DTO que se crea al traer alojados desde la base de datos. Este se entrega a la implementación del DAO, que la devuelve en forma de lista de acuerdo a una condición (ver buscarHuespedDAO) hacia el gestor.
 
@@ -114,11 +81,10 @@ Para la implementación se utilizaron las siguientes clases:
 
 **GestorAlojamiento:** Gestor que contiene el método buscarHuesped. Este recibe un criterio de búsqueda y llama al método buscarHuespedDAO.
 
-**CriteriosBusq:** Clase que se encarga de recibir los cuatro criterios opcionales. Los cuatro criterios son: Nombre, apellido, tipo de documento, número de documento. Si alguno no fue especificado, se inicializa en null. 
-
-
+**CriteriosBusq:** Clase que se encarga de recibir los cuatro criterios opcionales. Los cuatro criterios son: Nombre, apellido, tipo de documento, número de documento. Si alguno no fue especificado, se inicializa en null.
 
 ----
+
 ### Caso de uso 09: Dar de alta huésped
 **Alojado:** Clase abstracta que forma parte del patrón factory. Sus clases hijas son huésped (encargado de habitación) e invitado.
 
@@ -134,51 +100,5 @@ que esta en la interface AlojadoDAO.
 **GestorAlojamiento:** Gestor que contiene el método darAltaHuesped. A este se le pasa como parametro el invitado instanciado con datos validos y crea un DTO con el Invitado como parametro y llama a crearAlojado.
 
 
-----
-### Caso de uso 10: Modificar huésped
 
-**InterfazModificarHuesped:** Clase de la capa de presentación (GUI) que muestra los datos actuales del huésped. Gestiona la selección del campo a modificar, captura el nuevo dato y utiliza la clase Validador para comprobar su validez.
-
-**GestorAlojamiento:** Contiene el método modificarHuesped. Este método es llamado por la interfaz al pulsar "Siguiente" (guardar). Recibe el objeto Alojado original y el objeto Alojado con los datos modificados.
-
-**AlojadoDTO:** Objeto DTO. El gestor crea dos instancias de AlojadoDTO (una con los datos originales y otra con los modificados) para pasarlas a la capa de persistencia.
-
-**AlojadoDAO (interfaz):** Interfaz del patrón DAO que define la operación actualizarAlojado.
-
-**AlojadoDAOJSON:** Implementación concreta del DAO. Recibe el DTO original y el DTO modificado. Busca y elimina el registro original del archivo JSON y luego agrega el DTO modificado como un nuevo registro.
-
-----
-### Caso de uso 11: Dar de baja huésped
-
-Para la implementación se utilizaron las clases: 
-
-*GestorAlojamiento:* Que contiene métodos utilizados como eliminarAlojado, ResumenHistoriaHuesped, darDeBajaHuesped
-
-*InterfazDarBaja:* GUI que se encarga de intercambiar inputs con el usuario y mostrar mensajes y resultados por pantalla.
-
-*AlojadoDAO, AlojadoDAOJSON:* Interfaz perteneciente al patrón DAO cuya implementación AlojadoDAOJSON contiene métodos usados como: eliminarAlojado, buscarHuespedDAO
-
-El método principal se encuentra en el GestorAlojamiento y recibe una instancia de Alojado. Busca coincidencias en la base de datos y llama al método seAlojo: 
-
-- Si no encuentra coincidencias, el estado es NO_PERSISTIDO (no existe en la base de datos) y se ejecuta el método de interfaz noExisteHuesped.
-- Si tiene algún id_check_in, entonces el estado es SE_ALOJO y se ejecuta el método de interfaz noSePuedeDarDeBaja.
-- De lo contrario, es NO_SE_ALOJO y se ejecuta el método de clase eliminarAlojado y el método de interfaz terminarCU.
-- También existe la opción de querer cancelar la baja, en donde se llama al método de interfaz avisoBajaAlojado.
-
----
-
-## Patrones implementados
-| Patrón        | Nro de caso de uso | Nombre de caso de uso   |
-|---------------|------------------|-------------------------|
-| **DAO**       | `1, 2, 9, 10, 11` | Todos                   |
-| **Singleton** | `1`              | Login                   |
-| **Factory**   | `9`              | Dar de alta huésped     |
-| **Generics**  | `1, 2, 9, 10, 11`| Todos (ManejadorJSON.java) |
-
----
-
-## Flujo de trabajo propuesto
-
-Al ingresar usuario, puede ver los existentes del sistema en data/Usuarios.json, uno valido es "admin" y "admin123"
-Desde el metodo main se puede llamar unicamente el caso de uso 2 "Búsqueda de huesped", de aquel se puede alcanzar el resto de casos de uso como se desarrolla en la especificacion del sistema.
 
