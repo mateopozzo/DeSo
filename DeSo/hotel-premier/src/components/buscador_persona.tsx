@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CriteriosBusq, ResultadoBusq } from "@/services/busqueda.service";
 
 interface Props {
@@ -23,6 +24,7 @@ export default function BuscadorPersona({
   const [resultados, setResultados] = useState<ResultadoBusq[]>([]);
   const [busquedaRealizada, setBusquedaRealizada] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -111,8 +113,17 @@ export default function BuscadorPersona({
       {busquedaRealizada && (
         <div className="max-h-48 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg">
           {resultados.length === 0 ? (
-            <div className="p-4 text-center text-gray-500 text-sm">
-              No se encontraron resultados.
+            <div className="flex flex-col justify-center items-center">
+              <p className="p-4 text-center text-gray-500 text-md">
+                No se encontraron resultados.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.open("/alta-huesped", "_blank")}
+                className="px-8 py-2 mb-4 text-sm rounded-xl font-semibold transition duration-300 dark:text-white border dark:border-white hover:bg-[#10b655] hover:border-[#10b655] cursor-pointer"
+              >
+                Crear un nuevo huésped
+              </button>
             </div>
           ) : (
             <table className="w-full text-sm text-left">

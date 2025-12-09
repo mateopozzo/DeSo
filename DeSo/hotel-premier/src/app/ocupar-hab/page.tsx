@@ -149,7 +149,6 @@ export default function OcuparHabPage() {
     setPaso("CARGA");
     setIndiceActual(0);
     setError(null);
-    // acordarse de llamar a verificarRes(idhab,inicio,fin)
   };
 
   const confirmarHabitacionYContinuar = () => {
