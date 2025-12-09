@@ -28,7 +28,6 @@ public class HabitacionController {
     public ResponseEntity<List<HabitacionDTO>> listarTodaHabitacion(){
 
         var habitacionesDTO = gestorHabitacion.listarHabitaciones();
-
         if(habitacionesDTO==null || habitacionesDTO.isEmpty()){
             return ResponseEntity.ok(Collections.emptyList());
         }
@@ -42,11 +41,13 @@ public class HabitacionController {
     disponibilidadHabitaciones(@RequestParam LocalDate fecha_inicio, @RequestParam LocalDate fecha_fin) {
 
         if(fecha_inicio.isAfter(fecha_fin)){
+            System.out.println("fecha_inicio.isAfter(fecha_fin)");
             return ResponseEntity.ok(List.of());
         }
+        /* no entiendo para que sirve esta parte
         if(fecha_inicio.isEqual(LocalDate.now())){
             return ResponseEntity.ok(List.of());
-        }
+        }*/
 
         var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
         var listaEstadias = gestorHabitacion.listarEstadias(fecha_inicio, fecha_fin);
