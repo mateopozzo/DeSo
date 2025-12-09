@@ -27,7 +27,6 @@ import java.util.Objects;
 @Table(name="reserva")
 @NoArgsConstructor
 public class Reserva {
-    //  Cambiar para que contenga nombre, apellido y telefono del que reserva
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idReserva;

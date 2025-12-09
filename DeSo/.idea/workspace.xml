@@ -6,12 +6,27 @@
   <component name="ChangeListManager">
     <list default="true" id="d69e9f34-8257-4d9b-a136-62de3d9c3bd6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/ocupar-hab/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/ocupar-hab/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/components/grilla.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/components/grilla.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/services/habitaciones.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/services/habitaciones.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/DTO/ConsultarReservasDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/almacenamiento/DTO/ConsultarReservasDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/AlojadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/AlojadoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/HabitacionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/controller/HabitacionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/gestores/GestorHabitacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/gestores/GestorHabitacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/service/habitaciones/Reserva.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ddb/deso/service/habitaciones/Reserva.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -109,6 +124,7 @@
       <workItem from="1764786806546" duration="311000" />
       <workItem from="1764787941295" duration="2143000" />
       <workItem from="1764793919066" duration="4754000" />
+      <workItem from="1765264702670" duration="2525000" />
     </task>
     <servers />
   </component>

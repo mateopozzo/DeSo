@@ -9,6 +9,7 @@ export type DatosSeleccion = {
   idHabitacion: number;
   fechaInicio: string;
   fechaFin: string;
+  estado: string;
 };
 
 interface GrillaProps {
@@ -24,6 +25,7 @@ type Seleccion = {
   idHabitacion: number;
   fecha_inicio_sel: string;
   fecha_fin_sel: string | null;
+  estado: string;
 };
 
 export default function Grilla({
@@ -110,8 +112,6 @@ export default function Grilla({
         [inicio, fin] = [fin, inicio];
       }
       const hayConflicto = reservas.some((res) => {
-        // 1. FILTRO GLOBAL
-        // Usamos String() para asegurar que no sea un problema de Number vs String
         if (String(res.idHabitacion) !== String(idHab)) {
           return false;
         }
@@ -121,32 +121,13 @@ export default function Grilla({
           return false;
         }
 
-        // 2. VALIDACIÓN DE ESTADO
-        // Agregamos .trim() por si vienen espacios en blanco de la BD "RESERVADA "
         const est = res.estado.toUpperCase().trim();
 
-        // --- LOG DE DEPURACIÓN ---
-        console.log(`Analizando conflicto Hab ${idHab}:`, {
-          reserva_id: res.idHabitacion, // o id de la reserva si tienes
-          estado_original: res.estado,
-          estado_procesado: est,
-          casoDeUso: casoDeUso,
-          es_reservada: est === "RESERVADA",
-          caso_es_ocupar: casoDeUso === "OCUPAR",
-          BLOQUEA:
-            casoDeUso === "OCUPAR" && est === "RESERVADA"
-              ? "NO (Permitido)"
-              : "SI (Potencialmente)",
-        });
-        // -------------------------
-
-        // Reglas de bloqueo
         if (est === "OCUPADA" || est === "EN MANTENIMIENTO") return true;
         if (casoDeUso === "RESERVAR" && est === "RESERVADA") return true;
 
         if (casoDeUso === "OCUPAR" && est === "RESERVADA") return false;
 
-        // Si el estado es desconocido o no bloqueante, dejamos pasar
         return false;
       });
 
@@ -166,6 +147,7 @@ export default function Grilla({
           idHabitacion: idHab,
           fecha_inicio_sel: fecha,
           fecha_fin_sel: null,
+          estado: estadoActual,
         };
       }
 
@@ -179,6 +161,7 @@ export default function Grilla({
           idHabitacion: idHab,
           fecha_inicio_sel: inicio,
           fecha_fin_sel: fin,
+          estado: estadoActual,
         };
       }
       return prev;
@@ -196,6 +179,7 @@ export default function Grilla({
         idHabitacion: seleccion.idHabitacion,
         fechaInicio: seleccion.fecha_inicio_sel,
         fechaFin: seleccion.fecha_fin_sel,
+        estado: seleccion.estado,
       });
     }
   };

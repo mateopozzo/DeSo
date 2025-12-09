@@ -7,6 +7,8 @@ import {
   buscarEstadoHabitaciones,
   Habitacion,
   DisponibilidadDTO,
+  DatosRes,
+  verificarRes,
 } from "../../services/habitaciones.service";
 import Grilla from "../../components/grilla";
 
@@ -106,12 +108,36 @@ export default function OcuparHabPage() {
   };
 
   // recibe el seleccionado directamente desde el componente Grilla
-  const procesarSeleccionGrilla = (datos: {
+  const procesarSeleccionGrilla = async (datos: {
     idHabitacion: number;
     fechaInicio: string;
     fechaFin: string;
+    estado: string;
   }) => {
     console.log("Selección recibida de la grilla:", datos);
+
+    if (datos.estado === "RESERVADA") {
+      const datosResOc = await verificarRes(
+        datos.idHabitacion,
+        datos.fechaInicio,
+        datos.fechaFin
+      );
+
+      if (datosResOc.length > 0) {
+        const reservaEncontrada = datosResOc[0];
+        console.log("Reserva encontrada:", reservaEncontrada);
+        const ocuparRes = confirm(
+          `La reserva seleccionada está a nombre de ${reservaEncontrada.apellido} ${reservaEncontrada.nombre}. \n\n ¿Desea ocupar la reserva?`
+        );
+
+        if (!ocuparRes) {
+          return;
+        }
+      }
+      if (datosResOc.length == 0) {
+        console.log("Celda reservada pero no hay reserva en back");
+      }
+    }
 
     const nuevaReserva: ReservaCola = {
       idhab: datos.idHabitacion,
@@ -123,6 +149,7 @@ export default function OcuparHabPage() {
     setPaso("CARGA");
     setIndiceActual(0);
     setError(null);
+    // acordarse de llamar a verificarRes(idhab,inicio,fin)
   };
 
   const confirmarHabitacionYContinuar = () => {
@@ -354,19 +381,19 @@ export default function OcuparHabPage() {
       )}
 
       {paso === "GUARDANDO" && (
-        <div className="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white/50 dark:bg-white/20 flex items-center justify-center z-50">
           <h2 className="text-2xl font-bold text-black">Guardando...</h2>
         </div>
       )}
       {paso === "EXITO" && (
-        <div className="text-center py-20">
-          <img src="success.svg" alt="" width={20} className="dark:invert" />
-          <h2 className="text-4xl font-bold text-green-500 mb-4">
+        <div className="text-center py-20 flex flex-col justify-center items-center">
+          <img src="success.svg" alt="" width={90} className="dark:invert" />
+          <h2 className="text-3xl font-bold text-green-500 mb-4">
             Check-in exitoso
           </h2>
           <button
             onClick={() => router.push("/")}
-            className="bg-gray-9500 dark:text-white dark:border dark:border-white text-black px-6 py-2 rounded-xl"
+            className="bg-gray-9500 dark:text-white dark:border dark:border-white text-black px-6 py-2 font-semibold rounded-xl hover:bg-green-600 hover:border-green-600"
           >
             Volver al inicio
           </button>

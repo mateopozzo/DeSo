@@ -25,6 +25,15 @@ export interface Habitacion {
   estado_hab: string;
 }
 
+export interface DatosRes {
+  fecha_inicio: string;
+  fecha_fin: string;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  estado: string;
+}
+
 const PUERTO = "http://localhost:8080/api";
 
 export async function pedirHabs(): Promise<Habitacion[]> {
@@ -85,5 +94,44 @@ export async function crearReserva(reserva: RequestReserva) {
     console.log("Error captado en service - Error guardando reserva");
     console.error("Error creando reserva: " + error);
     throw error;
+  }
+}
+
+export async function verificarRes(
+  idHab: number,
+  fechaInicio: string,
+  fechaFin: string
+): Promise<DatosRes[]> {
+  const consulta = [
+    {
+      idHabitacion: idHab,
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin,
+    },
+  ];
+
+  try {
+    console.log(
+      "Pidiendo verificar reserva a back con payload:",
+      JSON.stringify(consulta)
+    );
+
+    const response = await fetch(`${PUERTO}/obtener-reservas`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(consulta),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al volver back: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error verificando reservas: " + error);
+    return [];
   }
 }

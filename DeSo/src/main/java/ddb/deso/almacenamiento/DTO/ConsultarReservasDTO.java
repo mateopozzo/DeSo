@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ConsultarReservasDTO {
-    Long IDHabitacion;
+    Long idHabitacion;
     String fechaInicio;
     String fechaFin;
 }

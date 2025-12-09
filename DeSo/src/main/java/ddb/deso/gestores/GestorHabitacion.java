@@ -11,7 +11,6 @@ import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.service.TipoDoc;
 import ddb.deso.service.alojamiento.*;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.habitaciones.Estadia;
@@ -295,7 +294,7 @@ public class GestorHabitacion {
         }
         return listaDisponibilidades;
     }
-
+    @Transactional(readOnly = true)
     public Collection<ReservaDTO> consultarReservas(ConsultarReservasDTO rango) {
 
         var fechaInicio = LocalDate.parse(rango.getFechaInicio());
@@ -307,21 +306,26 @@ public class GestorHabitacion {
 
         var reservas = reservaDAO.listarPorFecha(fechaInicio, fechaFin);
 
-        List<Reserva> reservasCoincidentes = new ArrayList<>();
-
-        for(var r : reservas){
-            if(rango.getIDHabitacion().equals(r.getIdReserva())){
-                reservasCoincidentes.add(r);
-            }
-        }
-
         List<ReservaDTO> reservasDTOCoincidentes = new ArrayList<>();
 
-        for(var r : reservasCoincidentes){
-            var rdto = new ReservaDTO();
-            rdto.setNombre(r.getNombre());
-            rdto.setApellido(r.getApellido());
-            rdto.setTelefono(r.getTelefono());
+        for(var r : reservas){
+
+            boolean contieneHabitacion = r.getListaHabitaciones().stream()
+                    .anyMatch(habitacion -> habitacion.getNroHab().equals(rango.getIdHabitacion()));
+
+            if(contieneHabitacion){
+                var rdto = new ReservaDTO();
+
+                rdto.setFecha_inicio(r.getFecha_inicio());
+                rdto.setFecha_fin(r.getFecha_fin());
+                rdto.setNombre(r.getNombre());
+                rdto.setApellido(r.getApellido());
+                rdto.setTelefono(r.getTelefono());
+                rdto.setEstado(r.getEstado());
+
+
+                reservasDTOCoincidentes.add(rdto);
+            }
         }
 
         return reservasDTOCoincidentes;

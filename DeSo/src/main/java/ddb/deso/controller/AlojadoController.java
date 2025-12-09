@@ -18,7 +18,6 @@ import java.util.List;
  * Escucha las peticiones web y las delega al GestorAlojamiento.
  */
 @RestController
-@CrossOrigin(origins ={"http://localhost:3000/", "http://localhost:8080"})
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;

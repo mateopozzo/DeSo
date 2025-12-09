@@ -17,7 +17,6 @@ import java.util.Set;
 
 
 @RestController
-@CrossOrigin(origins ={"http://localhost:3000/", "http://localhost:8080"})
 public class HabitacionController {
 
     private final GestorHabitacion gestorHabitacion;
@@ -44,10 +43,6 @@ public class HabitacionController {
             System.out.println("fecha_inicio.isAfter(fecha_fin)");
             return ResponseEntity.ok(List.of());
         }
-        /* no entiendo para que sirve esta parte
-        if(fecha_inicio.isEqual(LocalDate.now())){
-            return ResponseEntity.ok(List.of());
-        }*/
 
         var listaReservas = gestorHabitacion.listarReservas(fecha_inicio, fecha_fin);
         var listaEstadias = gestorHabitacion.listarEstadias(fecha_inicio, fecha_fin);
@@ -57,6 +52,8 @@ public class HabitacionController {
         return ResponseEntity.ok(listaReservas);
 
     }
+
+
 
     @PostMapping("/api/ocupar-habitacion")
     public ResponseEntity<EstadiaDTO> crearEstadia(
@@ -107,9 +104,8 @@ public class HabitacionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
     }
 
-    @GetMapping("/api/obtener-reservas")
+    @PostMapping("/api/obtener-reservas")
     public ResponseEntity<Set<ReservaDTO>> consultaReserva(@RequestBody List<ConsultarReservasDTO> listaConsultas) {
-
         if(listaConsultas == null || listaConsultas.isEmpty()){
             return ResponseEntity.ok(new HashSet<>());
         }
@@ -120,9 +116,7 @@ public class HabitacionController {
                 .forEach(rango -> {
                     reservasCoincidentes.addAll(gestorHabitacion.consultarReservas(rango));
                 });
-
         return ResponseEntity.ok(reservasCoincidentes);
-
     }
 
     private boolean creacionReservaValida(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
