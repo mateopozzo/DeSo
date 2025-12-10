@@ -5,7 +5,7 @@ DeSo/target/
 DeSo/src/main/java/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
 DeSo/main/java/src/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
 *.class
-/.idea/
+.idea/*
 DeSo.zip
 posta.txt
 /.vscode/
