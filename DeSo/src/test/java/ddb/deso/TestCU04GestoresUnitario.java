@@ -26,6 +26,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+
+/**
+ * Pruebas unitarias para la lógica de negocio en {@link GestorHabitacion}.
+ * <p>
+ * Se enfoca en la validación del método de creación de reservas. Mockea los DAOs de habitación,
+ * estadía y reserva para verificar:
+ * <ul>
+ * <li>Validación de integridad de datos de entrada (reservas nulas o habitaciones inexistentes).</li>
+ * <li>Detección de conflictos de disponibilidad por solapamiento de fechas con {@link Estadia} existentes.</li>
+ * <li>Detección de conflictos de disponibilidad con otras {@link Reserva} ya registradas.</li>
+ * <li>Flujo exitoso cuando no existen conflictos temporales.</li>
+ * </ul>
+ */
 @ExtendWith(MockitoExtension.class)
 public class TestCU04GestoresUnitario {
 

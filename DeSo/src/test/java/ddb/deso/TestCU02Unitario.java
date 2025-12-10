@@ -20,6 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de pruebas unitarias para {@link GestorAlojamiento}.
+ * <p>
+ * Verifica la lógica de negocio asociada a la búsqueda y filtrado de alojados (Huéspedes e Invitados).
+ * Utiliza {@link Mockito} para simular el comportamiento de {@link AlojadoDAO}, permitiendo validar
+ * escenarios de:
+ * <ul>
+ * <li>Manejo de excepciones ante retornos nulos o listas vacías desde la persistencia.</li>
+ * <li>Filtrado correcto de subtipos de {@link Alojado} (distinción entre Huesped e Invitado).</li>
+ * <li>Coincidencia precisa de criterios de búsqueda (nombre, apellido, tipo y nro de documento).</li>
+ * </ul>
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class TestCU02Unitario {

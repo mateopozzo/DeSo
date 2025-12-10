@@ -69,11 +69,15 @@ public class TestCU09Integracion {
 
 
     /**
-     * Verifica que al intentar dar de alta un segundo alojado con la misma
-     * clave primaria (DNI y TipoDoc), el sistema realice una modificacion de los datos ya presentes
-     *
-     * Comportamiento esperado: La búsqueda por el ID debe retornar
-     * exclusivamente el objeto con los datos del segundo alojado ('Sean Ramiez').
+     * Prueba de integración para verificar el comportamiento de "Upsert" (Actualización o Inserción).
+     * <p>
+     * <b>Escenario:</b> Se intenta persistir un segundo alojado que comparte la misma clave natural
+     * (Tipo y Nro de Documento) que uno ya existente, pero con datos personales distintos.
+     * </p>
+     * <p>
+     * <b>Resultado esperado:</b> El sistema no debe duplicar el registro ni lanzar error, sino actualizar
+     * los datos del registro existente. La búsqueda posterior debe retornar únicamente los datos del segundo objeto.
+     * </p>
      */
     @Test
     public void altaAlojadoConIDrepetido(){

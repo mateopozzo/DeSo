@@ -19,6 +19,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Pruebas de integración para el caso de uso de creación de reservas (CU04).
+ * <p>
+ * Levanta el contexto de Spring Boot para verificar la interacción real entre {@link GestorHabitacion}
+ * y la capa de persistencia (JPA/Hibernate).
+ * Caracteristicas:
+ * <ul>
+ * <li>Ejecución bajo contexto transaccional con {@link Rollback} para garantizar atomicidad e independencia de tests.</li>
+ * <li>Verificación de persistencia exitosa de reservas válidas.</li>
+ * <li>Manejo de errores a nivel de base de datos o servicio (IDs repetidos, IDs inexistentes).</li>
+ * </ul>
+ */
 @SpringBootTest
 @Transactional
 @Rollback(true)

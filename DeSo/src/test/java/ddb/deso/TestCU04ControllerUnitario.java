@@ -29,6 +29,19 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Pruebas unitarias de la capa web (Slice Test) para {@link HabitacionController}.
+ * <p>
+ * Utiliza {@link WebMvcTest} y {@link MockMvc} para validar el contrato de la API REST sin levantar
+ * el contexto completo de la aplicación.
+ * Objetivos principales:
+ * <ul>
+ * <li>Validación de entrada del DTO (campos nulos, vacíos o fechas incoherentes).</li>
+ * <li>Mapeo correcto de excepciones de negocio (ej. {@link ReservaInvalidaException}) a códigos de estado HTTP (422 Unprocessable Entity).</li>
+ * <li>Serialización y deserialización correcta de JSON.</li>
+ * <li>Verificación de códigos de estado exitosos (201 Created, 200 OK) al invocar al servicio mockeado.</li>
+ * </ul>
+ */
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(HabitacionController.class)
 public class TestCU04ControllerUnitario {
