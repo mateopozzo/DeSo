@@ -23,6 +23,7 @@ import org.jline.terminal.TerminalBuilder;
  * sin interfaz gráfica, interactuando con la capa de negocio
  * a través del {@link GestorAutenticacion}.</p>
  */
+@Deprecated
 public class InterfazLogin {    
     /**
      * Ejecuta la interfaz de login por consola.

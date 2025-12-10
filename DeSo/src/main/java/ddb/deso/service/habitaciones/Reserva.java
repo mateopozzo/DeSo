@@ -27,17 +27,41 @@ import java.util.Objects;
 @Table(name="reserva")
 @NoArgsConstructor
 public class Reserva {
+    /**
+     * Identificador único y autoincremental de la reserva.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
-    long idReserva;
+            long idReserva;
 
+    /**
+     * Fecha de inicio de la reserva.
+     */
     private LocalDate fecha_inicio;
+    /**
+     * Fecha de finalización de la reserva.
+     */
     private LocalDate fecha_fin;
+    /**
+     * Estado actual de la reserva (ej: Confirmada, Pendiente, Cancelada).
+     */
     private String estado;
+    /**
+     * Nombre de la persona que realiza la reserva.
+     */
     private String nombre;
+    /**
+     * Apellido de la persona que realiza la reserva.
+     */
     private String apellido;
+    /**
+     * Teléfono de contacto para la reserva.
+     */
     private String telefono;
 
+    /**
+     * Lista de {@link Habitacion}es asociadas a esta reserva.
+     */
     @ManyToMany(fetch = FetchType.LAZY)
     List<Habitacion> listaHabitaciones;
 

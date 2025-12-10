@@ -27,9 +27,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="servicio")
 public class Servicio {
+    /**
+     * Identificador único y autoincremental del servicio.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idServicio;
-
+    /**
+     * El tipo de servicio específico (ej: LAVADOYPLANCHADO, SAUNA).
+     */
     private TipoServicio tipo_servicio;
 }

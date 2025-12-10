@@ -27,6 +27,7 @@ import ddb.deso.service.alojamiento.Validador;
  * @see GestorAlojamiento
  * @see Validador
  */
+@Deprecated
 
 public class InterfazModificarHuesped {
     private Scanner entrada;

@@ -10,13 +10,28 @@ import lombok.*;
 /**
  * Clase que almacena la información de **contacto** de una persona alojada.
  * Incluye el número de teléfono y la dirección de correo electrónico.
+ * Esta clase es embebible en otras entidades ({@link DatosAlojado}).
+ *
+ * @author mat
  */
 @Embeddable
 @NoArgsConstructor
 public class DatosContacto {
+    /**
+     * Número de teléfono de contacto.
+     */
     private String telefono;
+    /**
+     * Dirección de correo electrónico de contacto.
+     */
     private String email;
 
+    /**
+     * Constructor para inicializar los datos de contacto.
+     *
+     * @param telefono El número de teléfono.
+     * @param email La dirección de correo electrónico.
+     */
     public DatosContacto(String telefono, String email) {
         this.telefono = telefono;
         this.email = email;
