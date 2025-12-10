@@ -8,9 +8,10 @@ DeSo/main/java/src/ddb/deso/almacenamiento/DAO/DAOGENERICO.java
 .idea/*
 DeSo.zip
 posta.txt
-/.vscode/
+/.vscode/*
 /.target/
 /mate
 /mate/*
 DeSo/src/main/resources/static/
 nohup.out
+
