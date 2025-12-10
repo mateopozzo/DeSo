@@ -30,6 +30,7 @@ import static java.lang.Integer.parseInt;
 
  * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
  */
+@Deprecated
 public class InterfazBusqueda {
     private final Scanner scanner;
 

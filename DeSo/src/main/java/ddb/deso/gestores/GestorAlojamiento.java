@@ -19,12 +19,22 @@ import org.springframework.stereotype.Service;
 public class GestorAlojamiento {
     private final AlojadoDAO alojadoDAO;
 
-    /*Inyeccion de dependencia*/
+    /**
+     * Constructor para la inyección de dependencias.
+     * @param alojadoDAO Implementación del DAO para acceso a datos de Alojados.
+     */
     @Autowired
     public GestorAlojamiento(AlojadoDAO alojadoDAO) {
         this.alojadoDAO = alojadoDAO;
     }
 
+    /**
+     * Verifica la existencia de un alojado en el sistema mediante su documento.
+     *
+     * @param dni Número de documento a verificar.
+     * @param tipo Tipo de documento.
+     * @return {@code true} si existe un alojado con ese documento, {@code false} en caso contrario o si los parámetros son nulos.
+     */
     public boolean dniExiste(String dni, TipoDoc tipo) {
         if (tipo == null || dni == null || dni.isBlank()) {
             return false;
@@ -35,11 +45,12 @@ public class GestorAlojamiento {
     }
 
     /**
-     Busca coincidencias en la base de datos con base en los criterios de búsqueda.
-
-     @param criterios_busq Criterios de búsqueda del huésped opcionales (nombre, apellido, tipo y número de documento).
+     * Busca coincidencias en la base de datos basándose en los criterios de búsqueda proporcionados.
+     *
+     * @param criterios_busq Criterios de búsqueda (nombre, apellido, tipo y número de documento).
+     * @return Lista de objetos {@link CriteriosBusq} con los datos básicos de los alojados encontrados.
+     * @throws AlojadosSinCoincidenciasException Si no se encuentran registros que coincidan con el criterio.
      */
-
     public List<CriteriosBusq> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, busca todos los alojados
@@ -56,6 +67,14 @@ public class GestorAlojamiento {
         return conversionAlojadoToCriterio(encontrados);
     }
 
+    /**
+     * Busca específicamente Huéspedes (aquellos responsables de reservas) que coincidan con los criterios.
+     * Filtra los resultados para excluir a los Invitados.
+     *
+     * @param criterios_busq Criterios de búsqueda.
+     * @return Lista de {@link CriteriosBusq} correspondientes a los Huéspedes encontrados.
+     * @throws AlojadosSinCoincidenciasException Si no se encuentran huéspedes o la lista inicial es vacía.
+     */
     public List<CriteriosBusq> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         try{
             var listaAlojados = alojadoDAO.buscarAlojado(criterios_busq);
@@ -88,14 +107,19 @@ public class GestorAlojamiento {
      * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
      * a guardar en el sistema.
      */
-
     public void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
         System.out.println("Modificando huésped...");
         // Usa el campo 'alojadoDAO' inyectado
         alojadoDAO.actualizarAlojado(alojadoOriginal, alojadoModificado);
     }
 
-
+    /**
+     * Registra un nuevo alojado en el sistema.
+     * Valida que los campos obligatorios estén presentes antes de delegar la creación al DAO.
+     *
+     * @param alojadoDTO Objeto de transferencia con los datos del nuevo alojado.
+     * @throws AlojadoInvalidoException Si el DTO es nulo o faltan campos obligatorios.
+     */
     public void darDeAltaHuesped(AlojadoDTO alojadoDTO) throws AlojadoInvalidoException {
         if(alojadoDTO == null || !alojadoDTO.verificarCamposObligatorios()){
             throw new AlojadoInvalidoException("Los campos obligatorios no están completos");
@@ -104,18 +128,17 @@ public class GestorAlojamiento {
     }
 
     /**
-     Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
-
-     @param criterios: Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
-     @return Estado del historial del huésped.
-
-     <ul>
-     <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
-     <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido, pero no tiene check-in/out.</li>
-     <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
-     </ul>
+     * Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
+     *
+     * @param criterios: Criterios de búsqueda del huésped (nombre, apellido, tipo y número de documento).
+     * @return Estado del historial del huésped.
+     *
+     * <ul>
+     * <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido, pero no tiene check-in/out.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
+     * </ul>
      */
-
     private ResumenHistorialHuesped huespedSeAlojo(CriteriosBusq criterios) {
 
         List<Alojado> listaAlojados = alojadoDAO.buscarAlojado(criterios);
@@ -142,36 +165,37 @@ public class GestorAlojamiento {
 
 
     /**
-     Elimina un registro de huésped del sistema.
-
-     @param alojado Objeto {@code Alojado} que contiene los datos del huésped a eliminar.
+     * Elimina un registro de huésped del sistema.
+     * Busca la entidad por DNI y solicita su eliminación al DAO.
+     *
+     * @param alojado Objeto {@code AlojadoDTO} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
      */
-
     public void eliminarAlojado(AlojadoDTO alojado) {
         var entidadEliminable = alojadoDAO.buscarPorDNI(alojado.getNroDoc(),alojado.getTipoDoc());
         alojadoDAO.eliminarAlojado(entidadEliminable);
     }
 
-    // Enumerador ResumenHistorialHuesped informa el estado del huesped en el sistema
-
+    /**
+     * Enumerador que informa el estado del historial de un huésped en el sistema.
+     */
     public enum ResumenHistorialHuesped {
-        // Tuvo alguna estadia en el hotel
+        /** Tuvo alguna estadía en el hotel. */
         SE_ALOJO,
 
-        // No tuvo ninguna estadia, pero sus datos están persistidos
+        /** No tuvo ninguna estadía, pero sus datos están persistidos. */
         NO_SE_ALOJO,
 
-        // Sus datos no están presentes en la base del sistema
+        /** Sus datos no están presentes en la base del sistema. */
         NO_PERSISTIDO
     }
 
     /**
-     Obtiene el resumen del historial de alojamiento de un huésped.
-
-     @param alojado Objeto {@code Alojado} con los datos del huésped.
-     @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
+     * Obtiene el resumen del historial de alojamiento de un huésped a partir de su entidad.
+     * Extrae los datos necesarios y consulta el estado de sus check-ins/check-outs.
+     *
+     * @param alojado Objeto {@code Alojado} con los datos del huésped.
+     * @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
-
     public ResumenHistorialHuesped historialHuesped(Alojado alojado){
         var nombre = alojado.getDatos().getDatos_personales().getNombre();
         var apellido = alojado.getDatos().getDatos_personales().getApellido();
@@ -223,6 +247,12 @@ public class GestorAlojamiento {
         return retorno;
     }
 
+    /**
+     * Método auxiliar para convertir una lista de entidades Alojado a DTOs de criterio de búsqueda.
+     *
+     * @param listaAlojado Lista de entidades {@link Alojado} (o sus subclases).
+     * @return Lista de {@link CriteriosBusq} mapeados con los datos básicos.
+     */
     private List<CriteriosBusq> conversionAlojadoToCriterio(List<? extends Alojado> listaAlojado) {
         List<CriteriosBusq>retornoEncontrados = new ArrayList<>();
         for(var a: listaAlojado){

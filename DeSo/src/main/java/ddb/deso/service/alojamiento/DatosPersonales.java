@@ -21,18 +21,49 @@ import lombok.*;
 @Setter
 @Getter
 public class DatosPersonales {
+    /**
+     * Nombre del alojado.
+     */
     private String nombre;
+    /**
+     * Apellido del alojado.
+     */
     private String apellido;
+    /**
+     * Nacionalidad del alojado.
+     */
     private String nacionalidad;
+    /**
+     * Posición fiscal del alojado frente al IVA.
+     */
     private String posicionIva;
+    /**
+     * Ocupación actual del alojado.
+     */
     private String ocupacion;
+    /**
+     * Clave Única de Identificación Tributaria o similar (CUIT/CUIL).
+     */
     private String CUIT;
+    /**
+     * Fecha de nacimiento del alojado.
+     */
     private LocalDate fechanac;
+    /**
+     * Número de documento (transient, se gestiona a través de {@link DatosAlojado}).
+     */
     @Transient
     private String nroDoc;
+    /**
+     * Tipo de documento (transient, se gestiona a través de {@link DatosAlojado}).
+     */
     @Transient
     private TipoDoc tipoDoc;
 
+    /**
+     * Referencia al objeto {@link DatosAlojado} propietario de esta instancia,
+     * usado para mantener la coherencia con el {@code EmbeddedId} (transient).
+     */
     @Transient
     private DatosAlojado alojadoOwner;
 

@@ -13,6 +13,8 @@ import jakarta.persistence.*;
 /**
  * Clase que encapsula los datos relacionados con el proceso de **Check-In** (Entrada).
  * Almacena la fecha y hora de la entrada y el identificador único del proceso.
+ *
+ * @author mat
  */
 
 @Getter
@@ -21,11 +23,21 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "check_in")
 public class DatosCheckIn {
+    /**
+     * Fecha y hora del registro de Check-In.
+     */
     private LocalDate fecha_hora_in;
+    /**
+     * Identificador único y autoincremental del registro de Check-In.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idCheckIn;
 
+    /**
+     * El {@link DatosAlojado} asociado a este registro de Check-In.
+     * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
@@ -33,6 +45,11 @@ public class DatosCheckIn {
     })
     private DatosAlojado alojado;
 
+    /**
+     * Constructor para inicializar el registro de Check-In con la fecha y hora de entrada.
+     *
+     * @param fecha_hora_in Fecha y hora del Check-In.
+     */
     public DatosCheckIn(LocalDate fecha_hora_in) {
         this.fecha_hora_in = fecha_hora_in;
     }

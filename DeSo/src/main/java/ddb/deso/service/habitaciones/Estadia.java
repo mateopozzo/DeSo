@@ -36,26 +36,49 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Estadia {
 
+    /**
+     * Identificador único y autoincremental de la estadía.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     long idEstadia;
 
+    /**
+     * La {@link Habitacion} asociada a esta estadía.
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     Habitacion habitacion;
 
+    /**
+     * Lista de {@link Servicio}s consumidos durante esta estadía.
+     */
     @ManyToMany(fetch = FetchType.LAZY)
     List<Servicio> listaServicios;
 
+    /**
+     * Registro de Check-In asociado al inicio de esta estadía.
+     */
     @OneToOne(fetch = FetchType.LAZY)
     DatosCheckIn datosCheckIn;
+    /**
+     * Registro de Check-Out asociado al fin de esta estadía.
+     */
     @OneToOne(fetch = FetchType.LAZY)
     DatosCheckOut datosCheckOut;
+    /**
+     * La {@link Reserva} de la cual forma parte esta estadía (opcional si es un walk-in).
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Reserva reserva;
 
+    /**
+     * Fecha de inicio de la estadía.
+     */
     private LocalDate fecha_inicio;
+    /**
+     * Fecha de finalización de la estadía.
+     */
     private LocalDate fecha_fin;
-
 
     public Estadia(LocalDate fecha_inicio, LocalDate fecha_fin) {
         this.fecha_inicio = fecha_inicio;

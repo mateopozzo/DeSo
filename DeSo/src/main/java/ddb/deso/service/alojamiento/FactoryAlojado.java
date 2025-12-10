@@ -12,13 +12,19 @@ import java.time.LocalDate;
  * predefinido o a partir de un objeto de transferencia de datos (DTO).
  * </p>
  *
- * @author mat
+ * @author gaek
  * @see Alojado
  * @see Huesped
  * @see Invitado
  */
 public class FactoryAlojado {
+    /**
+     * Constante para representar el tipo {@link Huesped}.
+     */
     public static final int HUESPED=0;
+    /**
+     * Constante para representar el tipo {@link Invitado}.
+     */
     public static final int INVITADO=1;
 
     public static int[] tipo = {HUESPED,INVITADO};

@@ -14,18 +14,45 @@ import lombok.NoArgsConstructor;
  * Clase que almacena la información de la **dirección de residencia**
  * de una persona alojada (huésped o invitado).
  * Incluye calle, número, localidad, provincia, país y código postal.
+ * Esta clase es embebible en otras entidades ({@link DatosAlojado}).
+ *
+ * @author mat
  */
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 public class DatosResidencia {
+    /**
+     * Nombre de la calle o avenida.
+     */
     private String calle;
+    /**
+     * Número de departamento (opcional).
+     */
     private String depto;
+    /**
+     * Nombre de la localidad o ciudad.
+     */
     private String localidad;
+    /**
+     * Nombre de la provincia o estado.
+     */
     private String prov;
+    /**
+     * Nombre del país.
+     */
     private String pais;
+    /**
+     * Número de la calle.
+     */
     private String nro_calle;
+    /**
+     * Número de piso (opcional).
+     */
     private String piso;
+    /**
+     * Código postal.
+     */
     private String cod_post;
 
     public void setCalle(String calle) {
