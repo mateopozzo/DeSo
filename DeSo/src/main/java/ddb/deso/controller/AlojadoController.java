@@ -32,10 +32,17 @@ public class AlojadoController {
 
     /**
      * Endpoint para CREAR un nuevo alojado (Huésped o Invitado).
-     * Escucha peticiones POST en /api/huesped
+     * Escucha peticiones POST en /api/huesped.
      *
-     * @param alojadoDTO Los datos del nuevo alojado (vienen en el body del POST en formato JSON)
-     * @return El AlojadoDTO creado con un código 201 (Created).
+     * @param alojadoDTO Los datos del nuevo alojado (vienen en el body del POST en formato JSON).
+     * @param force (Opcional) Booleano para forzar la creación incluso si hay validaciones no críticas (por defecto false).
+     * @return {@link ResponseEntity} con:
+     * <ul>
+     * <li>201 CREATED: Si se creó exitosamente.</li>
+     * <li>400 BAD REQUEST: Si el body es nulo, faltan campos o el alojado es inválido.</li>
+     * <li>409 CONFLICT: Si el documento ya existe (y no se usó force).</li>
+     * <li>500 INTERNAL SERVER ERROR: Para errores no previstos.</li>
+     * </ul>
      */
     @PostMapping("/api/huesped")
     public ResponseEntity<String> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
@@ -77,7 +84,15 @@ public class AlojadoController {
     }
 
 
-
+    /**
+     * Busca alojados (invitados o huéspedes) que cumplan con los criterios especificados.
+     *
+     * @param apellido Filtro por apellido (opcional).
+     * @param nombre Filtro por nombre (opcional).
+     * @param tipoDoc Filtro por tipo de documento (opcional).
+     * @param nroDoc Filtro por número de documento (opcional).
+     * @return Lista de {@link CriteriosBusq} con los alojados encontrados o lista vacía si no hay coincidencias.
+     */
     @GetMapping("/api/buscar-alojados")
     public ResponseEntity<List<CriteriosBusq>> obtenerAlojados(
             @RequestParam(required = false) String apellido,

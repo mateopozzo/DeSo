@@ -59,6 +59,9 @@ public class GestorAlojamiento {
     public List<CriteriosBusq> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         try{
             var listaAlojados = alojadoDAO.buscarAlojado(criterios_busq);
+            if(listaAlojados == null || listaAlojados.isEmpty()){
+                throw new AlojadosSinCoincidenciasException("No hay ocurrencias de Alojados disponibles para el criterio dado");
+            }
             List<Huesped> listaHuespedes = listaAlojados.stream()
                     .filter(alojado -> alojado instanceof Huesped)
                     .map(alojado -> (Huesped) alojado)

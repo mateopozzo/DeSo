@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación de AlojadoDAO que utiliza Spring Data JPA para la persistencia
- * Actúa como un adaptador entre la interfaz DAO y los repositorios JPA
+ * Implementación JPA de {@link AlojadoDAO}.
+ * Utiliza {@link Specification} para construcción dinámica de consultas SQL
+ * y maneja la normalización de caracteres para búsquedas insensibles a acentos.
  */
 @Repository
 public class AlojadoDAOJPA implements AlojadoDAO {
@@ -37,6 +38,10 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         this.alojadoRepository = alojadoRepository;
     }
 
+    /**
+     * Guarda un nuevo alojado en la base de datos.
+     * @param alojado Entidad Alojado a persistir.
+     */
     @Override
     public void crearAlojado(Alojado alojado) {
         if (alojado != null) {
@@ -44,6 +49,11 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         }
     }
 
+    /**
+     * Actualiza un alojado existente.
+     * @param alojadoPrev El alojado con los datos originales (usado para verificar ID).
+     * @param alojadoNuevo El objeto con los nuevos datos (actualmente no se usa explícitamente en la lógica, se guarda el prev).
+     */
     @Override
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
         if (alojadoPrev != null && alojadoPrev.getDatos().getIdAlojado() != null) {
@@ -51,6 +61,13 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         }
     }
 
+    /**
+     * Elimina un alojado de la base de datos.
+     * Construye el ID compuesto {@link AlojadoID} a partir de los datos del objeto
+     * y verifica su existencia antes de eliminar.
+     *
+     * @param alojado El objeto alojado que contiene los datos clave (tipo y nro doc) para la eliminación.
+     */
     @Override
     public void eliminarAlojado(Alojado alojado) {
         // Es más eficiente construir el ID y usar deleteById
@@ -70,6 +87,12 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         return alojadoRepository.findAll();
     }
 
+    /**
+     * Busca un alojado específico por su clave primaria compuesta.
+     * @param documento Número de documento.
+     * @param tipo Tipo de documento.
+     * @return El alojado encontrado o {@code null}.
+     */
     @Override
     public Alojado buscarPorDNI(String documento, TipoDoc tipo) {
         if (documento == null || tipo == null) return null;
@@ -81,6 +104,12 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         return entidadOptional.orElse(null);
     }
 
+    /**
+     * Ejecuta la lógica para promover un Alojado a Huésped en la base de datos.
+     * Realiza un flush y limpia el EntityManager para asegurar consistencia.
+     * @param nroDoc Número de documento del alojado.
+     * @param tipoDoc Tipo de documento del alojado.
+     */
     @Override
     public void promoverAHuesped(String nroDoc, String tipoDoc) {
         alojadoRepository.promoverAHuesped(nroDoc, tipoDoc);
@@ -88,6 +117,15 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         entityManager.clear();
     }
 
+    /**
+     * Realiza una búsqueda dinámica de alojados basada en múltiples criterios.
+     * Si se proporciona documento y tipo, realiza búsqueda directa por ID.
+     * De lo contrario, construye una consulta dinámica (Specification) que permite
+     * buscar por nombre y apellido (insensible a mayúsculas y acentos) usando la función 'unaccent'.
+     *
+     * @param criterios Objeto DTO con los filtros de búsqueda (nombre, apellido, dni, tipo).
+     * @return Lista de alojados que cumplen con los criterios.
+     */
     @Override
     public List<Alojado> buscarAlojado(CriteriosBusq criterios) {
 
@@ -136,10 +174,12 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     /**
-     @param cadena: String que necesito normalizar
-     @return una cadena normalizada sin tildes
-
-     FUENTE: https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu
+     * Normaliza una cadena de texto eliminando acentos y diacríticos.
+     * Utiliza la forma de normalización NFD y expresiones regulares ASCII.
+     *
+     * @param cadena String que se necesita normalizar.
+     * @return Una cadena normalizada sin tildes.
+     * @see <a href="https://stackoverflow.com/questions/4122170/java-change-%C3%A1%C3%A9%C5%91%C5%B1%C3%BA-to-aeouu">Fuente Original</a>
      */
 
     private String normalizar (String cadena){

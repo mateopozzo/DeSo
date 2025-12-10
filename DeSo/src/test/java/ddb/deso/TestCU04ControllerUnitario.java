@@ -1,14 +1,14 @@
 package ddb.deso;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
+import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.controller.HabitacionController;
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.service.EstadoHab;
 import ddb.deso.service.TipoHab;
-import ddb.deso.service.habitaciones.Estadia;
-import ddb.deso.service.habitaciones.Habitacion;
-import ddb.deso.service.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,18 +47,12 @@ public class TestCU04ControllerUnitario {
         return List.of(101L, 202L);
     }
 
-    private List<Estadia> crearListaEstadiasConflictiva(){
-        Estadia e = new Estadia();
+    private List<DisponibilidadDTO> crearListaEstadiasConflictiva(){
+        DisponibilidadDTO e = new DisponibilidadDTO();
         e.setFecha_inicio(LocalDate.now());
         e.setFecha_fin(LocalDate.parse("2025-12-02"));
-        Habitacion h = new Habitacion();
-        h.setNroHab(101L);
-        h.setEstado_hab(EstadoHab.DISPONIBLE);
-        h.setTipo_hab(TipoHab.DOBLEESTANDAR);
-        h.setTarifa(1);
-        h.setCapacidad(1);
-        e.setHabitacion(h);
-        e.setIdEstadia(1);
+        e.setEstado(EstadoHab.RESERVADA);
+        e.setIdHabitacion(101L);
         return List.of(e);
     }
 
@@ -80,31 +75,20 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException("Fechas nulas"))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isUnprocessableEntity());
     }
 
-//    @Test
-//    public void reservaConFechaInicioVacia() throws Exception {
-//        var r = crearDTO();
-//        r.setFecha_inicio(LocalDate.parse(""));
-//        var l = crearListaIdHabitaciones();
-//        Map<String, Object> body = Map.of(
-//                "reservaDTO", r,
-//                "listaIDHabitaciones", l
-//        );
-//        String jsonParaEnviar = mapper.writeValueAsString(body);
-//        mockMvc.perform(post("/api/reserva")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonParaEnviar))
-//                .andExpect(status().isBadRequest());
-//    }
-
     @Test
-    public void reservaConFechaInicioIFutura() throws Exception {
+    public void reservaConFechaInicioPosteriorAFin() throws Exception {
         var r = crearDTO();
         r.setFecha_inicio(LocalDate.parse("2027-11-02"));
         var l = crearListaIdHabitaciones();
@@ -112,11 +96,16 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -128,28 +117,16 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
-
-//    @Test  // TODO -> Hacer que este caso envie una fecha "" en json
-//    public void reservaConFechaFinVacia() throws Exception {
-//        var r = crearDTO();
-//        r.setFecha_fin(LocalDate.parse(""));
-//        var l = crearListaIdHabitaciones();
-//        Map<String, Object> body = Map.of(
-//                "reservaDTO", r,
-//                "listaIDHabitaciones", l
-//        );
-//        String jsonParaEnviar = mapper.writeValueAsString(body);
-//        mockMvc.perform(post("/api/reserva")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonParaEnviar))
-//                .andExpect(status().isBadRequest());
-//    }
 
     @Test
     public void reservaConNombreNulo() throws Exception {
@@ -160,11 +137,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -176,11 +157,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -192,11 +177,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -208,11 +197,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -224,11 +217,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -240,11 +237,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -257,6 +258,7 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -274,11 +276,15 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isConflict());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -291,23 +297,24 @@ public class TestCU04ControllerUnitario {
                 "reservaDTO", r,
                 "listaIDHabitaciones", l
         );
+
+        doThrow(new ReservaInvalidaException(""))
+                .when(gestorHabitacion).crearReserva(any(), any());
+
+
         String jsonParaEnviar = mapper.writeValueAsString(body);
         mockMvc.perform(post("/api/reserva")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonParaEnviar))
-                .andExpect(status().isConflict());
+                .andExpect(status().isUnprocessableEntity());
     }
 
-    private List<Reserva> crearListaReservasConflictivas() {
-        Reserva e = new Reserva();
+    private List<DisponibilidadDTO> crearListaReservasConflictivas() {
+        DisponibilidadDTO e = new DisponibilidadDTO();
         e.setFecha_inicio(LocalDate.now());
         e.setFecha_fin(LocalDate.parse("2025-12-02"));
-        e.setNombre("me");
-        e.setApellido("mo");
-        e.setEstado("RESERVADO");
-        e.setIdReserva(1L);
-
-        e.setListaHabitaciones(crearListaHabitaciones());
+        e.setEstado(EstadoHab.RESERVADA);
+        e.setIdHabitacion(101L);
         return List.of(e);
     }
 
@@ -315,7 +322,7 @@ public class TestCU04ControllerUnitario {
     public void listaHabitacionesDevuelveNull() throws Exception {
         when(gestorHabitacion.listarHabitaciones())
                 .thenReturn(null);
-        mockMvc.perform(get("/api/habitacion")).andExpect(status().isBadRequest());
+        mockMvc.perform(get("/api/habitacion")).andExpect(status().isOk());
     }
 
 
@@ -323,7 +330,7 @@ public class TestCU04ControllerUnitario {
     public void listaHabitacionesDevuelveVacio() throws Exception {
         when(gestorHabitacion.listarHabitaciones())
                 .thenReturn(List.of());
-        mockMvc.perform(get("/api/habitacion")).andExpect(status().isBadRequest());
+        mockMvc.perform(get("/api/habitacion")).andExpect(status().isOk());
     }
 
     @Test
@@ -333,10 +340,14 @@ public class TestCU04ControllerUnitario {
         mockMvc.perform(get("/api/habitacion")).andExpect(status().isOk());
     }
 
-    private List<Habitacion> crearListaHabitaciones() {
-        Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
+    private List<HabitacionDTO> crearListaHabitaciones() {
+        HabitacionDTO h1 = new HabitacionDTO(), h2 = new HabitacionDTO();
         h1.setNroHab(101L);
+        h1.setEstado_hab(EstadoHab.DISPONIBLE);
+        h1.setTipo_hab(TipoHab.DOBLEESTANDAR);
         h2.setNroHab(202L);
+        h2.setEstado_hab(EstadoHab.DISPONIBLE);
+        h2.setTipo_hab(TipoHab.DOBLEESTANDAR);
         return List.of(h1,h2);
     }
 

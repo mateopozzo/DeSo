@@ -142,6 +142,10 @@ public class GestorHabitacion {
 
     public void crearReserva(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
 
+        if(reservaDTO == null){
+            throw new ReservaInvalidaException("DTO nulo");
+        }
+
         Reserva reserva = new Reserva(
                 reservaDTO.getFecha_inicio(),
                 reservaDTO.getFecha_fin(),

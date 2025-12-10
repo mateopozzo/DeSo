@@ -54,8 +54,9 @@ git checkout entrega-final-diseño
 ## Flujo de trabajo propuesto
 
 Existen tres formas de correr el sistema
-1. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, el front-end se podrá acceder desde localhost:8080/.
-2. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, luego dirijirse a DeSo/hotel-premier y ejecutar `npm run build`, accediendo al sistema desde localhost:3000/
+1. 
+2. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, el front-end se podrá acceder desde localhost:8080/.
+3. Abrir el proyecto en su IDE de preferencia y compile el proyecto desde src/main/java/ddb/deso/DeSo.java, luego dirijirse a DeSo/hotel-premier y ejecutar `npm run build`, accediendo al sistema desde localhost:3000/
 
 ----
 

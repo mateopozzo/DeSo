@@ -1,5 +1,6 @@
 package ddb.deso;
 
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.gestores.GestorAlojamiento;
 import ddb.deso.service.TipoDoc;
@@ -25,7 +26,7 @@ import static org.springframework.test.util.AssertionErrors.*;
 
 @SpringBootTest
 @Transactional
-@Rollback
+@Rollback(value = true)
 public class TestCU09Integracion {
 
     @Autowired
@@ -45,7 +46,7 @@ public class TestCU09Integracion {
     public Alojado crearAlojadoUno(){
         DatosContacto dc = new DatosContacto("5342334", "prueba@gmail.com");
         DatosPersonales dp = new DatosPersonales("Perez", "Juan", "argentino", "Excento", "45673829", TipoDoc.DNI, "Desocupado", "", LocalDate.parse("2005-03-14"));
-        DatosResidencia dr = new DatosResidencia("Lavaisse", "Capital", "Santa Fe", "Santa Fe", "Argentina", "", "","3000");
+        DatosResidencia dr = new DatosResidencia("Lavaisse", "Capital", "Santa Fe", "Santa Fe", "Argentina", "123", "12","3000");
         DatosAlojado da = new DatosAlojado(dc, dr, dp);
         return new Invitado(da);
     }
@@ -60,7 +61,7 @@ public class TestCU09Integracion {
         DatosContacto dc = new DatosContacto("35532345", "prueba@gmail.com");
         DatosPersonales dp = new DatosPersonales("Ramiez", "Sean", "mexicano", "Excento", "45673829", TipoDoc.DNI, "Desocupado", "", LocalDate.parse("2003-02-01"));
         System.out.println("en dp" + dp.getNroDoc());
-        DatosResidencia dr = new DatosResidencia("Ricardo Aldao", "Capital", "Santa Fe", "Santa Fe", "Argentina", "", "","3000");
+        DatosResidencia dr = new DatosResidencia("Ricardo Aldao", "Capital", "Santa Fe", "Santa Fe", "Argentina", "1234", "1234","3000");
         DatosAlojado da = new DatosAlojado(dc, dr, dp);
         System.out.println("en datos" + da.getNroDoc());
         return new Invitado(da);
@@ -83,17 +84,20 @@ public class TestCU09Integracion {
 
         // criterio de busqueda final
         CriteriosBusq crit = new CriteriosBusq(null,null, TipoDoc.DNI, "45673829");
-        Alojado resultado = null;
+        CriteriosBusq resultado = null;
 
         // prints para debugs
         System.out.println("en invitado datos dp" + alojado1.getDatos().getDatos_personales().getNroDoc());
         System.out.println("en invitado datos " + alojado1.getDatos().getNroDoc());
         System.out.println("en invitado alojid "+alojado1.getId().getNroDoc());
 
-        gestor.darDeAltaHuesped(alojado1);// guardado primer huesped
+        AlojadoDTO alojadoDarDeAlta1 = new AlojadoDTO(alojado1);
+        AlojadoDTO alojadoDarDeAlta2 = new AlojadoDTO(alojado2);
+
+        gestor.darDeAltaHuesped(alojadoDarDeAlta1);// guardado primer huesped
         System.out.println("Primer alojado guardado"); //aviso
 
-        gestor.darDeAltaHuesped(alojado2);// guardado de segundo huesped
+        gestor.darDeAltaHuesped(alojadoDarDeAlta2);// guardado de segundo huesped
 
         // resultado de la busqueda
         var lista = gestor.buscarAlojado(crit);
@@ -103,7 +107,14 @@ public class TestCU09Integracion {
         resultado = lista.getFirst();
 
         // el unico resultado debe ser el alojado2
-        assertEquals("Resultado no es el segundo guardado", alojado2, resultado);
+        assertEquals("Resultado no es el segundo guardado",
+                new CriteriosBusq(
+                        alojado2.getDatos().getDatos_personales().getApellido(),
+                        alojado2.getDatos().getDatos_personales().getNombre(),
+                        alojado2.getDatos().getDatos_personales().getTipoDoc(),
+                        alojado2.getDatos().getDatos_personales().getNroDoc()),
+                resultado
+        );
     }
 
 }

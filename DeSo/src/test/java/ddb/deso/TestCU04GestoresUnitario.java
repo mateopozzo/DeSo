@@ -1,9 +1,9 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.DAO.EstadiaDAO;
-import ddb.deso.almacenamiento.DAO.HabitacionDAO;
-import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.almacenamiento.DAO.*;
+import ddb.deso.almacenamiento.DTO.ReservaDTO;
 import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
 import ddb.deso.gestores.excepciones.ReservaInvalidaException;
 import ddb.deso.service.EstadoHab;
 import ddb.deso.service.TipoHab;
@@ -11,8 +11,10 @@ import ddb.deso.service.habitaciones.Estadia;
 import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.service.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
@@ -24,17 +26,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestCU04GestoresUnitario {
 
-    @MockitoBean
+    @Mock
     private HabitacionDAO habitacionDAO;
-    @MockitoBean
+    @Mock
     private EstadiaDAO estadiaDAO;
-    @MockitoBean
+    @Mock
     private ReservaDAO reservaDAO;
+    @Mock
+    private AlojadoDAO alojadoDAO;
+    @Mock
+    private DatosCheckInDAO checkInDAO;
 
-    @Autowired
+    @InjectMocks
     private GestorHabitacion gestorHabitacion;
 
     private List<Estadia> crearEstadiaConflictiva(){
@@ -74,6 +80,18 @@ public class TestCU04GestoresUnitario {
         return reserva;
     }
 
+    private ReservaDTO convertirReservaADTO(Reserva r){
+        ReservaDTO ret = new ReservaDTO();
+        ret.setApellido(r.getApellido());
+        ret.setNombre(r.getNombre());
+        ret.setEstado(r.getEstado());
+        ret.setFecha_fin(r.getFecha_fin());
+        ret.setFecha_inicio(r.getFecha_inicio());
+        ret.setTelefono(r.getTelefono());
+        return ret;
+
+    }
+
     private List<Reserva> crearReservaConflictiva(){
         var r1 = crearReservaValida();
         var r2 = crearReservaValida();
@@ -109,19 +127,27 @@ public class TestCU04GestoresUnitario {
 
     @Test
     public void reservaValida(){
+        Habitacion hab = new Habitacion();
+        hab.setCapacidad(1);
+        hab.setTipo_hab(TipoHab.DOBLEESTANDAR);
+        hab.setEstado_hab(EstadoHab.DISPONIBLE);
+        hab.setTarifa(234);
+        hab.setNroHab(101L);
+        when(habitacionDAO.buscarPorNumero(101L)).thenReturn(hab);
         var r = crearReservaValida();
         assertDoesNotThrow(
-                ()->gestorHabitacion.crearReserva(r, crearListaIdHabitaciones())
+                ()->gestorHabitacion.crearReserva(convertirReservaADTO(r), List.of(101L))
         );
     }
 
     @Test
     public void habitacionesInexsitentes(){
         when(habitacionDAO.buscarPorNumero(101L)).thenReturn(null);
-        when(habitacionDAO.buscarPorNumero(202L)).thenReturn(null);
         assertThrows(
-                ReservaInvalidaException.class,
-                ()->gestorHabitacion.crearReserva(crearReservaValida(), crearListaIdHabitaciones())
+                HabitacionInexistenteException.class,
+                ()->gestorHabitacion.crearReserva(
+                        convertirReservaADTO(crearReservaValida()),
+                        crearListaIdHabitaciones())
         );
     }
 
@@ -129,11 +155,12 @@ public class TestCU04GestoresUnitario {
     public void existeEstadiaConflictiva(){
         var lh = crearListaHabitaciones();
         when(habitacionDAO.buscarPorNumero(101L)).thenReturn(lh.getFirst());
-        when(habitacionDAO.buscarPorNumero(202L)).thenReturn(lh.getLast());
         when(estadiaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(crearEstadiaConflictiva());
         assertThrows(
                 ReservaInvalidaException.class,
-                ()->gestorHabitacion.crearReserva(crearReservaValida(), crearListaIdHabitaciones())
+                ()->gestorHabitacion.crearReserva(
+                        convertirReservaADTO(crearReservaValida()),
+                        crearListaIdHabitaciones())
         );
     }
 
@@ -145,7 +172,9 @@ public class TestCU04GestoresUnitario {
         when(reservaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(crearReservaConflictiva());
         assertThrows(
                 ReservaInvalidaException.class,
-                ()->gestorHabitacion.crearReserva(crearReservaValida(), crearListaIdHabitaciones())
+                ()->gestorHabitacion.crearReserva(
+                        convertirReservaADTO(crearReservaValida()),
+                        crearListaIdHabitaciones())
         );
     }
 
@@ -158,20 +187,20 @@ public class TestCU04GestoresUnitario {
         when(reservaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(crearReservaConflictiva());
         assertThrows(
                 ReservaInvalidaException.class,
-                ()->gestorHabitacion.crearReserva(crearReservaValida(), crearListaIdHabitaciones())
+                ()->gestorHabitacion.crearReserva(
+                        convertirReservaADTO(crearReservaValida()), crearListaIdHabitaciones())
         );
     }
 
     @Test
     public void existenReservasEstadiasNoConflictivas(){
         var lh = crearListaHabitaciones();
-        when(habitacionDAO.buscarPorNumero(101L)).thenReturn(lh.getFirst());
-        when(habitacionDAO.buscarPorNumero(202L)).thenReturn(lh.getLast());
-        when(estadiaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(crearEstadiaNoConflictiva());
-        when(reservaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(crearReservasNoConflictivas());
-        assertThrows(
-                ReservaInvalidaException.class,
-                ()->gestorHabitacion.crearReserva(crearReservaValida(), crearListaIdHabitaciones())
+        when(habitacionDAO.buscarPorNumero(101L)).thenReturn(lh.get(0));
+        when(habitacionDAO.buscarPorNumero(202L)).thenReturn(lh.get(1));
+        when(estadiaDAO.listarPorFecha(any(LocalDate.class), any(LocalDate.class))).thenReturn(null);
+        assertDoesNotThrow(
+                ()->gestorHabitacion.crearReserva(
+                        convertirReservaADTO(crearReservaValida()), crearListaIdHabitaciones())
         );
     }
 

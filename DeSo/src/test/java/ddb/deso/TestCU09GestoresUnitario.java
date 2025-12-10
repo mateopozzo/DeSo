@@ -9,6 +9,7 @@ import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -96,8 +97,7 @@ public class TestCU09GestoresUnitario {
     public void campoObligatorioNulo(){
         var a = crearAlojadoDTO();
         a.setNombre(null);
-        var alojado = FactoryAlojado.createFromDTO(a);
-        assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(alojado));
+        assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(a));
     }
 
     /**
@@ -111,8 +111,7 @@ public class TestCU09GestoresUnitario {
     public void campoObligatorioQuedaVacio(){
         var a = crearAlojadoDTO();
         a.setNombre("");
-        var alojado = FactoryAlojado.createFromDTO(a);
-        assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(alojado));
+        assertThrows(AlojadoInvalidoException.class, ()->gestor.darDeAltaHuesped(a));
     }
 
     /**
@@ -125,8 +124,7 @@ public class TestCU09GestoresUnitario {
     @Test
     public void gestorRecibeAljadoValido(){
         var a = crearAlojadoDTO();
-        var alojado = FactoryAlojado.createFromDTO(a);
-        assertDoesNotThrow(()->gestor.darDeAltaHuesped(alojado), "Recibir un alojado valido no deberia arrojar excepcion");
+        assertDoesNotThrow(()->gestor.darDeAltaHuesped(a), "Recibir un alojado valido no deberia arrojar excepcion");
     }
 // TODO -> Probar nulidad campo por campo
 // TODO -> Probar vacuidad campo por campo
