@@ -38,7 +38,7 @@
 - Springboot, PostgreSQL
 - Mockito, JUnit
 
-**Librerías:** GSON, Jline, Springboot: Starter, Data JPA, Postgresql, Lombok, Commons-lang3, Annotations (JetBrains), Starter-test, Junit-Jupiter.
+**Librerías:** GSON, Jline, Springboot: Starter, Data JPA, Postgresql (Hosteado por servidor Aiven), Lombok, Commons-lang3, Annotations (JetBrains), Starter-test, Junit-Jupiter.
 
 ---
 
