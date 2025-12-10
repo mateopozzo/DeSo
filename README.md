@@ -78,7 +78,7 @@ npm run build
 
 Esto compila el front. Es necesario tener npm instalado; puede hacerse con `npm install`. Podrá acceder a la página en [localhost:3000](http://localhost:3000/).
 
----
+_Recomendamos consultar fechas desde la fecha actual hasta fines de Diciembre, ya que tiene habitaciones ocupadas y reservadas_
 
 ## Documentación
 
