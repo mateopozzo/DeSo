@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
 
-import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.DatosAlojado;
-import ddb.deso.alojamiento.FactoryAlojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
-import ddb.deso.alojamiento.Validador;
+import ddb.deso.service.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.service.alojamiento.DatosAlojado;
+import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.alojamiento.Validador;
 
 /**
  * Clase que representa la interfaz de consola para dar de alta a un nuevo huésped
@@ -21,6 +23,7 @@ import ddb.deso.alojamiento.Validador;
  * 
  * @author 
  */
+@Deprecated
 public class InterfazDarAlta {
     
     /** Entrada estándar utilizada para leer los datos del usuario. */
@@ -53,11 +56,12 @@ public class InterfazDarAlta {
 
         camposInvalidos.set(0, 12);
         camposDireccionInvalida.set(0, 8);
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
 
         boolean bandera = true;
         DatosAlojado da = new DatosAlojado();
-        Alojado nuevoAlojado = FactoryAlojado.create(1, da);
-
+        AlojadoDTO nuevoAlojado = new AlojadoDTO();
         while (bandera) {
             System.out.println("CREAR HUESPED NUEVO --------------------------------------");
             listaDatosHuesped(nuevoAlojado);
@@ -76,9 +80,9 @@ public class InterfazDarAlta {
                         muestraCamposValidos();
                         continue;
                     } else {
-                        String nro_doc = nuevoAlojado.getDatos().getDatos_personales().getNroDoc();
-                        TipoDoc tipo_doc = nuevoAlojado.getDatos().getDatos_personales().getTipoDoc();
-                        boolean existe_dni = GestorAlojamiento.dniExiste(nro_doc, tipo_doc);
+                        String nro_doc = nuevoAlojado.getNroDoc();
+                        TipoDoc tipo_doc = nuevoAlojado.getTipoDoc();
+                        boolean existe_dni = gestorAlojamiento.dniExiste(nro_doc, tipo_doc);
 
                         if (existe_dni) {
                             System.out.println("\n¡CUIDADO! El tipo y número de documento ya existen en el sistema.");
@@ -92,15 +96,15 @@ public class InterfazDarAlta {
                                 camposInvalidos.set(3); // marca nro doc como inválido
                                 continue;
                             } else {
-                                Alojado alojadoAnterior = GestorAlojamiento.obtenerAlojadoPorDNI(nro_doc, tipo_doc);
-                                GestorAlojamiento.eliminarAlojado(alojadoAnterior);
+                                AlojadoDTO alojadoAnterior = gestorAlojamiento.obtenerAlojadoPorDNI(nro_doc, tipo_doc);
+                                gestorAlojamiento.eliminarAlojado(alojadoAnterior);
                             }
                         }
                         // Guarda los datos
-                        GestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
+                        gestorAlojamiento.darDeAltaHuesped(nuevoAlojado);
                         System.out.print("El Huésped " +
-                                nuevoAlojado.getDatos().getDatos_personales().getNombre() + " " +
-                                nuevoAlojado.getDatos().getDatos_personales().getApellido() +
+                                nuevoAlojado.getNombre() + " " +
+                                nuevoAlojado.getApellido() +
                                 " se ha cargado correctamente.");
                         bandera = false;
                         String boton3 = "-1";
@@ -112,8 +116,6 @@ public class InterfazDarAlta {
                             System.out.print("\033[H\033[2J");
                             System.out.flush();
                             bandera = true;
-                            da = new DatosAlojado();
-                            nuevoAlojado.setDatos(da);
                         }
                     }
                     break;
@@ -144,28 +146,28 @@ public class InterfazDarAlta {
      *
      * @param alojado objeto {@link Alojado} cuyos datos se mostrarán.
      */
-    private void listaDatosHuesped(Alojado alojado) {
+    private void listaDatosHuesped(AlojadoDTO alojado) {
         System.out.println("Datos del Huésped:\n" +
-                "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
-                "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
-                "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-                "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
-                "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
-                "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-                "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
+                "1. Apellido:" + alojado.getApellido() + "\n" +
+                "2. Nombre:" + alojado.getNombre() + "\n" +
+                "3. Tipo de Documento:" + alojado.getTipoDoc() + "\n" +
+                "4. Número de Documento:" + alojado.getNroDoc() + "\n" +
+                "5. Cuit:" + alojado.getCUIT() + "\n" +
+                "6. Posición frente al IVA:" + alojado.getPosicionIva() + "\n" +
+                "7. Fecha de Nacimiento:" + alojado.getFechanac() + "\n" +
                 "8. Dirección:\n" +
-                "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
-                "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-                "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
-                "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
-                "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-                "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
-                "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
-                "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
-                "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
-                "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
-                "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
-                "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
+                "  Calle:" + alojado.getCalle() + "\n" +
+                "  Número:" + alojado.getNroCalle() + "\n" +
+                "  Piso:" + alojado.getPiso() + "\n" +
+                "  Departamento:" + alojado.getDepto() + "\n" +
+                "  Localidad:" + alojado.getLocalidad() + "\n" +
+                "  Provincia:" + alojado.getProv() + "\n" +
+                "  País:" + alojado.getPais() + "\n" +
+                "  Código Postal:" + alojado.getCodPost() + "\n" +
+                "9. Teléfono:" + alojado.getTelefono() + "\n" +
+                "10. Email:" + alojado.getEmail() + "\n" +
+                "11. Ocupación:" + alojado.getOcupacion() + "\n" +
+                "12. Nacionalidad:" + alojado.getNacionalidad() + "\n");
     }
 
     /**
@@ -191,28 +193,28 @@ public class InterfazDarAlta {
     }
 
        /**
-     * Permite cargar o modificar un campo específico de los datos de un huésped.
-     * <p>
-     * Según la opción numérica ingresada, este método solicita al usuario el valor
-     * correspondiente, lo valida mediante la clase {@link Validador} y actualiza
-     * el objeto {@link Alojado}. En caso de que el valor sea inválido, se marca el
-     * bit correspondiente en los {@link BitSet} de validación.
-     * </p>
-     *
-     * @param alojado el objeto {@link Alojado} cuyos datos se van a completar o modificar.
-     * @param opcion número del campo que el usuario desea modificar (entre 1 y 12).
-     * @param camposInvalidos conjunto de bits que marca los campos personales inválidos.
-     * @param camposDireccionInvalida conjunto de bits que marca los campos de dirección inválidos.
-     * @return el objeto {@link Alojado} actualizado con los nuevos valores.
-     */
-    private Alojado cargarCampo(Alojado alojado, String opcion,
-                                BitSet camposInvalidos, BitSet camposDireccionInvalida) {
+        * Permite cargar o modificar un campo específico de los datos de un huésped.
+        * <p>
+        * Según la opción numérica ingresada, este método solicita al usuario el valor
+        * correspondiente, lo valida mediante la clase {@link Validador} y actualiza
+        * el objeto {@link Alojado}. En caso de que el valor sea inválido, se marca el
+        * bit correspondiente en los {@link BitSet} de validación.
+        * </p>
+        *
+        * @param alojado                 el objeto {@link Alojado} cuyos datos se van a completar o modificar.
+        * @param opcion                  número del campo que el usuario desea modificar (entre 1 y 12).
+        * @param camposInvalidos         conjunto de bits que marca los campos personales inválidos.
+        * @param camposDireccionInvalida conjunto de bits que marca los campos de dirección inválidos.
+        * @return el objeto {@link Alojado} actualizado con los nuevos valores.
+        */
+    private AlojadoDTO cargarCampo(AlojadoDTO alojado, String opcion,
+                                   BitSet camposInvalidos, BitSet camposDireccionInvalida) {
 
         switch (opcion) {
             case "1":
                 System.out.print("Apellido: ");
                 String apellido = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setApellido(apellido);
+                alojado.setApellido(apellido);
                 if (Validador.isApellidoValido(apellido)) {
                     camposInvalidos.clear(0);
                 } else {
@@ -223,7 +225,7 @@ public class InterfazDarAlta {
             case "2":
                 System.out.print("Nombre: ");
                 String nombre = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setNombre(nombre);
+                alojado.setNombre(nombre);
                 if (Validador.isNombreValido(nombre)) {
                     camposInvalidos.clear(1);
                 } else {
@@ -234,7 +236,7 @@ public class InterfazDarAlta {
             case "3":
                 System.out.print("Tipo de documento: ");
                 TipoDoc nuevoTipoDoc = menuTipoDoc();
-                alojado.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
+                alojado.setTipoDoc(nuevoTipoDoc);
 
                 if (Validador.isTipoDocumentoValido(nuevoTipoDoc)) {
                     camposInvalidos.clear(2);
@@ -246,9 +248,9 @@ public class InterfazDarAlta {
             case "4":
                 System.out.print("Número de documento: ");
                 String nroDoc = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setNroDoc(nroDoc);
+                alojado.setNroDoc(nroDoc);
 
-                if (Validador.isNumeroDocumentoValido(nroDoc, alojado.getDatos().getDatos_personales().getTipoDoc())) {
+                if (Validador.isNumeroDocumentoValido(nroDoc, alojado.getTipoDoc())) {
                     camposInvalidos.clear(3);
                 } else {
                     camposInvalidos.set(3);
@@ -258,7 +260,7 @@ public class InterfazDarAlta {
             case "5":
                 System.out.print("CUIT (con el formato XX-XXXXXXXX-X): ");
                 String cuit = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setCUIT(cuit);
+                alojado.setCUIT(cuit);
                 if (Validador.isCuitValidoOpcional(cuit)) {
                     camposInvalidos.clear(4);
                 } else {
@@ -269,7 +271,7 @@ public class InterfazDarAlta {
             case "6":
                 System.out.print("Posición frente al IVA: ");
                 String posIva = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setPosicionIva(posIva);
+                alojado.setPosicionIva(posIva);
 
                 if (Validador.isPosicionIvaValida(posIva)) {
                     camposInvalidos.clear(5);
@@ -282,7 +284,7 @@ public class InterfazDarAlta {
                 System.out.print("Fecha de nacimiento (AAAA-MM-DD): ");
                 String fechaStr = entrada.nextLine();
                 LocalDate nuevaFecha = LocalDate.parse(fechaStr);
-                alojado.getDatos().getDatos_personales().setFechanac(nuevaFecha);
+                alojado.setFechanac(fechaStr);
 
                 if (Validador.isFechaNacimientoValida(nuevaFecha)) {
                     camposInvalidos.clear(6);
@@ -301,7 +303,7 @@ public class InterfazDarAlta {
                     case "1":
                         System.out.print("Calle: ");
                         String nuevaCalle = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setCalle(nuevaCalle);
+                        alojado.setCalle(nuevaCalle);
                         if (Validador.isCalleValida(nuevaCalle)) {
                             camposDireccionInvalida.clear(0);
                         } else {
@@ -312,7 +314,7 @@ public class InterfazDarAlta {
                     case "2":
                         System.out.print("Número: ");
                         String nuevoNumero = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
+                        alojado.setNroCalle(nuevoNumero);
                         if (Validador.isNumeroCalleValido(nuevoNumero)) {
                             camposDireccionInvalida.clear(1);
                         } else {
@@ -323,7 +325,7 @@ public class InterfazDarAlta {
                     case "3":
                         System.out.print("Piso: ");
                         String nuevoPiso = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setPiso(nuevoPiso);
+                        alojado.setPiso(nuevoPiso);
                         if (Validador.isNumeroCalleValido(nuevoPiso)) {
                             camposDireccionInvalida.clear(2);
                         } else {
@@ -334,7 +336,7 @@ public class InterfazDarAlta {
                     case "4":
                         System.out.print("Departamento: ");
                         String nuevoDepto = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setDepto(nuevoDepto);
+                        alojado.setDepto(nuevoDepto);
                         if (Validador.isNumeroCalleValido(nuevoDepto)) {
                             camposDireccionInvalida.clear(3);
                         } else {
@@ -345,7 +347,7 @@ public class InterfazDarAlta {
                     case "5":
                         System.out.print("Localidad: ");
                         String nuevaLocalidad = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
+                        alojado.setLocalidad(nuevaLocalidad);
                         if (Validador.isLocalidadValida(nuevaLocalidad)) {
                             camposDireccionInvalida.clear(4);
                         } else {
@@ -356,7 +358,7 @@ public class InterfazDarAlta {
                     case "6":
                         System.out.print("Provincia: ");
                         String nuevaProvincia = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setProv(nuevaProvincia);
+                        alojado.setProv(nuevaProvincia);
                         if (Validador.isProvinciaValida(nuevaProvincia)) {
                             camposDireccionInvalida.clear(5);
                         } else {
@@ -367,7 +369,7 @@ public class InterfazDarAlta {
                     case "7":
                         System.out.print("País: ");
                         String nuevoPais = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setPais(nuevoPais);
+                        alojado.setPais(nuevoPais);
                         if (Validador.isPaisValido(nuevoPais)) {
                             camposDireccionInvalida.clear(6);
                         } else {
@@ -378,7 +380,7 @@ public class InterfazDarAlta {
                     case "8":
                         System.out.print("Código postal: ");
                         String nuevoCodPost = entrada.nextLine();
-                        alojado.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
+                        alojado.setCodPost(nuevoCodPost);
                         if (Validador.isCodigoPostalValido(nuevoCodPost)) {
                             camposDireccionInvalida.clear(7);
                         } else {
@@ -397,7 +399,7 @@ public class InterfazDarAlta {
             case "9":
                 System.out.print("Teléfono: ");
                 String telefono = entrada.nextLine();
-                alojado.getDatos().getDatos_contacto().setTelefono(telefono);
+                alojado.setTelefono(telefono);
                 if (Validador.isTelefonoValido(telefono)) {
                     camposInvalidos.clear(8);
                 } else {
@@ -408,7 +410,7 @@ public class InterfazDarAlta {
             case "10":
                 System.out.print("Email: ");
                 String email = entrada.nextLine();
-                alojado.getDatos().getDatos_contacto().setEmail(email);
+                alojado.setEmail(email);
                 if (Validador.isEmailValidoOpcional(email)) {
                     camposInvalidos.clear(9);
                 } else {
@@ -419,7 +421,7 @@ public class InterfazDarAlta {
             case "11":
                 System.out.print("Ocupación: ");
                 String ocupacion = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setOcupacion(ocupacion);
+                alojado.setOcupacion(ocupacion);
                 if (Validador.isOcupacionValida(ocupacion)) {
                     camposInvalidos.clear(10);
                 } else {
@@ -430,7 +432,7 @@ public class InterfazDarAlta {
             case "12":
                 System.out.print("Nacionalidad: ");
                 String nacionalidad = entrada.nextLine();
-                alojado.getDatos().getDatos_personales().setNacionalidad(nacionalidad);
+                alojado.setNacionalidad(nacionalidad);
                 if (Validador.isNacionalidadValida(nacionalidad)) {
                     camposInvalidos.clear(11);
                 } else {

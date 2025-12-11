@@ -1,0 +1,32 @@
+{
+  "name": "hotel-premier",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "start-backend": "java -jar ..target/deso-0.0.1-SNAPSHOT.jar",
+    "full-stack-dev": "concurrently \"npm run dev\" \"npm run start-backend\""
+  },
+  "dependencies": {
+    "next": "16.0.7",
+    "postcss": "^8.5.6",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^20",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "babel-plugin-react-compiler": "1.0.0",
+    "concurrently": "^9.2.1",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
+  }
+}

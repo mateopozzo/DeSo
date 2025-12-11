@@ -1,0 +1,142 @@
+@startuml
+title CU15: Ocupar habitacion
+' Actor y participantes
+actor "Conserje" as Conserje
+boundary "GUI" as UI
+participant "Gestor Habitacion" as GestorHabitacion
+participant "Gestor Alojamiento" as GestorAlojamiento
+participant "EstadiaDAO" as EDAO <<Interface>>
+participant "ReservaDAO" as RDAO <<Interface>>
+participant "AlojadoDAO" as ADAO <<Interface>>
+
+database "Base de datos" as BDD <<Database>>
+
+== Inicio del caso de uso ==
+' Precondición
+group Precondicion: El actor esta autenticado en el sistema. El huesped y sus acompañantes existen en el sistema.
+  rnote across: Inicio del caso de uso
+  
+  
+  Conserje -> UI : Asignar una o varias habitaciones a huesped e invitados
+  activate Conserje
+  activate UI
+  
+  UI -> GestorHabitacion : Ejecutar CU05 Mostrar estado de habitaciones
+  activate GestorHabitacion
+  GestorHabitacion -> EDAO : listarEstadias()
+  activate EDAO
+  EDAO -> BDD : listarEstadias()
+  activate BDD
+  BDD --> EDAO : List<Estadia>
+  deactivate BDD
+  EDAO --> GestorHabitacion : List<Estadia>
+  deactivate EDAO
+  GestorHabitacion -> RDAO : listarReservas()
+  activate RDAO
+  RDAO -> BDD : listarReservas()
+  activate BDD
+  BDD --> RDAO : List<Reserva>
+  deactivate BDD
+  RDAO --> GestorHabitacion : List<Reserva>
+  deactivate 
+  GestorHabitacion -> GestorHabitacion : Asignar estado a habitaciones
+  activate GestorHabitacion
+  deactivate GestorHabitacion
+  GestorHabitacion --> UI : Grilla de habitaciones
+  deactivate GestorHabitacion
+  
+  deactivate GestorHabitacion
+  deactivate UI
+  deactivate Conserje
+  alt Disponibilidad : No hay habitaciones disponibles ni reservadas en las fechas solicitadas
+  end
+  note left 
+  Fin de caso de uso 
+  end note
+
+  loop Cargar habitaciones : Mientras Conserje presione "Cargar otra habitacion"  
+
+    loop Verificar disponibilidad : Mientras alguna habitacion sea seleccionada en una fecha no disponible
+      Conserje -> UI : Seleccion dia inicial y dia final de cada habitacion
+      activate Conserje
+      activate UI
+      alt Habitacion distinta a disponible o reservada
+        Conserje -> UI : Click en habitacion con estado distinto a "Disponible" o "Reservada"
+      end
+      alt Habitacion disponible o reservada
+        Conserje -> UI : Click en habitacion con estado "Disponible" o "Reservada" englobando alguna fecha de ocupacion en que el estado es distinto a estos
+      end
+      alt Habitacion Reservada
+        Conserje -> UI : Click en habitacion con estado "Disponible" o "Reservada" englobando algun dia de la secuencia donde el estado es "Reservada"
+        UI --> Conserje : Mensaje informando dias reservados y huesped asociado
+        UI --> Conserje : Botones "Ocupar igual" y "Volver"
+        alt Ocupar igual
+          rnote over UI : Break loop
+        end
+      end
+    end    
+  
+    
+    UI --> Conserje : Habitaciones seleccionadas con color rojo
+    UI --> Conserje : Mensaje "Presione cualquier tecla y continua..."
+    Conserje -> UI : Tecla presionada
+    
+    loop Cargar Huespedes : Mientras Conserje presione "Seguir Cargando"
+      UI --> Conserje : Campos de busqueda de huespedes
+      Conserje -> UI : Campos de busqueda ingresados
+      Conserje -> UI : Boton aceptar
+      UI -> GestorAlojamiento : BuscarAlojados(Criterio)
+      activate GestorAlojamiento
+      GestorAlojamiento -> ADAO : BuscarAlojados(Criterio)
+      activate ADAO
+      ADAO -> BDD : BuscarAlojados(Criterio)
+      activate BDD
+      BDD --> ADAO : List<Alojado>
+      deactivate BDD
+      ADAO --> GestorAlojamiento : List<Alojado>
+      deactivate ADAO
+      GestorAlojamiento --> UI : List<AlojadoDTO>
+      deactivate GestorAlojamiento
+      UI --> Conserje : Grilla de huespedes coincidentes
+      Conserje -> UI : Seleccion de huesped
+      Conserje -> UI : Seleccion de invitados
+      Conserje -> UI : Boton aceptar
+      UI --> Conserje : Botones "Seguir cargando" "Cargar otra habitacion" y "Salir"
+      
+    end
+  end
+  Conserje -> UI : Boton Salir
+  
+  loop Cargar habitaciones : Mientras haya estadias que Cargar
+      UI -> GestorHabitacion : CrearEstadia(EstadiaDTO)
+      activate GestorHabitacion
+      GestorHabitacion -> EDAO : CrearEstadia(EstadiaDTO)
+      activate EDAO
+      EDAO -> BDD : CrearEstadia(EstadiaDTO)
+      activate BDD
+      BDD --> EDAO
+      deactivate BDD
+      EDAO --> GestorHabitacion
+      deactivate EDAO
+      GestorHabitacion --> UI
+      deactivate GestorHabitacion
+  end
+  note left 
+      Se persisten todas las estadias en las habitaciones correspondientes
+  end note
+  
+  deactivate UI
+  deactivate Conserje
+  
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondicion (exito) -- Una o varias habitaciones son asignadas a un huesped y sus acompañantes.
+  Postcondicion (fracaso) -- No se asignan habitaciones.
+end note
+
+@enduml
+ 
+ 
+

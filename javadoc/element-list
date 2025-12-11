@@ -1,12 +1,17 @@
-unnamed package
 ddb.deso
 ddb.deso.almacenamiento.DAO
 ddb.deso.almacenamiento.DTO
+ddb.deso.almacenamiento.JPA
 ddb.deso.almacenamiento.JSON
-ddb.deso.alojamiento
-ddb.deso.contabilidad
-ddb.deso.habitaciones
-ddb.deso.login
-ddb.deso.login.negocio
-ddb.deso.login.negocio.excepciones
+ddb.deso.config
+ddb.deso.controller
+ddb.deso.gestores
+ddb.deso.gestores.excepciones
 ddb.deso.presentacion
+ddb.deso.repository
+ddb.deso.service
+ddb.deso.service.alojamiento
+ddb.deso.service.contabilidad
+ddb.deso.service.habitaciones
+ddb.deso.service.login
+ddb.deso.service.login.excepciones

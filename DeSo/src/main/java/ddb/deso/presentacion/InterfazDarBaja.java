@@ -1,7 +1,10 @@
 package ddb.deso.presentacion;
 
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.gestores.GestorAlojamiento;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,6 +22,7 @@ import java.util.Scanner;
  * @author mat
  * @see GestorAlojamiento
  */
+@Deprecated
 public class InterfazDarBaja {
 
     private static Scanner scanner;
@@ -145,8 +149,11 @@ public class InterfazDarBaja {
 
         scanner = scannerExterno;
 
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+
         //  Flujo secundario, el huesped no se puede eliminar
-        var historialAlojado=GestorAlojamiento.historialHuesped(alojadoParaEliminar);
+        var historialAlojado=gestorAlojamiento.historialHuesped(alojadoParaEliminar);
         if(historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.SE_ALOJO)){
             noSePuedeDarBaja();
             return;
@@ -161,7 +168,9 @@ public class InterfazDarBaja {
             return;
         }
 
-        GestorAlojamiento.eliminarAlojado(alojadoParaEliminar);
+        AlojadoDTO aljoadoDTOParaEliminar = new AlojadoDTO(alojadoParaEliminar);
+
+        gestorAlojamiento.eliminarAlojado(aljoadoDTOParaEliminar);
 
         terminarCU11(alojadoParaEliminar);
     }

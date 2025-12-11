@@ -4,8 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.DatosCheckInDTO;
+import ddb.deso.service.alojamiento.DatosCheckIn;
 
 import java.util.List;
 
@@ -14,8 +13,8 @@ import java.util.List;
  * @author mat
  */
 public interface DatosCheckInDAO {
-    void crearDatosCheckIn(DatosCheckInDTO datosCheckIn);
-    void actualizarDatosCheckIn(DatosCheckInDTO datosCheckInPre, DatosCheckInDTO datosCheckIn);
-    void eliminarDatosCheckIn(DatosCheckInDTO datosCheckIn);
-    List<DatosCheckInDTO> listarDatosCheckIn();
+    void crearDatosCheckIn(DatosCheckIn datosCheckIn);
+    void actualizarDatosCheckIn(DatosCheckIn datosCheckInPre, DatosCheckIn datosCheckIn);
+    void eliminarDatosCheckIn(DatosCheckIn datosCheckIn);
+    List<DatosCheckIn> listarDatosCheckIn();
 }

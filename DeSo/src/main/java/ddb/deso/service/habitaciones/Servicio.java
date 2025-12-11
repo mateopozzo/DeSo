@@ -1,0 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package ddb.deso.service.habitaciones;
+
+import ddb.deso.service.TipoServicio;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Representa un **servicio** ofrecido en una habitación (o en el contexto
+ * de una reserva).
+ * <p>
+ * Su propósito principal es encapsular el tipo de servicio ofrecido,
+ * el cual es definido por el enumerador {@link TipoServicio}.
+ * </p>
+ *
+ * @see ddb.deso.service.TipoServicio
+ */
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="servicio")
+public class Servicio {
+    /**
+     * Identificador único y autoincremental del servicio.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
+    long idServicio;
+    /**
+     * El tipo de servicio específico (ej: LAVADOYPLANCHADO, SAUNA).
+     */
+    private TipoServicio tipo_servicio;
+}

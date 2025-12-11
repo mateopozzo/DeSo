@@ -1,14 +1,15 @@
 package ddb.deso.presentacion;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
 
-import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.GestorAlojamiento;
-import ddb.deso.alojamiento.Validador;
+import ddb.deso.service.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.alojamiento.Validador;
 
 
 /**
@@ -26,6 +27,7 @@ import ddb.deso.alojamiento.Validador;
  * @see GestorAlojamiento
  * @see Validador
  */
+@Deprecated
 
 public class InterfazModificarHuesped {
     private Scanner entrada;
@@ -78,6 +80,9 @@ public class InterfazModificarHuesped {
         Alojado datosModificados = alojadoOriginal;
         boolean bandera = true;
 
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+
         while (bandera) {
             listaDatosHuesped(datosModificados);
 
@@ -92,10 +97,10 @@ public class InterfazModificarHuesped {
                 case "siguiente":
                 case "s":
                     if (camposInvalidos.isEmpty()) {
-                        if (!GestorAlojamiento.dniExiste(datosModificados.getDatos().getDatos_personales().getNroDoc(), datosModificados.getDatos().getDatos_personales().getTipoDoc())) {
+                        if (!gestorAlojamiento.dniExiste(datosModificados.getDatos().getDatos_personales().getNroDoc(), datosModificados.getDatos().getDatos_personales().getTipoDoc())) {
                             //guardo datos modificados
                             System.out.println("Guardando cambios...");
-                            GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
+                            gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
                             System.out.println("Cambios guardados.");
                             System.out.print("Los datos del huésped han sido modificados correctamente.");
                             bandera = false;//sale del bucle principal y el CU termina
@@ -108,7 +113,7 @@ public class InterfazModificarHuesped {
                             }
                             if (boton2.equals("1")) {
                                 //guardo datos con dni repetido
-                                GestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
+                                gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
                                 System.out.print("Los datos del huésped han sido modificados correctamente.");
                                 bandera = false;//sale del bucle principal y el CU termina
                             } else {

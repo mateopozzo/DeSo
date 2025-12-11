@@ -1,65 +1,70 @@
 package ddb.deso.almacenamiento.DAO;
 import java.util.List;
 
-import ddb.deso.TipoDoc;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.service.TipoDoc;
+import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 /**
- * Interfaz DAO (Data Access Object) que define las operaciones de acceso a datos
- * para la entidad {@link AlojadoDTO}.
- * <p>
- * Permite realizar las operaciones CRUD básicas y búsquedas según distintos
- * criterios relacionados con los huéspedes alojados.
- * </p>
+ * Contrato de persistencia para la entidad {@link Alojado}.
+ * Define operaciones CRUD y consultas especializadas sobre el repositorio de datos.
  *
  * @author mat
  */
 public interface AlojadoDAO {
 
     /**
-     * Registra un nuevo huésped en el almacenamiento persistente.
+     * Persiste una nueva instancia de Alojado en el repositorio.
      *
-     * @param alojado objeto {@link AlojadoDTO} que contiene la información del huésped a registrar.
+     * @param alojado Entidad con los datos a registrar. No debe ser {@code null}.
      */
-    void crearAlojado(AlojadoDTO alojado);
+    void crearAlojado(Alojado alojado);
 
     /**
-     * Actualiza los datos de un huésped existente en el sistema.
+     * Actualiza el estado de persistencia de un Alojado.
      *
-     * @param alojadoPrev datos actuales del huésped antes de la modificación.
-     * @param alojadoNuevo nuevos datos a actualizar.
+     * @param alojadoPrev Referencia al estado anterior (utilizado para validación o concurrencia).
+     * @param alojadoNuevo Entidad con el estado actualizado a persistir.
      */
-    void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo);
-
-     /**
-     * Elimina un huésped del almacenamiento persistente.
-     *
-     * @param alojado objeto {@link AlojadoDTO} que representa al huésped a eliminar.
-     */
-    void eliminarAlojado(AlojadoDTO alojado);
-
-     /**
-     * Busca huéspedes que cumplan con los criterios especificados.
-     *
-     * @param criterios objeto {@link CriteriosBusq} que define los parámetros de búsqueda (apellido, documento, etc.).
-     * @return una lista de {@link AlojadoDTO} que cumplen con los criterios.
-     */
-    List<AlojadoDTO> buscarHuespedDAO(CriteriosBusq criterios);
-
-     /**
-     * Obtiene una lista completa de todos los huéspedes alojados registrados.
-     *
-     * @return lista de {@link AlojadoDTO}.
-     */
-    List<AlojadoDTO> listarAlojados();
+    void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo);
 
     /**
-     * Busca un huésped específico según su tipo y número de documento.
+     * Elimina el registro asociado a la entidad proporcionada.
      *
-     * @param documento número de documento a buscar.
-     * @param tipo tipo de documento (por ejemplo, DNI, Pasaporte, etc.).
-     * @return el {@link AlojadoDTO} correspondiente si se encuentra, o {@code null} en caso contrario.
+     * @param alojado Entidad a eliminar del repositorio.
      */
-    AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo);
+    void eliminarAlojado(Alojado alojado);
+
+    /**
+     * Recupera una lista de Alojados que coinciden con los filtros proporcionados.
+     *
+     * @param criterios DTO conteniendo los filtros de búsqueda (e.g., atributos parciales).
+     * @return Lista de coincidencias o lista vacía si no existen resultados.
+     */
+    List<Alojado> buscarAlojado(CriteriosBusq criterios);
+
+    /**
+     * Recupera la totalidad de los registros de Alojados activos.
+     *
+     * @return Lista completa de entidades persistidas.
+     */
+    List<Alojado> listarAlojados();
+
+    /**
+     * Busca una entidad única por su clave de negocio compuesta (Documento + Tipo).
+     *
+     * @param documento Número de documento identificador.
+     * @param tipo Enumeración del tipo de documento {@link TipoDoc}.
+     * @return La entidad {@link Alojado} encontrada o {@code null} si no existe.
+     */
+    Alojado buscarPorDNI(String documento, TipoDoc tipo);
+
+    /**
+     * Transiciona el estado de un registro existente a la categoría de Huésped
+     * mediante su identificación.
+     *
+     * @param nroDoc Número de documento identificador.
+     * @param tipoDoc Cadena de caracteres representando el tipo de documento.
+     */
+    void promoverAHuesped(String nroDoc, String tipoDoc);
 }

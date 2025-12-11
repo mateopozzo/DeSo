@@ -1,11 +1,17 @@
 package ddb.deso.presentacion;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.service.TipoDoc;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.*;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
+import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
+import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.service.alojamiento.*;
 
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 import static java.lang.Integer.parseInt;
 
@@ -21,10 +27,10 @@ import static java.lang.Integer.parseInt;
  * flujo de **alta de un nuevo huésped** (llamando a {@code InterfazDarAlta}).</li>
  * </ul>
  * <p>
- *
- * @author Gael
- * @see GestorAlojamiento#buscarHuesped(CriteriosBusq)
+
+ * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
  */
+@Deprecated
 public class InterfazBusqueda {
     private final Scanner scanner;
 
@@ -39,7 +45,7 @@ public class InterfazBusqueda {
      * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
      * <p>
      * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
-     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarHuesped}
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarAlojado}
      * para iniciar el proceso de búsqueda.
      * </p>
      */
@@ -54,19 +60,31 @@ public class InterfazBusqueda {
         String nombre = scanner.nextLine();
         if(nombre.isEmpty()) nombre = null;
 
+        AlojadoDAO json = new AlojadoDAOJSON();
+        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+
         System.out.println("Ingrese el apellido: ");
         String apellido = scanner.nextLine();
-        if(apellido.isEmpty()) nombre = null;
+        if(apellido.isEmpty()) apellido = null;
 
         TipoDoc tipoDoc = menuTipoDoc(scanner);
 
         System.out.println("Ingrese el número de documento: ");
         String num_documento = scanner.nextLine();
-        if(num_documento.isEmpty()) nombre = null;
+        if(num_documento.isEmpty()) num_documento = null;
 
         // cargar_criterios valida qué criterios se ingresaron y actualiza los criterios del objeto
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
-        GestorAlojamiento.buscarHuesped(criterios_busq);
+        List<CriteriosBusq> alojadosEncontrados = null;
+        try{
+            alojadosEncontrados = gestorAlojamiento.buscarHuesped(criterios_busq);
+        } catch (AlojadosSinCoincidenciasException e){
+            System.out.println(e.getMessage());
+            this.sin_coincidencias();
+        }
+
+        this.seleccion(alojadosEncontrados);
+
     }
 
     /**
@@ -124,8 +142,8 @@ public class InterfazBusqueda {
      *
      * @param encontrados Una lista de {@link AlojadoDTO} que coinciden con la búsqueda.
      */
-    public void seleccion (List<AlojadoDTO> encontrados){
-        AlojadoDTO h_encontrado;
+    public void seleccion (List<CriteriosBusq> encontrados){
+        CriteriosBusq h_encontrado;
         String input_user;
 
         // Si nunca se actualiza el valor bandera me lo muestra
@@ -163,9 +181,12 @@ public class InterfazBusqueda {
                     System.out.println("Huesped seleccionado con éxito.");
                     if (h_encontrado != null){
                         System.out.println("MODIFICAR HUESPED ---- FROM CU02");
-                        DatosContacto cont = new DatosContacto(h_encontrado.getTelefono(), h_encontrado.getEmail());
-                        DatosResidencia res = new DatosResidencia(h_encontrado.getCalle(), h_encontrado.getDepto(), h_encontrado.getLocalidad(), h_encontrado.getProv(), h_encontrado.getPais(), h_encontrado.getNro_calle(), h_encontrado.getPiso(), h_encontrado.getCod_post());
-                        DatosPersonales per = new DatosPersonales(h_encontrado.getNombre(), h_encontrado.getApellido(), h_encontrado.getNacionalidad(), h_encontrado.getPosicionIva(), h_encontrado.getOcupacion(), h_encontrado.getNroDoc(), h_encontrado.getTipoDoc(), h_encontrado.getCUIT(), h_encontrado.getFechanac());
+                        AlojadoDAO json = new AlojadoDAOJSON();
+                        GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
+                        AlojadoDTO encontrado = gestorAlojamiento.obtenerAlojadoPorDNI(h_encontrado.getNroDoc(), h_encontrado.getTipoDoc());
+                        DatosContacto cont = new DatosContacto(encontrado.getTelefono(), encontrado.getEmail());
+                        DatosResidencia res = new DatosResidencia(encontrado.getCalle(), encontrado.getDepto(), encontrado.getLocalidad(), encontrado.getProv(), encontrado.getPais(), encontrado.getNroCalle(), encontrado.getPiso(), encontrado.getCodPost());
+                        DatosPersonales per = new DatosPersonales(encontrado.getNombre(), encontrado.getApellido(), encontrado.getNacionalidad(), encontrado.getPosicionIva(), encontrado.getOcupacion(), encontrado.getTipoDoc(), encontrado.getNroDoc(), encontrado.getCUIT(), LocalDate.parse(encontrado.getFechanac()));
                         DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
                         Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
 

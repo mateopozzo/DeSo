@@ -1,0 +1,70 @@
+@startuml
+title CU02: Buscar Huésped
+' Actor y participantes
+actor "Conserje" as Conserje
+boundary "GUI" as UI
+participant "Gestor Alojamiento" as GestorAlojamiento
+participant "AlojadoDAO" as ADAO <<Interface>>
+database "Base de datos" as BDD <<Database>>
+
+' Precondición
+group Precondicion: El actor esta autenticado
+  rnote across: Inicio del caso de uso
+  
+  
+  Conserje -> UI : Iniciar busqueda
+  activate Conserje
+  activate UI
+  
+  UI --> Conserje : Mostrar todos los campos
+  Conserje -> UI : Completa campos y presiona boton Buscar
+  
+  UI -> GestorAlojamiento : listarHuesped(Criterios)
+  activate GestorAlojamiento
+  GestorAlojamiento -> ADAO : listarHuesped(Criterios)
+  activate ADAO
+  ADAO -> BDD : listarHuesped(Criterios)
+  activate BDD
+  BDD --> ADAO : List<Alojado> 
+  deactivate BDD
+  
+  ADAO --> GestorAlojamiento : List<Huesped>
+  deactivate ADAO
+  GestorAlojamiento --> UI : List<HuespedDTO>
+  deactivate GestorAlojamiento
+  
+  UI --> Conserje : Mostrar lista de huespedes que cumplen criterios
+  
+  alt No existe concordancia segun criterios de busqueda
+    UI -> GestorAlojamiento : Ejecutar CU11 Dar de alta huesped
+    activate GestorAlojamiento
+    deactivate GestorAlojamiento
+    rnote over GestorAlojamiento : Fin del caso de uso
+  end
+  
+  Conserje -> UI : Boton SIGUIENTE
+  alt No se selecciono ninguna persona
+    UI -> GestorAlojamiento : Ejecutar CU11 Dar de alta huesped
+    activate GestorAlojamiento
+    deactivate GestorAlojamiento
+    rnote over GestorAlojamiento : Fin del caso de uso
+  end
+  
+  Conserje -> UI : Seleccion de persona
+  
+  UI -> UI : Ejecutar CU10 Modificar huesped
+
+  deactivate Conserje
+  deactivate UI
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondicion (exito) -- Los datos del huesped quedan en el estado deseado.
+  Postcondicion (fracaso) -- La operacion no se puede concretar.
+end note
+
+@enduml
+ 
+ 
+
