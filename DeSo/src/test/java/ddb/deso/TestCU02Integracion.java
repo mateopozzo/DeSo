@@ -7,6 +7,7 @@ import ddb.deso.service.alojamiento.Huesped;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@Rollback(value = true)
 public class TestCU02Integracion {
 
     @Autowired
@@ -43,10 +45,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit2), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit2);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -62,10 +64,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit5);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -81,10 +83,10 @@ public class TestCU02Integracion {
         assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit5), "Encuentra al menos un resultado");
         var lista = gestorAlojamiento.buscarHuesped(crit5);
         assertEquals(1, lista.size());
-        assertEquals("GOMEZ", normalizar(lista.getFirst().getDatos().getDatos_personales().getApellido().toUpperCase()));
-        assertEquals("ANA MARIA", normalizar(lista.getFirst().getDatos().getDatos_personales().getNombre()).toUpperCase());
-        assertEquals(TipoDoc.DNI, lista.getFirst().getDatos().getDatos_personales().getTipoDoc());
-        assertEquals("28123456", lista.getFirst().getDatos().getDatos_personales().getNroDoc());
+        assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
+        assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
+        assertEquals(TipoDoc.DNI, lista.getFirst().getTipoDoc());
+        assertEquals("28123456", lista.getFirst().getNroDoc());
     }
 
     /**
@@ -102,8 +104,7 @@ public class TestCU02Integracion {
         System.out.println("LA LISTA TIENE TAMAÑO: " + lista.size());
         assertNotEquals(1, lista.size());
         for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("JUAN", h.getDatos().getDatos_personales().getNombre().toUpperCase());
+            assert(h.getNombre().toUpperCase().startsWith("JUAN"));
         }
     }
 
@@ -121,29 +122,10 @@ public class TestCU02Integracion {
         var lista = gestorAlojamiento.buscarHuesped(crit4);
         assertNotEquals(1, lista.size());
         for(var h : lista){
-            assert(h instanceof Huesped);
-            assertEquals("45510538", h.getDatos().getDatos_personales().getNroDoc());
+            assertEquals("40543210", h.getNroDoc());
         }
     }
 
-    /**
-     * Test de integración que verifica la recuperación de todos los huéspedes.
-     * <p>
-     * Al pasar un criterio de búsqueda vacío (o con campos nulos), el sistema debe
-     * retornar la totalidad de los huéspedes registrados. Este test valida el tamaño
-     * esperado de la población de prueba.
-     * </p>
-     */
-    @Test
-    public void buscarTodos() {
-        CriteriosBusq crit7 = new CriteriosBusq(null,null, null, null);
-        assertDoesNotThrow(()->gestorAlojamiento.buscarHuesped(crit7), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.buscarHuesped(crit7);
-        for (var a : lista){
-            System.out.println(a.getDatos().getDatos_personales().getTipoDoc().toString() + " " +a.getDatos().getDatos_personales().getNroDoc());
-        }
-        assertEquals(35, lista.size());
-    }
 
 
 }

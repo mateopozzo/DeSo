@@ -30,12 +30,27 @@ import java.util.Objects;
 @Table(name="habitacion")
 @NoArgsConstructor
 public class Habitacion {
+    /**
+     * Número único y autoincremental de la habitación (identificador principal).
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental
     private Long nroHab;
+    /**
+     * El tipo de habitación (ej: INDIVIDUALESTANDAR, DOBLEESTANDAR).
+     */
     private TipoHab tipo_hab;
+    /**
+     * Estado actual de la habitación (ej: OCUPADA, LIMPIA, FUERA_DE_SERVICIO).
+     */
     private EstadoHab estado_hab;
+    /**
+     * Tarifa base de la habitación por noche.
+     */
     private float tarifa;
+    /**
+     * Capacidad máxima de personas que puede albergar la habitación.
+     */
     private int capacidad;
 
     public Habitacion(TipoHab tipo_hab, EstadoHab estado_hab, float tarifa, int capacidad) {

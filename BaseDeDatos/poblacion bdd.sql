@@ -91,7 +91,9 @@ INSERT INTO habitacion (nro_hab, capacidad, estado_hab, tarifa, tipo_hab) VALUES
 (301, 2, 0, 128600.00, 4),
 (302, 2, 0, 128600.00, 4);
 
+-- Permitir consulta con tildes --
 
+CREATE EXTENSION IF NOT EXISTS unaccent;
 
 
 

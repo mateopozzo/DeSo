@@ -20,6 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de pruebas unitarias para {@link GestorAlojamiento}.
+ * <p>
+ * Verifica la lógica de negocio asociada a la búsqueda y filtrado de alojados (Huéspedes e Invitados).
+ * Utiliza {@link Mockito} para simular el comportamiento de {@link AlojadoDAO}, permitiendo validar
+ * escenarios de:
+ * <ul>
+ * <li>Manejo de excepciones ante retornos nulos o listas vacías desde la persistencia.</li>
+ * <li>Filtrado correcto de subtipos de {@link Alojado} (distinción entre Huesped e Invitado).</li>
+ * <li>Coincidencia precisa de criterios de búsqueda (nombre, apellido, tipo y nro de documento).</li>
+ * </ul>
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class TestCU02Unitario {
@@ -160,8 +172,8 @@ public class TestCU02Unitario {
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
         assertDoesNotThrow(()->gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
-        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
-        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
+        Set<CriteriosBusq> comparadorRetorno = new HashSet<>(lconsulta);
+        Set<CriteriosBusq> comparadorOriginal = new HashSet<>(convertirACriterio(lh));
         //El retorno de la consulta tiene que contener los mismos huespedes que lh
         assertEquals(comparadorOriginal, comparadorRetorno);
     }
@@ -186,8 +198,8 @@ public class TestCU02Unitario {
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
         assertDoesNotThrow(() -> gestor.buscarHuesped(crit), "No encontro ni un huesped");
         var lconsulta = gestor.buscarHuesped(crit);
-        Set<Alojado> comparadorRetorno = new HashSet<Alojado>(lconsulta);
-        Set<Alojado> comparadorOriginal = new HashSet<Alojado>(lh);
+        Set<CriteriosBusq> comparadorRetorno = new HashSet<>(lconsulta);
+        Set<CriteriosBusq> comparadorOriginal = new HashSet<>(convertirACriterio(lh));
         //El retorno de la consulta tiene que contener los mismos huespedes que lh
         assertEquals(comparadorOriginal, comparadorRetorno);
     }
@@ -205,18 +217,20 @@ public class TestCU02Unitario {
     @Test
     public void buscarHuespedFiltraInvitadosDeListaAlojados(){
         List<Alojado> lista = listaDeMuchosAlojados();
-        Set<Alojado> setAlojado = new HashSet<>();
-        for(var a : lista) if(a instanceof Huesped)
-            setAlojado.add(a);
+        List<Alojado> listaSinInvitados = new ArrayList<>();
+        lista.forEach(a -> {
+            if(a instanceof Huesped) listaSinInvitados.add(a);
+        });
+        Set<CriteriosBusq> setAlojado = new HashSet<>(convertirACriterio(listaSinInvitados));
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lista);
-        List<? extends Alojado> lconsulta = new ArrayList<>();
+        List<CriteriosBusq> lconsulta = new ArrayList<>();
         try{
             lconsulta = gestor.buscarHuesped(crit);
         } catch (AlojadosSinCoincidenciasException e) {
             assertEquals(0, setAlojado.size());
         }
-        Set<Alojado> setHuesped= new HashSet<Alojado>(lconsulta);
+        Set<CriteriosBusq> setHuesped= new HashSet<>(lconsulta);
         assertEquals(setHuesped, setAlojado);
     }
 
@@ -242,8 +256,7 @@ public class TestCU02Unitario {
         assertDoesNotThrow(()->gestor.buscarAlojado(critNombre));
         var listaBusqueda = gestor.buscarAlojado(critNombre);
         for(var a : listaBusqueda){
-            assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getNombre(), nombreFiltro);
+            assertEquals(a.getNombre(), nombreFiltro);
         }
     }
 
@@ -269,8 +282,7 @@ public class TestCU02Unitario {
         assertDoesNotThrow(()->gestor.buscarAlojado(critApellido));
         var listaBusqueda = gestor.buscarAlojado(critApellido);
         for(var a : listaBusqueda){
-            assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getApellido(), apellidoFiltro);
+            assertEquals(a.getApellido(), apellidoFiltro);
         }
     }
 
@@ -294,8 +306,7 @@ public class TestCU02Unitario {
         assertDoesNotThrow(()->gestor.buscarAlojado(critTipoDoc));
         var listaBusqueda = gestor.buscarAlojado(critTipoDoc);
         for(var a : listaBusqueda){
-            assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getTipoDoc(), tipoDocFiltro);
+            assertEquals(a.getTipoDoc(), tipoDocFiltro);
         }
     }
 
@@ -319,8 +330,7 @@ public class TestCU02Unitario {
         assertDoesNotThrow(()->gestor.buscarAlojado(critNroDoc));
         var listaBusqueda = gestor.buscarAlojado(critNroDoc);
         for(var a : listaBusqueda){
-            assert(lista.contains(a));
-            assertEquals(a.getDatos().getDatos_personales().getNroDoc(), nroDodFiltro);
+            assertEquals(a.getNroDoc(), nroDodFiltro);
         }
     }
 
@@ -343,25 +353,26 @@ public class TestCU02Unitario {
                 .filter(a -> a.getDatos().getDatos_personales().getNombre().equals(nombreFiltro))
                 .toList();
 
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
+        List<Huesped> resultadoEntidades = respuestaDAO.stream()
                 .filter(a -> a instanceof Huesped)
                 .map(a -> (Huesped) a)
                 .toList();
+
+        var resultadoEsperadoCriterio = convertirACriterio(resultadoEntidades);
 
         CriteriosBusq crit = new CriteriosBusq(null, nombreFiltro, null, null);
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
-        if (resultadoEsperado.isEmpty()) {
+        if (resultadoEsperadoCriterio.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
         } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            assertTrue(resultadoReal.containsAll(resultadoEsperado));
+            List<CriteriosBusq> resultadoReal = gestor.buscarHuesped(crit);
+            assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
+            assertTrue(resultadoReal.containsAll(resultadoEsperadoCriterio));
             // Verificar que todos sean Huesped y tengan el nombre correcto
             resultadoReal.forEach(h -> {
-                assertEquals(nombreFiltro, h.getDatos().getDatos_personales().getNombre());
-                assertInstanceOf(Huesped.class, h);
+                assertEquals(nombreFiltro, h.getNombre());
             });
         }
     }
@@ -384,23 +395,25 @@ public class TestCU02Unitario {
                 .filter(a -> a.getDatos().getDatos_personales().getApellido().equals(apellidoFiltro))
                 .toList();
 
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
+        List<Huesped> resultadoEntidades = respuestaDAO.stream()
                 .filter(a -> a instanceof Huesped)
                 .map(a -> (Huesped) a)
                 .toList();
+
+        var resultadoEsperadoCriterio = convertirACriterio(resultadoEntidades);
 
         CriteriosBusq crit = new CriteriosBusq(apellidoFiltro, null, null, null);
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
 
-        if (resultadoEsperado.isEmpty()) {
+        if (resultadoEsperadoCriterio.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
         } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            assertTrue(resultadoReal.containsAll(resultadoEsperado));
-            resultadoReal.forEach(h -> assertEquals(apellidoFiltro, h.getDatos().getDatos_personales().getApellido()));
+            var resultadoReal = gestor.buscarHuesped(crit);
+            assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
+            assertTrue(resultadoReal.containsAll(resultadoEsperadoCriterio));
+            resultadoReal.forEach(h -> assertEquals(apellidoFiltro, h.getApellido()));
         }
     }
 
@@ -422,22 +435,24 @@ public class TestCU02Unitario {
                 .filter(a -> a.getDatos().getDatos_personales().getTipoDoc() == tipoDocFiltro)
                 .toList();
 
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
+        List<Huesped> resultadoEntidades = respuestaDAO.stream()
                 .filter(a -> a instanceof Huesped)
                 .map(a -> (Huesped) a)
                 .toList();
+
+        var resultadoEsperadoCriterio = convertirACriterio(resultadoEntidades);
 
         CriteriosBusq crit = new CriteriosBusq(null, null, tipoDocFiltro, null);
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
 
-        if (resultadoEsperado.isEmpty()) {
+        if (resultadoEsperadoCriterio.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
         } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            resultadoReal.forEach(h -> assertEquals(tipoDocFiltro, h.getDatos().getDatos_personales().getTipoDoc()));
+            var resultadoReal = gestor.buscarHuesped(crit);
+            assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
+            resultadoReal.forEach(h -> assertEquals(tipoDocFiltro, h.getTipoDoc()));
         }
     }
 
@@ -459,21 +474,23 @@ public class TestCU02Unitario {
                 .filter(a -> a.getDatos().getDatos_personales().getNroDoc().equals(nroDocFiltro))
                 .toList();
 
-        List<Huesped> resultadoEsperado = respuestaDAO.stream()
+        List<Huesped> resultadoEntidades = respuestaDAO.stream()
                 .filter(a -> a instanceof Huesped)
                 .map(a -> (Huesped) a)
                 .toList();
+
+        var resultadoEsperadoCriterio = convertirACriterio(resultadoEntidades);
 
         CriteriosBusq crit = new CriteriosBusq(null, null, null, nroDocFiltro);
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(respuestaDAO);
 
 
-        if (resultadoEsperado.isEmpty()) {
+        if (resultadoEsperadoCriterio.isEmpty()) {
             assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
         } else {
-            List<Huesped> resultadoReal = gestor.buscarHuesped(crit);
-            assertEquals(resultadoEsperado.size(), resultadoReal.size());
-            resultadoReal.forEach(h -> assertEquals(nroDocFiltro, h.getDatos().getDatos_personales().getNroDoc()));
+            var resultadoReal = gestor.buscarHuesped(crit);
+            assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
+            resultadoReal.forEach(h -> assertEquals(nroDocFiltro, h.getNroDoc()));
         }
     }
 
@@ -523,14 +540,26 @@ public class TestCU02Unitario {
     }
 
     private List<Alojado> listaDeMuchosHuespedes(){
-            List<Alojado> lh = new ArrayList<>();
-            Random random = new Random();
-            int n=random.nextInt(100)+1;
-            for(int i=0;i<n;i++){
-                lh.addAll(listaDeUnHuesped());
-            }
-            Collections.shuffle(lh);
-            return lh;
+        List<Alojado> lh = new ArrayList<>();
+        Random random = new Random();
+        int n=random.nextInt(100)+1;
+        for(int i=0;i<n;i++){
+            lh.addAll(listaDeUnHuesped());
         }
+        Collections.shuffle(lh);
+        return lh;
+    }
+
+    List<CriteriosBusq> convertirACriterio(List<? extends Alojado>lista){
+        List<CriteriosBusq> respuestaDAO = new ArrayList<>();
+        for(var a: lista){
+            respuestaDAO.add(new CriteriosBusq(
+                    a.getDatos().getDatos_personales().getApellido(),
+                    a.getDatos().getDatos_personales().getNombre(),
+                    a.getDatos().getDatos_personales().getTipoDoc(),
+                    a.getDatos().getDatos_personales().getNroDoc()));
+        }
+        return respuestaDAO;
+    }
 
 }

@@ -23,6 +23,7 @@ import ddb.deso.service.alojamiento.Validador;
  * 
  * @author 
  */
+@Deprecated
 public class InterfazDarAlta {
     
     /** Entrada estándar utilizada para leer los datos del usuario. */

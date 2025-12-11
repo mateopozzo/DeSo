@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+/**
+ * Implementación JPA de {@link DatosCheckInDAO}.
+ * Gestiona la persistencia de los datos asociados al proceso de Check-In.
+ */
 @Repository
 public class DatosCheckInDAOJPA implements DatosCheckInDAO {
 
@@ -15,7 +18,10 @@ public class DatosCheckInDAOJPA implements DatosCheckInDAO {
 
     @Autowired
     public DatosCheckInDAOJPA(CheckInRepository checkInRepository) {this.checkInRepository = checkInRepository;}
-
+    /**
+     * Guarda los datos de un Check-In.
+     * @param datosCheckIn Objeto con la información del Check-In.
+     */
     @Override
     public void crearDatosCheckIn(DatosCheckIn datosCheckIn) {
         checkInRepository.save(datosCheckIn);

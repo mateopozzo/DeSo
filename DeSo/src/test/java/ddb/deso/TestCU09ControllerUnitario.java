@@ -100,9 +100,9 @@ public class TestCU09ControllerUnitario {
      */
     private void setGestorDevuelveExcepcion(int valorDeVerdad){
         if(valorDeVerdad>0){
-            doThrow(new AlojadoInvalidoException("Alojado invalido")).when(gestorMock).darDeAltaHuesped(any(Alojado.class));
+            doThrow(new AlojadoInvalidoException("Alojado invalido")).when(gestorMock).darDeAltaHuesped(any(AlojadoDTO.class));
         } else {
-            doNothing().when(gestorMock).darDeAltaHuesped(any(Alojado.class));
+            doNothing().when(gestorMock).darDeAltaHuesped(any(AlojadoDTO.class));
         }
     }
 

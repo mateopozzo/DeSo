@@ -97,7 +97,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ddb.deso.ddb.deso.DeSo</mainClass>
+                    <mainClass>ddb.deso.DeSo</mainClass>
                 </configuration>
             </plugin>
         </plugins>

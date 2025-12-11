@@ -13,6 +13,8 @@ import java.util.Objects;
 /**
  * Clase que encapsula los datos relacionados con el proceso de **Check-Out** (Salida).
  * Almacena la fecha y hora de la salida y el identificador único del proceso.
+ *
+ * @author mat
  */
 
 @Getter
@@ -21,11 +23,21 @@ import java.util.Objects;
 @Entity
 @Table(name = "check_out")
 public class DatosCheckOut {
+    /**
+     * Fecha y hora del registro de Check-Out.
+     */
     LocalDate fecha_hora_out;
+    /**
+     * Identificador único y autoincremental del registro de Check-Out.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long idCheckOut;
 
+    /**
+     * El {@link DatosAlojado} asociado a este registro de Check-Out.
+     * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),

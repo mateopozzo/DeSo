@@ -14,6 +14,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Clase base abstracta que representa a una persona **alojada** en el sistema.
+ * <p>
+ * Utiliza la estrategia de herencia {@code SINGLE_TABLE} con un discriminador
+ * para distinguir entre subtipos (e.g., {@link Huesped}, {@link Invitado}).
+ * Contiene los datos comunes y la gestión de reservas y estadías.
+ * </p>
+ *
+ * @author mat
+ */
 @Getter
 @Setter
 @Entity
@@ -23,6 +33,12 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "tipo_alojado", discriminatorType = DiscriminatorType.STRING)
 public abstract class Alojado {
 
+    /**
+     * Constructor para inicializar un objeto Alojado con sus datos básicos.
+     *
+     * @param da Objeto {@link DatosAlojado} que contiene la información personal,
+     * contacto y residencia.
+     */
     public Alojado(DatosAlojado da){
         this.datos = da;
         this.id = this.getDatos().getIdAlojado();
@@ -30,9 +46,16 @@ public abstract class Alojado {
         this.listaReservas=new ArrayList<>();
     }
 
+    /**
+     * Clave primaria compuesta embebida, obtenida de los datos del alojado.
+     */
     @EmbeddedId
     private AlojadoID id;
 
+    /**
+     * Datos generales del alojado (personales, contacto, residencia, etc.).
+     * La relación es {@code OneToOne} y mapea los datos al ID ({@code MapsId}).
+     */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("id")
     @JoinColumns({
@@ -41,15 +64,28 @@ public abstract class Alojado {
     })
     protected DatosAlojado datos;
 
+    /**
+     * Lista de {@link Reserva}s asociadas a este alojado.
+     */
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reserva> listaReservas;
 
+    /**
+     * Lista de {@link Estadia}s asociadas a este alojado.
+     */
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Estadia> listaEstadias;
 
     public boolean esMayor() {
         return this.getDatos().getEdad() >= 18;
     }
+
+    /**
+     * Método abstracto para completar un DTO específico con los datos propios
+     * del subtipo concreto ({@link Huesped} o {@link Invitado}).
+     *
+     * @param dto El DTO (Data Transfer Object) a completar.
+     */
     public abstract void completarDTO(AlojadoDTO dto);
 
     @Override
@@ -65,6 +101,12 @@ public abstract class Alojado {
     }
 
 
+    /**
+     * Verifica que todos los campos obligatorios del alojado estén presentes y no vacíos.
+     * Incluye validaciones para datos personales, de residencia y la fecha de nacimiento.
+     *
+     * @return {@code true} si todos los campos obligatorios están completos, {@code false} en caso contrario.
+     */
     public boolean verificarCamposObligatorios(){
         return  this.getDatos() != null                                            && this.getDatos().getDatos_personales() != null                                 && this.getDatos().getDatos_residencia() != null &&
                 this.getDatos().getDatos_personales().getNombre() != null          && !this.getDatos().getDatos_personales().getNombre().isEmpty()                  &&

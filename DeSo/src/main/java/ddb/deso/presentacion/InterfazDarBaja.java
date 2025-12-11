@@ -22,6 +22,7 @@ import java.util.Scanner;
  * @author mat
  * @see GestorAlojamiento
  */
+@Deprecated
 public class InterfazDarBaja {
 
     private static Scanner scanner;
