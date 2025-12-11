@@ -2,6 +2,18 @@
 
 ## Autores
 
+- ANTUÑA, Felipe
+
+    feliantuna@gmail.com
+
+    [*@felipeantuna*](https://github.com/felipeantuna)
+    
+- GRASSI, Julieta
+
+  jjulietagrassi@gmail.com
+
+  [*@jjuligrassi*](https://github.com/jjuligrassi)
+
 - POZZO GALDÓN, Mateo
 
   mateopozzogaldon@gmail.com
@@ -49,7 +61,6 @@ Para clonar el repositorio, dirijase al directorio donde quiera clonarlo mediant
 ```
 git clone https://github.com/mateopozzo/DeSo.git
 cd DeSo
-git checkout entrega-final-diseño
 ```
 
 ---
