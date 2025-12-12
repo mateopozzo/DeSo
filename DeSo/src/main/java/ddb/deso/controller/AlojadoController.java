@@ -106,7 +106,7 @@ public class AlojadoController {
 
         List<CriteriosBusq> alojadosEncontrados;
         try {
-            alojadosEncontrados = gestorAlojamiento.buscarAlojado(criteriosBusq);
+            alojadosEncontrados = gestorAlojamiento.buscarCriteriosAlojado(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
             // No se cumplen los criterios
             System.out.println(e.getMessage());
@@ -131,7 +131,7 @@ public class AlojadoController {
         List<CriteriosBusq> huespedesEncontrados;
 
         try {
-            huespedesEncontrados = gestorAlojamiento.obtenerCriteriosHuesped(criteriosBusq);
+            huespedesEncontrados = gestorAlojamiento.buscarCriteriosHuesped(criteriosBusq);
         } catch (AlojadosSinCoincidenciasException e) {
             // No se cumplen los criterios
             System.out.println(e.getMessage());

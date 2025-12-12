@@ -28,7 +28,7 @@ import static java.lang.Integer.parseInt;
  * </ul>
  * <p>
 
- * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
+ * @see GestorAlojamiento#buscarCriteriosAlojado(CriteriosBusq)
  */
 @Deprecated
 public class InterfazBusqueda {
@@ -45,7 +45,7 @@ public class InterfazBusqueda {
      * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
      * <p>
      * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
-     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarAlojado}
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarCriteriosAlojado}
      * para iniciar el proceso de búsqueda.
      * </p>
      */
@@ -77,7 +77,7 @@ public class InterfazBusqueda {
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
         List<CriteriosBusq> alojadosEncontrados = null;
         try{
-            alojadosEncontrados = gestorAlojamiento.obtenerCriteriosHuesped(criterios_busq);
+            alojadosEncontrados = gestorAlojamiento.buscarCriteriosHuesped(criterios_busq);
         } catch (AlojadosSinCoincidenciasException e){
             System.out.println(e.getMessage());
             this.sin_coincidencias();

@@ -41,8 +41,8 @@ public class TestCU02Integracion {
     @Test
     public void busquedaRegular() {
         CriteriosBusq crit2 = new CriteriosBusq("Gomez", "Ana Maria", TipoDoc.DNI, "28123456");
-        assertDoesNotThrow(()->gestorAlojamiento.obtenerCriteriosHuesped(crit2), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.obtenerCriteriosHuesped(crit2);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarCriteriosHuesped(crit2), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarCriteriosHuesped(crit2);
         assertEquals(1, lista.size());
         assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
         assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
@@ -60,8 +60,8 @@ public class TestCU02Integracion {
     @Test
     public void busquedaConTildes  (){
         CriteriosBusq crit5 = new CriteriosBusq("Gómez", "Ana María", TipoDoc.DNI, "28123456");
-        assertDoesNotThrow(()->gestorAlojamiento.obtenerCriteriosHuesped(crit5), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.obtenerCriteriosHuesped(crit5);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarCriteriosHuesped(crit5), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarCriteriosHuesped(crit5);
         assertEquals(1, lista.size());
         assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
         assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
@@ -79,8 +79,8 @@ public class TestCU02Integracion {
     @Test
     public void busquedaConTildesYRandomCase  (){
         CriteriosBusq crit5 = new CriteriosBusq("GóMEz", "ANA MaRÍa", TipoDoc.DNI, "28123456");
-        assertDoesNotThrow(()->gestorAlojamiento.obtenerCriteriosHuesped(crit5), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.obtenerCriteriosHuesped(crit5);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarCriteriosHuesped(crit5), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarCriteriosHuesped(crit5);
         assertEquals(1, lista.size());
         assertEquals("GOMEZ", normalizar(lista.getFirst().getApellido().toUpperCase()));
         assertEquals("ANA MARIA", normalizar(lista.getFirst().getNombre()).toUpperCase());
@@ -98,8 +98,8 @@ public class TestCU02Integracion {
     @Test
     public void busquedaCriterioUnicoNombre() {
         CriteriosBusq crit3 = new CriteriosBusq(null,"Juan", null, null);
-        assertDoesNotThrow(()->gestorAlojamiento.obtenerCriteriosHuesped(crit3), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.obtenerCriteriosHuesped(crit3);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarCriteriosHuesped(crit3), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarCriteriosHuesped(crit3);
         System.out.println("LA LISTA TIENE TAMAÑO: " + lista.size());
         assertNotEquals(1, lista.size());
         for(var h : lista){
@@ -117,8 +117,8 @@ public class TestCU02Integracion {
     @Test
     public void busquedaCriterioUnicoDocumento() {
         CriteriosBusq crit4 = new CriteriosBusq(null,null, null, "40543210");
-        assertDoesNotThrow(()->gestorAlojamiento.obtenerCriteriosHuesped(crit4), "Encuentra al menos un resultado");
-        var lista = gestorAlojamiento.obtenerCriteriosHuesped(crit4);
+        assertDoesNotThrow(()->gestorAlojamiento.buscarCriteriosHuesped(crit4), "Encuentra al menos un resultado");
+        var lista = gestorAlojamiento.buscarCriteriosHuesped(crit4);
         assertNotEquals(1, lista.size());
         for(var h : lista){
             assertEquals("40543210", h.getNroDoc());
