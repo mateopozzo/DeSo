@@ -52,12 +52,6 @@ public class GestorAlojamiento {
      * @throws AlojadosSinCoincidenciasException Si no se encuentran registros que coincidan con el criterio.
      */
     public List<CriteriosBusq> buscarCriteriosAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
-        /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
-        Llama al DAO, busca todos los alojados
-
-        Si no encuentra coincidencias, encontrados is empty y se ejecuta la interfaz sin_coincidencias
-        Si encuentra, se ejecuta la interfaz selección y se le pasa la lista de coincidencias
-        */
 
         List<Alojado> encontrados = alojadoDAO.buscarAlojado(criterios_busq);
 
@@ -266,6 +260,34 @@ public class GestorAlojamiento {
             );
         }
         return retornoEncontrados;
+    }
+
+    /**
+     * Funcion que devuelve DTO de un alojado seleccionado por cliente
+     * La seleccion en la interfaz asegura que solo sea uno
+     */
+    private AlojadoDTO obtenerAlojadoDTO(CriteriosBusq criterioBusqueda){
+
+        if(criterioBusqueda == null){
+            throw new AlojadoInvalidoException("Criterio invalido");
+        }
+
+        if(criterioBusqueda.getNroDoc() == null || criterioBusqueda.getTipoDoc() == null){
+            throw new AlojadoInvalidoException("Identificaion invalida");
+        }
+
+        if(!dniExiste(criterioBusqueda.getNroDoc(), criterioBusqueda.getTipoDoc())){
+            throw new AlojadoInvalidoException("El alojado solicitrado no existe");
+        }
+
+        var alojado = alojadoDAO.buscarPorDNI(criterioBusqueda.getNroDoc(), criterioBusqueda.getTipoDoc());
+
+        if(alojado == null){
+            throw new AlojadoInvalidoException("No se encontro el alojado en la base");
+        }
+
+        return new AlojadoDTO(alojado);
+
     }
 
 }
