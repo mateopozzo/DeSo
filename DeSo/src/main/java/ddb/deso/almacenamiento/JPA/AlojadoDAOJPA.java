@@ -5,6 +5,7 @@ import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Path;
@@ -56,9 +57,28 @@ public class AlojadoDAOJPA implements AlojadoDAO {
      */
     @Override
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
-        if (alojadoPrev != null && alojadoPrev.getDatos().getIdAlojado() != null) {
-            alojadoRepository.save(alojadoPrev);
+
+        if(alojadoPrev==null){
+            throw new AlojadoInvalidoException("Alojado nulo");
         }
+
+        if(alojadoPrev.getId() == null){
+            throw new AlojadoInvalidoException("Alojado sin ID");
+        }
+
+        if(alojadoPrev.getId().getNroDoc() == null || alojadoPrev.getId().getTipoDoc() == null){
+            throw new AlojadoInvalidoException("ID invalido");
+        }
+
+        String nroDoc = alojadoPrev.getId().getNroDoc();
+        TipoDoc tipoDoc = alojadoPrev.getId().getTipoDoc();
+        Optional<Alojado> containerAlojPre = alojadoRepository.findById(new AlojadoID(nroDoc, tipoDoc));
+        Alojado alojadoPre = null;
+
+        if(containerAlojPre.isPresent()) alojadoPre=containerAlojPre.get();
+        else return;
+
+        actualizarAtributos(alojadoPre, alojadoNuevo);
     }
 
     /**
@@ -70,20 +90,30 @@ public class AlojadoDAOJPA implements AlojadoDAO {
      */
     @Override
     public void eliminarAlojado(Alojado alojado) {
-        // Es más eficiente construir el ID y usar deleteById
-        if (alojado != null && alojado.getDatos().getTipoDoc() != null && alojado.getDatos().getNroDoc() != null) {
-            AlojadoID id = new AlojadoID(alojado.getDatos().getNroDoc(), alojado.getDatos().getTipoDoc());
-            // Solo intenta borrar si existe, para evitar excepciones
-            if (alojadoRepository.existsById(id)) {
-                alojadoRepository.deleteById(id);
-            }
+
+        if (alojado == null ) {
+            throw new AlojadoInvalidoException("El alojado no existe");
         }
+
+        if ( alojado.getDatos()==null || alojado.getDatos().getTipoDoc() == null || alojado.getDatos().getNroDoc() == null){
+            throw new AlojadoInvalidoException("El alojado tiene datos invalidos");
+        }
+
+        AlojadoID id = new AlojadoID(alojado.getDatos().getNroDoc(), alojado.getDatos().getTipoDoc());
+
+        try {
+            alojadoRepository.deleteById(id);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
+
         alojadoRepository.flush();
     }
 
     @Override
     public List<Alojado> listarAlojados() {
-        // 1. Obtiene todas las entidades de la BD
+        // Obtiene todas las entidades de la BD
         return alojadoRepository.findAll();
     }
 
@@ -119,7 +149,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
     /**
      * Realiza una búsqueda dinámica de alojados basada en múltiples criterios.
-     * Si se proporciona documento y tipo, realiza búsqueda directa por ID.
      * De lo contrario, construye una consulta dinámica (Specification) que permite
      * buscar por nombre y apellido (insensible a mayúsculas y acentos) usando la función 'unaccent'.
      *
@@ -189,6 +218,45 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     private boolean no_es_vacio (String contenido){
         boolean flag = (contenido==null || contenido.isEmpty());
         return !flag;
+    }
+
+    /**
+     * Actualiza todos los atributos del alojadoPre, uno a uno
+     * @param alojadoPre
+     * @param alojadoNuevo
+     */
+    private void actualizarAtributos(Alojado alojadoPre, Alojado alojadoNuevo) {
+        if(alojadoPre.getId().equals(alojadoNuevo.getId())){
+            // Actualiza los datos del alojadoPre, repository se encarga de actualizar
+            // NO VERIFICA campos obligatorios, responsabilidad de front + controller + service
+
+            // Datos personales uno a uno para no pisar dni
+            alojadoPre.getDatos().getDatos_personales()
+                    .setApellido(alojadoNuevo.getDatos().getDatos_personales().getApellido());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setCUIT(alojadoNuevo.getDatos().getDatos_personales().getCUIT());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setFechanac(alojadoNuevo.getDatos().getDatos_personales().getFechanac());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setNacionalidad(alojadoNuevo.getDatos().getDatos_personales().getNacionalidad());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setNombre(alojadoNuevo.getDatos().getDatos_personales().getNombre());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setOcupacion(alojadoNuevo.getDatos().getDatos_personales().getOcupacion());
+            alojadoPre.getDatos().getDatos_personales()
+                    .setPosicionIva(alojadoNuevo.getDatos().getDatos_personales().getPosicionIva());
+
+            // Sin riesgo de pisar primary key
+            alojadoPre.getDatos().setDatos_residencia(alojadoNuevo.getDatos().getDatos_residencia());
+            alojadoPre.getDatos().setDatos_contacto(alojadoNuevo.getDatos().getDatos_contacto());
+
+            // Actualizacion a cargo de repo
+            alojadoRepository.save(alojadoPre);
+        } else {
+            // Como se modifica la clave primaria, es mas robusto borrar antiguo y guardar nuevo
+            eliminarAlojado(alojadoPre);
+            crearAlojado(alojadoNuevo);
+        }
     }
 
 }
