@@ -77,7 +77,7 @@ public class InterfazBusqueda {
         CriteriosBusq criterios_busq = new CriteriosBusq(apellido, nombre, tipoDoc, num_documento);
         List<CriteriosBusq> alojadosEncontrados = null;
         try{
-            alojadosEncontrados = gestorAlojamiento.buscarHuesped(criterios_busq);
+            alojadosEncontrados = gestorAlojamiento.obtenerCriteriosHuesped(criterios_busq);
         } catch (AlojadosSinCoincidenciasException e){
             System.out.println(e.getMessage());
             this.sin_coincidencias();

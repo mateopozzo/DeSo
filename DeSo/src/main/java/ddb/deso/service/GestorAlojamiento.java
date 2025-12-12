@@ -75,7 +75,7 @@ public class GestorAlojamiento {
      * @return Lista de {@link CriteriosBusq} correspondientes a los Huéspedes encontrados.
      * @throws AlojadosSinCoincidenciasException Si no se encuentran huéspedes o la lista inicial es vacía.
      */
-    public List<CriteriosBusq> buscarHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+    public List<CriteriosBusq> obtenerCriteriosHuesped(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         try{
             var listaAlojados = alojadoDAO.buscarAlojado(criterios_busq);
             if(listaAlojados == null || listaAlojados.isEmpty()){

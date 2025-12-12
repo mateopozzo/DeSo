@@ -82,14 +82,14 @@ public class TestCU02Unitario {
      * retorna {@code null} al buscar huéspedes.
      * <p>
      * Este test asegura que el gestor maneje defensivamente el retorno nulo
-     * desde la capa de persistencia para el método {@code buscarHuesped}.
+     * desde la capa de persistencia para el método {@code obtenerCriteriosHuesped}.
      * </p>
      */
     @Test
     public void buscarHuespedArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(null);
-        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
+        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.obtenerCriteriosHuesped(crit));
     }
 
     /**
@@ -117,7 +117,7 @@ public class TestCU02Unitario {
     @Test public void buscarHuespedArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(new ArrayList<Alojado>());
-        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarHuesped(crit));
+        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.obtenerCriteriosHuesped(crit));
     }
 
     /**
@@ -148,7 +148,7 @@ public class TestCU02Unitario {
         var li = listaDeMuchosInvitados();
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(li);
-        assertThrows(AlojadosSinCoincidenciasException.class,()->gestor.buscarHuesped(crit));
+        assertThrows(AlojadosSinCoincidenciasException.class,()->gestor.obtenerCriteriosHuesped(crit));
     }
 
     /**
@@ -170,8 +170,8 @@ public class TestCU02Unitario {
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
-        assertDoesNotThrow(()->gestor.buscarHuesped(crit), "No encontro ni un huesped");
-        var lconsulta = gestor.buscarHuesped(crit);
+        assertDoesNotThrow(()->gestor.obtenerCriteriosHuesped(crit), "No encontro ni un huesped");
+        var lconsulta = gestor.obtenerCriteriosHuesped(crit);
         Set<CriteriosBusq> comparadorRetorno = new HashSet<>(lconsulta);
         Set<CriteriosBusq> comparadorOriginal = new HashSet<>(convertirACriterio(lh));
         //El retorno de la consulta tiene que contener los mismos huespedes que lh
@@ -196,8 +196,8 @@ public class TestCU02Unitario {
         Collections.shuffle(lfinal);
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lfinal);
-        assertDoesNotThrow(() -> gestor.buscarHuesped(crit), "No encontro ni un huesped");
-        var lconsulta = gestor.buscarHuesped(crit);
+        assertDoesNotThrow(() -> gestor.obtenerCriteriosHuesped(crit), "No encontro ni un huesped");
+        var lconsulta = gestor.obtenerCriteriosHuesped(crit);
         Set<CriteriosBusq> comparadorRetorno = new HashSet<>(lconsulta);
         Set<CriteriosBusq> comparadorOriginal = new HashSet<>(convertirACriterio(lh));
         //El retorno de la consulta tiene que contener los mismos huespedes que lh
@@ -210,7 +210,7 @@ public class TestCU02Unitario {
      * un filtrado manual de la lista simulada.
      * <p>
      * Este test actúa como una "prueba de doble verificación", filtrando manualmente
-     * la lista de mocks y asegurando que el método {@code buscarHuesped} produzca
+     * la lista de mocks y asegurando que el método {@code obtenerCriteriosHuesped} produzca
      * exactamente el mismo subconjunto de objetos.
      * </p>
      */
@@ -226,7 +226,7 @@ public class TestCU02Unitario {
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(lista);
         List<CriteriosBusq> lconsulta = new ArrayList<>();
         try{
-            lconsulta = gestor.buscarHuesped(crit);
+            lconsulta = gestor.obtenerCriteriosHuesped(crit);
         } catch (AlojadosSinCoincidenciasException e) {
             assertEquals(0, setAlojado.size());
         }
@@ -365,9 +365,9 @@ public class TestCU02Unitario {
 
 
         if (resultadoEsperadoCriterio.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
+            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.obtenerCriteriosHuesped(crit));
         } else {
-            List<CriteriosBusq> resultadoReal = gestor.buscarHuesped(crit);
+            List<CriteriosBusq> resultadoReal = gestor.obtenerCriteriosHuesped(crit);
             assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
             assertTrue(resultadoReal.containsAll(resultadoEsperadoCriterio));
             // Verificar que todos sean Huesped y tengan el nombre correcto
@@ -408,9 +408,9 @@ public class TestCU02Unitario {
 
 
         if (resultadoEsperadoCriterio.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
+            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.obtenerCriteriosHuesped(crit));
         } else {
-            var resultadoReal = gestor.buscarHuesped(crit);
+            var resultadoReal = gestor.obtenerCriteriosHuesped(crit);
             assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
             assertTrue(resultadoReal.containsAll(resultadoEsperadoCriterio));
             resultadoReal.forEach(h -> assertEquals(apellidoFiltro, h.getApellido()));
@@ -448,9 +448,9 @@ public class TestCU02Unitario {
 
 
         if (resultadoEsperadoCriterio.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
+            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.obtenerCriteriosHuesped(crit));
         } else {
-            var resultadoReal = gestor.buscarHuesped(crit);
+            var resultadoReal = gestor.obtenerCriteriosHuesped(crit);
             assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
             resultadoReal.forEach(h -> assertEquals(tipoDocFiltro, h.getTipoDoc()));
         }
@@ -486,9 +486,9 @@ public class TestCU02Unitario {
 
 
         if (resultadoEsperadoCriterio.isEmpty()) {
-            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.buscarHuesped(crit));
+            assertThrows(AlojadosSinCoincidenciasException.class, () -> gestor.obtenerCriteriosHuesped(crit));
         } else {
-            var resultadoReal = gestor.buscarHuesped(crit);
+            var resultadoReal = gestor.obtenerCriteriosHuesped(crit);
             assertEquals(resultadoEsperadoCriterio.size(), resultadoReal.size());
             resultadoReal.forEach(h -> assertEquals(nroDocFiltro, h.getNroDoc()));
         }
