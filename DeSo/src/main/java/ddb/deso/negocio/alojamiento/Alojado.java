@@ -88,6 +88,13 @@ public abstract class Alojado {
      */
     public abstract void completarDTO(AlojadoDTO dto);
 
+    /**
+     * Verifica que el ID de dos alojados sea el mismo
+     * WARNING: Si se quieren comparar todos los atributos de alojado, utilizar  {@link #comparteDatos(Alojado)}
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -104,7 +111,7 @@ public abstract class Alojado {
     /**
      * Verifica que todos los campos obligatorios del alojado estén presentes y no vacíos.
      * Incluye validaciones para datos personales, de residencia y la fecha de nacimiento.
-     *
+     *      *
      * @return {@code true} si todos los campos obligatorios están completos, {@code false} en caso contrario.
      */
     public boolean verificarCamposObligatorios(){
@@ -125,4 +132,37 @@ public abstract class Alojado {
                 this.getDatos().getDatos_personales().getOcupacion() != null       && !this.getDatos().getDatos_personales().getOcupacion().isEmpty();
     }
 
+
+    /**
+     * Metodo que compara si los atributos de dos Alojados son exactamente iguales
+     * WARNING : Si solo se desea comparar DOCUMENTO Y TIPO, usar {@link #equals(Object)}
+     * @param otro
+     * @return
+     */
+    public boolean comparteDatos(Alojado otro) {
+
+        if(!otro.verificarCamposObligatorios() || this.verificarCamposObligatorios()){
+            return false;
+        }
+        
+        if(this.getId() == null || otro.getId() == null){
+            return false;
+        }
+
+        boolean esIgual = otro.getId().equals(this.getId());
+
+        esIgual &= otro.getDatos().getDatos_personales().equals(this.getDatos().getDatos_personales());
+        esIgual &= otro.getDatos().getDatos_personales().getNombre().equals(this.datos.getDatos_personales().getNombre());
+        esIgual &= otro.getDatos().getDatos_personales().getApellido().equals(this.datos.getDatos_personales().getApellido());
+        esIgual &= otro.getDatos().getDatos_personales().getCUIT().equals(this.datos.getDatos_personales().getCUIT());
+        esIgual &= otro.getDatos().getDatos_personales().getFechanac().equals(this.datos.getDatos_personales().getFechanac());
+        esIgual &= otro.getDatos().getDatos_personales().getNacionalidad().equals(this.datos.getDatos_personales().getNacionalidad());
+        esIgual &= otro.getDatos().getDatos_personales().getOcupacion().equals(this.datos.getDatos_personales().getOcupacion());
+        esIgual &= otro.getDatos().getDatos_personales().getPosicionIva().equals(this.datos.getDatos_personales().getPosicionIva());
+
+        esIgual &= otro.getDatos().getDatos_residencia().equals(this.getDatos().getDatos_residencia());
+        esIgual &= otro.getDatos().getDatos_contacto().equals(this.getDatos().getDatos_contacto());
+
+        return esIgual;
+    }
 }

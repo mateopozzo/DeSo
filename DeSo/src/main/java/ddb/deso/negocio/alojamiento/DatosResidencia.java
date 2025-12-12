@@ -6,6 +6,7 @@ package ddb.deso.negocio.alojamiento;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
  *
  * @author mat
  */
+@EqualsAndHashCode(callSuper= false)
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor

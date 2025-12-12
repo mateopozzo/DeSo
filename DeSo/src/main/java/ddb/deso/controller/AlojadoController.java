@@ -142,7 +142,34 @@ public class AlojadoController {
     }
 
 
-    // memo
+    /**
+     * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
+     *
+     * @param pre DTO del {@link AlojadoDTO} que existe previamente
+     * @param post DTO con modificaciones de la entidad {@link AlojadoDTO}
+     * @return {@link AlojadoDTO} con datos que estan en la base
+     */
+    @PutMapping("api/actualizar-alojado")
+    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestParam AlojadoDTO pre, @RequestParam AlojadoDTO post){
+
+        if(pre == null || post == null){
+            //TODO -> Definir tipos de retorno a front
+            return ResponseEntity.noContent().build();
+        }
+
+        AlojadoDTO dtoRta = null;
+        try{
+            dtoRta = gestorAlojamiento.modificarHuesped(pre, post);
+        } catch (AlojadoInvalidoException ea) {
+            System.out.println(ea.getMessage());
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(dtoRta);
+
+    }
+
+    //memo
     // @PutMapping    ->    modificar
     // @DeleteMapping ->    borrar
 }

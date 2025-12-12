@@ -96,15 +96,59 @@ public class GestorAlojamiento {
      * convertir ambos objetos de dominio a sus respectivos DTO (Data Transfer Objects)
      * y luego invoca al DAO ({@link AlojadoDAO}) para que persista la actualización.
      *
-     * @param alojadoOriginal El objeto {@link Alojado} con los datos tal como se encontraban
+     * @param dtoAlojadoOriginal El objeto {@link AlojadoDTO} con los datos tal como se encontraban
      * antes de la modificación.
-     * @param alojadoModificado El objeto {@link Alojado} que contiene los nuevos datos
+     * @param dtoAlojadoModificado El objeto {@link AlojadoDTO} que contiene los nuevos datos
      * a guardar en el sistema.
+     * @return La entidad que persiste en la base
      */
-    public void modificarHuesped(Alojado alojadoOriginal, Alojado alojadoModificado) {
-        System.out.println("Modificando huésped...");
-        // Usa el campo 'alojadoDAO' inyectado
+    public AlojadoDTO modificarHuesped(AlojadoDTO dtoAlojadoOriginal, AlojadoDTO dtoAlojadoModificado) {
+
+
+        {   // parafenralia de verificaciones
+            if (dtoAlojadoOriginal == null) {
+                throw new AlojadoInvalidoException("El alojado original es nulo");
+            }
+
+            if (dtoAlojadoModificado == null) {
+                throw new AlojadoInvalidoException("El alojado modificado es null");
+            }
+
+            if (!dtoAlojadoOriginal.verificarCamposObligatorios()) {
+                throw new AlojadoInvalidoException("El alojado original no cumple con los campos obligatorios");
+            }
+
+            if (!dtoAlojadoModificado.verificarCamposObligatorios()) {
+                throw new AlojadoInvalidoException("El alojado modificado no cumple con los campos obligatorios");
+            }
+
+            if (dtoAlojadoOriginal.getTipoDoc() == null || dtoAlojadoOriginal.getNroDoc() == null) {
+                throw new AlojadoInvalidoException("La identidad del alojado original es invalida");
+            }
+
+            if (dtoAlojadoModificado.getTipoDoc() == null || dtoAlojadoModificado.getNroDoc() == null) {
+                throw new AlojadoInvalidoException("La identidad del alojado modificado es invalida");
+            }
+        }
+
+        var alojadoOriginal = FactoryAlojado.createFromDTO(dtoAlojadoOriginal);
+        var alojadoModificado = FactoryAlojado.createFromDTO(dtoAlojadoModificado);
+
         alojadoDAO.actualizarAlojado(alojadoOriginal, alojadoModificado);
+
+        {// check de modificacion
+            var alojadoGuardado = alojadoDAO.buscarPorDNI(dtoAlojadoModificado.getNroDoc(), dtoAlojadoModificado.getTipoDoc());
+
+            if (alojadoGuardado == null) {
+                throw new AlojadoInvalidoException("El alojado no se persiste");
+            }
+
+            if (alojadoGuardado.comparteDatos(alojadoModificado)) {
+                throw new AlojadoInvalidoException("El alojado se guardo incorrectamente");
+            }
+
+            return new AlojadoDTO(alojadoGuardado);
+        }
     }
 
     /**

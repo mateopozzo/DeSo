@@ -14,6 +14,7 @@ import lombok.*;
  *
  * @author mat
  */
+@EqualsAndHashCode(callSuper= false)
 @Embeddable
 @NoArgsConstructor
 public class DatosContacto {
