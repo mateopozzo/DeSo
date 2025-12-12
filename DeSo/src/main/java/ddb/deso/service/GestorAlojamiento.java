@@ -51,7 +51,7 @@ public class GestorAlojamiento {
      * @return Lista de objetos {@link CriteriosBusq} con los datos básicos de los alojados encontrados.
      * @throws AlojadosSinCoincidenciasException Si no se encuentran registros que coincidan con el criterio.
      */
-    public List<CriteriosBusq> buscarAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
+    public List<CriteriosBusq> obtenerCriteriosAlojado(CriteriosBusq criterios_busq) throws AlojadosSinCoincidenciasException {
         /* Recibe los paŕametros de búsqueda en criterios_busq (String apellido, String nombre, TipoDoc tipoDoc, String nroDoc)
         Llama al DAO, busca todos los alojados
 

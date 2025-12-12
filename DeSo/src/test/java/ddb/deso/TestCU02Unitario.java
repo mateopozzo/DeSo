@@ -97,13 +97,13 @@ public class TestCU02Unitario {
      * retorna {@code null} al buscar alojados en general.
      * <p>
      * Asegura el manejo correcto de valores nulos provenientes del DAO en el
-     * método {@code buscarAlojado}.
+     * método {@code obtenerCriteriosAlojado}.
      * </p>
      */
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveNull(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(null);
-        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
+        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.obtenerCriteriosAlojado(crit));
     }
 
     /**
@@ -124,14 +124,14 @@ public class TestCU02Unitario {
      * Verifica que se lance {@link AlojadosSinCoincidenciasException} cuando el DAO
      * devuelve una lista vacía al buscar alojados.
      * <p>
-     * Valida que el método {@code buscarAlojado} propague la excepción de negocio
+     * Valida que el método {@code obtenerCriteriosAlojado} propague la excepción de negocio
      * adecuada cuando la búsqueda no arroja resultados.
      * </p>
      */
     @Test public void buscarAlojadoArrojaExcepcionSiDAODevuelveVacio(){
         CriteriosBusq crit = new CriteriosBusq();
         when(mockitoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(new ArrayList<Alojado>());
-        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.buscarAlojado(crit));
+        assertThrows(AlojadosSinCoincidenciasException.class, ()->gestor.obtenerCriteriosAlojado(crit));
     }
 
     /**
@@ -235,7 +235,7 @@ public class TestCU02Unitario {
     }
 
     /**
-     * Verifica que {@code buscarAlojado} filtre y retorne correctamente los alojados
+     * Verifica que {@code obtenerCriteriosAlojado} filtre y retorne correctamente los alojados
      * basándose en el nombre.
      * <p>
      * Valida que, dado un criterio con nombre, el servicio devuelva todos los alojados
@@ -253,8 +253,8 @@ public class TestCU02Unitario {
                 });
         CriteriosBusq critNombre = new CriteriosBusq(null,nombreFiltro,null,null);
 
-        assertDoesNotThrow(()->gestor.buscarAlojado(critNombre));
-        var listaBusqueda = gestor.buscarAlojado(critNombre);
+        assertDoesNotThrow(()->gestor.obtenerCriteriosAlojado(critNombre));
+        var listaBusqueda = gestor.obtenerCriteriosAlojado(critNombre);
         for(var a : listaBusqueda){
             assertEquals(a.getNombre(), nombreFiltro);
         }
@@ -262,7 +262,7 @@ public class TestCU02Unitario {
 
 
     /**
-     * Verifica que {@code buscarAlojado} filtre y retorne correctamente los alojados
+     * Verifica que {@code obtenerCriteriosAlojado} filtre y retorne correctamente los alojados
      * basándose en el apellido.
      * <p>
      * Comprueba que la lista resultante contenga únicamente alojados cuyo apellido
@@ -279,15 +279,15 @@ public class TestCU02Unitario {
                     return funcionMocoFiltro(critArgumento, lista);
                 });
         CriteriosBusq critApellido = new CriteriosBusq(apellidoFiltro,null,null,null);
-        assertDoesNotThrow(()->gestor.buscarAlojado(critApellido));
-        var listaBusqueda = gestor.buscarAlojado(critApellido);
+        assertDoesNotThrow(()->gestor.obtenerCriteriosAlojado(critApellido));
+        var listaBusqueda = gestor.obtenerCriteriosAlojado(critApellido);
         for(var a : listaBusqueda){
             assertEquals(a.getApellido(), apellidoFiltro);
         }
     }
 
     /**
-     * Verifica que {@code buscarAlojado} filtre correctamente por tipo de documento.
+     * Verifica que {@code obtenerCriteriosAlojado} filtre correctamente por tipo de documento.
      * <p>
      * Asegura que todos los elementos de la lista devuelta tengan el {@link TipoDoc}
      * especificado en el criterio de búsqueda.
@@ -303,15 +303,15 @@ public class TestCU02Unitario {
                     return funcionMocoFiltro(critArgumento, lista);
                 });
         CriteriosBusq critTipoDoc = new CriteriosBusq(null,null,tipoDocFiltro,null);
-        assertDoesNotThrow(()->gestor.buscarAlojado(critTipoDoc));
-        var listaBusqueda = gestor.buscarAlojado(critTipoDoc);
+        assertDoesNotThrow(()->gestor.obtenerCriteriosAlojado(critTipoDoc));
+        var listaBusqueda = gestor.obtenerCriteriosAlojado(critTipoDoc);
         for(var a : listaBusqueda){
             assertEquals(a.getTipoDoc(), tipoDocFiltro);
         }
     }
 
     /**
-     * Verifica que {@code buscarAlojado} filtre correctamente por número de documento.
+     * Verifica que {@code obtenerCriteriosAlojado} filtre correctamente por número de documento.
      * <p>
      * Valida la coincidencia exacta del número de documento en los resultados devueltos
      * por el servicio.
@@ -327,8 +327,8 @@ public class TestCU02Unitario {
                     return funcionMocoFiltro(critArgumento, lista);
                 });
         CriteriosBusq critNroDoc = new CriteriosBusq(null,null,null,nroDodFiltro);
-        assertDoesNotThrow(()->gestor.buscarAlojado(critNroDoc));
-        var listaBusqueda = gestor.buscarAlojado(critNroDoc);
+        assertDoesNotThrow(()->gestor.obtenerCriteriosAlojado(critNroDoc));
+        var listaBusqueda = gestor.obtenerCriteriosAlojado(critNroDoc);
         for(var a : listaBusqueda){
             assertEquals(a.getNroDoc(), nroDodFiltro);
         }

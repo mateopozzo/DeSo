@@ -221,7 +221,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     /**
-     * Actualiza todos los atributos del alojadoPre, uno a uno
+     * Actualiza todos los atributos del alojadoPre
      * @param alojadoPre
      * @param alojadoNuevo
      */
