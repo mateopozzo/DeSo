@@ -7,7 +7,7 @@ import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
-import ddb.deso.negocio.alojamiento.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Scanner;
@@ -184,11 +184,8 @@ public class InterfazBusqueda {
                         AlojadoDAO json = new AlojadoDAOJSON();
                         GestorAlojamiento gestorAlojamiento = new GestorAlojamiento(json);
                         AlojadoDTO encontrado = gestorAlojamiento.obtenerAlojadoPorDNI(h_encontrado.getNroDoc(), h_encontrado.getTipoDoc());
-                        DatosContacto cont = new DatosContacto(encontrado.getTelefono(), encontrado.getEmail());
-                        DatosResidencia res = new DatosResidencia(encontrado.getCalle(), encontrado.getDepto(), encontrado.getLocalidad(), encontrado.getProv(), encontrado.getPais(), encontrado.getNroCalle(), encontrado.getPiso(), encontrado.getCodPost());
-                        DatosPersonales per = new DatosPersonales(encontrado.getNombre(), encontrado.getApellido(), encontrado.getNacionalidad(), encontrado.getPosicionIva(), encontrado.getOcupacion(), encontrado.getTipoDoc(), encontrado.getNroDoc(), encontrado.getCUIT(), LocalDate.parse(encontrado.getFechanac()));
-                        DatosAlojado datos_huesped = new DatosAlojado(cont, res, per);
-                        Alojado huesped_h = FactoryAlojado.create(1, datos_huesped);
+                        AlojadoDTO huesped_h = getAlojadoDTO(encontrado);
+
 
                         InterfazModificarHuesped ui_modif = new InterfazModificarHuesped();
                         ui_modif.ejecutarModiHuesped(huesped_h);
@@ -199,6 +196,23 @@ public class InterfazBusqueda {
                 System.out.println("Entrada inválida. Debe ser un número o ENTER.");
             }
         }
+    }
+
+    private static @NotNull AlojadoDTO getAlojadoDTO(AlojadoDTO encontrado) {
+        AlojadoDTO huesped_h = new AlojadoDTO();
+        huesped_h.setNroDoc(encontrado.getNroDoc());
+        huesped_h.setTipoDoc(encontrado.getTipoDoc());
+        huesped_h.setTelefono(encontrado.getTelefono());
+        huesped_h.setEmail(encontrado.getEmail());
+        huesped_h.setCalle(encontrado.getCalle());
+        huesped_h.setProv(encontrado.getProv());
+        huesped_h.setPais(encontrado.getPais());
+        huesped_h.setNroDoc(encontrado.getNroDoc());
+        huesped_h.setCUIT(encontrado.getCUIT());
+        huesped_h.setPiso(encontrado.getPiso());
+        huesped_h.setCodPost(encontrado.getCodPost());
+        huesped_h.setNroCalle(encontrado.getNroCalle());
+        return huesped_h;
     }
 
     /**

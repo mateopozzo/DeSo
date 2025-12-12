@@ -4,12 +4,13 @@ import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
 
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.negocio.alojamiento.Alojado;
-import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.negocio.alojamiento.Validador;
+import ddb.deso.service.GestorAlojamiento;
 
 
 /**
@@ -70,14 +71,14 @@ public class InterfazModificarHuesped {
      * originales del huésped a ser modificado.
      * @author Lauti
      */
-    public void ejecutarModiHuesped(Alojado alojadoOriginal) {
+    public void ejecutarModiHuesped(AlojadoDTO alojadoOriginal) {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE LA LLAMADA MAIN O OTRO CASO DE USO
         System.out.println("Interfaz de modificación de huésped - En desarrollo");
         System.out.println("Este es un apartado especialmente para que el usuario" + "\n" +
                 " pueda modificar o eliminar los datos de un huésped ya existente.");
 
         // Lógica de modificación de huésped aquí
-        Alojado datosModificados = alojadoOriginal;
+        AlojadoDTO datosModificados = alojadoOriginal;
         boolean bandera = true;
 
         AlojadoDAO json = new AlojadoDAOJSON();
@@ -97,7 +98,7 @@ public class InterfazModificarHuesped {
                 case "siguiente":
                 case "s":
                     if (camposInvalidos.isEmpty()) {
-                        if (!gestorAlojamiento.dniExiste(datosModificados.getDatos().getDatos_personales().getNroDoc(), datosModificados.getDatos().getDatos_personales().getTipoDoc())) {
+                        if (!gestorAlojamiento.dniExiste(datosModificados.getNroDoc(), datosModificados.getTipoDoc())) {
                             //guardo datos modificados
                             System.out.println("Guardando cambios...");
                             gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
@@ -152,11 +153,11 @@ public class InterfazModificarHuesped {
                     break;
                 case "borrar":
                 case "b":
-                    InterfazDarBaja.eliminarHuesped(alojadoOriginal, entrada);
+//                    InterfazDarBaja.eliminarHuesped(alojadoOriginal, entrada);
                     bandera = false;//sale del bucle principal y el CU termina
                     break;
                 default:
-                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalida);                
+//                    datosModificados = cargarCampo(datosModificados, opcion, camposInvalidos, camposDireccionInvalida);
             }
             System.out.print("\033[H\033[2J"); System.out.flush(); // <<-- BORRA LA TERMINAL (ANSI)
         }
@@ -168,7 +169,7 @@ public class InterfazModificarHuesped {
      * Muestra un menú para seleccionar el tipo de documento.
      *
      * @return El {@link TipoDoc} seleccionado (DNI por defecto).
-     */
+//     */
     private TipoDoc menuTipoDoc() {
         System.out.println("Seleccione tipo de documento:");
         System.out.println("1. DNI");
@@ -196,28 +197,28 @@ public class InterfazModificarHuesped {
      *
      * @param alojado El objeto {@link Alojado} con los datos actuales.
      */
-    private void listaDatosHuesped(Alojado alojado) {
+    private void listaDatosHuesped(AlojadoDTO alojado) {
         System.out.println("Datos del Huésped:\n" +
-                "1. Apellido:" + alojado.getDatos().getDatos_personales().getApellido() + "\n" +
-                "2. Nombre:" + alojado.getDatos().getDatos_personales().getNombre() + "\n" +
-                "3. Tipo de Documento:" + alojado.getDatos().getDatos_personales().getTipoDoc() + "\n" +
-                "4. Número de Documento:" + alojado.getDatos().getDatos_personales().getNroDoc() + "\n" +
-                "5. Cuit:" + alojado.getDatos().getDatos_personales().getCUIT() + "\n" +
-                "6. Posición frente al IVA:" + alojado.getDatos().getDatos_personales().getPosicionIva() + "\n" +
-                "7. Fecha de Nacimiento:" + alojado.getDatos().getDatos_personales().getFechanac() + "\n" +
+                "1. Apellido:" + alojado.getApellido() + "\n" +
+                "2. Nombre:" + alojado.getNombre() + "\n" +
+                "3. Tipo de Documento:" + alojado.getTipoDoc() + "\n" +
+                "4. Número de Documento:" + alojado.getNroDoc() + "\n" +
+                "5. Cuit:" + alojado.getCUIT() + "\n" +
+                "6. Posición frente al IVA:" + alojado.getPosicionIva() + "\n" +
+                "7. Fecha de Nacimiento:" + alojado.getFechanac() + "\n" +
                 "8. Dirección:\n" +
-                "  Calle:" + alojado.getDatos().getDatos_residencia().getCalle() + "\n" +
-                "  Número:" + alojado.getDatos().getDatos_residencia().getNro_calle() + "\n" +
-                "  Piso:" + alojado.getDatos().getDatos_residencia().getPiso() + "\n" +
-                "  Departamento:" + alojado.getDatos().getDatos_residencia().getDepto() + "\n" +
-                "  Localidad:" + alojado.getDatos().getDatos_residencia().getLocalidad() + "\n" +
-                "  Provincia:" + alojado.getDatos().getDatos_residencia().getProv() + "\n" +
-                "  País:" + alojado.getDatos().getDatos_residencia().getPais() + "\n" +
-                "  Código Postal:" + alojado.getDatos().getDatos_residencia().getCod_post() + "\n" +
-                "9. Teléfono:" + alojado.getDatos().getDatos_contacto().getTelefono() + "\n" +
-                "10. Email:" + alojado.getDatos().getDatos_contacto().getEmail() + "\n" +
-                "11. Ocupación:" + alojado.getDatos().getDatos_personales().getOcupacion() + "\n" +
-                "12. Nacionalidad:" + alojado.getDatos().getDatos_personales().getNacionalidad() + "\n");
+                "  Calle:" + alojado.getCalle() + "\n" +
+                "  Número:" + alojado.getNroCalle() + "\n" +
+                "  Piso:" + alojado.getPiso() + "\n" +
+                "  Departamento:" + alojado.getDepto() + "\n" +
+                "  Localidad:" + alojado.getLocalidad() + "\n" +
+                "  Provincia:" + alojado.getProv() + "\n" +
+                "  País:" + alojado.getPais() + "\n" +
+                "  Código Postal:" + alojado.getCodPost() + "\n" +
+                "9. Teléfono:" + alojado.getTelefono() + "\n" +
+                "10. Email:" + alojado.getEmail() + "\n" +
+                "11. Ocupación:" + alojado.getOcupacion() + "\n" +
+                "12. Nacionalidad:" + alojado.getNacionalidad() + "\n");
 
         System.out.println("Escriba Siguiente (s), Cancelar (c) o Borrar (b)");
         System.out.print("Campos inválidos en: ");
@@ -235,18 +236,18 @@ public class InterfazModificarHuesped {
      * muestra un sub-menú.
      *
      * @param alojado El objeto {@link Alojado} en modificación.
-     * @param opcion El número del campo a modificar (como String).
+     * @param opcion  El número del campo a modificar (como String).
      * @return El {@link Alojado} con el campo modificado.
      */
-    private Alojado cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos) {
+    private AlojadoDTO cargarCampo(Alojado alojado, String opcion, BitSet camposInvalidos, BitSet camposDireccionInvalidos) {
 
-        Alojado datosModificados = alojado;
+        AlojadoDTO datosModificados = new AlojadoDTO(alojado);
 
         switch (opcion) {
             case "1":
                 System.out.print("Nuevo apellido: ");
                 String nuevoApellido = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setApellido(nuevoApellido);
+                datosModificados.setApellido(nuevoApellido);
                 if (Validador.isApellidoValido(nuevoApellido)) {
                     camposInvalidos.clear(0);
                 } else {
@@ -256,7 +257,7 @@ public class InterfazModificarHuesped {
             case "2":
                 System.out.print("Nuevo nombre: ");
                 String nuevoNombre = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setNombre(nuevoNombre);
+                datosModificados.setNombre(nuevoNombre);
                 if (Validador.isNombreValido(nuevoNombre)) {
                     camposInvalidos.clear(1);
                 } else {
@@ -266,7 +267,7 @@ public class InterfazModificarHuesped {
             case "3":
                 System.out.print("Nuevo tipo de documento: ");
                 TipoDoc nuevoTipoDoc = menuTipoDoc();
-                datosModificados.getDatos().getDatos_personales().setTipoDoc(nuevoTipoDoc);
+                datosModificados.setTipoDoc(nuevoTipoDoc);
                 if (Validador.isTipoDocumentoValido(nuevoTipoDoc)) {
                     camposInvalidos.clear(2);
                 } else {
@@ -276,8 +277,8 @@ public class InterfazModificarHuesped {
             case "4":
                 System.out.print("Nuevo número de documento: ");
                 String nuevoNroDoc = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setNroDoc(nuevoNroDoc);
-                if (Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getDatos().getDatos_personales().getTipoDoc())) {
+                datosModificados.setNroDoc(nuevoNroDoc);
+                if (Validador.isNumeroDocumentoValido(nuevoNroDoc, datosModificados.getTipoDoc())) {
                     camposInvalidos.clear(3);
                 } else {
                     camposInvalidos.set(3);
@@ -286,7 +287,7 @@ public class InterfazModificarHuesped {
             case "5":
                 System.out.print("Nuevo CUIT (con el formato XX-XXXXXXXX-X): ");
                 String nuevoCuit = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setCUIT(nuevoCuit);
+                datosModificados.setCUIT(nuevoCuit);
                 if (Validador.isCuitValidoOpcional(nuevoCuit)) {
                     camposInvalidos.clear(4);
                 } else {
@@ -296,7 +297,7 @@ public class InterfazModificarHuesped {
             case "6":
                 System.out.print("Nueva posición frente al IVA: ");
                 String nuevaPosIva = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setPosicionIva(nuevaPosIva);
+                datosModificados.setPosicionIva(nuevaPosIva);
                 if (Validador.isPosicionIvaValida(nuevaPosIva)) {
                     camposInvalidos.clear(5);
                 } else {
@@ -307,7 +308,7 @@ public class InterfazModificarHuesped {
                 System.out.print("Nueva fecha de nacimiento (AAAA-MM-DD): ");
                 String nuevaFechaStr = entrada.nextLine();
                 LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
-                datosModificados.getDatos().getDatos_personales().setFechanac(nuevaFecha);
+                datosModificados.setFechanac(nuevaFechaStr);
                 if (Validador.isFechaNacimientoValida(nuevaFecha)) {
                     camposInvalidos.clear(6);
                 } else {
@@ -329,7 +330,7 @@ public class InterfazModificarHuesped {
                     case "1":
                         System.out.print("Nueva calle: ");
                         String nuevaCalle = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setCalle(nuevaCalle);
+                        datosModificados.setCalle(nuevaCalle);
                         if (Validador.isCalleValida(nuevaCalle)) {
                             camposDireccionInvalidos.clear(0);
                         } else {
@@ -339,7 +340,7 @@ public class InterfazModificarHuesped {
                     case "2":
                         System.out.print("Nuevo número: ");
                         String nuevoNumero = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setNro_calle(nuevoNumero);
+                        datosModificados.setNroCalle(nuevoNumero);
                         if (Validador.isNumeroCalleValido(nuevoNumero)) {
                             camposDireccionInvalidos.clear(1);
                         } else {
@@ -349,7 +350,7 @@ public class InterfazModificarHuesped {
                     case "3":
                         System.out.print("Nuevo piso: ");
                         String nuevoPiso = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setPiso(nuevoPiso);
+                        datosModificados.setPiso(nuevoPiso);
                         if (Validador.isNumeroCalleValido(nuevoPiso)) {
                             camposDireccionInvalidos.clear(2);
                         } else {
@@ -359,7 +360,7 @@ public class InterfazModificarHuesped {
                     case "4":
                         System.out.print("Nuevo departamento: ");
                         String nuevoDepto = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setDepto(nuevoDepto);
+                        datosModificados.setDepto(nuevoDepto);
                         if (Validador.isNumeroCalleValido(nuevoDepto)) {
                             camposDireccionInvalidos.clear(3);
                         } else {
@@ -369,7 +370,7 @@ public class InterfazModificarHuesped {
                     case "5":
                         System.out.print("Nueva localidad: ");
                         String nuevaLocalidad = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setLocalidad(nuevaLocalidad);
+                        datosModificados.setLocalidad(nuevaLocalidad);
                         if (Validador.isLocalidadValida(nuevaLocalidad)) {
                             camposDireccionInvalidos.clear(4);
                         } else {
@@ -379,7 +380,7 @@ public class InterfazModificarHuesped {
                     case "6":
                         System.out.print("Nueva provincia: ");
                         String nuevaProvincia = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setProv(nuevaProvincia);
+                        datosModificados.setProv(nuevaProvincia);
                         if (Validador.isProvinciaValida(nuevaProvincia)) {
                             camposDireccionInvalidos.clear(5);
                         } else {
@@ -389,7 +390,7 @@ public class InterfazModificarHuesped {
                     case "7":
                         System.out.print("Nuevo país: ");
                         String nuevoPais = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setPais(nuevoPais);
+                        datosModificados.setPais(nuevoPais);
                         if (Validador.isPaisValido(nuevoPais)) {
                             camposDireccionInvalidos.clear(6);
                         } else {
@@ -399,7 +400,7 @@ public class InterfazModificarHuesped {
                     case "8":
                         System.out.print("Nuevo código postal: ");
                         String nuevoCodPost = entrada.nextLine();
-                        datosModificados.getDatos().getDatos_residencia().setCod_post(nuevoCodPost);
+                        datosModificados.setCodPost(nuevoCodPost);
                         if (Validador.isCodigoPostalValido(nuevoCodPost)) {
                             camposDireccionInvalidos.clear(7);
                         } else {
@@ -416,7 +417,7 @@ public class InterfazModificarHuesped {
             case "9":
                 System.out.print("Nuevo teléfono: ");
                 String nuevoTelefono = entrada.nextLine();
-                datosModificados.getDatos().getDatos_contacto().setTelefono(nuevoTelefono);
+                datosModificados.setTelefono(nuevoTelefono);
                 if (Validador.isTelefonoValido(nuevoTelefono)) {
                     camposInvalidos.clear(8);
                 } else {
@@ -426,7 +427,7 @@ public class InterfazModificarHuesped {
             case "10":
                 System.out.print("Nuevo email: ");
                 String nuevoEmail = entrada.nextLine();
-                datosModificados.getDatos().getDatos_contacto().setEmail(nuevoEmail);
+                datosModificados.setEmail(nuevoEmail);
                 if (Validador.isEmailValidoOpcional(nuevoEmail)) {
                     camposInvalidos.clear(9);
                 } else {
@@ -436,7 +437,7 @@ public class InterfazModificarHuesped {
             case "11":
                 System.out.print("Nueva ocupación: ");
                 String nuevaOcupacion = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setOcupacion(nuevaOcupacion);
+                datosModificados.setOcupacion(nuevaOcupacion);
                 if (Validador.isOcupacionValida(nuevaOcupacion)) {
                     camposInvalidos.clear(10);
                 } else {
@@ -446,7 +447,7 @@ public class InterfazModificarHuesped {
             case "12":
                 System.out.print("Nueva nacionalidad: ");
                 String nuevaNacionalidad = entrada.nextLine();
-                datosModificados.getDatos().getDatos_personales().setNacionalidad(nuevaNacionalidad);
+                datosModificados.setNacionalidad(nuevaNacionalidad);
                 if (Validador.isNacionalidadValida(nuevaNacionalidad)) {
                     camposInvalidos.clear(11);
                 } else {

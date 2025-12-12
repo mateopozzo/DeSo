@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
 import ddb.deso.repository.ReservaRepository;
-import ddb.deso.service.habitaciones.Reserva;
+import ddb.deso.negocio.habitaciones.Reserva;
 
 
 /**

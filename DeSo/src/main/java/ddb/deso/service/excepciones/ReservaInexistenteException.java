@@ -1,4 +1,4 @@
-package ddb.deso.gestores.excepciones;
+package ddb.deso.service.excepciones;
 
 /**
  * Excepción lanzada cuando se intenta operar sobre una {@code Reserva}

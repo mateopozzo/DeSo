@@ -1,6 +1,6 @@
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.service.TipoHab;
+import ddb.deso.negocio.TipoHab;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

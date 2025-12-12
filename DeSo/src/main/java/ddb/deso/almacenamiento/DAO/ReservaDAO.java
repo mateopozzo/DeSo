@@ -8,7 +8,7 @@ import ddb.deso.negocio.habitaciones.Reserva;
 import java.time.LocalDate;
 import java.util.List;
 
-import ddb.deso.service.habitaciones.Reserva;
+import ddb.deso.negocio.habitaciones.Reserva;
 
 /**
  * Contrato de acceso a datos para la entidad {@link Reserva}.

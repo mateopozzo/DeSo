@@ -17,15 +17,15 @@ import ddb.deso.negocio.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
-import ddb.deso.gestores.excepciones.ReservaInexistenteException;
-import ddb.deso.service.habitaciones.Habitacion;
-import ddb.deso.service.habitaciones.Reserva;
+import ddb.deso.service.excepciones.HabitacionInexistenteException;
+import ddb.deso.service.excepciones.ReservaInexistenteException;
+import ddb.deso.negocio.habitaciones.Habitacion;
+import ddb.deso.negocio.habitaciones.Reserva;
 import org.springframework.transaction.annotation.Transactional;
 
 import ddb.deso.almacenamiento.DTO.ReservaGrillaDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionReservaDTO;
-import ddb.deso.gestores.excepciones.ApellidoVacioException;
+import ddb.deso.service.excepciones.ApellidoVacioException;
 
 @Service
 @Transactional
