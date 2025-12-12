@@ -1,13 +1,14 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.almacenamiento.DAO.ReservaDAO;
 import ddb.deso.negocio.habitaciones.Reserva;
-
 import java.time.LocalDate;
 import java.util.List;
 
-import ddb.deso.repository.ReservaRepository;
 import org.springframework.stereotype.Repository;
+
+import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.repository.ReservaRepository;
+import ddb.deso.service.habitaciones.Reserva;
 
 
 /**
@@ -33,10 +34,37 @@ public class ReservaDAOJPA implements ReservaDAO {
         reservaRepository.save(reserva);
     }
 
-    @Override
+    /**
+     * Actualiza una reserva existente.
+     *
+     * <p>En JPA, {@code save} funciona tanto para crear como para actualizar
+     * (si el entity tiene ID persistido).</p>
+     *
+     * @param reserva reserva a actualizar.
+     */
+   @Override
     public void actualizar(Reserva reserva) {
-
+        if(reserva == null) { return; }
+        reservaRepository.save(reserva);
     }
+
+    /**
+     * Busca reservas por apellido (obligatorio) y opcionalmente por nombre.
+     *
+     * @param apellido apellido (obligatorio).
+     * @param nombre nombre (opcional).
+     * @return lista de reservas encontradas.
+     */
+    @Override
+    public List<Reserva> buscarPorApellidoNombre(String apellido, String nombre) {
+        if (apellido == null) return List.of();
+
+        if (nombre == null || nombre.isBlank()) {
+            return reservaRepository.findByApellidoContainingIgnoreCase(apellido);
+        }
+        return reservaRepository.findByApellidoContainingIgnoreCaseAndNombreContainingIgnoreCase(apellido, nombre);
+    }
+
 
     @Override
     public void eliminar(Reserva reserva) {

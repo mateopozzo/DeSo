@@ -1,10 +1,13 @@
 package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.*;
-import ddb.deso.service.GestorHabitacion;
-import ddb.deso.service.excepciones.AlojadoInvalidoException;
-import ddb.deso.service.excepciones.HabitacionInexistenteException;
-import ddb.deso.service.excepciones.ReservaInvalidaException;
+import ddb.deso.gestores.GestorHabitacion;
+import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
+import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
+import ddb.deso.gestores.excepciones.ReservaInexistenteException;
+import ddb.deso.gestores.excepciones.ReservaInvalidaException;
+import ddb.deso.gestores.excepciones.ApellidoVacioException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -165,6 +168,46 @@ public class HabitacionController {
                     reservasCoincidentes.addAll(gestorHabitacion.consultarReservas(rango));
                 });
         return ResponseEntity.ok(reservasCoincidentes);
+    }
+
+    /**
+     * Endpoint CU06: Busca reservas por apellido (obligatorio) y opcionalmente por nombre.
+     *
+     * @param dto criterios de búsqueda.
+     * @return lista de reservas para mostrar en la grilla.
+     *         400 si el apellido está vacío.
+     */
+    @PostMapping("/api/reservas/buscar")
+    public ResponseEntity<List<ReservaGrillaDTO>> buscarReservas(@RequestBody BuscarReservaDTO dto) {
+
+        try {
+            var resultado = gestorHabitacion.buscarReservasPorApellidoNombre(
+                    dto == null ? null : dto.getApellido(),
+                    dto == null ? null : dto.getNombre()
+            );
+            return ResponseEntity.ok(resultado);
+
+        } catch (ApellidoVacioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of());
+        }
+    }
+
+    /**
+     * Endpoint CU06: Cancela una reserva por ID.
+     *
+     * <p>Implementación: cancelación lógica (estado = "Cancelada"), no borrado físico.</p>
+     *
+     * @param idReserva ID de la reserva a cancelar.
+     * @return 204 NO CONTENT si se canceló; 404 si no existe.
+     */
+    @DeleteMapping("/api/reservas/{idReserva}")
+    public ResponseEntity<Void> cancelarReserva(@PathVariable Long idReserva) {
+        try {
+            gestorHabitacion.cancelarReserva(idReserva);
+            return ResponseEntity.noContent().build(); // 204
+        } catch (ReservaInexistenteException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /**
