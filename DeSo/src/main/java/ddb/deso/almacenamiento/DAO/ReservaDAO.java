@@ -4,9 +4,10 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.service.habitaciones.Reserva;
 import java.time.LocalDate;
 import java.util.List;
+
+import ddb.deso.service.habitaciones.Reserva;
 
 /**
  * Contrato de acceso a datos para la entidad {@link Reserva}.
@@ -25,6 +26,8 @@ public interface ReservaDAO {
      * @param reserva Entidad con estado modificado.
      */
     void actualizar(Reserva reserva);
+
+    List<Reserva> buscarPorApellidoNombre(String apellido, String nombre);
 
     /**
      * Elimina el registro de la reserva.

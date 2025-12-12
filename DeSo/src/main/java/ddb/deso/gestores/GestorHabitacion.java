@@ -18,9 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
+import ddb.deso.gestores.excepciones.ReservaInexistenteException;
 import ddb.deso.service.habitaciones.Habitacion;
 import ddb.deso.service.habitaciones.Reserva;
 import org.springframework.transaction.annotation.Transactional;
+
+import ddb.deso.almacenamiento.DTO.ReservaGrillaDTO;
+import ddb.deso.almacenamiento.DTO.HabitacionReservaDTO;
+import ddb.deso.gestores.excepciones.ApellidoVacioException;
 
 @Service
 @Transactional
@@ -99,6 +104,12 @@ public class GestorHabitacion {
         return disponibilidades;
 
     }
+    // TODO (CU06 - Cancelar Reserva):
+    // Hoy este método lista reservas sin considerar el campo "estado" de Reserva.
+    // Si se implementa cancelación lógica (estado = "Cancelada"), las reservas canceladas
+    // deberían dejar de bloquear disponibilidad y NO deberían mapearse a DisponibilidadDTO.
+    // Solución futura: filtrar por estado != "Cancelada" (idealmente con query en DAO/Repository
+    // y/o un enum EstadoReserva), y mantener consistencia en listarReservas(fechaInicio, fechaFin).
 
     public List<DisponibilidadDTO> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
 
@@ -333,5 +344,84 @@ public class GestorHabitacion {
         }
 
         return reservasDTOCoincidentes;
+    }
+
+    /**
+     * Busca reservas por apellido (obligatorio) y opcionalmente por nombre,
+     * para mostrar en la grilla del CU06 - Cancelar Reserva.
+     *
+     * @param apellido apellido del eventual huésped (obligatorio).
+     * @param nombre nombre del eventual huésped (opcional).
+     * @return lista de reservas encontradas para la grilla.
+     * @throws ApellidoVacioException si el apellido es nulo o vacío (flujo alternativo 3.A del CU).
+     */
+    @Transactional(readOnly = true)
+    public List<ReservaGrillaDTO> buscarReservasPorApellidoNombre(String apellido, String nombre)  {
+
+        if (apellido == null || apellido.isBlank()) {
+            throw new ApellidoVacioException("El campo apellido no puede estar vacío");
+        }
+
+        var reservas = reservaDAO.buscarPorApellidoNombre(apellido.trim(),
+                (nombre == null ? null : nombre.trim()));
+
+        if (reservas == null || reservas.isEmpty()) {
+            return List.of();
+        }
+
+        List<ReservaGrillaDTO> resultado = new ArrayList<>();
+
+        for (var r : reservas) {
+
+            var habitaciones = new ArrayList<HabitacionReservaDTO>();
+            if (r.getListaHabitaciones() != null) {
+                for (var h : r.getListaHabitaciones()) {
+                    habitaciones.add(new HabitacionReservaDTO(h.getNroHab(),h.getTipo_hab()));
+                }
+            }
+
+            resultado.add(new ReservaGrillaDTO(
+                    r.getIdReserva(),
+                    r.getApellido(),
+                    r.getNombre(),
+                    r.getFecha_inicio(),
+                    r.getFecha_fin(),
+                    habitaciones
+            ));
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Cancela una o varias reservas marcándolas como "Cancelada".
+     *
+     * <p>Se implementa cancelación lógica para no perder trazabilidad histórica.</p>
+     *
+     * @param idsReserva lista de IDs de reservas seleccionadas.
+     * @throws ReservaInvalidaException si la lista es nula o vacía.
+     * @throws ReservaInexistenteException si alguna reserva no existe.
+     */
+    public void cancelarReservas(List<Long> idsReserva) {
+
+        if (idsReserva == null || idsReserva.isEmpty()) {
+            throw new ReservaInvalidaException("No se seleccionaron reservas para cancelar");
+        }
+
+        // Evita cancelar dos veces si viene repetido (por grilla con varias habitaciones)
+        Set<Long> idsUnicos = new HashSet<>(idsReserva);
+
+        for (Long id : idsUnicos) {
+            if (id == null) continue;
+
+            Reserva reserva = reservaDAO.buscarPorID(id);
+
+            if (reserva == null) {
+                throw new ReservaInexistenteException("No existe la reserva con id: " + id);
+            }
+
+            reserva.setEstado("Cancelada");
+            reservaDAO.actualizar(reserva);
+        }
     }
 }
