@@ -28,7 +28,7 @@ import static java.lang.Integer.parseInt;
  * </ul>
  * <p>
 
- * @see GestorAlojamiento#obtenerCriteriosAlojado(CriteriosBusq)
+ * @see GestorAlojamiento#buscarAlojado(CriteriosBusq)
  */
 @Deprecated
 public class InterfazBusqueda {
@@ -45,7 +45,7 @@ public class InterfazBusqueda {
      * **Flujo principal:** Punto de entrada para el caso de uso de búsqueda.
      * <p>
      * Solicita al usuario ingresar criterios de búsqueda (nombre, apellido, tipo y número de documento).
-     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.obtenerCriteriosAlojado}
+     * Crea un objeto {@link CriteriosBusq} y llama a {@code GestorAlojamiento.buscarAlojado}
      * para iniciar el proceso de búsqueda.
      * </p>
      */

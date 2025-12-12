@@ -104,7 +104,7 @@ public class TestCU09Integracion {
         gestor.darDeAltaHuesped(alojadoDarDeAlta2);// guardado de segundo huesped
 
         // resultado de la busqueda
-        var lista = gestor.obtenerCriteriosAlojado(crit);
+        var lista = gestor.buscarAlojado(crit);
 
         // la lista tiene que tener un solo invitado
         assertEquals("Cantidad encontrados distinta a 1",1,lista.size());
