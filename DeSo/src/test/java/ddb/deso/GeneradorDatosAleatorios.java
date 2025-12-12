@@ -1,6 +1,6 @@
 package ddb.deso;//import ddb.deso.service.TipoDoc;
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.*;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

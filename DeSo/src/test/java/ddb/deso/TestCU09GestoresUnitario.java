@@ -2,14 +2,12 @@ package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.FactoryAlojado;
-import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

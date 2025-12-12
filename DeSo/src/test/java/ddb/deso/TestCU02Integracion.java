@@ -1,9 +1,8 @@
 package ddb.deso;
 
-import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.Huesped;
+import ddb.deso.negocio.TipoDoc;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

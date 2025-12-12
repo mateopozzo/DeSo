@@ -2,7 +2,7 @@ package ddb.deso.almacenamiento.DAO;
 
 import java.util.Optional;
 
-import ddb.deso.service.login.Usuario;
+import ddb.deso.negocio.login.Usuario;
 
 /**
  * Interfaz DAO responsable del acceso a los datos de usuarios del sistema.

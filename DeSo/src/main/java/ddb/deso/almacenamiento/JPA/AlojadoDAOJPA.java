@@ -1,9 +1,9 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.service.alojamiento.*;
+import ddb.deso.negocio.alojamiento.*;
 import ddb.deso.repository.AlojadoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

@@ -1,13 +1,13 @@
 package ddb.deso.presentacion;
 
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
-import ddb.deso.service.alojamiento.*;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.negocio.alojamiento.*;
 
 import java.util.List;
 import java.util.Scanner;

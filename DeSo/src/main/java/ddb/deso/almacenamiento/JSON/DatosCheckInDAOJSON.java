@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.JSON;
 
 import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
-import ddb.deso.service.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
 
 import java.io.IOException;
 import java.nio.file.Path;

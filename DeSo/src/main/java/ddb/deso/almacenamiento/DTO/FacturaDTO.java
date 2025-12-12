@@ -4,8 +4,8 @@
  */
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.service.TipoFactura;
-import ddb.deso.service.contabilidad.Factura;
+import ddb.deso.negocio.TipoFactura;
+import ddb.deso.negocio.contabilidad.Factura;
 
 import java.time.LocalDate;
 import java.util.Objects;

@@ -1,10 +1,10 @@
 package ddb.deso.presentacion;
 
 import ddb.deso.almacenamiento.JSON.UsuarioJsonDAO;
-import ddb.deso.service.login.Usuario;
-import ddb.deso.gestores.GestorAutenticacion;
-import ddb.deso.service.login.excepciones.CredencialesInvalidasException;
-import ddb.deso.service.login.excepciones.UsuarioNoEncontradoException;
+import ddb.deso.negocio.login.Usuario;
+import ddb.deso.service.GestorAutenticacion;
+import ddb.deso.negocio.login.excepciones.CredencialesInvalidasException;
+import ddb.deso.negocio.login.excepciones.UsuarioNoEncontradoException;
 
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;

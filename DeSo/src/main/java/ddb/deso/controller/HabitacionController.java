@@ -1,10 +1,10 @@
 package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.*;
-import ddb.deso.gestores.GestorHabitacion;
-import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
-import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
-import ddb.deso.gestores.excepciones.ReservaInvalidaException;
+import ddb.deso.service.GestorHabitacion;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.HabitacionInexistenteException;
+import ddb.deso.service.excepciones.ReservaInvalidaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

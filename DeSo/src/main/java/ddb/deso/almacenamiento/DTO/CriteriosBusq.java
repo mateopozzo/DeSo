@@ -1,5 +1,5 @@
 package ddb.deso.almacenamiento.DTO;
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 
 import java.util.Objects;
 

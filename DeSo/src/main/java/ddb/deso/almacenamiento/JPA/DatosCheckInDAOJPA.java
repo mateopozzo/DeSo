@@ -1,7 +1,7 @@
 package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
-import ddb.deso.service.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
 import ddb.deso.repository.CheckInRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

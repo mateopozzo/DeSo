@@ -2,10 +2,10 @@ package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.*;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

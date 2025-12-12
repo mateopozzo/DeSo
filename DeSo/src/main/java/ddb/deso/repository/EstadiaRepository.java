@@ -1,6 +1,6 @@
 package ddb.deso.repository;
 
-import ddb.deso.service.habitaciones.Estadia;
+import ddb.deso.negocio.habitaciones.Estadia;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

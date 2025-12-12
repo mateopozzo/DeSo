@@ -1,8 +1,8 @@
 package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.almacenamiento.DAO.EstadiaDAO;
-import ddb.deso.service.alojamiento.Huesped;
-import ddb.deso.service.habitaciones.Estadia;
+import ddb.deso.negocio.alojamiento.Huesped;
+import ddb.deso.negocio.habitaciones.Estadia;
 import ddb.deso.repository.EstadiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

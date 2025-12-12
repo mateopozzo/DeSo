@@ -4,10 +4,10 @@
  */
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.DatosCheckIn;
-import ddb.deso.service.alojamiento.DatosCheckOut;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.Alojado;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import lombok.*;
 
 import java.time.LocalDate;

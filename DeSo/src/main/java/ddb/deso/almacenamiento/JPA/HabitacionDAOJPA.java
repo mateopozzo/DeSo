@@ -1,8 +1,8 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.service.TipoHab;
+import ddb.deso.negocio.TipoHab;
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
-import ddb.deso.service.habitaciones.Habitacion;
+import ddb.deso.negocio.habitaciones.Habitacion;
 import ddb.deso.repository.HabitacionRepository;
 import org.springframework.stereotype.Repository;
 

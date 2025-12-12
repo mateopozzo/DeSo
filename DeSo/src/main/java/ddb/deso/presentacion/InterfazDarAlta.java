@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
 
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
-import ddb.deso.service.alojamiento.Alojado;
-import ddb.deso.service.alojamiento.DatosAlojado;
-import ddb.deso.gestores.GestorAlojamiento;
-import ddb.deso.service.alojamiento.Validador;
+import ddb.deso.negocio.alojamiento.Alojado;
+import ddb.deso.negocio.alojamiento.DatosAlojado;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.negocio.alojamiento.Validador;
 
 /**
  * Clase que representa la interfaz de consola para dar de alta a un nuevo huésped

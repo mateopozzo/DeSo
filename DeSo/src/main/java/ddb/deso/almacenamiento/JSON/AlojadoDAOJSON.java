@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 

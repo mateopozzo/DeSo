@@ -1,11 +1,11 @@
 package ddb.deso.controller;
 
-import ddb.deso.service.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.gestores.GestorAlojamiento;
+import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.gestores.excepciones.AlojadoInvalidoException;
-import ddb.deso.gestores.excepciones.AlojadosSinCoincidenciasException;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

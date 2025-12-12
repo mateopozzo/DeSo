@@ -2,20 +2,19 @@ package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.*;
 import ddb.deso.almacenamiento.DTO.ReservaDTO;
-import ddb.deso.gestores.GestorHabitacion;
-import ddb.deso.gestores.excepciones.HabitacionInexistenteException;
-import ddb.deso.gestores.excepciones.ReservaInvalidaException;
-import ddb.deso.service.EstadoHab;
-import ddb.deso.service.TipoHab;
-import ddb.deso.service.habitaciones.Estadia;
-import ddb.deso.service.habitaciones.Habitacion;
-import ddb.deso.service.habitaciones.Reserva;
+import ddb.deso.service.GestorHabitacion;
+import ddb.deso.service.excepciones.HabitacionInexistenteException;
+import ddb.deso.service.excepciones.ReservaInvalidaException;
+import ddb.deso.negocio.EstadoHab;
+import ddb.deso.negocio.TipoHab;
+import ddb.deso.negocio.habitaciones.Estadia;
+import ddb.deso.negocio.habitaciones.Habitacion;
+import ddb.deso.negocio.habitaciones.Reserva;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

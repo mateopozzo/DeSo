@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.service.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
 
 import java.util.List;
 

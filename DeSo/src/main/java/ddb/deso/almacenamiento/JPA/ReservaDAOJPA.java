@@ -1,7 +1,7 @@
 package ddb.deso.almacenamiento.JPA;
 
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
-import ddb.deso.service.habitaciones.Reserva;
+import ddb.deso.negocio.habitaciones.Reserva;
 
 import java.time.LocalDate;
 import java.util.List;

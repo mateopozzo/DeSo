@@ -1,8 +1,8 @@
 package ddb.deso.almacenamiento.DAO;
 import java.util.List;
 
-import ddb.deso.service.TipoDoc;
-import ddb.deso.service.alojamiento.Alojado;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 /**
