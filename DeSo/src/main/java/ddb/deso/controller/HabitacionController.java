@@ -193,23 +193,20 @@ public class HabitacionController {
     }
 
     /**
-    * Endpoint CU06: Cancela una o varias reservas seleccionadas.
+     * Endpoint CU06: Cancela una reserva por ID.
      *
-     * @param dto lista de IDs a cancelar.
-     * @return 200 OK si se cancelaron; 404 si alguna no existe; 422 si el request es inválido.
+     * <p>Implementación: cancelación lógica (estado = "Cancelada"), no borrado físico.</p>
+     *
+     * @param idReserva ID de la reserva a cancelar.
+     * @return 204 NO CONTENT si se canceló; 404 si no existe.
      */
-    @PostMapping("/api/reservas/cancelar")
-    public ResponseEntity<Void> cancelarReservas(@RequestBody CancelarReservasDTO dto) {
-
+    @DeleteMapping("/api/reservas/{idReserva}")
+    public ResponseEntity<Void> cancelarReserva(@PathVariable Long idReserva) {
         try {
-            gestorHabitacion.cancelarReservas(dto == null ? null : dto.getIdsReserva());
-            return ResponseEntity.ok().build();
-
+            gestorHabitacion.cancelarReserva(idReserva);
+            return ResponseEntity.noContent().build(); // 204
         } catch (ReservaInexistenteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        } catch (ReservaInvalidaException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }
 

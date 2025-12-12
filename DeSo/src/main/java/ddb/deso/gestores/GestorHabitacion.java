@@ -394,34 +394,23 @@ public class GestorHabitacion {
     }
 
     /**
-     * Cancela una o varias reservas marcándolas como "Cancelada".
+     * Cancela una reserva por ID marcándola con estado "Cancelada".
      *
-     * <p>Se implementa cancelación lógica para no perder trazabilidad histórica.</p>
-     *
-     * @param idsReserva lista de IDs de reservas seleccionadas.
-     * @throws ReservaInvalidaException si la lista es nula o vacía.
-     * @throws ReservaInexistenteException si alguna reserva no existe.
+     * @param idReserva id de la reserva.
+     * @throws ReservaInexistenteException si la reserva no existe.
      */
-    public void cancelarReservas(List<Long> idsReserva) {
-
-        if (idsReserva == null || idsReserva.isEmpty()) {
-            throw new ReservaInvalidaException("No se seleccionaron reservas para cancelar");
+    public void cancelarReserva(Long idReserva) {
+        if (idReserva == null) {
+            throw new ReservaInexistenteException("ID de reserva nulo");
         }
 
-        // Evita cancelar dos veces si viene repetido (por grilla con varias habitaciones)
-        Set<Long> idsUnicos = new HashSet<>(idsReserva);
-
-        for (Long id : idsUnicos) {
-            if (id == null) continue;
-
-            Reserva reserva = reservaDAO.buscarPorID(id);
-
-            if (reserva == null) {
-                throw new ReservaInexistenteException("No existe la reserva con id: " + id);
-            }
-
-            reserva.setEstado("Cancelada");
-            reservaDAO.actualizar(reserva);
+        Reserva reserva = reservaDAO.buscarPorID(idReserva);
+        if (reserva == null) {
+            throw new ReservaInexistenteException("No existe la reserva con id: " + idReserva);
         }
+
+        reserva.setEstado("Cancelada");
+        reservaDAO.actualizar(reserva);
     }
+
 }
