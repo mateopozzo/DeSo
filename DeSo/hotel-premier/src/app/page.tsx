@@ -56,7 +56,7 @@ export default function Home() {
         />
 
         <Card
-          href="/cancelar-reserva"
+          href="/"
           iconSrc="/reserva.svg"
           gestor="Reservas"
           title="Cancelar reserva"
