@@ -39,6 +39,8 @@ public class Factura {
 
     @OneToMany(fetch=FetchType.LAZY)
     List<NotaCredito> notaCredito;
+    
+    public void Factura() {}
 
     public Factura(LocalDate fecha_factura, int num_factura, TipoFactura tipo_factura, float importe_total, float importe_iva, float importe_neto, String destinatario) {
         this.fecha_factura = fecha_factura;
@@ -49,6 +51,7 @@ public class Factura {
         this.importe_neto = importe_neto;
         this.destinatario = destinatario;
     }
+   
 
 
 }
