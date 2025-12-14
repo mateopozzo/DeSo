@@ -11,6 +11,7 @@ import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.alojamiento.FactoryAlojado;
 import ddb.deso.negocio.alojamiento.Huesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -201,15 +202,76 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
+    /**
+     * Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
+     *
+     * @param alojadoHistorico:
+     * @return Estado del historial del huésped.
+     *
+     * <ul>
+     * <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido, pero no tiene check-in/out.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
+     * </ul>
+     */
+    private ResumenHistorialHuesped huespedSeAlojo(Alojado alojadoHistorico) {
+
+        if (alojadoHistorico == null) {
+            return ResumenHistorialHuesped.NO_PERSISTIDO;
+        }
+
+        boolean tieneCheckIns = alojadoHistorico.getDatos().getCheckIns() != null && !alojadoHistorico.getDatos().getCheckIns().isEmpty();
+        boolean tieneCheckOuts = alojadoHistorico.getDatos().getCheckOuts() != null && !alojadoHistorico.getDatos().getCheckOuts().isEmpty();
+
+        if (tieneCheckIns || tieneCheckOuts) {
+            return ResumenHistorialHuesped.SE_ALOJO;
+        }
+
+        return ResumenHistorialHuesped.NO_SE_ALOJO;
+    }
 
     /**
      * Elimina un registro de huésped del sistema.
      * Busca la entidad por DNI y solicita su eliminación al DAO.
      *
-     * @param alojado Objeto {@code AlojadoDTO} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
+     * @param criteriosEliminacion Objeto {@code CriteriosBusq} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
      */
-    public void eliminarAlojado(AlojadoDTO alojado) {
-        var entidadEliminable = alojadoDAO.buscarPorDNI(alojado.getNroDoc(),alojado.getTipoDoc());
+    public void eliminarAlojado(CriteriosBusq criteriosEliminacion) {
+
+        if(criteriosEliminacion == null){
+            return;
+        }
+
+        if(criteriosEliminacion.getNroDoc() == null || criteriosEliminacion.getNroDoc().isEmpty()){
+            throw new AlojadoInvalidoException("La identidad del alojado no existe");
+        }
+
+        if(criteriosEliminacion.getTipoDoc() == null){
+            throw new AlojadoInvalidoException("La identidad del alojado no existe");
+        }
+
+        var entidadEliminable = alojadoDAO.buscarPorDNI(criteriosEliminacion.getNroDoc(),criteriosEliminacion.getTipoDoc());
+
+        if(entidadEliminable == null){
+            throw new AlojadoInvalidoException("No existe la entidad en la base de datos");
+        }
+
+        if(!(entidadEliminable.getId().getNroDoc().equals(criteriosEliminacion.getNroDoc()))){
+            throw new AlojadoInvalidoException("Error de identidad en la base de datos");
+        }
+        if(!(entidadEliminable.getId().getTipoDoc().equals(criteriosEliminacion.getTipoDoc()))){
+            throw new AlojadoInvalidoException("Error de identidad en la base de datos");
+        }
+
+        var estadoDeAlojado = historialHuesped(entidadEliminable);
+
+        if(estadoDeAlojado != ResumenHistorialHuesped.NO_SE_ALOJO){
+            //El huésped no puede ser eliminado pues se
+            //ha alojado en el Hotel en alguna oportunidad
+            throw new AlojadoNoEliminableException("El huésped no puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad\n");
+            return; // porlasdudas
+        }
+
         alojadoDAO.eliminarAlojado(entidadEliminable);
     }
 
@@ -253,6 +315,7 @@ public class GestorAlojamiento {
         } else if (seAlojo == ResumenHistorialHuesped.NO_PERSISTIDO) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
+
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 

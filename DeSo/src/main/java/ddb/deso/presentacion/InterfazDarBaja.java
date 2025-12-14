@@ -2,6 +2,7 @@ package ddb.deso.presentacion;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.service.GestorAlojamiento;
@@ -170,7 +171,7 @@ public class InterfazDarBaja {
 
         AlojadoDTO aljoadoDTOParaEliminar = new AlojadoDTO(alojadoParaEliminar);
 
-        gestorAlojamiento.eliminarAlojado(aljoadoDTOParaEliminar);
+        gestorAlojamiento.eliminarAlojado(new CriteriosBusq(null,null,aljoadoDTOParaEliminar.getTipoDoc(), aljoadoDTOParaEliminar.getNroDoc()));
 
         terminarCU11(alojadoParaEliminar);
     }
