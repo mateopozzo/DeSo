@@ -84,6 +84,24 @@ public class AlojadoController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * Endpoint para obtener los datos del alojado que el usuario elige para modificar
+     *
+     * @param criterios
+     * @return
+     */
+    @GetMapping("api/obtener-atributos-huesped")
+    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam CriteriosBusq criterios){
+
+        if(!identidadValida(criterios)){
+            return null;
+        }
+
+        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+
+        return ResponseEntity.ok().body(dtoAlojado);
+    }
+
 
     /**
      * Busca alojados (invitados o huéspedes) que cumplan con los criterios especificados.
@@ -143,6 +161,8 @@ public class AlojadoController {
     }
 
 
+
+
     /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
@@ -173,15 +193,7 @@ public class AlojadoController {
     @DeleteMapping("api/eliminar-huesped")
     ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestParam AlojadoDTO dtoAlojadoPorEliminar){
 
-        if(dtoAlojadoPorEliminar == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(dtoAlojadoPorEliminar.getTipoDoc() == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(dtoAlojadoPorEliminar.getNroDoc() == null || dtoAlojadoPorEliminar.getNroDoc().isEmpty()){
+        if(!identidadValida(dtoAlojadoPorEliminar)){
             return ResponseEntity.badRequest().build();
         }
 
@@ -194,6 +206,19 @@ public class AlojadoController {
         }
 
         return ResponseEntity.ok(BajaHuesped.DADO_DE_BAJA);
+    }
+
+    private boolean identidadValida(CriteriosBusq c){
+        if(c==null)return false;
+        if(c.getTipoDoc()==null)return false;
+        if(c.getNroDoc()==null || c.getNroDoc().isEmpty())return false;
+        return true;
+    }
+    private boolean identidadValida(AlojadoDTO a){
+        if(a==null)return false;
+        if(a.getTipoDoc()==null)return false;
+        if(a.getNroDoc()==null || a.getNroDoc().isEmpty())return false;
+        return true;
     }
 
     //memo
