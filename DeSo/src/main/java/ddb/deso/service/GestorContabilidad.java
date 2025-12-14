@@ -2,7 +2,7 @@ package ddb.deso.service;
 
 import ddb.deso.negocio.contabilidad.*;
 import ddb.deso.almacenamiento.DAO.*;
-import ddb.deso.almacenamiento.DTO.*;
+import ddb.deso.almacenamiento.DTO.*; 
 import ddb.deso.negocio.habitaciones.*;
 import ddb.deso.negocio.TipoFactura;
 import ddb.deso.negocio.TipoServicio;
@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service // Agregada anotación para que Spring lo detecte
+@Service
 public class GestorContabilidad {
 
     private EstadiaDAO estadiaDAO;
@@ -25,8 +25,7 @@ public class GestorContabilidad {
     private ResponsablePagoDAO responsablePagoDAO;
     private HabitacionDAO habitacionDAO;
 
-    // Constructor con Inyección de Dependencias
-    @Autowired // Opcional en versiones nuevas de Spring si es el único constructor
+    @Autowired
     public GestorContabilidad(EstadiaDAO estadiaDAO, FacturaDAO facturaDAO, ResponsablePagoDAO respDAO, HabitacionDAO habDAO) {
         this.estadiaDAO = estadiaDAO;
         this.facturaDAO = facturaDAO;
@@ -34,51 +33,40 @@ public class GestorContabilidad {
         this.habitacionDAO = habDAO;
     }
 
-    /**
-     * CU07 Paso 1: Pre-visualización de la factura
-     */
     public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
+        // ... (Este método queda igual que antes) ...
+        // Para abreviar la respuesta, asumo que el código de calcularDetalleFacturacion
+        // sigue siendo el mismo que te pasé antes y que funcionaba bien.
         
-        // 1. Validar Habitación
-        // Asumiendo que el método en DAO es buscarPorNumero o similar.
-        // Si el DAO recibe Integer, castear nroHabitacion.intValue()
+        // Si necesitas que te lo pegue completo de nuevo, avísame.
+        // Aquí repito la lógica básica para que compile si copias todo:
         Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
         if (hab == null) throw new Exception("Habitación no encontrada");
 
-        // 2. Buscar Estadía Activa
         Estadia estadiaActual = null;
         List<Estadia> todas = estadiaDAO.listar();
-        
         for (Estadia e : todas) {
-            // Verifica habitación y que fecha_fin sea null o futura (lógica de "activa")
-            // NOTA: Se asume que Habitacion tiene getNroHab(). Verificar nombre exacto en entidad.
-            if (e.getHabitacion().getNroHab().equals(nroHabitacion)) { 
+            if (e.getHabitacion().getNroHab().equals(nroHabitacion)) {
                 estadiaActual = e; 
                 break; 
             }
         }
-        
         if (estadiaActual == null) throw new Exception("No hay estadía activa para esta habitación");
 
-        // 3. Calcular Costo Estadía (Días * Tarifa + Recargos)
-        // Estadia usa LocalDate, usamos ChronoUnit directamente.
         LocalDate inicio = estadiaActual.getFecha_inicio();
-        LocalDate fin = LocalDate.now(); // Fecha actual para el cálculo
-
+        LocalDate fin = LocalDate.now();
         long dias = ChronoUnit.DAYS.between(inicio, fin);
         if (dias == 0) dias = 1;
 
         double precioNoche = hab.getTarifa(); 
         double costoEstadia = dias * precioNoche;
 
-        // Regla: Late Check-out 
         if (horaSalida.isAfter(LocalTime.of(11, 0)) && horaSalida.isBefore(LocalTime.of(18, 0))) {
-            costoEstadia += (precioNoche * 0.5); // +50%
+            costoEstadia += (precioNoche * 0.5); 
         } else if (horaSalida.isAfter(LocalTime.of(18, 0))) {
-            costoEstadia += precioNoche; // +1 día
+            costoEstadia += precioNoche; 
         }
 
-        // 4. Procesar Servicios (Consumos)
         List<Servicio> serviciosEntity = estadiaActual.getListaServicios();
         List<ServicioDTO> serviciosDTO = new ArrayList<>();
         double totalServicios = 0.0;
@@ -86,67 +74,51 @@ public class GestorContabilidad {
         if (serviciosEntity != null) {
             for (Servicio s : serviciosEntity) {
                 double precio = calcularPrecioServicio(s.getTipo_servicio());
-                
-                // Constructor DTO: Asegurarse que coincida con tu clase ServicioDTO
                 ServicioDTO dto = new ServicioDTO();
                 dto.setIdServicio(s.getIdServicio());
                 dto.setTipoServicio(s.getTipo_servicio());
-                dto.setPrecio(precio); // Asumiendo que agregaste este campo al DTO
-                
+                dto.setPrecio(precio); 
                 serviciosDTO.add(dto);
                 totalServicios += precio;
             }
         }
 
-        // 5. Determinar Tipo Factura Sugerida
         TipoFactura tipoSugerido = TipoFactura.B;
-        // Aquí podrías buscar al huésped principal si la estadía ya tiene uno,
-        // o dejarlo por defecto B hasta que el usuario elija responsable.
 
-        // 6. Retornar DTO Armado
-        DetalleFacturaDTO detalle = new DetalleFacturaDTO();
-        detalle.setIdEstadia(estadiaActual.getIdEstadia());
-        detalle.setHabitacion("Habitación " + hab.getNroHab() + " - " + hab.getTipo_hab());
-        detalle.setCostoEstadia(costoEstadia);
-        detalle.setConsumos(serviciosDTO);
-        detalle.setMontoTotal(costoEstadia + totalServicios);
-        detalle.setTipoFacturaSugerida(tipoSugerido);
-        
-        return detalle;
+        return new DetalleFacturaDTO(
+            estadiaActual.getIdEstadia(), 
+            "Habitación " + hab.getNroHab() + " - " + hab.getTipo_hab(),
+            costoEstadia,
+            serviciosDTO,
+            costoEstadia + totalServicios,
+            tipoSugerido
+        );
     }
 
-    /**
-     * CU07 Paso 2: Generar Factura
-     */
     public FacturaDTO generarFactura(GenerarFacturaRequestDTO request) throws Exception {
-        // Extraer datos del request DTO
+        
         Long idEstadia = request.getIdEstadia();
         Long idResponsable = request.getIdResponsable();
-        
-        // Recuperar Entidades
-        // Nota: El diagrama dice int, pero los IDs suelen ser Long. Ajusta el cast si es necesario.
-        Estadia estadia = estadiaDAO.read(idEstadia.intValue()); 
+
+        Estadia estadia = estadiaDAO.read(idEstadia); 
         ResponsablePago responsable = responsablePagoDAO.read(idResponsable);
 
         if (estadia == null || responsable == null) throw new Exception("Datos inválidos");
 
-        // Crear Factura
+        // 1. Crear Entidad
         Factura nuevaFactura = new Factura();
-        nuevaFactura.setFecha_factura(LocalDate.now()); // Usa LocalDate, no Date
+        nuevaFactura.setFecha_factura(LocalDate.now()); 
         nuevaFactura.setDestinatario(responsable.getRazonSocial());
 
-        // Lógica de Tipo Factura
         TipoFactura tipo = TipoFactura.B;
         if (responsable.getCuit() != null && responsable.getCuit() > 0) { 
              tipo = TipoFactura.A;
         }
         nuevaFactura.setTipo_factura(tipo); 
 
-        // Recalcular montos (Simplificado: facturamos todo lo pendiente)
         DetalleFacturaDTO detalle = calcularDetalleFacturacion(estadia.getHabitacion().getNroHab(), LocalTime.now());
         float total = detalle.getMontoTotal().floatValue();
 
-        // Asignar montos según la entidad Factura
         nuevaFactura.setImporte_total(total);
         
         if (tipo == TipoFactura.A) {
@@ -159,11 +131,13 @@ public class GestorContabilidad {
             nuevaFactura.setImporte_iva(0);
         }
 
-        // Guardar
-        FacturaDTO dto = new FacturaDTO(nuevaFactura);
-        facturaDAO.crearFactura(dto);
+       
+        FacturaDTO facturaParaGuardar = new FacturaDTO(nuevaFactura);
+        
+        facturaDAO.crearFactura(facturaParaGuardar);
 
-        return dto;
+        // Devolvemos el DTO con los datos calculados
+        return facturaParaGuardar; 
     }
 
     private double calcularPrecioServicio(TipoServicio tipo) {
@@ -176,7 +150,7 @@ public class GestorContabilidad {
         }
     }
     
-    // Métodos placeholder 
+    // Métodos placeholder
     public ResponsablePago buscarRespPago() { return null; }
     public boolean ingresarPago() { return false; }
     public Pago listarCheques() { return null; }
