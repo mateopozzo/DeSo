@@ -10,6 +10,7 @@ import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.alojamiento.FactoryAlojado;
 import ddb.deso.negocio.alojamiento.Huesped;
+import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
@@ -234,32 +235,32 @@ public class GestorAlojamiento {
      * Elimina un registro de huésped del sistema.
      * Busca la entidad por DNI y solicita su eliminación al DAO.
      *
-     * @param criteriosEliminacion Objeto {@code CriteriosBusq} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
+     * @param dtoAlojadoEliminacion Objeto {@code CriteriosBusq} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
      */
-    public void eliminarAlojado(CriteriosBusq criteriosEliminacion) {
+    public void eliminarAlojado(AlojadoDTO dtoAlojadoEliminacion) {
 
-        if(criteriosEliminacion == null){
+        if(dtoAlojadoEliminacion == null){
             return;
         }
 
-        if(criteriosEliminacion.getNroDoc() == null || criteriosEliminacion.getNroDoc().isEmpty()){
+        if(dtoAlojadoEliminacion.getNroDoc() == null || dtoAlojadoEliminacion.getNroDoc().isEmpty()){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
         }
 
-        if(criteriosEliminacion.getTipoDoc() == null){
+        if(dtoAlojadoEliminacion.getTipoDoc() == null){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
         }
 
-        var entidadEliminable = alojadoDAO.buscarPorDNI(criteriosEliminacion.getNroDoc(),criteriosEliminacion.getTipoDoc());
+        var entidadEliminable = alojadoDAO.buscarPorDNI(dtoAlojadoEliminacion.getNroDoc(),dtoAlojadoEliminacion.getTipoDoc());
 
         if(entidadEliminable == null){
             throw new AlojadoInvalidoException("No existe la entidad en la base de datos");
         }
 
-        if(!(entidadEliminable.getId().getNroDoc().equals(criteriosEliminacion.getNroDoc()))){
+        if(!(entidadEliminable.getId().getNroDoc().equals(dtoAlojadoEliminacion.getNroDoc()))){
             throw new AlojadoInvalidoException("Error de identidad en la base de datos");
         }
-        if(!(entidadEliminable.getId().getTipoDoc().equals(criteriosEliminacion.getTipoDoc()))){
+        if(!(entidadEliminable.getId().getTipoDoc().equals(dtoAlojadoEliminacion.getTipoDoc()))){
             throw new AlojadoInvalidoException("Error de identidad en la base de datos");
         }
 
@@ -269,24 +270,9 @@ public class GestorAlojamiento {
             //El huésped no puede ser eliminado pues se
             //ha alojado en el Hotel en alguna oportunidad
             throw new AlojadoNoEliminableException("El huésped no puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad\n");
-            return; // porlasdudas
         }
 
         alojadoDAO.eliminarAlojado(entidadEliminable);
-    }
-
-    /**
-     * Enumerador que informa el estado del historial de un huésped en el sistema.
-     */
-    public enum ResumenHistorialHuesped {
-        /** Tuvo alguna estadía en el hotel. */
-        SE_ALOJO,
-
-        /** No tuvo ninguna estadía, pero sus datos están persistidos. */
-        NO_SE_ALOJO,
-
-        /** Sus datos no están presentes en la base del sistema. */
-        NO_PERSISTIDO
     }
 
     /**

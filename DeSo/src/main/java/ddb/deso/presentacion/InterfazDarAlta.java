@@ -97,7 +97,7 @@ public class InterfazDarAlta {
                                 camposInvalidos.set(3); // marca nro doc como inválido
                                 continue;
                             } else {
-                                gestorAlojamiento.eliminarAlojado(new CriteriosBusq(null,null,tipo_doc,nro_doc));
+                                gestorAlojamiento.eliminarAlojado(nuevoAlojado);
                             }
                         }
                         // Guarda los datos

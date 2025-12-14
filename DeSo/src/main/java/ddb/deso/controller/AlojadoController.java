@@ -1,10 +1,12 @@
 package ddb.deso.controller;
 
+import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,6 @@ public class AlojadoController {
     public ResponseEntity<String> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
         if (alojadoDTO == null) {
-            // No pudo crear=>Devuelve 400 Bad Request
             return ResponseEntity.badRequest().build();
         }
 
@@ -167,6 +168,32 @@ public class AlojadoController {
 
         return ResponseEntity.ok(dtoRta);
 
+    }
+
+    @DeleteMapping("api/eliminar-huesped")
+    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestParam AlojadoDTO dtoAlojadoPorEliminar){
+
+        if(dtoAlojadoPorEliminar == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(dtoAlojadoPorEliminar.getTipoDoc() == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(dtoAlojadoPorEliminar.getNroDoc() == null || dtoAlojadoPorEliminar.getNroDoc().isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        try{
+            gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
+        } catch (AlojadoNoEliminableException e){
+            return ResponseEntity.ok(BajaHuesped.OPERACION_PROHIBIDA);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return ResponseEntity.ok(BajaHuesped.DADO_DE_BAJA);
     }
 
     //memo
