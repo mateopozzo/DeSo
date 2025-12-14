@@ -4,12 +4,12 @@
 import {useRouter} from "next/navigation";
 import {FormEvent, useState} from "react";
 import {cancelarReserva, ReservaDTO} from "@/services/reserva.service";
-import {crearHuesped} from "@/services/huespedes.service";
-import {Input} from "postcss";
 
 export default function CancelarReserva() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
+    const [busquedaRealizada, setBusquedaRealizada] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const form1_limpio = {
         apellido: "",
@@ -42,141 +42,145 @@ export default function CancelarReserva() {
             hasta: formData.hasta,
         };
 
-
-
     };
 
-
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
+        setBusquedaRealizada(false);
         setError(null);
 
-        const campos_ob= [
-            {key: "apellido", etiq: "apellido"},
-            {key: "nombre", etiq: "nombre"},
-            {key: "nroHab", etiq: "nroHab"},
-            {key: "tipoHab", etiq: "tipoHab"},
-            {key: "desde", etiq: "desde"},
-            {key: "hasta", etiq: "hata"},
-        ];
-
-        const campos_obligatorios = campos_ob.filter((campo) => {
-            // porque si no al typescript no le gusta
+        // 1. VALIDACIÓN
+        const campos_ob = [{ key: "apellido", etiq: "Apellido" }];
+        const campos_faltantes = campos_ob.filter((campo) => {
             const valor = formData[campo.key as keyof typeof formData];
             return !valor || valor.toString().trim() === "";
         });
 
-        if (campos_obligatorios.length > 0) {
-            // junto todos los campos con un map donde hago join entre c/u y una coma
-            const lista = campos_obligatorios.map((c) => c.etiq).join(", ");
-            setError(`Los campos: ${lista} no pueden estar vacíos`);
+        if (campos_faltantes.length > 0) {
+            const lista = campos_faltantes.map((c) => c.etiq).join(", ");
+            setError(`Los siguientes campos son obligatorios para buscar: ${lista}`);
+            setLoading(false);
             return;
         }
 
-        //Esto no esta terminado
-        // await enviarDatos(false);
+        // 2. LLAMADA A TU FUNCIÓN enviarDatos
     };
 
+
     // en el return mandamos el html que teniamos antes
-    return(
-        <div className="dark:bg-gray-950 dark:text-white">
-            <h1 className="text-[#141414] dark:text-white  mb-8 text-5xl font-bold pb-2">
-                Dar alta de huésped
+    return (
+        <div className="dark:bg-gray-950 dark:text-white p-5">
+            <h1 className="text-[#141414] dark:text-white mb-8 text-5xl font-bold pb-2 border-b dark:border-gray-800">
+                Buscar Reservas
             </h1>
 
-            {/* INICIO DEL FORM */}
-            {error && (
-                <div className="bg-[#914d45] text-white p-2 mb-4 rounded font-semibold">
-                    {error}
-                </div>
-            )}
+            <div className="border border-gray-200 p-5 rounded-xl bg-[#f5f7fa] dark:bg-gray-950 shadow-sm mb-6">
+                <form
+                    onSubmit={handleSearch}
+                    className="flex flex-col lg:flex-row gap-4"
+                >
+                    {/* --- PARTE IZQUIERDA: INPUTS (Grid 3x2) --- */}
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 dark:bg-gray-950 dark:text-white"
-            >
-                <InputGroup
-                    label="Apellido"
-                    name="apellido"
-                    value={formData.apellido}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="text"
-                />
-                <InputGroup
-                    label="Nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="text"
-                />
-                <InputGroup
-                    label="nroHab"
-                    name="nroHab"
-                    value={formData.nroHab}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="number"
-                />
-                <InputGroup
-                    label="tipoHab"
-                    name="tipoHab"
-                    value={formData.tipoHab}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="text"
-                />
-                <InputGroup
-                    label="desde"
-                    name="desde"
-                    value={formData.desde}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="date"
-                />
-                <InputGroup
-                    label="hasta"
-                    name="hasta"
-                    value={formData.hasta}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    maxLength={50}
-                    type="date"
-                />
-            </form>
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Apellido <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                name="apellido"
+                                placeholder="Ingrese apellido"
+                                value={formData.apellido}
+                                onChange={handleChange}
+                                className={`border p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px] ${
+                                    error && formData.apellido === "" ? "border-red-500" : "border-gray-300 dark:border-gray-700"
+                                }`}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Nombre
+                            </label>
+                            <input
+                                name="nombre"
+                                placeholder="Ingrese nombre"
+                                value={formData.nombre}
+                                onChange={handleChange}
+                                className="border border-gray-300 dark:border-gray-700 p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px]"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Fecha Desde
+                            </label>
+                            <input
+                                name="desde"
+                                type="date"
+                                value={formData.desde}
+                                onChange={handleChange}
+                                className="border border-gray-300 dark:border-gray-700 p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px]"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Nro Habitación
+                            </label>
+                            <input
+                                name="nroHab"
+                                placeholder="Ej: 101"
+                                value={formData.nroHab}
+                                onChange={handleChange}
+                                type="number"
+                                className="border border-gray-300 dark:border-gray-700 p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px]"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Tipo Habitación
+                            </label>
+                            <input
+                                name="tipoHab"
+                                placeholder="Ej: Simple, Doble"
+                                value={formData.tipoHab}
+                                onChange={handleChange}
+                                className="border border-gray-300 dark:border-gray-700 p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px]"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="mb-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                                Fecha Hasta
+                            </label>
+                            <input
+                                name="hasta"
+                                type="date"
+                                value={formData.hasta}
+                                onChange={handleChange}
+                                className="border border-gray-300 dark:border-gray-700 p-2.5 rounded-lg w-full text-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white h-[42px]"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="lg:w-24 flex items-end">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full h-full bg-green-400/70 text-white p-4 rounded-xl hover:bg-green-500 transition-colors disabled:opacity-50 flex items-center justify-center min-h-[50px]"
+                        >
+                            {loading ? "..." : <img src="search.svg" alt="Buscar" width={30} className="dark:invert" />}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            /* Continua la busqueda de reserva */
+
         </div>
     );
-
-
 }
 
-
-const InputGroup =({
-                       label,
-                       name,
-                       value,
-                       onChange,
-                       type = "text",
-                       placeholder = "",
-                   }: any) => (
-    <div className="flex flex-col dark:bg-gray-950 dark:text-white">
-        <label className="mb-2 font-semibold text-[#141414] dark:bg-gray-950 dark:text-white">
-            {label}
-        </label>
-        <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
-        />
-    </div>
-);
 
