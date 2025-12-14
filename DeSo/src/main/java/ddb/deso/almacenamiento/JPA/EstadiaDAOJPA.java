@@ -99,4 +99,13 @@ public class EstadiaDAOJPA implements EstadiaDAO {
         }
         return fechaEstadiaFin.isBefore(fechaFin) && fechaEstadiaFin.isAfter(fechaInicio);
     }
+    /**
+     * Busca una estadía por su ID.
+     * Requerido por el GestorContabilidad para facturar.
+     */
+    @Override
+    public Estadia read(long id) {
+        // findById retorna un Optional, usamos orElse(null) si no lo encuentra
+        return estadiaRepository.findById(id).orElse(null);
+    }
 }

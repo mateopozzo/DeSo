@@ -17,4 +17,11 @@ public interface ResponsablePagoDAO {
     void eliminar(ResponsablePago responsablePago);
     List<ResponsablePago> listar();
     ResponsablePago buscarPorCUIT(String CUIT);
+
+    /**
+     * Busca un responsable de pago por su ID (CUIT).
+     * @param id El CUIT del responsable (clave primaria).
+     * @return La entidad encontrada o null.
+     */
+    ResponsablePago read(Long id);
 }
