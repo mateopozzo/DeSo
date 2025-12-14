@@ -72,4 +72,6 @@ public interface EstadiaDAO {
      * @return Lista de estadías del huésped vigentes en la fecha indicada.
      */
     List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
+
+    Estadia read(long id);
 }
