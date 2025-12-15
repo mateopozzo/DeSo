@@ -88,4 +88,9 @@ public class GeneradorDatosAleatorios {
     public static Huesped generarHuespedAleatorio() {
         return new Huesped(generarDatosAlojadoAleatorio());
     }
+
+    public static Alojado generarAlojadoAleatorio(){
+        var da = generarDatosAlojadoAleatorio();
+        return (RANDOM.nextInt(2) == 1 ? new Huesped(da):new Invitado(da));
+    }
 }
