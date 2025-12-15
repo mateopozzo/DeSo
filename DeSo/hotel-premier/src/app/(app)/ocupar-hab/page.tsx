@@ -9,8 +9,8 @@ import {
   DisponibilidadDTO,
   DatosRes,
   verificarRes,
-} from "../../services/habitaciones.service";
-import Grilla from "../../components/grilla";
+} from "../../../services/habitaciones.service";
+import Grilla from "../../../components/grilla";
 
 import { busqueda, ResultadoBusq } from "@/services/busqueda.service";
 import {
@@ -72,7 +72,7 @@ export default function OcuparHabPage() {
 
   const cancelarCasoUso = () => {
     if (confirm("¿Desea cancelar todo el proceso?")) {
-      router.push("/");
+      router.push("/home");
     }
   };
 
@@ -391,7 +391,7 @@ export default function OcuparHabPage() {
             Check-in exitoso
           </h2>
           <button
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/home")}
             className="bg-gray-9500 dark:text-white dark:border dark:border-white text-black px-6 py-2 font-semibold rounded-xl hover:bg-green-600 hover:border-green-600"
           >
             Volver al inicio

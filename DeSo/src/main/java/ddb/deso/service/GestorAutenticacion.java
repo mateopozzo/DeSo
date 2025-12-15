@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ddb.deso.almacenamiento.DAO.UsuarioDAO;
 import ddb.deso.negocio.login.Usuario;
 import ddb.deso.negocio.login.excepciones.CredencialesInvalidasException;
+import ddb.deso.negocio.login.excepciones.UsuarioNoEncontradoException;
 
 /**
  * Gestor del CU01 (Autenticar Usuario).
@@ -42,13 +43,13 @@ public class GestorAutenticacion {
      * @return {@link Usuario} autenticado si las credenciales son válidas.
      * @throws CredencialesInvalidasException si el usuario no existe o la contraseña no coincide.
      */
-    public Usuario autenticar(String nombre, String password) throws CredencialesInvalidasException {
+    public Usuario autenticar(String nombre, String password) throws UsuarioNoEncontradoException, CredencialesInvalidasException {
         String n = (nombre == null) ? "" : nombre.trim();
         String p = (password == null) ? "" : password;
 
         var usuarioOpt = usuarioDAO.buscarPorNombre(n);
 
-        if (usuarioOpt.isEmpty()) throw new CredencialesInvalidasException();
+        if (usuarioOpt.isEmpty()) throw new UsuarioNoEncontradoException(n);
 
         Usuario u = usuarioOpt.get();
         if (!u.coincidePasswordCon(p)) throw new CredencialesInvalidasException();

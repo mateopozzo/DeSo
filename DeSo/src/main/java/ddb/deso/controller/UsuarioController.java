@@ -14,6 +14,7 @@ import ddb.deso.almacenamiento.DTO.LoginRequestDTO;
 import ddb.deso.almacenamiento.DTO.LoginResponseDTO;
 import ddb.deso.negocio.login.Usuario;
 import ddb.deso.negocio.login.excepciones.CredencialesInvalidasException;
+import ddb.deso.negocio.login.excepciones.UsuarioNoEncontradoException;
 import ddb.deso.service.GestorAutenticacion;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -51,7 +52,7 @@ public class UsuarioController {
     @PostMapping("/api/auth/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO dto,
                                                   HttpSession session)
-            throws CredencialesInvalidasException {
+            throws CredencialesInvalidasException, UsuarioNoEncontradoException {
 
         Usuario u = gestorAutenticacion.autenticar(dto.getNombre(), dto.getPassword());
 
@@ -97,8 +98,8 @@ public class UsuarioController {
     /**
      * Maneja errores de autenticación devolviendo el mensaje requerido por el CU01.
      */
-    @ExceptionHandler(CredencialesInvalidasException.class)
-    public ResponseEntity<ErrorDTO> credencialesInvalidas() {
+    @ExceptionHandler({ UsuarioNoEncontradoException.class, CredencialesInvalidasException.class })
+    public ResponseEntity<ErrorDTO> authError() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorDTO("El usuario o la contraseña no son válidos"));
     }

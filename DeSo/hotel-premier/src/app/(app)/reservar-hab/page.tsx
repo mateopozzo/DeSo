@@ -8,8 +8,8 @@ import {
   Habitacion,
   DisponibilidadDTO,
   RequestReserva,
-} from "../../services/habitaciones.service";
-import Grilla, { DatosSeleccion } from "../../components/grilla";
+} from "../../../services/habitaciones.service";
+import Grilla, { DatosSeleccion } from "../../../components/grilla";
 
 export default function ReservarHab() {
   const router = useRouter();
@@ -142,7 +142,7 @@ export default function ReservarHab() {
 
   const cancelarCasoUso = () => {
     if (confirm("¿Desea cancelar todo el proceso?")) {
-      router.push("/");
+      router.push("/home");
     }
   };
 
@@ -338,7 +338,7 @@ export default function ReservarHab() {
               Hacer otra reserva
             </button>
             <button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/home")}
               className="px-8 py-3 rounded-xl font-bold border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition"
             >
               Ir al inicio

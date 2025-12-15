@@ -129,7 +129,7 @@ export default function buscarHuesped() {
         <div className="flex flex-col lg:flex-row  justify-center gap-4 mt-8 col-span-4">
           <button
             type="button"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/home")}
             className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
           >
             Cancelar
