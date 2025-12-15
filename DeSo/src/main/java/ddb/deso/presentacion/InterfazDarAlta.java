@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Scanner;
 
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
@@ -96,8 +97,7 @@ public class InterfazDarAlta {
                                 camposInvalidos.set(3); // marca nro doc como inválido
                                 continue;
                             } else {
-                                AlojadoDTO alojadoAnterior = gestorAlojamiento.obtenerAlojadoPorDNI(nro_doc, tipo_doc);
-                                gestorAlojamiento.eliminarAlojado(alojadoAnterior);
+                                gestorAlojamiento.eliminarAlojado(nuevoAlojado);
                             }
                         }
                         // Guarda los datos

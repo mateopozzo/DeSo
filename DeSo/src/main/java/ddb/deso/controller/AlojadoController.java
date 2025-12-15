@@ -1,10 +1,12 @@
 package ddb.deso.controller;
 
+import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,6 @@ public class AlojadoController {
     public ResponseEntity<String> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
 
         if (alojadoDTO == null) {
-            // No pudo crear=>Devuelve 400 Bad Request
             return ResponseEntity.badRequest().build();
         }
 
@@ -81,6 +82,24 @@ public class AlojadoController {
 
         // EXITO
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * Endpoint para obtener los datos del alojado que el usuario elige para modificar
+     *
+     * @param criterios
+     * @return
+     */
+    @GetMapping("api/obtener-atributos-huesped")
+    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam CriteriosBusq criterios){
+
+        if(!identidadValida(criterios)){
+            return null;
+        }
+
+        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+
+        return ResponseEntity.ok().body(dtoAlojado);
     }
 
 
@@ -142,6 +161,8 @@ public class AlojadoController {
     }
 
 
+
+
     /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
@@ -167,6 +188,37 @@ public class AlojadoController {
 
         return ResponseEntity.ok(dtoRta);
 
+    }
+
+    @DeleteMapping("api/eliminar-huesped")
+    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestParam AlojadoDTO dtoAlojadoPorEliminar){
+
+        if(!identidadValida(dtoAlojadoPorEliminar)){
+            return ResponseEntity.badRequest().build();
+        }
+
+        try{
+            gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
+        } catch (AlojadoNoEliminableException e){
+            return ResponseEntity.ok(BajaHuesped.OPERACION_PROHIBIDA);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return ResponseEntity.ok(BajaHuesped.DADO_DE_BAJA);
+    }
+
+    private boolean identidadValida(CriteriosBusq c){
+        if(c==null)return false;
+        if(c.getTipoDoc()==null)return false;
+        if(c.getNroDoc()==null || c.getNroDoc().isEmpty())return false;
+        return true;
+    }
+    private boolean identidadValida(AlojadoDTO a){
+        if(a==null)return false;
+        if(a.getTipoDoc()==null)return false;
+        if(a.getNroDoc()==null || a.getNroDoc().isEmpty())return false;
+        return true;
     }
 
     //memo
