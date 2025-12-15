@@ -206,7 +206,7 @@ public class GestorAlojamiento {
     /**
      * Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
      *
-     * @param alojadoHistorico:
+     * @param alojadoHistorico: Debe definir un alojado univocamente
      * @return Estado del historial del huésped.
      *
      * <ul>
@@ -221,8 +221,13 @@ public class GestorAlojamiento {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
 
-        boolean tieneCheckIns = alojadoHistorico.getDatos().getCheckIns() != null && !alojadoHistorico.getDatos().getCheckIns().isEmpty();
-        boolean tieneCheckOuts = alojadoHistorico.getDatos().getCheckOuts() != null && !alojadoHistorico.getDatos().getCheckOuts().isEmpty();
+        // No es nulo ni vacio
+        boolean tieneCheckIns =
+                alojadoHistorico.getDatos().getCheckIns() != null
+                && !alojadoHistorico.getDatos().getCheckIns().isEmpty();
+        boolean tieneCheckOuts =
+                alojadoHistorico.getDatos().getCheckOuts() != null
+                && !alojadoHistorico.getDatos().getCheckOuts().isEmpty();
 
         if (tieneCheckIns || tieneCheckOuts) {
             return ResumenHistorialHuesped.SE_ALOJO;
@@ -242,11 +247,9 @@ public class GestorAlojamiento {
         if(dtoAlojadoEliminacion == null){
             return;
         }
-
         if(dtoAlojadoEliminacion.getNroDoc() == null || dtoAlojadoEliminacion.getNroDoc().isEmpty()){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
         }
-
         if(dtoAlojadoEliminacion.getTipoDoc() == null){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
         }
@@ -256,7 +259,6 @@ public class GestorAlojamiento {
         if(entidadEliminable == null){
             throw new AlojadoInvalidoException("No existe la entidad en la base de datos");
         }
-
         if(!(entidadEliminable.getId().getNroDoc().equals(dtoAlojadoEliminacion.getNroDoc()))){
             throw new AlojadoInvalidoException("Error de identidad en la base de datos");
         }
@@ -264,12 +266,11 @@ public class GestorAlojamiento {
             throw new AlojadoInvalidoException("Error de identidad en la base de datos");
         }
 
-        var estadoDeAlojado = historialHuesped(entidadEliminable);
+        ResumenHistorialHuesped estadoDeAlojado = historialHuesped(entidadEliminable);
 
         if(estadoDeAlojado != ResumenHistorialHuesped.NO_SE_ALOJO){
-            //El huésped no puede ser eliminado pues se
-            //ha alojado en el Hotel en alguna oportunidad
-            throw new AlojadoNoEliminableException("El huésped no puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad\n");
+            throw new AlojadoNoEliminableException("El huésped no puede ser " +
+                    "eliminado pues se ha alojado en el Hotel en alguna oportunidad\n");
         }
 
         alojadoDAO.eliminarAlojado(entidadEliminable);
@@ -283,18 +284,8 @@ public class GestorAlojamiento {
      * @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
     public ResumenHistorialHuesped historialHuesped(Alojado alojado){
-        var nombre = alojado.getDatos().getDatos_personales().getNombre();
-        var apellido = alojado.getDatos().getDatos_personales().getApellido();
-        var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
-        var tipoDoc = alojado.getDatos().getDatos_personales().getTipoDoc();
 
-        CriteriosBusq criterios = new CriteriosBusq(apellido, nombre, tipoDoc, nroDoc);
-        System.out.println(nombre);
-        System.out.println(apellido);
-        System.out.println(nroDoc);
-        System.out.println(tipoDoc);
-
-        ResumenHistorialHuesped seAlojo = this.huespedSeAlojo(criterios);
+        ResumenHistorialHuesped seAlojo = this.huespedSeAlojo(alojado);
 
         if (seAlojo == ResumenHistorialHuesped.SE_ALOJO) {
             return ResumenHistorialHuesped.SE_ALOJO;
@@ -317,7 +308,6 @@ public class GestorAlojamiento {
      @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
      */
-
     public AlojadoDTO obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;
