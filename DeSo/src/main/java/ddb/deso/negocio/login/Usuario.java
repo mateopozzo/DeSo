@@ -60,6 +60,12 @@ public class Usuario {
      * @param textoPlano contraseña ingresada por el usuario.
      * @return {@code true} si coincide, {@code false} caso contrario.
      */
+
+    public Usuario(String nombre, String contrasenia, int permisos) {
+        this.nombre = nombre;
+        this.contrasenia = contrasenia;
+        this.permisos = permisos;
+    }
     public boolean coincidePasswordCon(String textoPlano) {
         return this.contrasenia != null && this.contrasenia.equals(textoPlano);
     }
