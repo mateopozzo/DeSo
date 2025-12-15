@@ -8,8 +8,8 @@ import {
   Habitacion,
   DisponibilidadDTO,
   RequestReserva,
-} from "../../services/habitaciones.service";
-import Grilla, { DatosSeleccion } from "../../components/grilla";
+} from "../../../services/habitaciones.service";
+import Grilla, { DatosSeleccion } from "../../../components/grilla";
 
 export default function ReservarHab() {
   const router = useRouter();

@@ -9,8 +9,8 @@ import {
   DisponibilidadDTO,
   DatosRes,
   verificarRes,
-} from "../../services/habitaciones.service";
-import Grilla from "../../components/grilla";
+} from "../../../services/habitaciones.service";
+import Grilla from "../../../components/grilla";
 
 import { busqueda, ResultadoBusq } from "@/services/busqueda.service";
 import {
