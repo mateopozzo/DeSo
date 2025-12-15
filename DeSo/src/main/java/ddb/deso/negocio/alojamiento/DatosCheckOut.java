@@ -7,7 +7,7 @@ package ddb.deso.negocio.alojamiento;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -26,7 +26,8 @@ public class DatosCheckOut {
     /**
      * Fecha y hora del registro de Check-Out.
      */
-    LocalDate fecha_hora_out;
+    LocalDateTime fecha_hora_out;
+
     /**
      * Identificador único y autoincremental del registro de Check-Out.
      */
@@ -45,7 +46,7 @@ public class DatosCheckOut {
     })
     private DatosAlojado alojado;
 
-    public DatosCheckOut(LocalDate fecha_hora_out) {
+    public DatosCheckOut(LocalDateTime fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
     }
 
@@ -57,11 +58,11 @@ public class DatosCheckOut {
         this.idCheckOut = idCheckOut;
     }
 
-    public LocalDate getFecha_hora_out() {
+    public LocalDateTime getFecha_hora_out() {
         return fecha_hora_out;
     }
 
-    public void setFecha_hora_iout(LocalDate fecha_hora_out) {
+    public void setFecha_hora_iout(LocalDateTime fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
     }
 
