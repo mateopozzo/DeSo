@@ -41,14 +41,14 @@ export default function HomePage() {
           desc="Genera una reserva para un huésped"
         />
         <Card
-          href="/"
+          href="/home"
           iconSrc="/fac.svg"
           gestor="Facturación"
           title="Generar factura"
           desc="Genera una nueva factura"
         />
         <Card
-          href="/"
+          href="/home"
           iconSrc="/hab.svg"
           gestor="Habitaciones"
           title="Dar de baja huésped"
@@ -63,7 +63,7 @@ export default function HomePage() {
           desc="Cancela una reserva existente"
         />
         <Card
-          href="/"
+          href="/home"
           iconSrc="/fac.svg"
           gestor="Facturación"
           title="Ingresar pago"

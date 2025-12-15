@@ -36,7 +36,7 @@ const MENU_ITEMS: opciones[] = [
     icon: "/fac.svg",
     alt: "Facturación",
     width: 50,
-    options: [{ label: "Generar factura", href: "/" }],
+    options: [{ label: "Generar factura", href: "/home" }],
   },
 ];
 
@@ -45,7 +45,7 @@ export default function sidebar() {
     <aside className="w-[100px] hidden h-full lg:flex flex-col items-center py-8 bg-[#f5f7fa] dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 z-50 relative">
       <ul className="flex flex-col gap-8 items-center w-full">
         <li className="mb-4">
-          <Link href="/">
+          <Link href="/home">
             <img
               src="/ICON-LOGO-LIGHT.svg"
               alt="Logo Hotel Premier"
