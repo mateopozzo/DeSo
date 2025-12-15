@@ -36,8 +36,6 @@ public class FacturaController {
     @PostMapping("/generar")
     public ResponseEntity<FacturaDTO> generarFactura(@RequestBody GenerarFacturaRequestDTO request) {
         try {
-            // CORRECCIÓN: Pasamos el objeto 'request' entero.
-            // El GestorContabilidad se actualizó para recibir el DTO, no variables sueltas.
             FacturaDTO factura = gestorContabilidad.generarFactura(request);
             return ResponseEntity.ok(factura);
         } catch (Exception e) {
