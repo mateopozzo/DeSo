@@ -11,6 +11,7 @@ import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.negocio.alojamiento.Validador;
 import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 
 
 /**
@@ -71,7 +72,7 @@ public class InterfazModificarHuesped {
      * originales del huésped a ser modificado.
      * @author Lauti
      */
-    public void ejecutarModiHuesped(AlojadoDTO alojadoOriginal) {
+    public void ejecutarModiHuesped(AlojadoDTO alojadoOriginal) throws AlojadoPreExistenteException {
         // PUNTO DE INGRESO PRINCIPAL -> LLAMADO DESDE LA LLAMADA MAIN O OTRO CASO DE USO
         System.out.println("Interfaz de modificación de huésped - En desarrollo");
         System.out.println("Este es un apartado especialmente para que el usuario" + "\n" +
@@ -101,7 +102,7 @@ public class InterfazModificarHuesped {
                         if (!gestorAlojamiento.dniExiste(datosModificados.getNroDoc(), datosModificados.getTipoDoc())) {
                             //guardo datos modificados
                             System.out.println("Guardando cambios...");
-                            gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
+                            gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados, false);
                             System.out.println("Cambios guardados.");
                             System.out.print("Los datos del huésped han sido modificados correctamente.");
                             bandera = false;//sale del bucle principal y el CU termina
@@ -114,7 +115,11 @@ public class InterfazModificarHuesped {
                             }
                             if (boton2.equals("1")) {
                                 //guardo datos con dni repetido
-                                gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados);
+                                try{
+                                    gestorAlojamiento.modificarHuesped(alojadoOriginal, datosModificados, false);
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
                                 System.out.print("Los datos del huésped han sido modificados correctamente.");
                                 bandera = false;//sale del bucle principal y el CU termina
                             } else {

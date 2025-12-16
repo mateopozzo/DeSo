@@ -6,6 +6,7 @@ import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.jetbrains.annotations.NotNull;
 
@@ -194,6 +195,8 @@ public class InterfazBusqueda {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Entrada inválida. Debe ser un número o ENTER.");
+            } catch (AlojadoPreExistenteException e) {
+                throw new RuntimeException(e);
             }
         }
     }
