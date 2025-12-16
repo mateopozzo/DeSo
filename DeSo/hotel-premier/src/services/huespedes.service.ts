@@ -44,7 +44,7 @@ export async function crearHuesped(data: HuespedDTO, forzar: boolean = false) {
 export async function obtenerAtributosHuesped(criterio: CriteriosBusq) {
 
   const urlBase = `http://localhost:8080/api/obtener-atributos-huesped`;
-  const url = urlBase + `?nroDoc=${criterio.nroDoc}&?tipoDoc=${criterio.tipoDoc}`;
+  const url = urlBase + `?nroDoc=${criterio.nroDoc}&tipoDocStr=${criterio.tipoDoc}`;
 
   const response = await fetch(url, {
     method : "GET",
@@ -53,8 +53,9 @@ export async function obtenerAtributosHuesped(criterio: CriteriosBusq) {
   return response;
 }
 
-export async function actualizarAlojado(pre: HuespedDTO, post: HuespedDTO){
-  const url = `http://localhost:8080/api/actualizar-alojado`;
+export async function actualizarAlojado(pre: HuespedDTO, post: HuespedDTO, force : boolean){
+
+  const url = `http://localhost:8080/api/actualizar-alojado` + force ? `?force=${true}` : "";
 
   const body:ActualizarAlojadoDTO = {pre, post};
 
@@ -63,6 +64,8 @@ export async function actualizarAlojado(pre: HuespedDTO, post: HuespedDTO){
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
   });
+
+  return response;
 }
 
 export async function eliminarHuesped(data: HuespedDTO){
