@@ -18,14 +18,10 @@ export default function CancelarReserva() {
     const [formData, setFormData] = useState(form1_limpio);
     const [resultados, setResultados] = useState<ReservaGrillaDTO[]>([]);
 
-    // CAMBIO 1: Usamos un Map para guardar el objeto completo, no solo el ID.
-    // Clave: ID, Valor: Objeto Reserva
     const [seleccionadas, setSeleccionadas] = useState<Map<number, ReservaGrillaDTO>>(new Map());
 
-    // Convertimos el mapa a array para poder recorrerlo en el HTML
     const listaSeleccionadas = Array.from(seleccionadas.values());
 
-    // CAMBIO 2: La función toggle ahora recibe el objeto completo
     const toggleSeleccion = (reserva: ReservaGrillaDTO) => {
         const nuevoMapa = new Map(seleccionadas);
         if (nuevoMapa.has(reserva.idReserva)) {
@@ -36,7 +32,12 @@ export default function CancelarReserva() {
         setSeleccionadas(nuevoMapa);
     };
 
-    // CAMBIO 3: Cancelar usando el Map
+    const cancelarCasoUso = () => {
+        if (confirm("¿Desea cancelar todo el proceso?")) {
+            router.push("/home");
+        }
+    };
+
     const handleCancelarMasivo = async () => {
         if(!confirm(`¿Eliminar ${seleccionadas.size} reservas?`)) return;
 
@@ -47,10 +48,9 @@ export default function CancelarReserva() {
             await cancelarReserva(id);
         }
 
-        // Actualizamos la grilla visual (filtramos lo que se borró)
         setResultados(prev => prev.filter(r => !seleccionadas.has(r.idReserva)));
 
-        // Limpiamos la selección
+
         setSeleccionadas(new Map());
         setLoading(false);
     };
@@ -66,9 +66,7 @@ export default function CancelarReserva() {
         setLoading(true);
         setBusquedaRealizada(false);
         setError(null);
-        // NOTA: Ya NO limpiamos setSeleccionadas aquí, para que persistan entre búsquedas.
 
-        // 1. VALIDACIÓN
         const campos_ob = [{ key: "apellido", etiq: "Apellido" }];
         const campos_faltantes = campos_ob.filter((campo) => {
             const valor = formData[campo.key as keyof typeof formData];
@@ -98,9 +96,19 @@ export default function CancelarReserva() {
 
     return (
         <div className="dark:bg-gray-950 dark:text-white p-5 min-h-screen">
-            <h1 className="text-[#141414] dark:text-white mb-8 text-5xl font-bold pb-2 border-b dark:border-gray-800">
-                Buscar Reservas
-            </h1>
+
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b dark:border-gray-800 pb-4 gap-4">
+                <h1 className="text-[#141414] dark:text-white mb-8 text-5xl font-bold pb-2 border-b dark:border-gray-800">
+                    Buscar Reservas
+                </h1>
+                <button
+                    type="button"
+                    onClick={cancelarCasoUso}
+                    className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950 dark:hover:border-[#b92716] text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] hover:text-white hover:border-[#b92716]"
+                >
+                    Cancelar Proceso
+                </button>
+            </div>
 
             <div className="border border-gray-200 p-5 rounded-xl bg-[#f5f7fa] dark:bg-gray-950 shadow-sm mb-6">
                 <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-4">
@@ -146,9 +154,6 @@ export default function CancelarReserva() {
                 </form>
             </div>
 
-            {/* CAMBIO 4: Sacamos la lista de seleccionados FUERA del condicional busquedaRealizada 
-                para que se vea siempre que haya algo seleccionado */}
-
             {listaSeleccionadas.length > 0 && (
                 <div className="mb-8 animate-fade-in">
                     <div className="flex justify-between items-end mb-4">
@@ -175,7 +180,6 @@ export default function CancelarReserva() {
                                         {item.apellido} ({item.habitaciones.map(h => `Hab ${h.numeroHabitacion}`).join(", ")})
                                     </span>
                                     <button
-                                        // Aquí pasamos el OBJETO item para que el toggle funcione
                                         onClick={() => toggleSeleccion(item)}
                                         className="ml-1 text-gray-400 hover:text-red-500 transition-colors"
                                         title="Desmarcar"
