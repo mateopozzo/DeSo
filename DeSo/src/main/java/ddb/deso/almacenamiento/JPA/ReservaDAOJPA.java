@@ -1,14 +1,13 @@
 package ddb.deso.almacenamiento.JPA;
 
-import ddb.deso.negocio.habitaciones.Reserva;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
-import ddb.deso.repository.ReservaRepository;
 import ddb.deso.negocio.habitaciones.Reserva;
+import ddb.deso.repository.ReservaRepository;
 
 
 /**
@@ -60,9 +59,9 @@ public class ReservaDAOJPA implements ReservaDAO {
         if (apellido == null) return List.of();
 
         if (nombre == null || nombre.isBlank()) {
-            return reservaRepository.findByApellidoContainingIgnoreCase(apellido);
+            return reservaRepository.findByApellidoStartingWithIgnoreCase(apellido);
         }
-        return reservaRepository.findByApellidoContainingIgnoreCaseAndNombreContainingIgnoreCase(apellido, nombre);
+        return reservaRepository.findByApellidoStartingWithIgnoreCaseAndNombreStartingWithIgnoreCase(apellido, nombre);
     }
 
 
