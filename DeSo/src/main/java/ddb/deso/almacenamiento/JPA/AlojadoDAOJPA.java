@@ -224,6 +224,15 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     }
 
     /**
+     * @param idEstadia 
+     * @return
+     */
+    @Override
+    public List<Alojado> buscarAlojado(long idEstadia) {
+        return alojadoRepository.findAlojadosByEstadiaId(idEstadia);
+    }
+
+    /**
      * Normaliza una cadena de texto eliminando acentos y diacríticos.
      * Utiliza la forma de normalización NFD y expresiones regulares ASCII.
      *

@@ -171,6 +171,11 @@ public class AlojadoController {
         return ResponseEntity.ok(huespedesEncontrados);
     }
 
+    @GetMapping("api/buscar-huespedes-de-estadia")
+    private ResponseEntity<List<CriteriosBusq>> obtenerHuespedesDeEstadia(@RequestParam long idEstadia){
+        return ResponseEntity.ok(gestorAlojamiento.buscarCriteriosALojadoDeEstadia(idEstadia));
+    }
+
 
 
 
@@ -212,7 +217,7 @@ public class AlojadoController {
     ResponseEntity<List<DatosCheckOutDTO>> generarCheckOutAlojado(@RequestBody List<CriteriosBusq> criteriosBusq){
 
         if(criteriosBusq == null){
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(List.of());
         }
 
         return ResponseEntity.ok(gestorAlojamiento.generarCheckOut(criteriosBusq));

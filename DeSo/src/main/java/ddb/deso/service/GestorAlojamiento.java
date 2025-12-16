@@ -20,6 +20,7 @@ import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -445,5 +446,19 @@ public class GestorAlojamiento {
 
     }
 
+    public List<CriteriosBusq> buscarCriteriosALojadoDeEstadia(long idEstadia) {
+        var listaAlojados = alojadoDAO.buscarAlojado(idEstadia);
+        List<CriteriosBusq> listaRetorno = new ArrayList<>();
+        listaAlojados.forEach(a ->
+        {
+            listaRetorno.add(new CriteriosBusq(
+                    a.getDatos().getDatos_personales().getApellido(),
+                    a.getDatos().getDatos_personales().getNombre(),
+                    a.getDatos().getTipoDoc(),
+                    a.getDatos().getNroDoc())
+            );
+        });
+        return listaRetorno;
+    }
 }
 

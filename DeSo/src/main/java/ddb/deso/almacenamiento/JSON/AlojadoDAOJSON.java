@@ -113,6 +113,15 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     }
 
     /**
+     * @param idEstadia 
+     * @return
+     */
+    @Override
+    public List<Alojado> buscarAlojado(long idEstadia) {
+        return List.of();
+    }
+
+    /**
     @param alojado_DTO: Instancia de AlojadoDTO
     @param criterio: Criterio de búsqueda donde todos son opcionales, y si no fueron definidos son null
     Se llama a normalizar para evitar problemas por tildes
