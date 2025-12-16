@@ -1,6 +1,7 @@
 package ddb.deso.controller;
 
 import ddb.deso.almacenamiento.DTO.ActualizarAlojadoDTO;
+import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
@@ -205,6 +206,16 @@ public class AlojadoController {
 
         return ResponseEntity.ok(dtoRta);
 
+    }
+
+    @PutMapping("/api/generar-check-out")
+    ResponseEntity<List<DatosCheckOutDTO>> generarCheckOutAlojado(@RequestBody List<CriteriosBusq> criteriosBusq){
+
+        if(criteriosBusq == null){
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.ok(gestorAlojamiento.generarCheckOut(criteriosBusq));
     }
 
     @DeleteMapping("api/eliminar-huesped")

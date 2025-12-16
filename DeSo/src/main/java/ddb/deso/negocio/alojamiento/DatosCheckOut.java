@@ -26,6 +26,7 @@ public class DatosCheckOut {
     /**
      * Fecha y hora del registro de Check-Out.
      */
+    @Getter
     LocalDateTime fecha_hora_out;
 
     /**
@@ -56,14 +57,6 @@ public class DatosCheckOut {
 
     public void setId(long idCheckOut) {
         this.idCheckOut = idCheckOut;
-    }
-
-    public LocalDateTime getFecha_hora_out() {
-        return fecha_hora_out;
-    }
-
-    public void setFecha_hora_iout(LocalDateTime fecha_hora_out) {
-        this.fecha_hora_out = fecha_hora_out;
     }
 
     @Override
