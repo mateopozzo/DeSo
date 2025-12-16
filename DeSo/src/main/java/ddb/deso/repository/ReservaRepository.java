@@ -1,6 +1,5 @@
 package ddb.deso.repository;
 
-import ddb.deso.negocio.habitaciones.Reserva;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +27,22 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
      * @return lista de reservas coincidentes.
      */
     List<Reserva> findByApellidoContainingIgnoreCaseAndNombreContainingIgnoreCase(String apellido, String nombre);
+
+    /**
+     * Busca reservas cuyo apellido empiece con el texto indicado (ignorando mayúsculas/minúsculas).
+     *
+     * @param apellido texto inicial a buscar en el apellido.
+     * @return lista de reservas coincidentes.
+     */
+    List<Reserva> findByApellidoStartingWithIgnoreCase(String apellido);
+
+    /**
+     * Busca reservas cuyo apellido y nombre empiecen con los textos indicados
+     * (ignorando mayúsculas/minúsculas).
+     *
+     * @param apellido texto inicial a buscar en el apellido.
+     * @param nombre texto inicial a buscar en el nombre.
+     * @return lista de reservas coincidentes.
+     */
+    List<Reserva> findByApellidoStartingWithIgnoreCaseAndNombreStartingWithIgnoreCase(String apellido, String nombre);
 }

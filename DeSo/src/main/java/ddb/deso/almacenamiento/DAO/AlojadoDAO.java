@@ -43,6 +43,8 @@ public interface AlojadoDAO {
      */
     List<Alojado> buscarAlojado(CriteriosBusq criterios);
 
+    List<Alojado> buscarAlojado(long idEstadia);
+
     /**
      * Recupera la totalidad de los registros de Alojados activos.
      *

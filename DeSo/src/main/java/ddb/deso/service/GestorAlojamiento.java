@@ -1,20 +1,26 @@
 package ddb.deso.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
+import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import ddb.deso.negocio.alojamiento.FactoryAlojado;
 import ddb.deso.negocio.alojamiento.Huesped;
 import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -104,7 +110,7 @@ public class GestorAlojamiento {
      * a guardar en el sistema.
      * @return La entidad que persiste en la base
      */
-    public AlojadoDTO modificarHuesped(AlojadoDTO dtoAlojadoOriginal, AlojadoDTO dtoAlojadoModificado) {
+    public AlojadoDTO modificarHuesped(AlojadoDTO dtoAlojadoOriginal, AlojadoDTO dtoAlojadoModificado, boolean forzar) throws AlojadoPreExistenteException {
 
 
         {   // parafenralia de verificaciones
@@ -116,6 +122,8 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("El alojado modificado es null");
             }
 
+            System.out.println("NONULOS");
+
             if (!dtoAlojadoOriginal.verificarCamposObligatorios()) {
                 throw new AlojadoInvalidoException("El alojado original no cumple con los campos obligatorios");
             }
@@ -124,6 +132,8 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("El alojado modificado no cumple con los campos obligatorios");
             }
 
+            System.out.println("CAMPOS");
+
             if (dtoAlojadoOriginal.getTipoDoc() == null || dtoAlojadoOriginal.getNroDoc() == null) {
                 throw new AlojadoInvalidoException("La identidad del alojado original es invalida");
             }
@@ -131,6 +141,18 @@ public class GestorAlojamiento {
             if (dtoAlojadoModificado.getTipoDoc() == null || dtoAlojadoModificado.getNroDoc() == null) {
                 throw new AlojadoInvalidoException("La identidad del alojado modificado es invalida");
             }
+
+            System.out.println("IDENTIDADES");
+
+            if(!forzar
+                && (!dtoAlojadoModificado.getNroDoc().equals(dtoAlojadoOriginal.getNroDoc())
+                       || !dtoAlojadoModificado.getTipoDoc().equals(dtoAlojadoOriginal.getTipoDoc()) )
+                && dniExiste(dtoAlojadoModificado.getNroDoc(), dtoAlojadoModificado.getTipoDoc())){
+                throw new AlojadoPreExistenteException("El alojado " + dtoAlojadoModificado.getTipoDoc().toString()
+                        + " " + dtoAlojadoModificado.getNroDoc() + "ya existe en el sistema");
+            }
+
+            System.out.println("EXISTENCIA");
         }
 
         var alojadoOriginal = FactoryAlojado.createFromDTO(dtoAlojadoOriginal);
@@ -145,7 +167,8 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("El alojado no se persiste");
             }
 
-            if (alojadoGuardado.comparteDatos(alojadoModificado)) {
+            if (!alojadoGuardado.comparteDatos(alojadoModificado)) {
+                System.out.println("LOS DATOS EN LA BASE NO SE MODIFICARON");
                 throw new AlojadoInvalidoException("El alojado se guardo incorrectamente");
             }
 
@@ -245,7 +268,7 @@ public class GestorAlojamiento {
     public void eliminarAlojado(AlojadoDTO dtoAlojadoEliminacion) {
 
         if(dtoAlojadoEliminacion == null){
-            return;
+            throw new AlojadoInvalidoException("El parametro no puede ser unico");
         }
         if(dtoAlojadoEliminacion.getNroDoc() == null || dtoAlojadoEliminacion.getNroDoc().isEmpty()){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
@@ -345,6 +368,56 @@ public class GestorAlojamiento {
         return retornoEncontrados;
     }
 
+    public List<DatosCheckOutDTO> generarCheckOut(List<CriteriosBusq> criteriosBusq){
+
+        if(criteriosBusq == null){return null;}
+
+        List<DatosCheckOutDTO> listaRetorno = new ArrayList<>();
+
+        criteriosBusq.forEach(crit -> {
+            DatosCheckOutDTO dtoCO = null;
+            try{
+                dtoCO=generarCheckOut(crit);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            if(dtoCO != null) listaRetorno.add(dtoCO);
+        });
+
+        return listaRetorno;
+    }
+
+    public DatosCheckOutDTO generarCheckOut(CriteriosBusq criteriosBusq){
+
+        if(criteriosBusq == null){
+            throw new AlojadoInvalidoException("Criterio de busqueda nulo");
+        }
+
+        if(criteriosBusq.getNroDoc() == null || criteriosBusq.getNroDoc().isEmpty()){
+            throw new AlojadoInvalidoException("Numero de documento nulo");
+        }
+
+        if(criteriosBusq.getTipoDoc() == null){
+            throw new AlojadoInvalidoException("Tipo de documento nulo");
+        }
+
+        DatosCheckOut cout = new DatosCheckOut(LocalDateTime.now());
+        cout.setFecha_hora_out(LocalDateTime.now());
+
+        var alojado = alojadoDAO.buscarPorDNI(criteriosBusq.getNroDoc(),criteriosBusq.getTipoDoc());
+
+        if(alojado == null){
+            return null;
+        }
+
+        cout.setAlojado(alojado.getDatos());
+
+        alojado.getDatos().nuevoCheckOut(cout);
+
+        return new DatosCheckOutDTO(cout);
+
+    }
+
     /**
      * Funcion que devuelve DTO de un alojado seleccionado por cliente
      * La seleccion en la interfaz asegura que solo sea uno
@@ -373,5 +446,19 @@ public class GestorAlojamiento {
 
     }
 
+    public List<CriteriosBusq> buscarCriteriosALojadoDeEstadia(long idEstadia) {
+        var listaAlojados = alojadoDAO.buscarAlojado(idEstadia);
+        List<CriteriosBusq> listaRetorno = new ArrayList<>();
+        listaAlojados.forEach(a ->
+        {
+            listaRetorno.add(new CriteriosBusq(
+                    a.getDatos().getDatos_personales().getApellido(),
+                    a.getDatos().getDatos_personales().getNombre(),
+                    a.getDatos().getTipoDoc(),
+                    a.getDatos().getNroDoc())
+            );
+        });
+        return listaRetorno;
+    }
 }
 
