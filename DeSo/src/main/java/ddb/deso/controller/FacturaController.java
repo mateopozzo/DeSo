@@ -6,6 +6,7 @@ import ddb.deso.service.GestorContabilidad;
 import ddb.deso.almacenamiento.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import ddb.deso.negocio.habitaciones.Estadia;
 
 import java.time.LocalTime;
 
@@ -16,7 +17,27 @@ public class FacturaController {
     @Autowired
     private GestorContabilidad gestorContabilidad;
 
-    // Paso 1: Pre-visualización
+      @GetMapping("/habitacion/{nroHabitacion}/verificar-estadia")
+    public ResponseEntity<EstadiaDTO> verificarEstadiaActiva(
+            @PathVariable Long nroHabitacion,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaSalida) {
+        
+        try {
+
+            if (horaSalida == null) {
+                horaSalida = LocalTime.now();
+            }
+
+            Estadia estadia = gestorContabilidad.existeEstadia(nroHabitacion);
+            EstadiaDTO estadiaDTO= new EstadiaDTO(estadia);
+            return ResponseEntity.ok(estadiaDTO);
+
+        } catch (Exception e) {
+    
+            return ResponseEntity.notFound().build();
+        }
+    }
+    // Paso 1: Pre-visualización (No se usa generalmente pero lo dejo por las dudas)
     @GetMapping("/habitacion/{nroHabitacion}/detalle")
     public ResponseEntity<DetalleFacturaDTO> obtenerDetalleFacturacion(
             @PathVariable Long nroHabitacion,
@@ -43,4 +64,6 @@ public class FacturaController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+  
 }

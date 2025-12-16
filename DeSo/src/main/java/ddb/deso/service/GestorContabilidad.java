@@ -38,8 +38,10 @@ public class GestorContabilidad {
         this.habitacionDAO = habDAO;
         this.alojadoDAO= alojadoDAO;
     }
+    
+    //saco horaSalida porque no es necesario para buscar la estadia ahora
 
-    public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
+    public Estadia existeEstadia(Long nroHabitacion)throws Exception {
         
         Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
         if (hab == null) throw new Exception("Habitación no encontrada");
@@ -50,21 +52,32 @@ public class GestorContabilidad {
 
         for (Estadia e : todas) {
             if ((e.getHabitacion().getNroHab().equals(nroHabitacion)) && 
-               (e.getFecha_fin() == null || !e.getFecha_fin().isBefore(hoy))){
+                (e.getDatosCheckOut()==null)&&
+                (!hoy.isBefore(e.getFecha_inicio())) &&
+                (!hoy.isAfter(e.getFecha_fin()))){
                 estadiaActual = e; 
                 break; 
             }
         }
         if (estadiaActual == null) throw new Exception("No hay estadía activa para esta habitación");
+       
+    
+        return estadiaActual;//se necesita la entidad para otra funcion, en otro lugar
+                                //convierte a dto
+    }
 
+
+
+    public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
+        
+        Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
+     
+        Estadia estadiaActual=existeEstadia(nroHabitacion);
+       
         LocalDate inicio = estadiaActual.getFecha_inicio();
         LocalDate fin = estadiaActual.getFecha_fin();
 
-        if(estadiaActual.getFecha_fin()==null) fin=LocalDate.now(); //por si fecha fin no fue cargada en ocupar habitación, se toma que la esatdía termina hoy
-
         long dias = ChronoUnit.DAYS.between(inicio, fin);
-
-        //Decision:no se generan facturas antes de cumplir la estadia
 
         if (dias == 0) {
             dias = 1; // Mínimo 1 día
@@ -84,7 +97,7 @@ public class GestorContabilidad {
 
         if (serviciosEntity != null) {
             for (Servicio s : serviciosEntity) {
-                double precio = calcularPrecioServicio(s.getTipo_servicio());
+                double precio = calcularPrecioServicio(s.getTipo_servicio()); //decision de precios estaticos en funcion de back
                 ServicioDTO dto = new ServicioDTO();
                 dto.setIdServicio(s.getIdServicio());
                 dto.setTipoServicio(s.getTipo_servicio());
@@ -131,12 +144,11 @@ public class GestorContabilidad {
 
 
         LocalTime  hora_checkout;
-        if (estadia.getDatosCheckOut() == null){
-            hora_checkout= LocalTime.now();
-        }
-        else{
-            hora_checkout =estadia.getDatosCheckOut().getFecha_hora_out().toLocalTime();
-        }
+        //duda!!
+        //asumo que fueron los datos check out en el huesped por un endpoint antrior
+
+        hora_checkout =estadia.getDatosCheckOut().getFecha_hora_out().toLocalTime();
+    
         
         DetalleFacturaDTO detalle = calcularDetalleFacturacion(estadia.getHabitacion().getNroHab(), hora_checkout);
         float total = detalle.getMontoTotal().floatValue();

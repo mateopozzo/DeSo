@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DetalleFacturaDTO {
-
+    
     // Identificador de la estadía que se está facturando
     private Long idEstadia;
     
-    // Descripción amigable (Ej: "Habitación 101 - Doble Superior")
     private String habitacion;
     
     // Costo calculado solo por el alojamiento (noches + recargos check-out)
@@ -18,7 +17,7 @@ public class DetalleFacturaDTO {
     // Lista de consumos (bar, lavandería) convertidos a DTO para mostrarlos en la grilla
     private List<ServicioDTO> consumos;
     
-    // Suma de costoEstadia + total de consumos (Neto o Bruto según se quiera ver)
+    // Suma de costoEstadia + total de consumos 
     private Double montoTotal;
     
     // Sugerencia del sistema basada en la condición fiscal del responsable (A o B)
