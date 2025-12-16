@@ -25,7 +25,7 @@ export interface ActualizarAlojadoDTO{
   post : HuespedDTO;
 }
 
-import {CriteriosBusq} from "@/services/busqueda.service";
+import {CriteriosBusq, ResultadoBusq} from "@/services/busqueda.service";
 
 export async function crearHuesped(data: HuespedDTO, forzar: boolean = false) {
   console.log(data);
@@ -41,7 +41,7 @@ export async function crearHuesped(data: HuespedDTO, forzar: boolean = false) {
   return response;
 }
 
-export async function obtenerAtributosHuesped(criterio: CriteriosBusq) {
+export async function obtenerAtributosHuesped(criterio: CriteriosBusq) : Promise<Response> {
 
   const urlBase = `http://localhost:8080/api/obtener-atributos-huesped`;
   const url = urlBase + `?nroDoc=${criterio.nroDoc}&tipoDocStr=${criterio.tipoDoc}`;
