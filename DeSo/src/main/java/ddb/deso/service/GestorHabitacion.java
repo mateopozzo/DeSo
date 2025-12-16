@@ -295,6 +295,12 @@ public class GestorHabitacion {
         estadia.setHabitacion(habitacion);
         estadia.setReserva(reserva);
         estadiaDAO.crear(estadia);
+
+        for(var id : alojados) {
+            id.nuevaEstadia(estadia);
+        }
+
+        huesped.nuevaEstadia(estadia);
     }
 
     private List<DisponibilidadDTO> listarDisponibilidadesPorReserva(Reserva reserva){
