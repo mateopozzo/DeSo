@@ -10,10 +10,14 @@ export interface ReservaGrillaDTO {
     idReserva: number;
     apellido: string;
     nombre: string;
-    nroHabitacion: string;
-    tipoHabitacion: string;
     fechaInicio: string;
     fechaFin: string;
+    listaIDHabitaciones: HabitacionesReservaDTO []
+}
+
+export interface HabitacionesReservaDTO{
+    numero: number;
+    tipo: string
 }
 
 const BASE_URL = "http://localhost:8080/api";
@@ -25,6 +29,7 @@ export async function buscarReservas(criterio: CriterioBusquedaDTO): Promise<Res
         body: JSON.stringify(criterio),
     });
 
+    console.log(response);
     if (!response.ok) {
         // Manejo básico de error
         throw new Error("Error al buscar reservas");

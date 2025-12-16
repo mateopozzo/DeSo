@@ -172,7 +172,7 @@ export default function CancelarReserva() {
                                 >
                                     <span className="text-xs font-mono text-gray-500">#{item.idReserva}</span>
                                     <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                                        {item.apellido} ({item.nroHabitacion})
+                                        {item.apellido} ({item.listaIDHabitaciones.map(h => `Hab ${h.numero}`).join(", ")})
                                     </span>
                                     <button
                                         // Aquí pasamos el OBJETO item para que el toggle funcione
@@ -231,7 +231,13 @@ export default function CancelarReserva() {
                                             </td>
                                             <td className="px-6 py-4 font-medium">#{reserva.idReserva}</td>
                                             <td className="px-6 py-4">{reserva.apellido}, {reserva.nombre}</td>
-                                            <td className="px-6 py-4">Hab {reserva.nroHabitacion} ({reserva.tipoHabitacion})</td>
+                                            <td className="px-6 py-4"><div className="flex flex-col gap-1">
+                                                {reserva.listaIDHabitaciones.map((h, index) => (
+                                                    <span key={index} className="block">
+                                                        Hab {h.numero} ({h.tipo})
+                                                    </span>
+                                                ))}
+                                            </div></td>
                                             <td className="px-6 py-4 text-green-600">{reserva.fechaInicio}</td>
                                             <td className="px-6 py-4 text-red-600">{reserva.fechaFin}</td>
                                         </tr>
