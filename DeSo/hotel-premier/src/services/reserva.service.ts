@@ -12,12 +12,12 @@ export interface ReservaGrillaDTO {
     nombre: string;
     fechaInicio: string;
     fechaFin: string;
-    listaIDHabitaciones: HabitacionesReservaDTO []
+    habitaciones: HabitacionesReservaDTO []
 }
 
 export interface HabitacionesReservaDTO{
-    numero: number;
-    tipo: string
+    numeroHabitacion: number;
+    tipoHabitacion: string
 }
 
 const BASE_URL = "http://localhost:8080/api";
