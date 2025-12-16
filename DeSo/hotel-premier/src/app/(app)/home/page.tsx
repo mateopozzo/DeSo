@@ -48,7 +48,7 @@ export default function HomePage() {
           desc="Factura una estadía y sus servicios"
         />
         <Card
-          href="/home"
+          href="/buscar-huesped"
           iconSrc="/hab.svg"
           gestor="Habitaciones"
           title="Dar de baja huésped"
