@@ -13,6 +13,7 @@ import ddb.deso.negocio.alojamiento.Huesped;
 import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,7 +105,7 @@ public class GestorAlojamiento {
      * a guardar en el sistema.
      * @return La entidad que persiste en la base
      */
-    public AlojadoDTO modificarHuesped(AlojadoDTO dtoAlojadoOriginal, AlojadoDTO dtoAlojadoModificado) {
+    public AlojadoDTO modificarHuesped(AlojadoDTO dtoAlojadoOriginal, AlojadoDTO dtoAlojadoModificado, boolean forzar) throws AlojadoPreExistenteException {
 
 
         {   // parafenralia de verificaciones
@@ -130,6 +131,11 @@ public class GestorAlojamiento {
 
             if (dtoAlojadoModificado.getTipoDoc() == null || dtoAlojadoModificado.getNroDoc() == null) {
                 throw new AlojadoInvalidoException("La identidad del alojado modificado es invalida");
+            }
+
+            if(!forzar && dniExiste(dtoAlojadoModificado.getNroDoc(), dtoAlojadoModificado.getTipoDoc())){
+                throw new AlojadoPreExistenteException("El alojado " + dtoAlojadoModificado.getTipoDoc().toString()
+                        + " " + dtoAlojadoModificado.getNroDoc() + "ya existe en el sistema");
             }
         }
 
@@ -245,7 +251,7 @@ public class GestorAlojamiento {
     public void eliminarAlojado(AlojadoDTO dtoAlojadoEliminacion) {
 
         if(dtoAlojadoEliminacion == null){
-            return;
+            throw new AlojadoInvalidoException("El parametro no puede ser unico");
         }
         if(dtoAlojadoEliminacion.getNroDoc() == null || dtoAlojadoEliminacion.getNroDoc().isEmpty()){
             throw new AlojadoInvalidoException("La identidad del alojado no existe");
