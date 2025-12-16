@@ -1,24 +1,44 @@
-import {HuespedDTO} from "@/services/huespedes.service";
 
-export interface ReservaDTO {
-    apellido: string,
-    nombre: string,
-    nroHab: string,
-    tipoHab: string,
-    desde: string,
-    hasta: string,
+// DTO para los filtros de búsqueda (lo que envías al backend)
+export interface CriterioBusquedaDTO {
+    apellido: string;
+    nombre?: string;
 }
 
-export async function cancelarReserva(data: ReservaDTO, forzar: boolean = false) {
-    console.log(data);
-    const baseUrl = "http://localhost:8080/api/reserva";
-    const url = forzar ? `${baseUrl}?force=true` : baseUrl;
+// DTO para mostrar en la grilla (lo que recibes del backend: ReservaGrillaDTO)
+export interface ReservaGrillaDTO {
+    idReserva: number;
+    apellido: string;
+    nombre: string;
+    nroHabitacion: string;
+    tipoHabitacion: string;
+    fechaInicio: string;
+    fechaFin: string;
+}
 
-    const response = await fetch(url, {
+const BASE_URL = "http://localhost:8080/api";
+
+export async function buscarReservas(criterio: CriterioBusquedaDTO): Promise<ReservaGrillaDTO[]> {
+    const response = await fetch(`${BASE_URL}/reservas/buscar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(criterio),
     });
 
-    return response;
+    if (!response.ok) {
+        // Manejo básico de error
+        throw new Error("Error al buscar reservas");
+    }
+
+    return await response.json();
+}
+
+export async function cancelarReserva(idReserva: number): Promise<boolean> {
+    const response = await fetch(`${BASE_URL}/reservas/${idReserva}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    });
+
+    // 204 No Content significa éxito en el delete
+    return response.status === 204;
 }
