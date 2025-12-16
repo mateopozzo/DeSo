@@ -1,5 +1,6 @@
 package ddb.deso.controller;
 
+import ddb.deso.almacenamiento.DTO.ActualizarAlojadoDTO;
 import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
@@ -91,7 +92,7 @@ public class AlojadoController {
      * @return
      */
     @GetMapping("api/obtener-atributos-huesped")
-    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam CriteriosBusq criterios){
+    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestBody CriteriosBusq criterios){
 
         if(!identidadValida(criterios)){
             return null;
@@ -166,12 +167,13 @@ public class AlojadoController {
     /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
-     * @param pre DTO del {@link AlojadoDTO} que existe previamente
-     * @param post DTO con modificaciones de la entidad {@link AlojadoDTO}
      * @return {@link AlojadoDTO} con datos que estan en la base
      */
     @PutMapping("api/actualizar-alojado")
-    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestParam AlojadoDTO pre, @RequestParam AlojadoDTO post){
+    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestBody ActualizarAlojadoDTO dto){
+
+        var pre = dto.pre;
+        var post= dto.post;
 
         if(pre == null || post == null){
             //TODO -> Definir tipos de retorno a front
@@ -191,14 +193,14 @@ public class AlojadoController {
     }
 
     @DeleteMapping("api/eliminar-huesped")
-    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestParam AlojadoDTO dtoAlojadoPorEliminar){
+    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestBody AlojadoDTO dtoAlojadoPorEliminar){
 
         if(!identidadValida(dtoAlojadoPorEliminar)){
             return ResponseEntity.badRequest().build();
         }
 
         try{
-            gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
+                gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
         } catch (AlojadoNoEliminableException e){
             return ResponseEntity.ok(BajaHuesped.OPERACION_PROHIBIDA);
         } catch (Exception e){
