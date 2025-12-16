@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class TestCU11GestoresUnitario {
     }
 
     private DatosCheckOut crearCheckOut() {
-        return new DatosCheckOut(LocalDate.now());
+        return new DatosCheckOut(LocalDateTime.now());
     }
 
     @Test
