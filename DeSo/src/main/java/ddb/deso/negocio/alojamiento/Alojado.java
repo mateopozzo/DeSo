@@ -107,6 +107,11 @@ public abstract class Alojado {
         return Objects.hashCode(id);
     }
 
+    public void nuevaEstadia(Estadia estadia){
+        if(listaEstadias == null) listaEstadias = new ArrayList<>();
+        listaEstadias.add(estadia);
+    }
+
 
     /**
      * Verifica que todos los campos obligatorios del alojado estén presentes y no vacíos.
