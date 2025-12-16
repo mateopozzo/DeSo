@@ -2,9 +2,11 @@ package ddb.deso.presentacion;
 
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.almacenamiento.JSON.AlojadoDAOJSON;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -154,10 +156,10 @@ public class InterfazDarBaja {
 
         //  Flujo secundario, el huesped no se puede eliminar
         var historialAlojado=gestorAlojamiento.historialHuesped(alojadoParaEliminar);
-        if(historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.SE_ALOJO)){
+        if(historialAlojado==(ResumenHistorialHuesped.SE_ALOJO)){
             noSePuedeDarBaja();
             return;
-        } else if (historialAlojado==(GestorAlojamiento.ResumenHistorialHuesped.NO_PERSISTIDO)) {
+        } else if (historialAlojado==(ResumenHistorialHuesped.NO_PERSISTIDO)) {
             noExisteHuesped();
             return;
         }
@@ -170,7 +172,7 @@ public class InterfazDarBaja {
 
         AlojadoDTO aljoadoDTOParaEliminar = new AlojadoDTO(alojadoParaEliminar);
 
-        gestorAlojamiento.eliminarAlojado(aljoadoDTOParaEliminar);
+        gestorAlojamiento.eliminarAlojado(new CriteriosBusq(null,null,aljoadoDTOParaEliminar.getTipoDoc(), aljoadoDTOParaEliminar.getNroDoc()));
 
         terminarCU11(alojadoParaEliminar);
     }

@@ -10,7 +10,9 @@ import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.alojamiento.FactoryAlojado;
 import ddb.deso.negocio.alojamiento.Huesped;
+import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
+import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -201,30 +203,77 @@ public class GestorAlojamiento {
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
+    /**
+     * Verifica si un huésped se alojó previamente basado en los criterios de búsqueda.
+     *
+     * @param alojadoHistorico: Debe definir un alojado univocamente
+     * @return Estado del historial del huésped.
+     *
+     * <ul>
+     * <li>{@link ResumenHistorialHuesped#SE_ALOJO}: El huésped tiene check-in o check-out registrados.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_SE_ALOJO}: El huésped está persistido, pero no tiene check-in/out.</li>
+     * <li>{@link ResumenHistorialHuesped#NO_PERSISTIDO}: El huésped no fue encontrado.</li>
+     * </ul>
+     */
+    private ResumenHistorialHuesped huespedSeAlojo(Alojado alojadoHistorico) {
+
+        if (alojadoHistorico == null) {
+            return ResumenHistorialHuesped.NO_PERSISTIDO;
+        }
+
+        // No es nulo ni vacio
+        boolean tieneCheckIns =
+                alojadoHistorico.getDatos().getCheckIns() != null
+                && !alojadoHistorico.getDatos().getCheckIns().isEmpty();
+        boolean tieneCheckOuts =
+                alojadoHistorico.getDatos().getCheckOuts() != null
+                && !alojadoHistorico.getDatos().getCheckOuts().isEmpty();
+
+        if (tieneCheckIns || tieneCheckOuts) {
+            return ResumenHistorialHuesped.SE_ALOJO;
+        }
+
+        return ResumenHistorialHuesped.NO_SE_ALOJO;
+    }
 
     /**
      * Elimina un registro de huésped del sistema.
      * Busca la entidad por DNI y solicita su eliminación al DAO.
      *
-     * @param alojado Objeto {@code AlojadoDTO} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
+     * @param dtoAlojadoEliminacion Objeto {@code CriteriosBusq} que contiene los datos claves (tipo y nro doc) del huésped a eliminar.
      */
-    public void eliminarAlojado(AlojadoDTO alojado) {
-        var entidadEliminable = alojadoDAO.buscarPorDNI(alojado.getNroDoc(),alojado.getTipoDoc());
+    public void eliminarAlojado(AlojadoDTO dtoAlojadoEliminacion) {
+
+        if(dtoAlojadoEliminacion == null){
+            return;
+        }
+        if(dtoAlojadoEliminacion.getNroDoc() == null || dtoAlojadoEliminacion.getNroDoc().isEmpty()){
+            throw new AlojadoInvalidoException("La identidad del alojado no existe");
+        }
+        if(dtoAlojadoEliminacion.getTipoDoc() == null){
+            throw new AlojadoInvalidoException("La identidad del alojado no existe");
+        }
+
+        var entidadEliminable = alojadoDAO.buscarPorDNI(dtoAlojadoEliminacion.getNroDoc(),dtoAlojadoEliminacion.getTipoDoc());
+
+        if(entidadEliminable == null){
+            throw new AlojadoInvalidoException("No existe la entidad en la base de datos");
+        }
+        if(!(entidadEliminable.getId().getNroDoc().equals(dtoAlojadoEliminacion.getNroDoc()))){
+            throw new AlojadoInvalidoException("Error de identidad en la base de datos");
+        }
+        if(!(entidadEliminable.getId().getTipoDoc().equals(dtoAlojadoEliminacion.getTipoDoc()))){
+            throw new AlojadoInvalidoException("Error de identidad en la base de datos");
+        }
+
+        ResumenHistorialHuesped estadoDeAlojado = historialHuesped(entidadEliminable);
+
+        if(estadoDeAlojado != ResumenHistorialHuesped.NO_SE_ALOJO){
+            throw new AlojadoNoEliminableException("El huésped no puede ser " +
+                    "eliminado pues se ha alojado en el Hotel en alguna oportunidad\n");
+        }
+
         alojadoDAO.eliminarAlojado(entidadEliminable);
-    }
-
-    /**
-     * Enumerador que informa el estado del historial de un huésped en el sistema.
-     */
-    public enum ResumenHistorialHuesped {
-        /** Tuvo alguna estadía en el hotel. */
-        SE_ALOJO,
-
-        /** No tuvo ninguna estadía, pero sus datos están persistidos. */
-        NO_SE_ALOJO,
-
-        /** Sus datos no están presentes en la base del sistema. */
-        NO_PERSISTIDO
     }
 
     /**
@@ -235,24 +284,15 @@ public class GestorAlojamiento {
      * @return El estado del historial del huésped, uno de los valores de {@link ResumenHistorialHuesped}.
      */
     public ResumenHistorialHuesped historialHuesped(Alojado alojado){
-        var nombre = alojado.getDatos().getDatos_personales().getNombre();
-        var apellido = alojado.getDatos().getDatos_personales().getApellido();
-        var nroDoc = alojado.getDatos().getDatos_personales().getNroDoc();
-        var tipoDoc = alojado.getDatos().getDatos_personales().getTipoDoc();
 
-        CriteriosBusq criterios = new CriteriosBusq(apellido, nombre, tipoDoc, nroDoc);
-        System.out.println(nombre);
-        System.out.println(apellido);
-        System.out.println(nroDoc);
-        System.out.println(tipoDoc);
-
-        ResumenHistorialHuesped seAlojo = this.huespedSeAlojo(criterios);
+        ResumenHistorialHuesped seAlojo = this.huespedSeAlojo(alojado);
 
         if (seAlojo == ResumenHistorialHuesped.SE_ALOJO) {
             return ResumenHistorialHuesped.SE_ALOJO;
         } else if (seAlojo == ResumenHistorialHuesped.NO_PERSISTIDO) {
             return ResumenHistorialHuesped.NO_PERSISTIDO;
         }
+
         return ResumenHistorialHuesped.NO_SE_ALOJO;
     }
 
@@ -268,7 +308,6 @@ public class GestorAlojamiento {
      @return La entidad de dominio {@code Alojado} encontrada (que puede ser {@code Huesped} o {@code Invitado}),
      o {@code null} si los parámetros son inválidos o no se encuentra ningún registro.
      */
-
     public AlojadoDTO obtenerAlojadoPorDNI(String dni, TipoDoc tipo){
         if (tipo == null || dni == null || dni.isBlank()) {
             return null;
