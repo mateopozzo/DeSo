@@ -1,13 +1,17 @@
 package ddb.deso.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
+import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import ddb.deso.negocio.alojamiento.FactoryAlojado;
 import ddb.deso.negocio.alojamiento.Huesped;
 import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
@@ -361,6 +365,56 @@ public class GestorAlojamiento {
             );
         }
         return retornoEncontrados;
+    }
+
+    public List<DatosCheckOutDTO> generarCheckOut(List<CriteriosBusq> criteriosBusq){
+
+        if(criteriosBusq == null){return null;}
+
+        List<DatosCheckOutDTO> listaRetorno = new ArrayList<>();
+
+        criteriosBusq.forEach(crit -> {
+            DatosCheckOutDTO dtoCO = null;
+            try{
+                dtoCO=generarCheckOut(crit);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            if(dtoCO != null) listaRetorno.add(dtoCO);
+        });
+
+        return listaRetorno;
+    }
+
+    public DatosCheckOutDTO generarCheckOut(CriteriosBusq criteriosBusq){
+
+        if(criteriosBusq == null){
+            throw new AlojadoInvalidoException("Criterio de busqueda nulo");
+        }
+
+        if(criteriosBusq.getNroDoc() == null || criteriosBusq.getNroDoc().isEmpty()){
+            throw new AlojadoInvalidoException("Numero de documento nulo");
+        }
+
+        if(criteriosBusq.getTipoDoc() == null){
+            throw new AlojadoInvalidoException("Tipo de documento nulo");
+        }
+
+        DatosCheckOut cout = new DatosCheckOut(LocalDateTime.now());
+        cout.setFecha_hora_out(LocalDateTime.now());
+
+        var alojado = alojadoDAO.buscarPorDNI(criteriosBusq.getNroDoc(),criteriosBusq.getTipoDoc());
+
+        if(alojado == null){
+            return null;
+        }
+
+        cout.setAlojado(alojado.getDatos());
+
+        alojado.getDatos().nuevoCheckOut(cout);
+
+        return new DatosCheckOutDTO(cout);
+
     }
 
     /**

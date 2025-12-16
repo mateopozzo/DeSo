@@ -60,7 +60,7 @@ function BajaHuespedContent() {
                 if (resultadoLimpio === "DADO_DE_BAJA") {
                     // exito
                     alert(
-                        `Los datos del huésped ${huesped.nombre} ${huesped.apellido}, ${huesped.tipoDoc} y ${huesped.nroDoc} han sido eliminados del sistema.\nPRESIONE CUALQUIER TECLA PARA CONTINUAR...`
+                        `Los datos del huésped ${huesped.nombre} ${huesped.apellido}, ${huesped.tipoDoc} y ${huesped.nroDoc} han sido eliminados del sistema.\nPRESIONE OK PARA CONTINUAR...`
                     );
                     router.push("/home");
                 } else if (resultadoLimpio === "OPERACION_PROHIBIDA") {
@@ -97,7 +97,7 @@ function BajaHuespedContent() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950 p-4">
             <div className="max-w-2xl w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-800">
 
-                <h1 className="text-3xl font-bold text-[#ca695e] mb-6 text-center">
+                <h1 className="text-3xl font-bold dark:text-white mb-6 text-center">
                     Dar de baja Huésped
                 </h1>
 
