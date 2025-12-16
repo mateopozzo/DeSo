@@ -10,7 +10,7 @@ import {
   DatosRes,
   verificarRes,
 } from "../../../services/habitaciones.service";
-import Grilla from "../../../components/grilla";
+import Grilla from "../../../components/grilla_habitaciones";
 
 import { busqueda, ResultadoBusq } from "@/services/busqueda.service";
 import {

@@ -41,11 +41,11 @@ export default function HomePage() {
           desc="Genera una reserva para un huésped"
         />
         <Card
-          href="/home"
+          href="/facturar"
           iconSrc="/fac.svg"
-          gestor="Facturación"
+          gestor="Contabilidad"
           title="Generar factura"
-          desc="Genera una nueva factura"
+          desc="Factura una estadía y sus servicios"
         />
         <Card
           href="/home"
@@ -65,7 +65,7 @@ export default function HomePage() {
         <Card
           href="/home"
           iconSrc="/fac.svg"
-          gestor="Facturación"
+          gestor="Contabilidad"
           title="Ingresar pago"
           desc="Ingresa el pago de una factura"
         />
