@@ -8,6 +8,7 @@ import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,17 +89,25 @@ public class AlojadoController {
     /**
      * Endpoint para obtener los datos del alojado que el usuario elige para modificar
      *
-     * @param criterios
      * @return
      */
     @GetMapping("api/obtener-atributos-huesped")
-    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestBody CriteriosBusq criterios){
+    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam String nroDoc, @RequestParam String tipoDocStr) {
 
-        if(!identidadValida(criterios)){
+        if(nroDoc == null || tipoDocStr == null || nroDoc.isEmpty() || tipoDocStr.isEmpty()) {
             return null;
         }
 
-        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+        TipoDoc tipoDoc = null;
+        try {
+            tipoDoc = TipoDoc.valueOf(tipoDocStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Se intento obtener datos de un Tipo de documento" + tipoDocStr);
+            return null;
+        }
+
+
+        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(nroDoc, tipoDoc);
 
         return ResponseEntity.ok().body(dtoAlojado);
     }
@@ -170,7 +179,7 @@ public class AlojadoController {
      * @return {@link AlojadoDTO} con datos que estan en la base
      */
     @PutMapping("api/actualizar-alojado")
-    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestBody ActualizarAlojadoDTO dto){
+    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestBody ActualizarAlojadoDTO dto, @RequestParam boolean force){
 
         var pre = dto.pre;
         var post= dto.post;
@@ -182,7 +191,10 @@ public class AlojadoController {
 
         AlojadoDTO dtoRta = null;
         try{
-            dtoRta = gestorAlojamiento.modificarHuesped(pre, post);
+            dtoRta = gestorAlojamiento.modificarHuesped(pre, post, force);
+        } catch (AlojadoPreExistenteException ape){
+            System.out.println(ape.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } catch (AlojadoInvalidoException ea) {
             System.out.println(ea.getMessage());
             return ResponseEntity.noContent().build();
