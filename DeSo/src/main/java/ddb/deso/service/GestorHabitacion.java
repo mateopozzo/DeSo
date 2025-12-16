@@ -1,31 +1,40 @@
 package ddb.deso.service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import ddb.deso.service.excepciones.AlojadoInvalidoException;
-import ddb.deso.negocio.EstadoHab;
-import ddb.deso.almacenamiento.DAO.*;
-import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
-import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
-import ddb.deso.almacenamiento.DTO.HabitacionDTO;
-import ddb.deso.almacenamiento.DTO.ReservaDTO;
-import ddb.deso.service.excepciones.ReservaInvalidaException;
-import ddb.deso.negocio.alojamiento.*;
-import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.negocio.habitaciones.Estadia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import ddb.deso.service.excepciones.HabitacionInexistenteException;
-import ddb.deso.service.excepciones.ReservaInexistenteException;
-import ddb.deso.negocio.habitaciones.Habitacion;
-import ddb.deso.negocio.habitaciones.Reserva;
 import org.springframework.transaction.annotation.Transactional;
 
-import ddb.deso.almacenamiento.DTO.ReservaGrillaDTO;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
+import ddb.deso.almacenamiento.DAO.EstadiaDAO;
+import ddb.deso.almacenamiento.DAO.HabitacionDAO;
+import ddb.deso.almacenamiento.DAO.ReservaDAO;
+import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
+import ddb.deso.almacenamiento.DTO.HabitacionDTO;
 import ddb.deso.almacenamiento.DTO.HabitacionReservaDTO;
+import ddb.deso.almacenamiento.DTO.ReservaDTO;
+import ddb.deso.almacenamiento.DTO.ReservaGrillaDTO;
+import ddb.deso.negocio.EstadoHab;
+import ddb.deso.negocio.alojamiento.Alojado;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.Invitado;
+import ddb.deso.negocio.habitaciones.Estadia;
+import ddb.deso.negocio.habitaciones.Habitacion;
+import ddb.deso.negocio.habitaciones.Reserva;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.ApellidoVacioException;
+import ddb.deso.service.excepciones.HabitacionInexistenteException;
+import ddb.deso.service.excepciones.ReservaInexistenteException;
+import ddb.deso.service.excepciones.ReservaInvalidaException;
 
 @Service
 @Transactional
@@ -104,12 +113,6 @@ public class GestorHabitacion {
         return disponibilidades;
 
     }
-    // TODO (CU06 - Cancelar Reserva):
-    // Hoy este método lista reservas sin considerar el campo "estado" de Reserva.
-    // Si se implementa cancelación lógica (estado = "Cancelada"), las reservas canceladas
-    // deberían dejar de bloquear disponibilidad y NO deberían mapearse a DisponibilidadDTO.
-    // Solución futura: filtrar por estado != "Cancelada" (idealmente con query en DAO/Repository
-    // y/o un enum EstadoReserva), y mantener consistencia en listarReservas(fechaInicio, fechaFin).
 
     public List<DisponibilidadDTO> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
 
@@ -118,6 +121,9 @@ public class GestorHabitacion {
         List<DisponibilidadDTO> disponibilidadesEnFecha = new ArrayList<>();
 
         if(reservas != null) for (Reserva reserva : reservas) {
+            if ("Cancelada".equalsIgnoreCase(reserva.getEstado())) {
+                continue;
+            }
             disponibilidadesEnFecha.addAll(listarDisponibilidadesPorReserva(reserva));
         }
 
@@ -373,6 +379,10 @@ public class GestorHabitacion {
 
         for (var r : reservas) {
 
+            // Si la reserva está cancelada, la ignoramos y pasamos a la siguiente
+            if ("Cancelada".equalsIgnoreCase(r.getEstado())) {
+                continue;
+            }
             var habitaciones = new ArrayList<HabitacionReservaDTO>();
             if (r.getListaHabitaciones() != null) {
                 for (var h : r.getListaHabitaciones()) {
