@@ -24,4 +24,8 @@ public interface AlojadoRepository extends JpaRepository<Alojado, AlojadoID>,
     // busqueda de alojados que ocuparon la estadia
     @Query("SELECT DISTINCT a FROM Alojado a JOIN a.listaEstadias e WHERE e.idEstadia = :idEstadia")
     List<Alojado> findAlojadosByEstadiaId(@Param("idEstadia") long idEstadia);
+
+    @Query("SELECT a FROM Alojado a JOIN FETCH a.datos WHERE a.datos.datos_personales.CUIT = :cuit")
+    Alojado findByCuit(@Param("cuit") String cuit);
 }
+

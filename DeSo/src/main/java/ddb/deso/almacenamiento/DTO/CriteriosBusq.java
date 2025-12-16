@@ -1,5 +1,6 @@
 package ddb.deso.almacenamiento.DTO;
 import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.Alojado;
 
 import java.util.Objects;
 
@@ -50,6 +51,13 @@ public class CriteriosBusq {
         nombre = "";
         tipoDoc = null;
         nroDoc = "";
+    }
+
+    public CriteriosBusq(Alojado entidadRetorno) {
+        this.nombre=entidadRetorno.getDatos().getDatos_personales().getNombre();
+        this.apellido=entidadRetorno.getDatos().getDatos_personales().getApellido();
+        this.tipoDoc=entidadRetorno.getDatos().getDatos_personales().getTipoDoc();
+        this.nroDoc=entidadRetorno.getDatos().getDatos_personales().getNroDoc();
     }
 
     public String getApellido() {

@@ -122,6 +122,15 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     }
 
     /**
+     * @param CUIT 
+     * @return
+     */
+    @Override
+    public Alojado buscarAlojado(String CUIT) {
+        return null;
+    }
+
+    /**
     @param alojado_DTO: Instancia de AlojadoDTO
     @param criterio: Criterio de búsqueda donde todos son opcionales, y si no fueron definidos son null
     Se llama a normalizar para evitar problemas por tildes

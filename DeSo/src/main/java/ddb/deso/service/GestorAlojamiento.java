@@ -460,5 +460,20 @@ public class GestorAlojamiento {
         });
         return listaRetorno;
     }
+
+    public CriteriosBusq buscarCriteriosAlojadoPorCuit(String CUIT){
+        if(CUIT == null || CUIT.isEmpty()) return null;
+
+        Alojado entidadRetorno = alojadoDAO.buscarAlojado(CUIT);
+
+        if(entidadRetorno == null) return null;
+
+        if(entidadRetorno.getDatos().getDatos_personales().getCUIT() == null
+                || entidadRetorno.getDatos().getDatos_personales().getCUIT().isEmpty()) return null;
+
+        if(!entidadRetorno.getDatos().getDatos_personales().getCUIT().equals(CUIT)) return null;
+
+        return new CriteriosBusq(entidadRetorno);
+    }
 }
 

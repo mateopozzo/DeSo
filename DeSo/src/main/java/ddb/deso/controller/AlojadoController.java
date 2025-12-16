@@ -176,6 +176,16 @@ public class AlojadoController {
         return ResponseEntity.ok(gestorAlojamiento.buscarCriteriosALojadoDeEstadia(idEstadia));
     }
 
+    @GetMapping("api/buscar-huesped-cuit")
+    private ResponseEntity<CriteriosBusq> obtenerHuespedesSegunCUIT(@RequestParam String CUIT){
+        if(CUIT == null || CUIT.isEmpty()){
+            return ResponseEntity.ok().build();
+        }
+
+        CriteriosBusq entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(CUIT);
+
+        return ResponseEntity.ok(entidadRetorno);
+    }
 
 
 

@@ -45,6 +45,8 @@ public interface AlojadoDAO {
 
     List<Alojado> buscarAlojado(long idEstadia);
 
+    Alojado buscarAlojado(String CUIT);
+
     /**
      * Recupera la totalidad de los registros de Alojados activos.
      *
@@ -69,4 +71,5 @@ public interface AlojadoDAO {
      * @param tipoDoc Cadena de caracteres representando el tipo de documento.
      */
     void promoverAHuesped(String nroDoc, String tipoDoc);
+
 }
