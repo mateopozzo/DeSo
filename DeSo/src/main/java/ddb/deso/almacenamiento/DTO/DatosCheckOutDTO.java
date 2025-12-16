@@ -2,7 +2,7 @@ package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.negocio.alojamiento.DatosCheckOut;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -11,7 +11,7 @@ import java.time.LocalDate;
  */
 
 public class DatosCheckOutDTO {
-    LocalDate fecha_hora_out;
+    LocalDateTime fecha_hora_out;
     long idCheckOut;
 
     /**
@@ -23,11 +23,11 @@ public class DatosCheckOutDTO {
     }
 
     /*  Getters y setters   */
-    public LocalDate getFecha_hora_out() {
+    public LocalDateTime getFecha_hora_out() {
         return fecha_hora_out;
     }
 
-    public void setFecha_hora_out(LocalDate fecha_hora_out) {
+    public void setFecha_hora_out(LocalDateTime fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
     }
 
