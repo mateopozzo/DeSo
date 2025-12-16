@@ -189,8 +189,11 @@ public class AlojadoController {
             return ResponseEntity.noContent().build();
         }
 
+        System.out.println("NO NULOS");
+
         AlojadoDTO dtoRta = null;
         try{
+            System.out.println("SE LO MANDO AL GESTOR");
             dtoRta = gestorAlojamiento.modificarHuesped(pre, post, force);
         } catch (AlojadoPreExistenteException ape){
             System.out.println(ape.getMessage());

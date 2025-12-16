@@ -117,6 +117,8 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("El alojado modificado es null");
             }
 
+            System.out.println("NONULOS");
+
             if (!dtoAlojadoOriginal.verificarCamposObligatorios()) {
                 throw new AlojadoInvalidoException("El alojado original no cumple con los campos obligatorios");
             }
@@ -124,6 +126,8 @@ public class GestorAlojamiento {
             if (!dtoAlojadoModificado.verificarCamposObligatorios()) {
                 throw new AlojadoInvalidoException("El alojado modificado no cumple con los campos obligatorios");
             }
+
+            System.out.println("CAMPOS");
 
             if (dtoAlojadoOriginal.getTipoDoc() == null || dtoAlojadoOriginal.getNroDoc() == null) {
                 throw new AlojadoInvalidoException("La identidad del alojado original es invalida");
@@ -133,10 +137,17 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("La identidad del alojado modificado es invalida");
             }
 
-            if(!forzar && dniExiste(dtoAlojadoModificado.getNroDoc(), dtoAlojadoModificado.getTipoDoc())){
+            System.out.println("IDENTIDADES");
+
+            if(!forzar
+                && (!dtoAlojadoModificado.getNroDoc().equals(dtoAlojadoOriginal.getNroDoc())
+                       || !dtoAlojadoModificado.getTipoDoc().equals(dtoAlojadoOriginal.getTipoDoc()) )
+                && dniExiste(dtoAlojadoModificado.getNroDoc(), dtoAlojadoModificado.getTipoDoc())){
                 throw new AlojadoPreExistenteException("El alojado " + dtoAlojadoModificado.getTipoDoc().toString()
                         + " " + dtoAlojadoModificado.getNroDoc() + "ya existe en el sistema");
             }
+
+            System.out.println("EXISTENCIA");
         }
 
         var alojadoOriginal = FactoryAlojado.createFromDTO(dtoAlojadoOriginal);
@@ -151,7 +162,8 @@ public class GestorAlojamiento {
                 throw new AlojadoInvalidoException("El alojado no se persiste");
             }
 
-            if (alojadoGuardado.comparteDatos(alojadoModificado)) {
+            if (!alojadoGuardado.comparteDatos(alojadoModificado)) {
+                System.out.println("LOS DATOS EN LA BASE NO SE MODIFICARON");
                 throw new AlojadoInvalidoException("El alojado se guardo incorrectamente");
             }
 

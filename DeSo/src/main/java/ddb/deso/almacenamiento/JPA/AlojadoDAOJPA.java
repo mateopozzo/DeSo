@@ -9,6 +9,7 @@ import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Path;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
@@ -60,17 +61,31 @@ public class AlojadoDAOJPA implements AlojadoDAO {
     @Transactional
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
 
+        System.out.println("LLEGA AL DAO");
+
         if(alojadoPrev==null){
             throw new AlojadoInvalidoException("Alojado nulo");
         }
+
+        System.out.println("NO ES NULO");
 
         if(alojadoPrev.getId() == null){
             throw new AlojadoInvalidoException("Alojado sin ID");
         }
 
+        System.out.println("TIENE ID");
+
         if(alojadoPrev.getId().getNroDoc() == null || alojadoPrev.getId().getTipoDoc() == null){
             throw new AlojadoInvalidoException("ID invalido");
         }
+
+        System.out.println("TIENE NRO Y TIPO");
+
+        if(!alojadoNuevo.verificarCamposObligatorios()){
+            throw new AlojadoInvalidoException("NO verifica campos Obligatorios");
+        }
+
+        System.out.println("TIENE CAMPO");
 
         String nroDoc = alojadoPrev.getId().getNroDoc();
         TipoDoc tipoDoc = alojadoPrev.getId().getTipoDoc();
@@ -80,7 +95,11 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         if(containerAlojPre.isPresent()) alojadoPre=containerAlojPre.get();
         else return;
 
+        System.out.println("ENCUENTRA ACTUAL");
+
         actualizarAtributos(alojadoPre, alojadoNuevo);
+
+        alojadoRepository.flush();
     }
 
     /**
@@ -270,6 +289,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
 
             // Actualizacion a cargo de repo
             alojadoRepository.save(alojadoPre);
+            alojadoRepository.flush();
         } else {
             // Como se modifica la clave primaria, es mas robusto borrar antiguo y guardar nuevo
             eliminarAlojado(alojadoPre);

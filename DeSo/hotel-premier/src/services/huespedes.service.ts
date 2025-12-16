@@ -55,9 +55,11 @@ export async function obtenerAtributosHuesped(criterio: CriteriosBusq) {
 
 export async function actualizarAlojado(pre: HuespedDTO, post: HuespedDTO, force : boolean){
 
-  const url = `http://localhost:8080/api/actualizar-alojado` + force ? `?force=${true}` : "";
+  const url = `http://localhost:8080/api/actualizar-alojado${force ? '?force=true' : '?force=false'}`;
 
-  const body:ActualizarAlojadoDTO = {pre, post};
+  const body:ActualizarAlojadoDTO = {pre:pre, post:post};
+
+  console.log(JSON.stringify(body));
 
   const response = await fetch (url, {
     method : "PUT",
