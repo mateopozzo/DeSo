@@ -172,7 +172,7 @@ public class InterfazDarBaja {
 
         AlojadoDTO aljoadoDTOParaEliminar = new AlojadoDTO(alojadoParaEliminar);
 
-        gestorAlojamiento.eliminarAlojado(new CriteriosBusq(null,null,aljoadoDTOParaEliminar.getTipoDoc(), aljoadoDTOParaEliminar.getNroDoc()));
+        gestorAlojamiento.eliminarAlojado(aljoadoDTOParaEliminar);
 
         terminarCU11(alojadoParaEliminar);
     }

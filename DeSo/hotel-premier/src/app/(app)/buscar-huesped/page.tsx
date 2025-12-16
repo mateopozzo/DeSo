@@ -67,7 +67,7 @@ export default function buscarHuesped() {
   };
 
   const handleSeleccionar = (huesped: ResultadoBusq) => {
-    router.push(`/gestionar-huesped/${huesped.tipoDoc}${huesped.nroDoc}`);
+    router.push(`/gestionar-huesped/?tipoDoc=${huesped.tipoDoc}&nroDoc=${huesped.nroDoc}&nombre=${huesped.nombre}&apellido=${huesped.apellido}`);
   };
 
   return (

@@ -1,5 +1,6 @@
 package ddb.deso.controller;
 
+import ddb.deso.almacenamiento.DTO.ActualizarAlojadoDTO;
 import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
@@ -7,6 +8,7 @@ import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
+import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,17 +89,25 @@ public class AlojadoController {
     /**
      * Endpoint para obtener los datos del alojado que el usuario elige para modificar
      *
-     * @param criterios
      * @return
      */
     @GetMapping("api/obtener-atributos-huesped")
-    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam CriteriosBusq criterios){
+    ResponseEntity<AlojadoDTO> obetenerAtributosAlojado(@RequestParam String nroDoc, @RequestParam String tipoDocStr) {
 
-        if(!identidadValida(criterios)){
+        if(nroDoc == null || tipoDocStr == null || nroDoc.isEmpty() || tipoDocStr.isEmpty()) {
             return null;
         }
 
-        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(criterios.getNroDoc(), criterios.getTipoDoc());
+        TipoDoc tipoDoc = null;
+        try {
+            tipoDoc = TipoDoc.valueOf(tipoDocStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Se intento obtener datos de un Tipo de documento" + tipoDocStr);
+            return null;
+        }
+
+
+        var dtoAlojado = gestorAlojamiento.obtenerAlojadoPorDNI(nroDoc, tipoDoc);
 
         return ResponseEntity.ok().body(dtoAlojado);
     }
@@ -166,21 +176,28 @@ public class AlojadoController {
     /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
-     * @param pre DTO del {@link AlojadoDTO} que existe previamente
-     * @param post DTO con modificaciones de la entidad {@link AlojadoDTO}
      * @return {@link AlojadoDTO} con datos que estan en la base
      */
     @PutMapping("api/actualizar-alojado")
-    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestParam AlojadoDTO pre, @RequestParam AlojadoDTO post){
+    ResponseEntity<AlojadoDTO> actualizarAlojado(@RequestBody ActualizarAlojadoDTO dto, @RequestParam boolean force){
+
+        var pre = dto.pre;
+        var post= dto.post;
 
         if(pre == null || post == null){
             //TODO -> Definir tipos de retorno a front
             return ResponseEntity.noContent().build();
         }
 
+        System.out.println("NO NULOS");
+
         AlojadoDTO dtoRta = null;
         try{
-            dtoRta = gestorAlojamiento.modificarHuesped(pre, post);
+            System.out.println("SE LO MANDO AL GESTOR");
+            dtoRta = gestorAlojamiento.modificarHuesped(pre, post, force);
+        } catch (AlojadoPreExistenteException ape){
+            System.out.println(ape.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } catch (AlojadoInvalidoException ea) {
             System.out.println(ea.getMessage());
             return ResponseEntity.noContent().build();
@@ -191,14 +208,14 @@ public class AlojadoController {
     }
 
     @DeleteMapping("api/eliminar-huesped")
-    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestParam AlojadoDTO dtoAlojadoPorEliminar){
+    ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestBody AlojadoDTO dtoAlojadoPorEliminar){
 
         if(!identidadValida(dtoAlojadoPorEliminar)){
             return ResponseEntity.badRequest().build();
         }
 
         try{
-            gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
+                gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
         } catch (AlojadoNoEliminableException e){
             return ResponseEntity.ok(BajaHuesped.OPERACION_PROHIBIDA);
         } catch (Exception e){

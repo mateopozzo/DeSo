@@ -9,7 +9,9 @@ import {
   DisponibilidadDTO,
   RequestReserva,
 } from "../../../services/habitaciones.service";
-import Grilla, { DatosSeleccion } from "../../../components/grilla";
+import Grilla, {
+  DatosSeleccion,
+} from "../../../components/grilla_habitaciones";
 
 export default function ReservarHab() {
   const router = useRouter();
@@ -164,7 +166,7 @@ export default function ReservarHab() {
           {paso === "EXITO" && "Reserva exitosa"}
         </h1>
         <button
-          onClick={cancelarCasoUso}
+          onClick={() => router.push("/home")}
           className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 dark:border dark:border-white dark:text-white bg-[#f5f7fa] dark:bg-gray-950  text-[#1a252f] border border-[#1a252f] hover:bg-[#b92716] dark:hover:border-[#b92716] hover:text-white hover:border-[#b92716]"
         >
           Cancelar
@@ -255,6 +257,7 @@ export default function ReservarHab() {
                     placeholder="Ej: Juan"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
+                    pattern="[a-z][A-Z]"
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring-2 focus:ring-[#52a173] outline-none transition"
                   />
                 </div>

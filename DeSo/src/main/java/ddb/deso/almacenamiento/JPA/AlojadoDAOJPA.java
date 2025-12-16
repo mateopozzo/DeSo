@@ -9,10 +9,12 @@ import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Path;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -56,19 +58,34 @@ public class AlojadoDAOJPA implements AlojadoDAO {
      * @param alojadoNuevo El objeto con los nuevos datos (actualmente no se usa explícitamente en la lógica, se guarda el prev).
      */
     @Override
+    @Transactional
     public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo) {
+
+        System.out.println("LLEGA AL DAO");
 
         if(alojadoPrev==null){
             throw new AlojadoInvalidoException("Alojado nulo");
         }
 
+        System.out.println("NO ES NULO");
+
         if(alojadoPrev.getId() == null){
             throw new AlojadoInvalidoException("Alojado sin ID");
         }
 
+        System.out.println("TIENE ID");
+
         if(alojadoPrev.getId().getNroDoc() == null || alojadoPrev.getId().getTipoDoc() == null){
             throw new AlojadoInvalidoException("ID invalido");
         }
+
+        System.out.println("TIENE NRO Y TIPO");
+
+        if(!alojadoNuevo.verificarCamposObligatorios()){
+            throw new AlojadoInvalidoException("NO verifica campos Obligatorios");
+        }
+
+        System.out.println("TIENE CAMPO");
 
         String nroDoc = alojadoPrev.getId().getNroDoc();
         TipoDoc tipoDoc = alojadoPrev.getId().getTipoDoc();
@@ -78,7 +95,11 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         if(containerAlojPre.isPresent()) alojadoPre=containerAlojPre.get();
         else return;
 
+        System.out.println("ENCUENTRA ACTUAL");
+
         actualizarAtributos(alojadoPre, alojadoNuevo);
+
+        alojadoRepository.flush();
     }
 
     /**
@@ -230,6 +251,8 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             // Actualiza los datos del alojadoPre, repository se encarga de actualizar
             // NO VERIFICA campos obligatorios, responsabilidad de front + controller + service
 
+            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
+
             // Datos personales uno a uno para no pisar dni
             alojadoPre.getDatos().getDatos_personales()
                     .setApellido(alojadoNuevo.getDatos().getDatos_personales().getApellido());
@@ -246,12 +269,27 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             alojadoPre.getDatos().getDatos_personales()
                     .setPosicionIva(alojadoNuevo.getDatos().getDatos_personales().getPosicionIva());
 
-            // Sin riesgo de pisar primary key
-            alojadoPre.getDatos().setDatos_residencia(alojadoNuevo.getDatos().getDatos_residencia());
-            alojadoPre.getDatos().setDatos_contacto(alojadoNuevo.getDatos().getDatos_contacto());
+            //datos de residencia
+            alojadoPre.getDatos().getDatos_residencia().setCalle(alojadoNuevo.getDatos().getDatos_residencia().getCalle());
+            alojadoPre.getDatos().getDatos_residencia().setCod_post(alojadoNuevo.getDatos().getDatos_residencia().getCod_post());
+            alojadoPre.getDatos().getDatos_residencia().setDepto(alojadoNuevo.getDatos().getDatos_residencia().getDepto());
+            alojadoPre.getDatos().getDatos_residencia().setLocalidad(alojadoNuevo.getDatos().getDatos_residencia().getLocalidad());
+            alojadoPre.getDatos().getDatos_residencia().setNro_calle(alojadoNuevo.getDatos().getDatos_residencia().getNro_calle());
+            alojadoPre.getDatos().getDatos_residencia().setPais(alojadoNuevo.getDatos().getDatos_residencia().getPais());
+            alojadoPre.getDatos().getDatos_residencia().setPiso(alojadoNuevo.getDatos().getDatos_residencia().getPiso());
+            alojadoPre.getDatos().getDatos_residencia().setProv(alojadoNuevo.getDatos().getDatos_residencia().getProv());
+
+            //datos contacto
+            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
+            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
+            System.out.println(alojadoPre.getDatos().getDatos_contacto().getTelefono());
+            alojadoPre.getDatos().getDatos_contacto().setEmail(alojadoNuevo.getDatos().getDatos_contacto().getEmail());
+            alojadoPre.getDatos().getDatos_contacto().setTelefono(alojadoNuevo.getDatos().getDatos_contacto().getTelefono());
+            System.out.println(alojadoPre.getDatos().getDatos_contacto().getTelefono());
 
             // Actualizacion a cargo de repo
             alojadoRepository.save(alojadoPre);
+            alojadoRepository.flush();
         } else {
             // Como se modifica la clave primaria, es mas robusto borrar antiguo y guardar nuevo
             eliminarAlojado(alojadoPre);
