@@ -62,8 +62,6 @@ export default function AltaHuesped() {
       posicionIva: formData.iva,
     };
 
-
-
     try {
       const response = await crearHuesped(dataDTO, forzar);
 
@@ -344,7 +342,7 @@ export default function AltaHuesped() {
             <option value="Consumidor final">Consumidor final</option>
             <option value="Responsable inscripto">Responsable inscripto</option>
             <option value="Monotributista">Monotributista</option>
-            <option value="Monotributista">Excento</option>
+            <option value="Excento">Excento</option>
           </select>
         </div>
         {/* INICIO DE BOTONES */}

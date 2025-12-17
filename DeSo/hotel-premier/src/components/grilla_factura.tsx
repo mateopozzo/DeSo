@@ -114,7 +114,7 @@ export default function GrillaItemsFactura({
       <div className="flex justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
         <div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-            Detalle de Consumos
+            Detalle de consumos
           </h3>
           <p className="text-sm text-gray-500">
             Facturar a:{" "}
