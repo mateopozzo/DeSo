@@ -1,27 +1,28 @@
 package ddb.deso;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.negocio.TipoDoc;
-import ddb.deso.controller.AlojadoController;
-import ddb.deso.service.GestorAlojamiento;
-import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.controller.AlojadoController;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.GestorHabitacion;
+import ddb.deso.service.excepciones.AlojadoInvalidoException;
 
 /**
  * Pruebas unitarias para el controlador del Caso de Uso 09 (Alta de Huésped).
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * códigos HTTP) aislando la lógica de negocio mediante un mock de {@link GestorAlojamiento}.
  * </p>
  */
-@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(AlojadoController.class)
 public class TestCU09ControllerUnitario {
 
@@ -40,6 +41,9 @@ public class TestCU09ControllerUnitario {
 
     @MockitoBean
     GestorAlojamiento gestorMock;
+
+    @MockitoBean
+    GestorHabitacion gestorHabitacionMock;
 
     @Autowired
     private ObjectMapper mapper;

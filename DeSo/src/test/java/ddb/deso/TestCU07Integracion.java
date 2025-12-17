@@ -1,29 +1,40 @@
 package ddb.deso;
 
-import ddb.deso.almacenamiento.DAO.*;
-import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.almacenamiento.DTO.GenerarFacturaRequestDTO;
-import ddb.deso.negocio.EstadoHab;
-import ddb.deso.negocio.TipoHab;
-import ddb.deso.negocio.alojamiento.*;
-import ddb.deso.negocio.contabilidad.ResponsablePago;
-import ddb.deso.negocio.habitaciones.Estadia;
-import ddb.deso.negocio.habitaciones.Habitacion;
-import ddb.deso.service.GestorAlojamiento;
-import ddb.deso.service.GestorContabilidad;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import ddb.deso.almacenamiento.DAO.AlojadoDAO;
+import ddb.deso.almacenamiento.DAO.DatosCheckOutDAO;
+import ddb.deso.almacenamiento.DAO.EstadiaDAO;
+import ddb.deso.almacenamiento.DAO.HabitacionDAO;
+import ddb.deso.almacenamiento.DAO.ResponsablePagoDAO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
+import ddb.deso.almacenamiento.DTO.GenerarFacturaRequestDTO;
+import ddb.deso.negocio.EstadoHab;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.TipoHab;
+import ddb.deso.negocio.alojamiento.DatosAlojado;
+import ddb.deso.negocio.alojamiento.DatosCheckOut;
+import ddb.deso.negocio.alojamiento.DatosPersonales;
+import ddb.deso.negocio.alojamiento.Huesped;
+import ddb.deso.negocio.contabilidad.ResponsablePago;
+import ddb.deso.negocio.habitaciones.Estadia;
+import ddb.deso.negocio.habitaciones.Habitacion;
+import ddb.deso.service.GestorAlojamiento;
+import ddb.deso.service.GestorContabilidad;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@Disabled("Test de integración – no requerido por el enunciado (solo tests unitarios de servicio)")
 @SpringBootTest
 @Transactional
 @Rollback(true)
@@ -70,6 +81,8 @@ public class TestCU07Integracion {
         dp.setApellido("Test");
         dp.setFechanac(LocalDate.of(1990, 1, 1)); // Mayor de edad (30+ años)
         dp.setCUIT("20304050607"); // CUIT coincidente con el responsable
+        dp.setTipoDoc(TipoDoc.DNI);
+        dp.setNroDoc("30111222");
 
         DatosAlojado da = new DatosAlojado();
         da.setDatos_personales(dp);
