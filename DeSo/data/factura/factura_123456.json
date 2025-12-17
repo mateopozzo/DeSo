@@ -1,0 +1,9 @@
+{
+  "fecha_factura" : [ 2025, 12, 16 ],
+  "num_factura" : 123456,
+  "tipo_factura" : "B",
+  "importe_total" : 12100.0,
+  "importe_iva" : 2100.0,
+  "importe_neto" : 10000.0,
+  "destinatario" : "Cliente de Prueba S.R.L."
+}
