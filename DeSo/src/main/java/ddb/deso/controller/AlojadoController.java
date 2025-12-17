@@ -262,6 +262,7 @@ public class AlojadoController {
         return true;
     }
 
+
     //memo
     // @PutMapping    ->    modificar
     // @DeleteMapping ->    borrar
