@@ -27,7 +27,7 @@ export default function HomePage() {
       <div className="flex flex-col items-start gap-4 md:grid lg:grid-cols-2 xl:grid-cols-3">
         <Card
           href="/alta-huesped"
-          iconSrc="/hab.svg"
+          iconSrc="/agregar-user.svg"
           gestor="Habitaciones"
           title="Dar alta de huésped"
           desc="Ingresa un nuevo huésped en el sistema"
@@ -35,7 +35,7 @@ export default function HomePage() {
 
         <Card
           href="/reservar-hab"
-          iconSrc="/reserva.svg"
+          iconSrc="/calendar-agregar.svg"
           gestor="Reservas"
           title="Reservar habitación"
           desc="Genera una reserva para un huésped"
@@ -49,10 +49,10 @@ export default function HomePage() {
         />
         <Card
           href="/buscar-huesped"
-          iconSrc="/hab.svg"
+          iconSrc="/eliminar-user.svg"
           gestor="Habitaciones"
           title="Dar de baja huésped"
-          desc="Elimina un huésped existente en el sistema"
+          desc="Elimina un huésped existente"
         />
 
         <Card
@@ -62,12 +62,13 @@ export default function HomePage() {
           title="Cancelar reserva"
           desc="Cancela una reserva existente"
         />
+        <div></div>
         <Card
-          href="/home"
-          iconSrc="/fac.svg"
-          gestor="Contabilidad"
-          title="Ingresar pago"
-          desc="Ingresa el pago de una factura"
+          href="/buscar-huesped"
+          iconSrc="/search.svg"
+          gestor="Habitaciones"
+          title="Buscar huésped"
+          desc="Buscar huéspedes en el sistema"
         />
         <Card
           href="/ocupar-hab"
@@ -75,15 +76,6 @@ export default function HomePage() {
           gestor="Habitaciones"
           title="Ocupar habitación"
           desc="Ingresa un huésped a su habitación"
-        />
-        <div></div>
-        <div></div>
-        <Card
-          href="/buscar-huesped"
-          iconSrc="/hab.svg"
-          gestor="Habitaciones"
-          title="Buscar huésped"
-          desc="Buscar huéspedes en el sistema"
         />
       </div>
     </div>

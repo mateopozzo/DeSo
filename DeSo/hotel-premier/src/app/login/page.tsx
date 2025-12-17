@@ -34,7 +34,33 @@ export default function LoginPage() {
   return (
     <div className="min-h-[calc(100vh-2rem)] flex items-center justify-center">
       <div className="w-full max-w-md rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-6 shadow-sm">
-        <h1 className="text-3xl font-semibold mb-2">Hotel Premier</h1>
+        <div className="flex justify-center items-center mb-4">
+          <img
+            src="/ICON-LOGO-LIGHT.svg"
+            alt="Logo"
+            width={80}
+            height={80}
+            className="dark:hidden block"
+          />
+          <img
+            src="/ICON-LOGO-DARK.svg"
+            alt="Logo"
+            width={80}
+            height={80}
+            className="hidden dark:block"
+          />
+        </div>
+        <div className="flex flex-row justify-between">
+          <h1 className="text-3xl font-semibold mb-2">Hotel Premier</h1>
+          <img
+            src="/log-in.svg"
+            alt="Cerrar sesión"
+            width={40}
+            height={40}
+            className="dark:invert cursor-pointer hover:opacity-70 transition-opacity"
+          />
+        </div>
+
         <p className="text-sm opacity-80 mb-6">
           Ingresá con tu usuario y contraseña
         </p>

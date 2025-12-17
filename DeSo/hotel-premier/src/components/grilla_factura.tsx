@@ -21,6 +21,7 @@ export default function GrillaItemsFactura({
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<
     number[]
   >(detalle.consumos.map((s) => s.idServicio));
+  const [tipoFac, setTipoFactura] = useState("");
 
   const toggleServicio = (id: number) => {
     setServiciosSeleccionados((prev) =>
@@ -52,7 +53,36 @@ export default function GrillaItemsFactura({
     return { subtotal, iva, total };
   }, [cobrarEstadia, serviciosSeleccionados, detalle]);
   return (
-    <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+      <div className="flex flex-row justify-between mb-8">
+        <div className="flex flex-col">
+          <h2 className="text-xl dark:text-white text-black font-semibold">
+            Seleccione el tipo de factura a generar
+          </h2>
+          <p className="text-sm text-gray-500">
+            Le recomendamos utilizar el tipo de factura sugerido, ya que este se
+            basa en la condición tributaria del destinatario.
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-2 text-gray-700 dark:text-gray-400 uppercase text-xs">
+            Tipo de factura
+          </label>
+          <select
+            name="tipoFac"
+            value={tipoFac}
+            onChange={() => setTipoFactura(tipoFac)}
+            className="py-1 px-2 text-center border border-blue-600 rounded-lg bg-[#f5f7fa] dark:bg-gray-950 dark:text-white"
+          >
+            <option value="Responsable inscripto">B</option>
+            <option value="Consumidor final">A</option>
+
+            <option value="Monotributista">C</option>
+            <option value="Monotributista">E</option>
+          </select>
+        </div>
+      </div>
+
       <div className="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
         <div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
@@ -66,7 +96,7 @@ export default function GrillaItemsFactura({
           </p>
         </div>
         <div className="text-right">
-          <span className="text-xs uppercase text-gray-400">Tipo Sugerido</span>
+          <span className="text-xs uppercase text-gray-400">Tipo sugerido</span>
           <div className="text-2xl font-bold text-blue-500 border-2 border-blue-500 px-3 rounded inline-block ml-2">
             {detalle.tipoFacturaSugerida}
           </div>
