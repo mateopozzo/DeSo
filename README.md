@@ -110,8 +110,11 @@ _Cabe mencionar que al momento de entrega de este trabajo, la base de datos ya s
 
 ## Patrones implementados
 
-_DAO_ para manejar el acceso a la capa de datos
-
-_Singleton_ (login) donde nos aseguramos de que la instancia de uso sea única
-
-_Factory_ (Alojado, Invitado, Huesped) donde el patrón se utiliza para crear un invitado (alojado que no puede ser responsable de habitación) o un huésped (alojado que es responsable de habitación y tiene CUIT)
+## Patrones implementados
+| Patrón        | Nro de caso de uso | Nombre de caso de uso   |
+|---------------|------------------|-------------------------|
+| **DAO**       | `1, 2, 9, 10, 11` | Todos                   |
+| **Singleton** | `1`              | Login                   |
+| **Factory**   | `9`              | Dar de alta huésped     |
+| **Generics**  | `1, 2, 9, 10, 11`| Todos (ManejadorJSON.java) |
+| **Strategy**  | `7` | Facturar |
