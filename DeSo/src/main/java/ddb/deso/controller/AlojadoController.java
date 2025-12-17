@@ -1,12 +1,9 @@
 package ddb.deso.controller;
 
-import ddb.deso.almacenamiento.DTO.ActualizarAlojadoDTO;
-import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
+import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
-import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.GestorAlojamiento;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.service.GestorHabitacion;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
@@ -179,13 +176,13 @@ public class AlojadoController {
         return ResponseEntity.ok(gestorAlojamiento.buscarCriteriosALojadoDeEstadia(idEstadia));
     }
 
-    @GetMapping("api/buscar-huesped-cuit")
-    private ResponseEntity<CriteriosBusq> obtenerHuespedesSegunCUIT(@RequestParam String CUIT){
-        if(CUIT == null || CUIT.isEmpty()){
+    @GetMapping("api/buscar-tercero")
+    private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
+        if(cuit == null || cuit.isEmpty()){
             return ResponseEntity.ok().build();
         }
 
-        CriteriosBusq entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(CUIT);
+        PersonaJuridicaDTO entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(cuit);
 
         return ResponseEntity.ok(entidadRetorno);
     }
