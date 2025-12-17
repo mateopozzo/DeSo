@@ -46,7 +46,7 @@
 
 - NEXT.js, Typescript, Tailwind CSS
 - Springboot, PostgreSQL
-- Mockito, JUnit
+- Mockito, JUnit, Postman
 
 **Librerías:** GSON, Jline, Springboot: Starter, Data JPA, Postgresql (Hosteado por servidor Aiven), Lombok, Commons-lang3, Annotations (JetBrains), Starter-test, Junit-Jupiter.
 
@@ -111,10 +111,19 @@ _Cabe mencionar que al momento de entrega de este trabajo, la base de datos ya s
 ## Patrones implementados
 
 ## Patrones implementados
-| Patrón        | Nro de caso de uso | Nombre de caso de uso   |
-|---------------|------------------|-------------------------|
-| **DAO**       | `1, 2, 9, 10, 11` | Todos                   |
-| **Singleton** | `1`              | Login                   |
-| **Factory**   | `9`              | Dar de alta huésped     |
-| **Generics**  | `1, 2, 9, 10, 11`| Todos (ManejadorJSON.java) |
-| **Strategy**  | `7` | Facturar |
+
+| Patrón        | Nro de caso de uso | Nombre de caso de uso      |
+| ------------- | ------------------ | -------------------------- |
+| **DAO**       | `1, 2, 9, 10, 11`  | Todos                      |
+| **Singleton** | `1`                | Login                      |
+| **Factory**   | `9`                | Dar de alta huésped        |
+| **Generics**  | `1, 2, 9, 10, 11`  | Todos (ManejadorJSON.java) |
+| **Strategy**  | `7`                | Facturar                   |
+
+_DAO_ para abstraer el acceso a la capa de datos de la capa de negocio
+
+_Singleton_ (login) donde nos aseguramos de que la instancia de autenticación sea única
+
+_Factory_ (Alojado, Invitado, Huesped) donde el patrón se utiliza para crear un invitado (alojado que no puede ser responsable de habitación) o un huésped (alojado que es responsable de habitación y tiene CUIT)
+
+_Strategy_ (Factura) donde el patrón nos permite separar la lógica de guardar una factura de la lógica de _cómo_ hacerlo. Cumple con el principio open/closed de SOLID. Permite cambiar el tipo de exportación en tiempo de ejecución.
