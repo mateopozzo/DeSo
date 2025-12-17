@@ -8,6 +8,7 @@ import ddb.deso.negocio.TipoFactura;
 import ddb.deso.negocio.TipoServicio;
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.negocio.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import ddb.deso.service.excepciones.ResponsableMenorEdadExcepcion;
 
 import ddb.deso.service.strategias.EstrategiaGuardadoFactura;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
@@ -73,37 +75,48 @@ public class GestorContabilidad {
     }
 
 
-
+    
     public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
+        // Busca la estadía activa (filtros estrictos)
+        Estadia estadiaActual = existeEstadia(nroHabitacion);
         
-        Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
-     
-        Estadia estadiaActual=existeEstadia(nroHabitacion);
-       
-        LocalDate inicio = estadiaActual.getFecha_inicio();
-        LocalDate fin = estadiaActual.getFecha_fin();
+        // Delega el cálculo matemático al nuevo método privado
+        return calcularMontos(estadiaActual, horaSalida);
+    }
+
+    // 2. NUEVO MÉTODO PRIVADO (Solo matemática, sin búsquedas)
+    private DetalleFacturaDTO calcularMontos(Estadia estadia, LocalTime horaSalida) {
+        Habitacion hab = estadia.getHabitacion();
+        LocalDate inicio = estadia.getFecha_inicio();
+        LocalDate fin = estadia.getFecha_fin();
+        
+        LocalDateTime fechaHoraCombinada = LocalDateTime.of(fin, horaSalida);
+        DatosCheckOut datosCheckOut = new DatosCheckOut();
+        datosCheckOut.setFecha_hora_out(fechaHoraCombinada);
 
         long dias = ChronoUnit.DAYS.between(inicio, fin);
 
-        if (dias == 0) {
-            dias = 1; // Mínimo 1 día
-        }
+        // Ajuste de días
+        if (dias == 0) dias = 1; 
+
         double precioNoche = hab.getTarifa(); 
         double costoEstadia = dias * precioNoche;
 
+        // Lógica de Late Check-Out
         if (horaSalida.isAfter(LocalTime.of(11, 0)) && horaSalida.isBefore(LocalTime.of(18, 0))) {
             costoEstadia += (precioNoche * 0.5); 
         } else if (horaSalida.isAfter(LocalTime.of(18, 0))) {
             costoEstadia += precioNoche; 
         }
 
-        List<Servicio> serviciosEntity = estadiaActual.getListaServicios();
+        // Servicios
+        List<Servicio> serviciosEntity = estadia.getListaServicios();
         List<ServicioDTO> serviciosDTO = new ArrayList<>();
         double totalServicios = 0.0;
 
         if (serviciosEntity != null) {
             for (Servicio s : serviciosEntity) {
-                double precio = calcularPrecioServicio(s.getTipo_servicio()); //decision de precios estaticos en funcion de back
+                double precio = calcularPrecioServicio(s.getTipo_servicio());
                 ServicioDTO dto = new ServicioDTO();
                 dto.setIdServicio(s.getIdServicio());
                 dto.setTipoServicio(s.getTipo_servicio());
@@ -116,7 +129,7 @@ public class GestorContabilidad {
         TipoFactura tipoSugerido = TipoFactura.B;
 
         return new DetalleFacturaDTO(
-            estadiaActual.getIdEstadia(), 
+            estadia.getIdEstadia(), 
             "Habitación " + hab.getNroHab() + " - " + hab.getTipo_hab(),
             costoEstadia,
             serviciosDTO,
@@ -125,6 +138,7 @@ public class GestorContabilidad {
         );
     }
 
+    // 3. MODIFICAR GENERAR FACTURA 
     public FacturaDTO generarFactura(GenerarFacturaRequestDTO request) throws Exception {
         
         Long idEstadia = request.getIdEstadia();
@@ -137,30 +151,28 @@ public class GestorContabilidad {
 
         if (estadia == null || responsable == null) throw new Exception("Datos inválidos");
 
-        // 1. Crear Entidad
+       
         Factura nuevaFactura = new Factura();
         nuevaFactura.setFecha_factura(LocalDate.now()); 
         nuevaFactura.setDestinatario(responsable.getRazonSocial());
-
-        TipoFactura tipo = TipoFactura.B;
-        if (responsable.getCuit() != null && responsable.getCuit() > 0) { 
-             tipo = TipoFactura.A;
-        }
+        TipoFactura tipo = (responsable.getCuit() != null && responsable.getCuit() > 0) ? TipoFactura.A : TipoFactura.B;
         nuevaFactura.setTipo_factura(tipo); 
 
-
-        LocalTime  hora_checkout;
-        //duda!!
-        //asumo que fueron los datos check out en el huesped por un endpoint antrior
-
-        hora_checkout =estadia.getDatosCheckOut().getFecha_hora_out().toLocalTime();
-    
         
-        DetalleFacturaDTO detalle = calcularDetalleFacturacion(estadia.getHabitacion().getNroHab(), hora_checkout);
-        float total = detalle.getMontoTotal().floatValue();
+        LocalTime hora_checkout;
+        if (estadia.getDatosCheckOut() != null) {
+            hora_checkout = estadia.getDatosCheckOut().getFecha_hora_out().toLocalTime();
+        } else {
+            hora_checkout = LocalTime.now();
+        }
+        
+        DetalleFacturaDTO detalle = calcularMontos(estadia, hora_checkout);
+        // -------------------------
 
+        float total = detalle.getMontoTotal().floatValue();
         nuevaFactura.setImporte_total(total);
         
+        // ... (Cálculo de IVA y Guardado ) ...
         if (tipo == TipoFactura.A) {
             float neto = (float) (total / 1.21);
             float iva = total - neto;
@@ -171,15 +183,11 @@ public class GestorContabilidad {
             nuevaFactura.setImporte_iva(0);
         }
 
-       
         FacturaDTO facturaParaGuardar = new FacturaDTO(nuevaFactura);
-        
         facturaDAO.crearFactura(facturaParaGuardar);
 
-        // Devolvemos el DTO con los datos calculados
         return facturaParaGuardar; 
     }
-
 
 
 private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMenorEdadExcepcion {

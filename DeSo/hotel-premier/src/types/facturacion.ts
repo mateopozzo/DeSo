@@ -36,6 +36,10 @@ export interface CriteriosBusq {
   nroDoc: string;
 }
 
+export interface AlojadoDTO extends CriteriosBusq {
+  fechanac: string;
+}
+
 export interface FacturaDTO {
   valor: number;
   servicios: string[];
