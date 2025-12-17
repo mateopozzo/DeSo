@@ -43,7 +43,6 @@ public class TestCU07Integracion {
     public void pruebaDeQueryPorId(){
         List<CriteriosBusq> x = gestorAlojamiento.buscarCriteriosALojadoDeEstadia(15);
 
-        System.out.println("dou " + x.size() );
         for(var coso : x){
             System.out.println(coso.getNombre());
             System.out.println(coso.getApellido());

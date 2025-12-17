@@ -277,7 +277,7 @@ public class GestorHabitacion {
 
         // crear check in
         DatosCheckIn checkIn = new DatosCheckIn(fechaInicio);
-        checkIn.setAlojado(huesped.getDatos());
+        checkIn.setAlojado(List.of(huesped.getDatos()));
         huesped.getDatos().nuevoCheckIn(checkIn);
 
         checkInDAO.crearDatosCheckIn(checkIn);

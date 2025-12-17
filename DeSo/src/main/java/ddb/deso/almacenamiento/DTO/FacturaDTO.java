@@ -6,6 +6,8 @@ package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.negocio.TipoFactura;
 import ddb.deso.negocio.contabilidad.Factura;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,6 +16,8 @@ import java.util.Objects;
  *
  * @author mat
  */
+@Getter
+@Setter
 public class FacturaDTO {
     private LocalDate fecha_factura;
     private int num_factura;

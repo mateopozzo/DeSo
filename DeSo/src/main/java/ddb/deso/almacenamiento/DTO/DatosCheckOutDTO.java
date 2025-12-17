@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,8 +20,8 @@ public class DatosCheckOutDTO {
     /*  Getters y setters   */
     LocalDateTime fecha_hora_out;
     long idCheckOut;
-    String nroDoc;
-    TipoDoc tipoDoc;
+    List<String> nroDoc;
+    List<TipoDoc> tipoDoc;
 
     /**
      * @param obj Instancia de {@code DatosCheckOut} transferido
@@ -27,8 +29,12 @@ public class DatosCheckOutDTO {
     public DatosCheckOutDTO(DatosCheckOut obj) {
         fecha_hora_out=obj.getFecha_hora_out();
         idCheckOut= obj.getIdCheckOut();
-        nroDoc=obj.getAlojado().getNroDoc();
-        tipoDoc=obj.getAlojado().getTipoDoc();
+        nroDoc = new ArrayList<>();
+        tipoDoc = new ArrayList<>();
+        for(var a : obj.getAlojado()){
+            nroDoc.add(a.getNroDoc());
+            tipoDoc.add(a.getTipoDoc());
+        }
     }
 
 }
