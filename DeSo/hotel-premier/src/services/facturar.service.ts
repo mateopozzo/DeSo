@@ -7,6 +7,7 @@ import {
   CriteriosBusq,
   PersonaJuridica,
   EstadiaDTO,
+  AlojadoDTO,
 } from "@/types/facturacion";
 
 const PUERTO = "http://localhost:8080/api";
@@ -80,24 +81,30 @@ export async function buscarAlojados(
   }
 }
 
-export async function esMayor(tipoDoc: string, nroDoc: string) {
-  console.log("Preguntando si responsable es mayor");
-
-  const params = new URLSearchParams({ tipoDoc: tipoDoc, nroDoc: nroDoc });
+export async function obtenerDatosHuesped(
+  nroDoc: string,
+  tipoDoc: string
+): Promise<AlojadoDTO> {
+  const params = new URLSearchParams({
+    nroDoc: nroDoc,
+    tipoDocStr: tipoDoc,
+  });
 
   try {
-    // BUSQUEDA: URL ES MAYOR?
-    const response = await fetch(`${PUERTO}/es-mayor?${params.toString()}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${PUERTO}/obtener-atributos-huesped?${params.toString()}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+      }
+    );
 
-    if (!response.ok) throw new Error("No es mayor de edad.");
-    console.log("Es mayor");
+    if (!response.ok) throw new Error("Error obteniendo datos del huésped");
     return await response.json();
-  } catch (er) {
-    throw er;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 

@@ -1,16 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CriteriosBusq,
-  PersonaJuridica,
-  EstadiaDTO,
-} from "@/types/facturacion";
+import { CriteriosBusq, AlojadoDTO } from "@/types/facturacion";
 import {
   buscarAlojados,
   obtenerDetalleFacturacion,
   generarFacturaFinal,
   verificarEstadia,
+  obtenerDatosHuesped,
 } from "@/services/facturar.service";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
@@ -135,6 +132,21 @@ export default function Facturar() {
     }
   };
 
+  const cargarConsumos = async () => {
+    setPaso("CARGANDO_CONSUMOS");
+    try {
+      const detalle = await obtenerDetalleFacturacion(id_hab, hora_checkout);
+      setDetalleFactura(detalle);
+      setPaso("COBRANDO");
+    } catch (err) {
+      console.error(err);
+      setError(
+        "Error al obtener los consumos de la habitación. Intente nuevamente."
+      );
+      setPaso("GRILLA");
+    }
+  };
+
   const handleSeleccionResponsable = (alojado: ResponsablePago) => {
     console.log("Responsable seleccionado:", alojado);
     setResponsableSeleccionado(alojado);
@@ -147,26 +159,29 @@ export default function Facturar() {
       return;
     }
 
-    if (!("razonSoc" in responsableSeleccionado)) {
-      if (!esMayorDeEdad(responsableSeleccionado.fechanac)) {
+    if ("razonSoc" in responsableSeleccionado) {
+      setPaso("CARGANDO_CONSUMOS");
+      cargarConsumos();
+      return;
+    }
+
+    try {
+      const huespedCompleto = await obtenerDatosHuesped(
+        responsableSeleccionado.nroDoc,
+        responsableSeleccionado.tipoDoc || "DNI"
+      );
+
+      if (!esMayorDeEdad(huespedCompleto.fechanac)) {
         setError(
           `El huésped ${responsableSeleccionado.nombre} es menor de edad. Seleccione un adulto o facture a tercero.`
         );
         return;
       }
-    }
 
-    setPaso("CARGANDO_CONSUMOS");
-    try {
-      const detalle = await obtenerDetalleFacturacion(id_hab, hora_checkout);
-      setDetalleFactura(detalle);
-      setPaso("COBRANDO");
+      cargarConsumos();
     } catch (err) {
       console.error(err);
-      setError(
-        "Error al obtener los consumos de la habitación. Intente nuevamente."
-      );
-      setPaso("GRILLA");
+      setError("Error al verificar los datos del huésped. Intente nuevamente.");
     }
   };
 
