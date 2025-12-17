@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d69e9f34-8257-4d9b-a136-62de3d9c3bd6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/(app)/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/(app)/home/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/(app)/ocupar-hab/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/(app)/ocupar-hab/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/(app)/reservar-hab/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/(app)/reservar-hab/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-premier/src/components/grilla.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/app/(app)/facturar/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/app/(app)/facturar/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hotel-premier/src/services/facturar.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/services/facturar.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ddb/deso/presentacion/InterfazDarBaja.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-premier/src/types/facturacion.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-premier/src/types/facturacion.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

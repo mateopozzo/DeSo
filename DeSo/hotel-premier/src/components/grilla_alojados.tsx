@@ -1,17 +1,19 @@
 "use client";
 import { useState } from "react";
 import {
-  AlojadoDTO,
-  buscarTercero,
+  CriteriosBusq,
   PersonaJuridica,
-} from "@/services/facturar.service";
+  EstadiaDTO,
+} from "@/types/facturacion";
 
-export type ResponsablePago = AlojadoDTO | PersonaJuridica;
+import { buscarTercero } from "@/services/facturar.service";
+
+export type ResponsablePago = CriteriosBusq | PersonaJuridica;
 
 interface AlojadosProps {
   idHab: string;
   horaCheckout: string;
-  alojadosDTO: AlojadoDTO[];
+  alojadosDTO: CriteriosBusq[];
   onSeleccionarResponsable?: (responsable: ResponsablePago) => void;
   onAvanzar?: () => void;
 }
@@ -33,7 +35,7 @@ export default function GrillaAlojados({
   const [buscando, setBuscando] = useState(false);
   const [mensajeNoCUIT, setNoCUIT] = useState("");
 
-  const handleSeleccionHuesped = (index: number, alojado: AlojadoDTO) => {
+  const handleSeleccionHuesped = (index: number, alojado: CriteriosBusq) => {
     setSeleccionadoIndex(index);
     setModoTercero(false);
     setTerceroEncontrado(null);

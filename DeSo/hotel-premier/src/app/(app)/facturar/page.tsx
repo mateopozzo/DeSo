@@ -1,28 +1,55 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { CriteriosBusq, AlojadoDTO } from "@/types/facturacion";
 import {
-  AlojadoDTO,
   buscarAlojados,
-  PersonaJuridica,
+  obtenerDetalleFacturacion,
+  generarFacturaFinal,
+  verificarEstadia,
+  obtenerDatosHuesped,
 } from "@/services/facturar.service";
+import { DetalleFacturaDTO } from "@/types/facturacion";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
 import { pedirHabs, Habitacion } from "../../../services/habitaciones.service";
 import GrillaItemsFactura from "@/components/grilla_factura";
+
+// revisar de donde sacar que es mayor
+const esMayorDeEdad = (fechaNacStr: string): boolean => {
+  if (!fechaNacStr) return false;
+  const nacimiento = new Date(fechaNacStr);
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const m = hoy.getMonth() - nacimiento.getMonth();
+  if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+    edad--;
+  }
+  return edad >= 18;
+};
 
 export default function Facturar() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [id_hab, setIdHab] = useState("");
+  const [id_est, setIdEst] = useState("");
   const [hora_checkout, setHora] = useState("");
-  const [listaAlojados, setListaAlojados] = useState<AlojadoDTO[]>([]);
+
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
-  const [responsableSeleccionado, setResponsableSeleccionado] = useState<
-    AlojadoDTO | PersonaJuridica | null
-  >(null);
+  const [listaAlojados, setListaAlojados] = useState<CriteriosBusq[]>([]);
+  const [responsableSeleccionado, setResponsableSeleccionado] =
+    useState<ResponsablePago | null>(null);
+  const [detalleFactura, setDetalleFactura] =
+    useState<DetalleFacturaDTO | null>(null);
+
+  let estadia_existe = false;
 
   const [paso, setPaso] = useState<
-    "BUSCAR" | "GRILLA" | "COBRANDO" | "GUARDANDO" | "EXITO"
+    | "BUSCAR"
+    | "GRILLA"
+    | "CARGANDO_CONSUMOS"
+    | "COBRANDO"
+    | "GUARDANDO"
+    | "EXITO"
   >("BUSCAR");
 
   useEffect(() => {
@@ -44,10 +71,11 @@ export default function Facturar() {
       setError("Debe completar el número de habitación y la hora de salida.");
       return;
     }
-    console.log("Haciendo el checkout");
+
+    console.log("Buscando habitaciones existentes");
 
     const nroHabInput = Number(id_hab);
-    // llamada a back para saber quiénes ocupan la hab. resp es una lista de alojadoDTO
+    // llamada a back para saber quiénes ocupan la hab. resp es una lista de CriteriosBusq
     const habitacionEncontrada = listaHabitaciones.find(
       (h) => h.nroHab === nroHabInput
     );
@@ -60,21 +88,62 @@ export default function Facturar() {
     if (listaHabitaciones.length == 0) {
       return;
     }
-    try {
-      const resp = await buscarAlojados(id_hab, hora_checkout);
-      // if id hab existe pero lista retorna vacía, entonces no esta ocupada throw error hab no ocupada
 
-      if (!resp || resp.length === 0) {
+    // LLAMADA A BACK: verificar estadia. devuelve ESTADIA DTO
+    console.log("Verificando que exista la estadía");
+    try {
+      const response = await verificarEstadia(id_hab, hora_checkout);
+      if (!response) {
         setError("La habitación no está ocupada actualmente.");
         return;
       }
-      console.log(`Alojados: ${resp}`);
 
-      setListaAlojados(resp);
-      setPaso("GRILLA");
-    } catch (e) {
-      console.error(e);
+      if (!response) {
+        estadia_existe = false;
+      } else {
+        estadia_existe = true;
+        console.log(`Response ${response}`);
+
+        setIdEst(response.idEstadia.toString());
+      }
+    } catch (err) {
+      console.error(err);
       setError("Error al traer los alojados.");
+    }
+
+    if (estadia_existe) {
+      try {
+        // LLAMADA A BACK: obtengo los alojados de una estadía
+        const resp = await buscarAlojados(id_est);
+        // if id hab existe pero lista retorna vacía, entonces no esta ocupada throw error hab no ocupada
+
+        if (!resp || resp.length === 0) {
+          setError("La habitación no está ocupada actualmente.");
+          return;
+        }
+        console.log(`Alojados: ${resp}`);
+
+        setListaAlojados(resp);
+        setPaso("GRILLA");
+      } catch (e) {
+        console.error(e);
+        setError("Error al traer los alojados.");
+      }
+    }
+  };
+
+  const cargarConsumos = async () => {
+    setPaso("CARGANDO_CONSUMOS");
+    try {
+      const detalle = await obtenerDetalleFacturacion(id_hab, hora_checkout);
+      setDetalleFactura(detalle);
+      setPaso("COBRANDO");
+    } catch (err) {
+      console.error(err);
+      setError(
+        "Error al obtener los consumos de la habitación. Intente nuevamente."
+      );
+      setPaso("GRILLA");
     }
   };
 
@@ -84,18 +153,72 @@ export default function Facturar() {
     setError(null);
   };
 
-  const avanzarAFacturacion = () => {
+  const avanzarAFacturacion = async () => {
     if (!responsableSeleccionado) {
-      setError("Debe seleccionar un responsable para continuar.");
+      setError("Debe seleccionar un responsable.");
       return;
     }
 
-    // if (esMenor(responsableSeleccionado.fechaNacimiento)) {
-    //    setError("La persona seleccionada es menor de edad. Por favor elija otra.");
-    //    return;
-    // }
+    if ("razonSoc" in responsableSeleccionado) {
+      setPaso("CARGANDO_CONSUMOS");
+      cargarConsumos();
+      return;
+    }
 
-    setPaso("COBRANDO");
+    try {
+      const huespedCompleto = await obtenerDatosHuesped(
+        responsableSeleccionado.nroDoc,
+        responsableSeleccionado.tipoDoc || "DNI"
+      );
+
+      if (!esMayorDeEdad(huespedCompleto.fechanac)) {
+        setError(
+          `El huésped ${responsableSeleccionado.nombre} es menor de edad. Seleccione un adulto o facture a tercero.`
+        );
+        return;
+      }
+
+      cargarConsumos();
+    } catch (err) {
+      console.error(err);
+      setError("Error al verificar los datos del huésped. Intente nuevamente.");
+    }
+  };
+
+  const confirmarFactura = async (datosCobro: {
+    cobrarEstadia: boolean;
+    idsServicios: number[];
+  }) => {
+    if (!detalleFactura || !responsableSeleccionado) return;
+
+    setPaso("GUARDANDO");
+
+    const destinatarioNombre =
+      "razonSoc" in responsableSeleccionado
+        ? responsableSeleccionado.razonSoc
+        : `${responsableSeleccionado.apellido}, ${responsableSeleccionado.nombre}`;
+
+    const payload = {
+      idEstadia: detalleFactura.idEstadia,
+      tipoFactura: detalleFactura.tipoFacturaSugerida,
+      destinatario: destinatarioNombre,
+      cobrarAlojamiento: datosCobro.cobrarEstadia,
+      idsConsumosAIncluir: datosCobro.idsServicios,
+      responsableTipo:
+        "razonSoc" in responsableSeleccionado ? "TERCERO" : "HUESPED",
+      responsableId:
+        "razonSoc" in responsableSeleccionado
+          ? responsableSeleccionado.cuit
+          : responsableSeleccionado.nroDoc,
+    };
+
+    try {
+      await generarFacturaFinal(payload as any);
+      setPaso("EXITO");
+    } catch (err) {
+      setError("Error al generar la factura.");
+      setPaso("COBRANDO");
+    }
   };
 
   return (
@@ -103,6 +226,7 @@ export default function Facturar() {
       <h1 className="text-5xl font-bold text-gray-800 dark:text-white mb-2">
         {paso === "BUSCAR" && "Facturar: Check-out"}
         {paso === "GRILLA" && "Responsable de pago"}
+        {paso === "CARGANDO_CONSUMOS" && "Obteniendo consumos..."}
         {paso === "COBRANDO" && "Items de la factura"}
         {paso === "GUARDANDO" && "Guardando..."}
         {paso === "EXITO" && "Factura creada con éxito"}
@@ -118,11 +242,13 @@ export default function Facturar() {
         {paso === "EXITO" &&
           "La factura se descargará en breve con el formato elegido."}
       </p>
+      {/* errores */}
       {error && (
         <div className="bg-red-600 text-white p-4 rounded-xl mb-6 font-bold shadow-md">
           {error}
         </div>
       )}
+      {/* buscar */}
       {paso === "BUSCAR" && (
         <div className="flex flex-col">
           <div
@@ -171,58 +297,50 @@ export default function Facturar() {
           </div>
         </div>
       )}
-
-      {paso === "GRILLA" && listaAlojados.length > 0 ? (
-        <div className="mt-4">
-          <GrillaAlojados
-            idHab={id_hab}
-            horaCheckout={hora_checkout}
-            alojadosDTO={listaAlojados}
-            onSeleccionarResponsable={handleSeleccionResponsable}
-            onAvanzar={avanzarAFacturacion}
-          />
+      {/* seleccionar resp */}
+      {paso === "GRILLA" && (
+        <GrillaAlojados
+          idHab={id_hab}
+          horaCheckout={hora_checkout}
+          alojadosDTO={listaAlojados}
+          onSeleccionarResponsable={handleSeleccionResponsable}
+          onAvanzar={avanzarAFacturacion}
+        />
+      )}
+      {/* esperar detalles */}
+      {paso === "CARGANDO_CONSUMOS" && (
+        <div className="text-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Calculando estadía. Aguarde</p>
         </div>
-      ) : (
-        paso === "GRILLA" && (
-          <p className="text-gray-500">
-            No se encontraron huéspedes para esta habitación.
-          </p>
-        )
       )}
 
-      {paso === "COBRANDO" && (
-        <div className="mt-4">
-          <GrillaItemsFactura
-            responsableNombre={
-              responsableSeleccionado
-                ? "razonSoc" in responsableSeleccionado
-                  ? responsableSeleccionado.razonSoc
-                  : `${responsableSeleccionado.apellido}, ${responsableSeleccionado.nombre}`
-                : "Cliente de Prueba"
-            }
-            onConfirmar={() => {
-              console.log("Simulando guardado...");
-              setPaso("GUARDANDO");
-              setTimeout(() => setPaso("EXITO"), 2000); // Simula delay de red
-            }}
-            onCancelar={() => setPaso("GRILLA")}
-          />
-        </div>
+      {paso === "COBRANDO" && detalleFactura && responsableSeleccionado && (
+        <GrillaItemsFactura
+          detalle={detalleFactura}
+          responsableNombre={
+            "razonSoc" in responsableSeleccionado
+              ? responsableSeleccionado.razonSoc
+              : `${responsableSeleccionado.nombre} ${responsableSeleccionado.apellido}`
+          }
+          onConfirmar={confirmarFactura}
+          onCancelar={() => setPaso("GRILLA")}
+        />
       )}
       {paso === "GUARDANDO" && (
         <div className="fixed inset-0 bg-white/50 dark:bg-white/20 flex items-center justify-center z-50">
           <h2 className="text-2xl font-bold text-black">Guardando...</h2>
         </div>
       )}
+      {/* PASO 4: EXITO */}
       {paso === "EXITO" && (
-        <div className="text-center py-20 flex flex-col justify-center items-center">
-          <img src="success.svg" alt="" width={90} className="dark:invert" />
-          <h2 className="text-3xl font-bold text-green-500 mb-4">
-            Check-in exitoso
+        <div className="text-center py-20">
+          <h2 className="text-3xl text-green-600 font-bold mb-4">
+            Operación Exitosa
           </h2>
           <button
             onClick={() => router.push("/home")}
-            className="bg-gray-9500 dark:text-white dark:border dark:border-white text-black px-6 py-2 font-semibold rounded-xl hover:bg-green-600 hover:border-green-600"
+            className="bg-blue-600 text-white px-6 py-2 rounded"
           >
             Volver al inicio
           </button>
