@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.JSON;
 
-import ddb.deso.TipoFactura;
+import ddb.deso.negocio.TipoFactura;
 import ddb.deso.almacenamiento.DAO.FacturaDAO;
 import ddb.deso.almacenamiento.DTO.FacturaDTO;
 import java.io.IOException;

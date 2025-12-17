@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ddb.deso.TipoDoc;
+import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.alojamiento.Alojado;
-import ddb.deso.alojamiento.CriteriosBusq;
+import ddb.deso.negocio.alojamiento.Alojado;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 
 
 /**
@@ -36,7 +35,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     private final ManejadorJson manejador;
 
     public AlojadoDAOJSON() {
-        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), AlojadoDTO.class);
+        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_ALOJADOS), Alojado.class);
     }
     
     /**
@@ -44,7 +43,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      listaAlojados es una lista de entidades de Alojado a persistir
      */
 
-    private void escribirListaEnArchivo(List<AlojadoDTO> listaAlojados){
+    private void escribirListaEnArchivo(List<Alojado> listaAlojados){
         try {
             manejador.escribir(listaAlojados);
         } catch (IOException ex) {
@@ -58,25 +57,23 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      */
 
     @Override
-    public void crearAlojado(AlojadoDTO alojado){
-        List<AlojadoDTO> listaAlojados = listarAlojados();
+    public void crearAlojado(Alojado alojado){
+        List<Alojado> listaAlojados = listarAlojados();
         listaAlojados.add(alojado);
         escribirListaEnArchivo(listaAlojados);
     }
 
-    // REVISAR ESTO --------------
-    // Actualiza la instancia de alojado guardada en JSON
 
     @Override
-    public void actualizarAlojado(AlojadoDTO alojadoPrev, AlojadoDTO alojadoNuevo){
+    public void actualizarAlojado(Alojado alojadoPrev, Alojado alojadoNuevo){
 //        System.out.println(RUTA_ARCHIVO_JSON_ALOJADOS);
         eliminarAlojado(alojadoPrev);
         this.crearAlojado(alojadoNuevo);
     }
     
     @Override
-    public void eliminarAlojado(AlojadoDTO alojado){
-        List<AlojadoDTO> listaAlojados = this.listarAlojados();
+    public void eliminarAlojado(Alojado alojado){
+        List<Alojado> listaAlojados = this.listarAlojados();
         listaAlojados.remove(alojado);
         escribirListaEnArchivo(listaAlojados);
     }
@@ -87,8 +84,8 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      */
 
     @Override
-    public List<AlojadoDTO> listarAlojados(){
-        List<AlojadoDTO> listaAlojadosRetorno=new ArrayList<>();
+    public List<Alojado> listarAlojados(){
+        List<Alojado> listaAlojadosRetorno=new ArrayList<>();
         
         try {
             listaAlojadosRetorno = manejador.listar();
@@ -106,13 +103,31 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     */
 
     @Override
-    public List<AlojadoDTO> buscarHuespedDAO (CriteriosBusq criterios_busq){
+    public List<Alojado> buscarAlojado(CriteriosBusq criterios_busq){
         // Tengo la lista de todos los alojados del archivo Alojado.JSON
-        List<AlojadoDTO> lista_alojados = listarAlojados();
+        List<Alojado> lista_alojados = listarAlojados();
 
         return lista_alojados.stream()
                 .filter(un_alojado -> cumpleCriterio(un_alojado, criterios_busq))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * @param idEstadia 
+     * @return
+     */
+    @Override
+    public List<Alojado> buscarAlojado(long idEstadia) {
+        return List.of();
+    }
+
+    /**
+     * @param CUIT 
+     * @return
+     */
+    @Override
+    public Alojado buscarAlojado(String CUIT) {
+        return null;
     }
 
     /**
@@ -125,7 +140,7 @@ public class AlojadoDAOJSON implements AlojadoDAO {
     Si el criterio no fue definido (no_es_vacio==false), no se evalúa la segunda condición
     */
 
-    private boolean cumpleCriterio (AlojadoDTO alojado_DTO, CriteriosBusq criterio) {
+    private boolean cumpleCriterio (Alojado alojado_DTO, CriteriosBusq criterio) {
         // atributo_b: Atributos obtenidos del criterio de búsqueda
         // atributo_h: Atributos del huésped propiamente dicho
 
@@ -140,19 +155,19 @@ public class AlojadoDAOJSON implements AlojadoDAO {
         String nroDoc_b = criterio.getNroDoc();
 
         // para mi (mateo) seria robusto validar que todas las strings no sean vacias
-        String apellido = alojado_DTO.getApellido();
-        String nombre = alojado_DTO.getNombre();
+        String apellido = alojado_DTO.getDatos().getDatos_personales().getApellido();
+        String nombre = alojado_DTO.getDatos().getDatos_personales().getNombre();
 
         String apellido_h = normalizar(apellido);
         String nombre_h = normalizar(nombre);
-        TipoDoc tipoDoc_h = alojado_DTO.getTipoDoc();
-        String nroDoc_h = alojado_DTO.getNroDoc();
-        System.out.println(nombre_b + " " + nombre_h);
+        TipoDoc tipoDoc_h = alojado_DTO.getDatos().getDatos_personales().getTipoDoc();
+        String nroDoc_h = alojado_DTO.getDatos().getDatos_personales().getNroDoc();
+
         if (no_es_vacio(apellido_b) && !apellido_h.equalsIgnoreCase(apellido_b)) {
             return false;
         }
         if (no_es_vacio(nombre_b) && !nombre_h.equalsIgnoreCase(nombre_b)) {
-            System.out.println(nombre_b + " " + nombre_h);
+//            System.out.println(nombre_b + nombre_h);
             return false;
         }
         if (tipoDoc_b != null && !tipoDoc_h.equals(tipoDoc_b)) {
@@ -182,14 +197,19 @@ public class AlojadoDAOJSON implements AlojadoDAO {
      *
      * @param documento El **número de documento** del alojado a buscar (ej: "40123456").
      * @param tipo El **tipo de documento** del alojado a buscar (ej: {@code TipoDoc.DNI}).
-     * @return Un objeto {@link AlojadoDTO} si se encuentra la coincidencia, o {@code null} en caso contrario.
+     * @return Un objeto {@link Alojado} si se encuentra la coincidencia, o {@code null} en caso contrario.
      */
     @Override
-    public AlojadoDTO buscarPorDNI(String documento, TipoDoc tipo){
-        List<AlojadoDTO> listaAlojados = listarAlojados();
+    public Alojado buscarPorDNI(String documento, TipoDoc tipo){
+        List<Alojado> listaAlojados = listarAlojados();
         return listaAlojados.stream()
-                .filter(a -> a.getNroDoc().equals(documento) && a.getTipoDoc().equals(tipo))
+                .filter(a -> a.getDatos().getNroDoc().equals(documento) && a.getDatos().getDatos_personales().getTipoDoc().equals(tipo))
                 .findFirst() // Devuelve un Optional<AlojadoDTO>
                 .orElse(null); // Si no se encuentra devuelve null
+    }
+
+    @Override
+    public void promoverAHuesped(String nroDoc, String tipoDoc) {
+        return;
     }
 }

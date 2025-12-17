@@ -4,16 +4,16 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.TipoDoc;
-import ddb.deso.alojamiento.DatosContacto;
+import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.DatosContacto;
 
 /**
  *
  * @author mat
  */
 public interface DatosContactoDAO {
-    void crearDatosContacto(DatosContacto datosContacto);
-    void actualizarDatosContacto(DatosContacto datosContacto);
-    void eliminarDatosContacto(DatosContacto datosContacto);
+    void crear(DatosContacto datosContacto);
+    void actualizar(DatosContacto datosContacto);
+    void eliminar(DatosContacto datosContacto);
     DatosContacto buscarDatosContacto(String documento, TipoDoc tipo);
 }

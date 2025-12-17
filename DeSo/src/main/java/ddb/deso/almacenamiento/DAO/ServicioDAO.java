@@ -4,8 +4,8 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.TipoServicio;
-import ddb.deso.habitaciones.Servicio;
+import ddb.deso.negocio.TipoServicio;
+import ddb.deso.negocio.habitaciones.Servicio;
 import java.util.List;
 
 /**
@@ -13,9 +13,9 @@ import java.util.List;
  * @author mat
  */
 public interface ServicioDAO {
-    void crearServicio(Servicio servicio);
-    void crearServicio(TipoServicio tipoServicio);
-    void actualizarServicio(Servicio servicio);
-    void eliminarServicio(Servicio servicio);
+    void crear(Servicio servicio);
+    void crear(TipoServicio tipoServicio);
+    void actualizar(Servicio servicio);
+    void eliminar(Servicio servicio);
     List<Servicio> listar();
 }

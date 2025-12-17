@@ -5,7 +5,7 @@
 package ddb.deso.almacenamiento.JSON;
 
 import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
-import ddb.deso.almacenamiento.DTO.DatosCheckInDTO;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,10 +31,10 @@ public class DatosCheckInDAOJSON implements DatosCheckInDAO {
     private final ManejadorJson manejador;
 
     public DatosCheckInDAOJSON() {
-        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_CHECKIN), DatosCheckInDTO.class);
+        this.manejador = new ManejadorJson(Path.of(RUTA_ARCHIVO_JSON_CHECKIN), DatosCheckIn.class);
     }
 
-    private void escribirListaEnArchivo(List<DatosCheckInDTO> listaCI){
+    private void escribirListaEnArchivo(List<DatosCheckIn> listaCI){
         try {
             manejador.escribir(listaCI);
         } catch (IOException ex) {
@@ -45,8 +45,8 @@ public class DatosCheckInDAOJSON implements DatosCheckInDAO {
     /*
     * */
     @Override
-    public void crearDatosCheckIn(DatosCheckInDTO datosCheckIn){
-        List<DatosCheckInDTO> listaCI=listarDatosCheckIn();
+    public void crearDatosCheckIn(DatosCheckIn datosCheckIn){
+        List<DatosCheckIn> listaCI=listarDatosCheckIn();
         listaCI.add(datosCheckIn);
         escribirListaEnArchivo(listaCI);
     }
@@ -54,18 +54,18 @@ public class DatosCheckInDAOJSON implements DatosCheckInDAO {
      * No implementado
      */
     @Override
-    public void actualizarDatosCheckIn(DatosCheckInDTO datosCheckInPre, DatosCheckInDTO datosCheckIn){
+    public void actualizarDatosCheckIn(DatosCheckIn datosCheckInPre, DatosCheckIn datosCheckIn){
 
     }
 
     // No implementado
     @Override
-    public void eliminarDatosCheckIn(DatosCheckInDTO datosCheckIn){
+    public void eliminarDatosCheckIn(DatosCheckIn datosCheckIn){
     }
     
     @Override
-    public List<DatosCheckInDTO> listarDatosCheckIn(){
-        List<DatosCheckInDTO> listaCI=new ArrayList<>();
+    public List<DatosCheckIn> listarDatosCheckIn(){
+        List<DatosCheckIn> listaCI=new ArrayList<>();
 
         try {
             listaCI = manejador.listar();

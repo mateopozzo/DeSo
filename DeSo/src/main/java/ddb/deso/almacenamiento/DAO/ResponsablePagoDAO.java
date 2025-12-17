@@ -4,7 +4,7 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.contabilidad.ResponsablePago;
+import ddb.deso.negocio.contabilidad.ResponsablePago;
 import java.util.List;
 
 /**
@@ -12,9 +12,16 @@ import java.util.List;
  * @author mat
  */
 public interface ResponsablePagoDAO {
-    void crearResponsablePago(ResponsablePago responsablePago);
-    void actualizarAlojado(ResponsablePago responsablePago);
-    void eliminarAlojado(ResponsablePago responsablePago);
-    List<ResponsablePago> listarResponsablePago();
+    void crear(ResponsablePago responsablePago);
+    void actualizar(ResponsablePago responsablePago);
+    void eliminar(ResponsablePago responsablePago);
+    List<ResponsablePago> listar();
     ResponsablePago buscarPorCUIT(String CUIT);
+
+    /**
+     * Busca un responsable de pago por su ID (CUIT).
+     * @param id El CUIT del responsable (clave primaria).
+     * @return La entidad encontrada o null.
+     */
+    ResponsablePago read(Long id);
 }

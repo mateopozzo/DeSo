@@ -1,10 +1,10 @@
 package ddb.deso.presentacion;
 
 import ddb.deso.almacenamiento.JSON.UsuarioJsonDAO;
-import ddb.deso.login.Usuario;
-import ddb.deso.login.negocio.GestorAutenticacion;
-import ddb.deso.login.negocio.excepciones.CredencialesInvalidasException;
-import ddb.deso.login.negocio.excepciones.UsuarioNoEncontradoException;
+import ddb.deso.negocio.login.Usuario;
+import ddb.deso.service.GestorAutenticacion;
+import ddb.deso.negocio.login.excepciones.CredencialesInvalidasException;
+import ddb.deso.negocio.login.excepciones.UsuarioNoEncontradoException;
 
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -23,6 +23,7 @@ import org.jline.terminal.TerminalBuilder;
  * sin interfaz gráfica, interactuando con la capa de negocio
  * a través del {@link GestorAutenticacion}.</p>
  */
+@Deprecated
 public class InterfazLogin {    
     /**
      * Ejecuta la interfaz de login por consola.

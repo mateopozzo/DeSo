@@ -4,29 +4,58 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.alojamiento.Huesped;
-import ddb.deso.habitaciones.Estadia;
-import ddb.deso.habitaciones.Reserva;
+import ddb.deso.negocio.habitaciones.Reserva;
 import java.time.LocalDate;
 import java.util.List;
 
+import ddb.deso.negocio.habitaciones.Reserva;
+
 /**
+ * Contrato de acceso a datos para la entidad {@link Reserva}.
  *
  * @author mat
  */
 public interface ReservaDAO {
+    /**
+     * Persiste una nueva reserva en el repositorio.
+     * @param reserva Entidad a persistir.
+     */
     void crearReserva(Reserva reserva);
+
+    /**
+     * Sincroniza los cambios de una reserva existente.
+     * @param reserva Entidad con estado modificado.
+     */
     void actualizar(Reserva reserva);
+
+    List<Reserva> buscarPorApellidoNombre(String apellido, String nombre);
+
+    /**
+     * Elimina el registro de la reserva.
+     * @param reserva Entidad a eliminar.
+     */
     void eliminar(Reserva reserva);
+
+    /**
+     * Recupera la totalidad de reservas registradas.
+     * @return Lista completa de entidades.
+     */
     List<Reserva> listar();
-    
-    //  Devuelve las instancias de reserva que ocurren durante la fecha
-    List<Reserva> listarPorFecha(LocalDate fecha);
-    
-    List<Estadia> listarPorHuesped(Huesped huesped);
-    
-    //  devuelve todas las estadias del huesped que ocupo durante la fecha
-    List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped);
-    
-    
+
+    /**
+     * Busca una reserva por su identificador único.
+     * @param ID Clave primaria.
+     * @return La entidad encontrada o {@code null}.
+     */
+    Reserva buscarPorID(Long ID);
+
+    /**
+     * Recupera reservas cuyo periodo de vigencia se solapa con el rango proporcionado.
+     *
+     * @param fechaInicio Inicio del intervalo de búsqueda.
+     * @param fechaFin Fin del intervalo de búsqueda.
+     * @return Lista de reservas con intersección temporal.
+     */
+    List<Reserva> listarPorFecha(LocalDate fechaInicio, LocalDate fechaFin);
+
 }

@@ -1,0 +1,115 @@
+title CU04: Reservar habitacion
+@startuml
+' Actor y participantes
+actor "Conserje" as Conserje <<Usuario>>
+boundary "GUI" as UI <<Interfaz grafica>>
+participant "GestorAlojamiento" as Sistema
+participant "GestorHabitaciones" as Habitaciones
+participant "Reserva" as R
+participant "ReservaDAO" as RDAO <<Interface>>
+database "Base de datos" as Base <<Database>>
+
+' Precondición
+group Precondicion: Conserje autenticado en el sistema
+
+  note across: Inicio del caso de uso
+  activate Conserje
+  Conserje -> UI : Inicia reserva de habitaciones
+  activate UI
+  UI --> Habitaciones : mostrarEstadoHabitaciones()
+  activate Habitaciones
+  Habitaciones -> UI : Grilla
+  deactivate Habitaciones
+  
+  note across: Verificacion de disponibilidad de habitaciones
+  alt Existencia: No hay habitaciones disponibles
+    deactivate Conserje 
+    deactivate UI
+    note over Conserje
+      Finaliza caso de uso
+    end note
+  end
+  
+  UI --> Conserje : Mostrar Grilla, campos fechaDesde, fechaHasta
+  activate Conserje
+  Conserje -> UI : Ingresa habitaciones y rango de fechas
+  activate UI
+  UI -> UI : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
+  activate UI
+  deactivate UI
+  loop Disponibilidad: Mientras seleccione habitacion no disponible
+    UI --> Conserje : Mostrar Error, Grilla, campos fechaDesde, fechaHasta
+    Conserje -> UI : Ingresa habitaciones y rango de fechas
+    UI -> UI : verificarHabitaciones(fechaDesde, fechaHasta, List<Habitacion>)
+    activate UI
+    deactivate UI
+  end
+  Conserje -> UI : Siguiente
+  
+  note across: Verificacion de dias y habitaciones
+  UI -> UI : mostrarListadoReservas()
+  activate UI
+  deactivate UI
+  alt rechaza: Conserje presiona rechazar
+    Conserje -> UI : Rechazar
+    deactivate Conserje 
+    UI -> UI : deshacerGrilla(Grilla)
+    deactivate UI
+    note over Conserje
+      Finaliza Caso de uso
+    end note
+  end
+  Conserje -> UI : Aceptar
+  activate Conserje 
+  activate UI
+  note across: Cargar responsable de reserva
+  UI -> UI : ingresarResponsableReserva()
+  activate UI
+  deactivate UI
+  Conserje -> UI : Completa campos
+  loop Campo incompleto: Conserje no completa uno o mas campos
+    UI -> UI : mostrarCartelError()
+    activate UI
+    deactivate UI
+    UI -> UI : Foco en primer campo faltante
+    activate UI
+    deactivate UI
+    Conserje -> UI : Completa campos
+  end
+  
+  note across: Guardar reserva en Sistema
+  UI --> Sistema : crearReserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
+  activate Sistema
+  Sistema -> Sistema : validarReserva()
+  activate Sistema
+  deactivate Sistema 
+  Sistema -> R : Reserva(List<Habitacion>, fechaDesde, fechaHasta, Responsable)
+  activate R
+  R-->Sistema
+  deactivate R
+  Sistema -> RDAO : crear(Reserva)
+  activate RDAO
+  RDAO -> Base : crear(Reserva)
+  activate Base
+  Base  --> RDAO
+  deactivate Base
+  RDAO --> Sistema
+  deactivate RDAO
+  Sistema --> UI
+  deactivate Sistema
+  opt Cancelar
+    Conserje -> UI : Presiona "CANCELAR"
+    UI -> Conserje : Mensaje: caso de uso finalizado
+    deactivate Conserje
+    deactivate UI
+  end
+end
+
+== Fin del caso de uso ==
+note across
+  Postcondición (éxito) -- Una o varias habitaciones han sido reservadas a nombre de un eventual huésped para un rango de fechas determinado.
+  Postcondición (fracaso) -- No se ha podido realizar la reserva de alguna habitación para el eventual huésped que la ha solicitado para el rango de fechas deseado.
+end note
+
+@enduml
+ 

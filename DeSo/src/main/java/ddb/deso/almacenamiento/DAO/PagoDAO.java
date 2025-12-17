@@ -4,8 +4,8 @@
  */
 package ddb.deso.almacenamiento.DAO;
 
-import ddb.deso.contabilidad.Pago;
-import ddb.deso.contabilidad.ResponsablePago;
+import ddb.deso.negocio.contabilidad.Pago;
+import ddb.deso.negocio.contabilidad.ResponsablePago;
 import java.time.LocalDate;
 import java.util.List;
 

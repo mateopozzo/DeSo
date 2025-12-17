@@ -4,17 +4,22 @@
  */
 package ddb.deso.almacenamiento.DTO;
 
-import ddb.deso.TipoFactura;
-import ddb.deso.contabilidad.Factura;
-import java.util.Date;
+import ddb.deso.negocio.TipoFactura;
+import ddb.deso.negocio.contabilidad.Factura;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
  *
  * @author mat
  */
+@Getter
+@Setter
 public class FacturaDTO {
-    private Date fecha_factura;
+    private LocalDate fecha_factura;
     private int num_factura;
     private TipoFactura tipo_factura;
     private float importe_total;
@@ -22,7 +27,7 @@ public class FacturaDTO {
     private float importe_neto;
     private String destinatario;
 
-    public FacturaDTO(Date fecha_factura, int num_factura, TipoFactura tipo_factura, float importe_total, float importe_iva, float importe_neto, String destinatario) {
+    public FacturaDTO(LocalDate fecha_factura, int num_factura, TipoFactura tipo_factura, float importe_total, float importe_iva, float importe_neto, String destinatario) {
         this.fecha_factura = fecha_factura;
         this.num_factura = num_factura;
         this.tipo_factura = tipo_factura;
@@ -45,7 +50,7 @@ public class FacturaDTO {
         this.destinatario = f.getDestinatario();
     }
 
-    public Date getFecha_factura() {
+    public LocalDate getFecha_factura() {
         return fecha_factura;
     }
 
@@ -73,7 +78,7 @@ public class FacturaDTO {
         return destinatario;
     }
 
-    public void setFecha_factura(Date fecha_factura) {
+    public void setFecha_factura(LocalDate fecha_factura) {
         this.fecha_factura = fecha_factura;
     }
 

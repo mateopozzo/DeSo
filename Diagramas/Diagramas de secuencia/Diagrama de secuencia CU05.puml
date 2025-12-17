@@ -1,0 +1,101 @@
+@startuml
+title CU05: Mostrar estado de habitaciones
+' Actor y participantes
+actor "Conserje" as Conserje <<Usuario>>
+boundary "GUI" as UI <<Interfaz grafica>>
+participant "Gestor de habitaciones" as Gestor
+participant "ReservaDAO" as RDAO <<Interface>>
+participant "EstadiaDAO" as EDAO <<Interface>>
+database "Habitacion BDD" as BDD <<Database>>
+
+' Precondición
+group Precondicion: Conserje autenticado en el sistema
+  rnote across: Inicio del caso de uso
+  opt Cancelar
+    Conserje -> UI : Boton cancelar
+    rnote over Conserje : Fin del caso de uso
+  end
+  
+  activate Conserje
+  Conserje -> UI : Ver estado de habitaciones
+  activate UI
+  UI --> Conserje : Campos "Desde" y "Hasta"
+  Conserje -> UI : Enter o click en campo "Desde"
+  UI --> Conserje : Focus input fecha de inicio
+  Conserje -> UI : Fecha de inicio
+  
+  
+  UI -> UI : Verificacion
+  activate UI
+  deactivate UI
+
+  
+  loop Verificacion: La fecha de inicio es invalida
+    UI --> Conserje : Mensaje de error
+    UI --> Conserje : Focus input fecha de inicio
+    Conserje -> UI : Fecha de inicio
+    UI -> UI : Verificacion
+    activate UI
+    deactivate UI
+  end
+  
+  UI --> Conserje : Focus input fecha de finalizacion
+  Conserje -> UI : Fecha de finalizacion
+  
+  loop Verificacion: La fecha de finalizacion es invalida
+    UI --> Conserje : Mensaje de error
+    UI --> Conserje : Focus input fecha de finalizacion
+    Conserje -> UI : Fecha de finalizacion
+    UI -> UI : Verificacion
+    activate UI
+    deactivate UI
+  end
+  
+  
+  UI -> Gestor : listarHabitaciones(inicio, fin)
+  activate Gestor
+  Gestor -> EDAO : listarEstadias(inicio, fin)
+  activate EDAO
+  EDAO -> BDD : listarEstadias(inicio, fin)
+  activate BDD
+  BDD --> EDAO
+  deactivate BDD
+  EDAO -> EDAO : filtrarEstadias(inicio, fin)
+  activate EDAO
+  deactivate EDAO
+  EDAO --> Gestor : List<Estadia>
+  deactivate EDAO
+  
+  Gestor -> RDAO : listarReservas(inicio, fin)
+  activate RDAO
+  RDAO -> BDD : listarReservas(inicio, fin)
+  activate BDD
+  BDD --> RDAO
+  deactivate BDD
+  RDAO -> RDAO : filtrarReservas(inicio, fin)
+  activate RDAO
+  deactivate RDAO
+  RDAO --> Gestor : List<ReservaDAO>
+  deactivate RDAO
+  
+  Gestor -> Gestor : Determinar estado habitaciones (listaReservas, listaEstadias)
+
+  Gestor --> UI : List<Habitacion>
+  deactivate Gestor 
+  UI -> UI : Asignar color a cada estado
+  UI --> Conserje : Tabla con habitaciones y estados codificados en colores
+  deactivate UI
+  deactivate Conserje
+end
+
+== Fin del caso de uso ==
+rnote across
+  Postcondición (éxito) -- Las habitaciones se muestran en la pantalla con su correspondiente estado.
+  Postcondición (fracaso) -- Las habitaciones no se muestran en pantalla.
+end note
+
+@enduml
+ 
+
+
+ 

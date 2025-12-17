@@ -1,7 +1,7 @@
 package ddb.deso.almacenamiento.DTO;
 
 
-import ddb.deso.alojamiento.DatosCheckIn;
+import ddb.deso.negocio.alojamiento.DatosCheckIn;
 
 import java.time.LocalDate;
 
