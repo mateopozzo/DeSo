@@ -50,9 +50,10 @@ export default function buscarHuesped() {
       setBusquedaRealizada(true);
       setLoading(false);
 
-      if (datos.length === 0) {
-        router.push("/alta-huesped");
-      }
+      //para que la redireccion no sea automatica y el usuario tenga control
+      // if (datos.length === 0) {
+      //   router.push("/alta-huesped");
+      // }
     } catch (err) {
       alert("Error al conectarse al servidor");
       setLoading(false);
@@ -142,81 +143,67 @@ export default function buscarHuesped() {
             {loading ? "Buscando huéspedes" : "Buscar"}
           </button>
         </div>
-        {/* FIN DE BOTONES */}
-        {/* FIN DEL FORM */}
       </form>
 
-      {/* INICIO RESULTADOS */}
       {busquedaRealizada && (
-        <div className="w-full mt-8 animate-fade-in-up">
-          <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-800">
-            Resultados de la búsqueda
-          </h2>
+          <div className="w-full mt-8 animate-fade-in-up">
+            <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-800">
+              Resultados de la búsqueda
+            </h2>
 
-          <div className="rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden bg-white dark:bg-gray-950">
-            <div className="overflow-y-auto max-h-[600px]">
-              <table className="w-full text-left text-sm border-collapse">
-                <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 uppercase font-semibold sticky top-0 z-10 shadow-sm">
-                  <tr>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Apellido
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Nombre
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Tipo de documento
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Nro. de documento
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-center">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                  {resultados.length > 0 ? (
-                    resultados.map((huesped, index) => (
-                      <tr
-                        key={index}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group"
-                      >
-                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                          {huesped.apellido}
-                        </td>
-                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                          {huesped.nombre}
-                        </td>
-                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                          <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold">
-                            {huesped.tipoDoc}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">
-                          {huesped.nroDoc}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => handleSeleccionar(huesped)}
-                            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium hover:underline px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
-                          >
-                            Seleccionar
-                          </button>
-                        </td>
+            {resultados.length > 0 ? (
+                <div className="rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden bg-white dark:bg-gray-950">
+                  <div className="overflow-y-auto max-h-[600px]">
+                    <table className="w-full text-left text-sm border-collapse">
+                      <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 uppercase font-semibold sticky top-0 z-10 shadow-sm">
+                      <tr>
+                        <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">Apellido</th>
+                        <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">Nombre</th>
+                        <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">Tipo de documento</th>
+                        <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">Nro. de documento</th>
+                        <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-center">Acciones</th>
                       </tr>
-                    ))
-                  ) : (
-                    <p>
-                      No se encontraron coincidencias. Ejecutando modificar
-                      huesped.
-                    </p>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                      {resultados.map((huesped, index) => (
+                          <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group">
+                            <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{huesped.apellido}</td>
+                            <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{huesped.nombre}</td>
+                            <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                    <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold">
+                      {huesped.tipoDoc}
+                    </span>
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">{huesped.nroDoc}</td>
+                            <td className="px-6 py-4 text-center">
+                              <button
+                                  onClick={() => handleSeleccionar(huesped)}
+                                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium hover:underline px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                              >
+                                Seleccionar
+                              </button>
+                            </td>
+                          </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900/50">
+                  <p className="text-lg text-gray-600 dark:text-gray-400 mb-4 text-center">
+                    No se encontró ningún huésped con esos datos. <br />
+                    ¿Deseas intentar una nueva búsqueda o registrar uno nuevo?
+                  </p>
+                  <button
+                      onClick={() => router.push("/alta-huesped")}
+                      className="cursor-pointer px-6 py-3 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655] shadow-lg"
+                  >
+                    + Crear nuevo huésped
+                  </button>
+                </div>
+            )}
           </div>
-        </div>
       )}
       {/* FIN RESULTADOS */}
     </div>

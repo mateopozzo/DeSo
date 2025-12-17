@@ -7,7 +7,7 @@ public class GenerarFacturaRequestDTO {
     private Long idEstadia;
     private Long idResponsable;
     // Lista de IDs de servicios específicos a facturar (opcional, si null se factura todo)
-    private List<Long> idsServicios; 
+    private List<Long> idsServicios;
 
     public GenerarFacturaRequestDTO() {
     }
