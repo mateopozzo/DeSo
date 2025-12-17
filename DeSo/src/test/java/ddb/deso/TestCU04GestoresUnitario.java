@@ -215,6 +215,4 @@ public class TestCU04GestoresUnitario {
                         convertirReservaADTO(crearReservaValida()), crearListaIdHabitaciones())
         );
     }
-
-
 }
