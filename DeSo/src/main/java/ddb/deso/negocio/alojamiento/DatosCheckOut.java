@@ -4,6 +4,7 @@
  */
 package ddb.deso.negocio.alojamiento;
 
+import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -55,6 +56,11 @@ public class DatosCheckOut {
 
     public DatosCheckOut(LocalDateTime fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;
+    }
+
+    public DatosCheckOut(DatosCheckOutDTO dto, List<DatosAlojado> listaAlojados) {
+        this.alojado = listaAlojados;
+        this.fecha_hora_out = dto.getFecha_hora_out();
     }
 
     public long getId() {

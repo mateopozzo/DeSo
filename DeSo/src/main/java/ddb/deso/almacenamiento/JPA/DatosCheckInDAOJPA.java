@@ -38,6 +38,6 @@ public class DatosCheckInDAOJPA implements DatosCheckInDAO {
 
     @Override
     public List<DatosCheckIn> listarDatosCheckIn() {
-        return List.of();
+        return checkInRepository.findAll();
     }
 }
