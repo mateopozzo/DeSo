@@ -3,15 +3,24 @@ package ddb.deso;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
 import ddb.deso.negocio.TipoDoc;
+import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.service.GestorAlojamiento;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.postgresql.hostchooser.HostRequirement.any;
 
 /**
  * Clase de pruebas unitarias para el Caso de Uso 09 (CU09): Alta de Huésped/Alojado.
@@ -29,13 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see GestorAlojamiento
  * @see AlojadoDAO
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestCU09GestoresUnitario {
-
-    @Autowired
+    @InjectMocks
     GestorAlojamiento gestor;
 
-    @MockitoBean
+    @Mock
     AlojadoDAO dao;
 
     /**
@@ -122,6 +130,7 @@ public class TestCU09GestoresUnitario {
     @Test
     public void gestorRecibeAljadoValido(){
         var a = crearAlojadoDTO();
+        doNothing().when(dao).crearAlojado(any(Alojado.class));
         assertDoesNotThrow(()->gestor.darDeAltaHuesped(a), "Recibir un alojado valido no deberia arrojar excepcion");
     }
 // TODO -> Probar nulidad campo por campo
