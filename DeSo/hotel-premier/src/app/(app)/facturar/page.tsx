@@ -8,6 +8,7 @@ import {
 } from "@/services/facturar.service";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
 import { pedirHabs, Habitacion } from "../../../services/habitaciones.service";
+import GrillaItemsFactura from "@/components/grilla_factura";
 
 export default function Facturar() {
   const router = useRouter();
@@ -189,7 +190,25 @@ export default function Facturar() {
         )
       )}
 
-      {paso === "COBRANDO" && <div className="mt-4"></div>}
+      {paso === "COBRANDO" && (
+        <div className="mt-4">
+          <GrillaItemsFactura
+            responsableNombre={
+              responsableSeleccionado
+                ? "razonSoc" in responsableSeleccionado
+                  ? responsableSeleccionado.razonSoc
+                  : `${responsableSeleccionado.apellido}, ${responsableSeleccionado.nombre}`
+                : "Cliente de Prueba"
+            }
+            onConfirmar={() => {
+              console.log("Simulando guardado...");
+              setPaso("GUARDANDO");
+              setTimeout(() => setPaso("EXITO"), 2000); // Simula delay de red
+            }}
+            onCancelar={() => setPaso("GRILLA")}
+          />
+        </div>
+      )}
       {paso === "GUARDANDO" && (
         <div className="fixed inset-0 bg-white/50 dark:bg-white/20 flex items-center justify-center z-50">
           <h2 className="text-2xl font-bold text-black">Guardando...</h2>
