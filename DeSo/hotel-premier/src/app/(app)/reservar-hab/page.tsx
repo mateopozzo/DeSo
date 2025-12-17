@@ -102,6 +102,7 @@ export default function ReservarHab() {
     }
     if (!seleccion) return;
 
+    setError(null);
     setPaso("GUARDANDO");
 
     try {
@@ -258,6 +259,7 @@ export default function ReservarHab() {
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     pattern="[a-z][A-Z]"
+                    maxLength={255}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring-2 focus:ring-[#52a173] outline-none transition"
                   />
                 </div>
@@ -269,6 +271,7 @@ export default function ReservarHab() {
                     type="text"
                     placeholder="Ej: Pérez"
                     value={apellido}
+                    maxLength={255}
                     onChange={(e) => setApellido(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring-2 focus:ring-[#52a173] outline-none transition"
                   />
@@ -283,7 +286,12 @@ export default function ReservarHab() {
                   type="tel"
                   placeholder="Ej: 5491112345678"
                   value={telefono}
-                  onChange={(e) => setTelefono(e.target.value)}
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inpu : string = e.target.value;
+                    const reval = inpu.replace(/(?!^\+)\D/g, "");
+                    setTelefono(reval);
+                  }}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-[#f5f7fa] dark:bg-gray-950 focus:ring-2 focus:ring-[#52a173] outline-none transition"
                 />
               </div>

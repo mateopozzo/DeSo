@@ -87,7 +87,7 @@ export default function buscarHuesped() {
           value={formData.apellido}
           onChange={handleChange}
           placeholder="Doe"
-          maxLength={50}
+          maxLength="50"
           type="text"
         />
         <InputGroup
@@ -97,7 +97,7 @@ export default function buscarHuesped() {
           onChange={handleChange}
           placeholder="John"
           type="text"
-          maxLength={50}
+          maxLength="50"
         />
         <div className="flex flex-col  dark:text-white">
           <label className="mb-2 font-semibold text-[#141414]  dark:text-white">
@@ -125,7 +125,7 @@ export default function buscarHuesped() {
           onChange={handleChange}
           placeholder="Sin guiones ni puntos"
           type="text"
-          maxLength={20}
+          maxLength="20"
         />
         <div className="flex flex-col lg:flex-row  justify-center gap-4 mt-8 col-span-4">
           <button
@@ -211,24 +211,26 @@ export default function buscarHuesped() {
 }
 
 const InputGroup = ({
-  label,
-  name,
-  value,
-  onChange,
-  type = "text",
-  placeholder = "",
-}: any) => (
-  <div className="flex flex-col dark:bg-gray-950 dark:text-white">
-    <label className="mb-2 font-semibold text-[#141414] dark:bg-gray-950 dark:text-white">
-      {label}
-    </label>
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
-    />
-  </div>
+                      label,
+                      name,
+                      value,
+                      onChange,
+                      type = "text",
+                      placeholder = "",
+                      maxLength = "255",
+                    }: any) => (
+    <div className="flex flex-col dark:bg-gray-950 dark:text-white">
+      <label className="mb-2 font-semibold text-[#141414] dark:bg-gray-950 dark:text-white">
+        {label}
+      </label>
+      <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
+      />
+    </div>
 );

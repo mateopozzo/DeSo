@@ -99,17 +99,21 @@ function GestionarHuespedContent() {
         cargarDatos();
     }, [searchParams, router]);
 
-    // Manejo de Inputs
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
-        // Textos siempre en mayúsculas
         const finalValue = e.target.type === "text" || e.target.tagName === "SELECT"
             ? value.toUpperCase()
             : value;
 
         setFormData({ ...formData, [name]: finalValue });
+    };
+
+    const handleChangeFono = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value.replace(/(?!^\+)\D/g, "") });
     };
 
     // Actualizar los datos del alojado
@@ -136,7 +140,6 @@ function GestionarHuespedContent() {
                     const inputDoc = document.querySelector<HTMLInputElement>('input[name="numeroDocumento"]');
                     const selectDoc = document.querySelector<HTMLSelectElement>('select[name="tipo_documento"]');
 
-                    // Si cambió el tipo, enfocar tipo, si no el numero
                     if(formData.tipo_documento !== originalDto.tipoDoc && selectDoc) selectDoc.focus();
                     else if(inputDoc) inputDoc.focus();
                 }
@@ -161,7 +164,7 @@ function GestionarHuespedContent() {
         e.preventDefault();
         setError(null);
 
-        // verificacion de campos obligatorios (Reutilizadas de Alta)
+        // verificacion de campos obligatorios (Reutilizadas de alta)
         const campos_ob = [
             { key: "apellido", etiq: "apellido" },
             { key: "nombre", etiq: "nombre" },
@@ -231,11 +234,21 @@ function GestionarHuespedContent() {
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 dark:bg-gray-950 dark:text-white">
 
-                {/* --- FILA 0: NOMBRE y APELLIDO (Siempre arriba) --- */}
-                <InputGroup label="Nombre" name="nombre" value={formData.nombre} onChange={handleChange} />
-                <InputGroup label="Apellido" name="apellido" value={formData.apellido} onChange={handleChange} />
+                {/* --- FILA 0 - NOMBRE Y APELLIDO --- */}
+                <InputGroup
+                    label="Nombre"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    maxLength={255}/>
+                <InputGroup
+                    label="Apellido"
+                    name="apellido"
+                    value={formData.apellido}
+                    maxLength={255}
+                    onChange={handleChange} />
 
-                {/* --- FILA 1: DNI | (NADA) --- */}
+                {/* --- FILA 1: DNI  | (NADA) --- */}
                 <div className="flex flex-col dark:text-white">
                     <label className="mb-2 font-semibold text-[#141414] dark:text-white">Documento</label>
                     <div className="flex gap-2">
@@ -252,6 +265,7 @@ function GestionarHuespedContent() {
                         </select>
                         <input
                             type="text"
+                            maxLength={50}
                             name="numeroDocumento"
                             value={formData.numeroDocumento}
                             onChange={handleChange}
@@ -264,8 +278,14 @@ function GestionarHuespedContent() {
                 <div className="hidden md:block"></div>
 
 
-                {/* --- FILA 2: CUIT | Razón Social --- */}
-                <InputGroup label="CUIT" name="cuit" value={formData.cuit} onChange={handleChange} maxLength={11} />
+                {/* --- FILA 2: CUIT | Razon social --- */}
+                <InputGroup
+                    label="CUIT"
+                    name="cuit"
+                    value={formData.cuit}
+                    onChange={handleChange}
+                    maxLength={11}
+                />
 
                 <div className="flex flex-col">
                     <label className="mb-2 font-semibold text-[#141414] dark:text-white">Posición frente al IVA</label>
@@ -278,7 +298,7 @@ function GestionarHuespedContent() {
                         <option value="Consumidor final">Consumidor final</option>
                         <option value="Responsable inscripto">Responsable inscripto</option>
                         <option value="Monotributista">Monotributista</option>
-                        <option value="Exento">Exento</option>
+                        <option value="Excento">Exento</option>
                     </select>
                 </div>
 
@@ -295,7 +315,13 @@ function GestionarHuespedContent() {
                     />
                 </div>
 
-                <InputGroup label="Nacionalidad" name="nacionalidad" value={formData.nacionalidad} onChange={handleChange} />
+                <InputGroup
+                    label="Nacionalidad"
+                    name="nacionalidad"
+                    maxLength={50}
+                    value={formData.nacionalidad}
+                    onChange={handleChange}
+                />
 
 
                 {/* --- FILA 4: BLOQUES DE UBICACIÓN (Izquierda: Ubicación General / Derecha: Calle) --- */}
@@ -305,44 +331,106 @@ function GestionarHuespedContent() {
                     <h3 className="font-bold text-gray-500 text-sm uppercase">Domicilio (Ubicación)</h3>
 
                     {/* 1. País */}
-                    <InputGroup label="País" name="paisResidencia" value={formData.paisResidencia} onChange={handleChange} />
+                    <InputGroup
+                        label="País"
+                        name="paisResidencia"
+                        maxLength={100}
+                        value={formData.paisResidencia}
+                        onChange={handleChange}
+                    />
 
-                    {/* 2. Prov - Localidad (Alineado con "Numero" del otro bloque) */}
+                    {/* 2. Prov - Localidad */}
                     <div className="grid grid-cols-2 gap-2">
-                        <InputGroup label="Provincia" name="provincia" value={formData.provincia} onChange={handleChange} />
-                        <InputGroup label="Localidad" name="localidad" value={formData.localidad} onChange={handleChange} />
+                        <InputGroup
+                            label="Provincia"
+                            name="provincia"
+                            value={formData.provincia}
+                            onChange={handleChange}
+                            maxLength={100}
+                        />
+                        <InputGroup
+                            label="Localidad"
+                            name="localidad"
+                            value={formData.localidad}
+                            maxLength={100}
+                            onChange={handleChange}
+                        />
                     </div>
 
-                    {/* 3. CP (Alineado con "Piso" del otro bloque) */}
-                    <InputGroup label="Cód. Postal" name="codPostal" value={formData.codPostal} onChange={handleChange} />
+                    {/* 3. CP */}
+                    <InputGroup
+                        label="Cód. Postal"
+                        name="codPostal"
+                        value={formData.codPostal}
+                        maxLength={100}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* DERECHA: CALLE (Calle, Numero, Piso) */}
                 <div className="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-xl">
                     <h3 className="font-bold text-gray-500 text-sm uppercase">Domicilio (Calle)</h3>
 
-                    {/* 1. Calle (Alineado con País) */}
-                    <InputGroup label="Calle" name="calle" value={formData.calle} onChange={handleChange} />
+                    {/* 1. Calle */}
+                    <InputGroup
+                        label="Calle"
+                        name="calle"
+                        value={formData.calle}
+                        onChange={handleChange}
+                        maxLength={100}
+                    />
 
-                    {/* 2. Número (Alineado con Prov-Loc) */}
-                    <InputGroup label="Número" name="numeroCalle" value={formData.numeroCalle} onChange={handleChange} type="number" />
+                    {/* 2. Número */}
+                    <InputGroup
+                        label="Número"
+                        name="numeroCalle"
+                        value={formData.numeroCalle}
+                        onChange={handleChange}
+                        type="number"
+                        maxLength={100}
+                    />
 
-                    {/* 3. Piso (Alineado con CP) */}
-                    <InputGroup label="Piso" name="piso" value={formData.piso} onChange={handleChange} type="number" />
+                    {/* 3. Piso */}
+                    <InputGroup
+                        label="Piso"
+                        name="piso"
+                        value={formData.piso}
+                        onChange={handleChange}
+                        type="number"
+                        maxLength={100}
+                    />
                 </div>
 
 
                 {/* --- FILA 5: EMAIL | TELEFONO --- */}
-                <InputGroup label="Email" name="email" value={formData.email} onChange={handleChange} type="email" />
-                <InputGroup label="Teléfono" name="telefono" value={formData.telefono} onChange={handleChange} type="tel" />
+                <InputGroup
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    maxLength={100}
+                    type="email"
+                />
+                <InputGroup
+                    label="Teléfono"
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleChangeFono}
+                    maxLength={100}
+                    type="tel"
+                />
 
 
                 {/* --- FILA 6: OCUPACION | (NADA) --- */}
-                <InputGroup label="Ocupación" name="ocupacion" value={formData.ocupacion} onChange={handleChange} />
+                <InputGroup
+                    label="Ocupación"
+                    name="ocupacion"
+                    value={formData.ocupacion}
+                    onChange={handleChange}
+                    maxLength={100}
+                />
                 <div className="hidden md:block"></div>
 
-
-                {/* --- BOTONES --- */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 col-span-1 md:col-span-2 mt-4 border-t border-gray-200 dark:border-gray-800">
                     <button type="button" onClick={handleBorrar} className="w-full md:w-auto px-8 py-2 rounded-xl font-bold transition duration-300 border border-[#ca695e] text-[#ca695e] hover:bg-[#ca695e] hover:text-white">
                         Eliminar huésped

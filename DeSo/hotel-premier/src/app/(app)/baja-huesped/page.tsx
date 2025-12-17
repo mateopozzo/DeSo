@@ -15,7 +15,7 @@ function BajaHuespedContent() {
         const nroDoc = searchParams.get("nroDoc");
         const tipoDoc = searchParams.get("tipoDoc");
         const nombre = searchParams.get("nombre");
-        const apellido = searchParams.get("apellido"); // Nota: corregí 'apellid' a 'apellido' asumiendo consistencia, verifica tu push
+        const apellido = searchParams.get("apellido");
 
         if (!nroDoc || !tipoDoc) {
             alert("Faltan datos para identificar al huésped.");
@@ -76,7 +76,7 @@ function BajaHuespedContent() {
                 }
 
             } else {
-                // Errores HTTP (500, 400, etc)
+                // errores
                 alert("Ocurrió un error al intentar eliminar. Código: " + response.status);
             }
         } catch (error) {

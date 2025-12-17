@@ -61,6 +61,8 @@ export default function CancelarReserva() {
         setFormData({...formData, [e.target.name]: e.target.value});
     };
 
+
+
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -119,6 +121,7 @@ export default function CancelarReserva() {
                             </label>
                             <input
                                 name="apellido"
+                                maxLength={255}
                                 placeholder="Ingrese apellido"
                                 value={formData.apellido}
                                 onChange={handleChange}
@@ -134,6 +137,7 @@ export default function CancelarReserva() {
                             </label>
                             <input
                                 name="nombre"
+                                maxLength={255}
                                 placeholder="Ingrese nombre"
                                 value={formData.nombre}
                                 onChange={handleChange}
