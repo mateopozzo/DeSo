@@ -30,7 +30,7 @@ export default function navbar() {
             </svg>
           </button>
 
-          <Link href="/" className="lg:hidden">
+          <Link href="/home" className="lg:hidden">
             <img
               src="/ICON-LOGO-LIGHT.svg"
               alt="Logo"
@@ -50,7 +50,7 @@ export default function navbar() {
 
         <div className="flex items-center gap-4">
           <span className="text-[#141414] dark:text-white font-semibold text-lg hidden sm:block">
-            Hola, Aldo
+            Cerrar sesión
           </span>
           <Link href="/">
             <img

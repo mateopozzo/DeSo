@@ -57,7 +57,7 @@ export default function LoginPage() {
             alt="Cerrar sesión"
             width={40}
             height={40}
-            className="dark:invert cursor-pointer hover:opacity-70 transition-opacity"
+            className="dark:invert"
           />
         </div>
 

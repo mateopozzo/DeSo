@@ -21,7 +21,7 @@ const MENU_ITEMS: opciones[] = [
     width: 40,
     options: [
       { label: "Dar alta de huésped", href: "/alta-huesped" },
-      { label: "Dar de baja huésped", href: "/baja-huesped" },
+      { label: "Dar de baja huésped", href: "/buscar-huesped" },
       { label: "Buscar huésped", href: "/buscar-huesped" },
     ],
   },
@@ -41,7 +41,7 @@ const MENU_ITEMS: opciones[] = [
     icon: "/fac.svg",
     alt: "Facturación",
     width: 50,
-    options: [{ label: "Generar factura", href: "/home" }],
+    options: [{ label: "Generar factura", href: "/facturar" }],
   },
 ];
 

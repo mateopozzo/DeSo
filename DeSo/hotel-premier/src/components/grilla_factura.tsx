@@ -21,7 +21,12 @@ export default function GrillaItemsFactura({
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<
     number[]
   >(detalle.consumos.map((s) => s.idServicio));
-  const [tipoFac, setTipoFactura] = useState("");
+
+  // estado local para el tipo de factura seleccionado (no mutamos la prop)
+  const [tipoFac, setTipoFac] = useState<string>(
+    detalle.tipoFacturaSugerida || "B"
+  );
+  const [facturaDistinta, setFacturaDistinta] = useState<boolean>(false);
 
   const toggleServicio = (id: number) => {
     setServiciosSeleccionados((prev) =>
@@ -40,8 +45,8 @@ export default function GrillaItemsFactura({
     let iva = 0;
     let total = subtotal;
 
-    // solo calcular si es A
-    if (detalle.tipoFacturaSugerida === "A") {
+    // solo calcular si es A (usando el tipo seleccionado)
+    if (tipoFac === "A") {
       iva = subtotal * 0.21;
       total = subtotal + iva;
     } else {
@@ -51,7 +56,31 @@ export default function GrillaItemsFactura({
     }
 
     return { subtotal, iva, total };
-  }, [cobrarEstadia, serviciosSeleccionados, detalle]);
+  }, [cobrarEstadia, serviciosSeleccionados, detalle, tipoFac]);
+
+  const cambiarTipo = (nuevoTipo: string) => {
+    setTipoFac(nuevoTipo);
+    if (nuevoTipo === detalle.tipoFacturaSugerida) {
+      setFacturaDistinta(false);
+      return;
+    }
+
+    switch (nuevoTipo) {
+      case "A":
+        break;
+      case "B":
+        break;
+      case "C":
+        break;
+      case "E":
+        break;
+      default:
+        setTipoFac("B");
+        break;
+    }
+
+    setFacturaDistinta(true);
+  };
   return (
     <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
       <div className="flex flex-row justify-between mb-8">
@@ -71,19 +100,18 @@ export default function GrillaItemsFactura({
           <select
             name="tipoFac"
             value={tipoFac}
-            onChange={() => setTipoFactura(tipoFac)}
+            onChange={(e) => cambiarTipo(e.target.value)}
             className="py-1 px-2 text-center border border-blue-600 rounded-lg bg-[#f5f7fa] dark:bg-gray-950 dark:text-white"
           >
-            <option value="Responsable inscripto">B</option>
-            <option value="Consumidor final">A</option>
-
-            <option value="Monotributista">C</option>
-            <option value="Monotributista">E</option>
+            <option value="B">B</option>
+            <option value="A">A</option>
+            <option value="C">C</option>
+            <option value="E">E</option>
           </select>
         </div>
       </div>
 
-      <div className="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
         <div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
             Detalle de Consumos
@@ -95,10 +123,31 @@ export default function GrillaItemsFactura({
             </span>
           </p>
         </div>
-        <div className="text-right">
-          <span className="text-xs uppercase text-gray-400">Tipo sugerido</span>
-          <div className="text-2xl font-bold text-blue-500 border-2 border-blue-500 px-3 rounded inline-block ml-2">
-            {detalle.tipoFacturaSugerida}
+        <div className="text-right flex flex-col">
+          <div>
+            <span className="text-xs uppercase text-gray-400">
+              Tipo sugerido
+            </span>
+            <div
+              className={`mb-4 text-2xl font-bold border-2 px-3 rounded inline-block ml-2 ${
+                facturaDistinta
+                  ? "text-gray-400 dark:text-gray-600 border-gray-300 dark:border-gray-600"
+                  : "text-blue-500 border-blue-500"
+              }`}
+            >
+              {detalle.tipoFacturaSugerida}
+            </div>
+
+            {facturaDistinta && (
+              <div className="text-right">
+                <span className="text-xs uppercase text-gray-400">
+                  Tipo seleccionado
+                </span>
+                <div className="text-2xl font-bold text-green-400 border-2 border-green-400 px-3 rounded inline-block ml-2">
+                  {tipoFac}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

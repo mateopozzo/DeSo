@@ -14,7 +14,7 @@ export interface DetalleFacturaDTO {
   costoEstadia: number;
   consumos: ServicioDTO[];
   montoTotal: number;
-  tipoFacturaSugerida: "A" | "B" | "C";
+  tipoFacturaSugerida: "A" | "B" | "C" | "E";
 }
 
 // POST a generar GenerarFacturaRequestDTO
