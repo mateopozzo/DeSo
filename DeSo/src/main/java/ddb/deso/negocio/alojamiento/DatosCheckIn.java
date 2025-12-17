@@ -49,10 +49,6 @@ public class DatosCheckIn {
                     @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
             }
     )
-    @JoinColumns({
-            @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
-            @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
-    })
     private List<DatosAlojado> alojado = new ArrayList<>();
 
     /**
