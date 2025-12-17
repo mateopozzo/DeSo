@@ -42,9 +42,11 @@ export async function verificarEstadia(
       throw new Error("Error del servidor: " + response.status);
     }
 
-    console.log("Se encontró la estadía. Se devuelve: " + response.json());
+    // CORRECCIÓN: Leemos una sola vez
+    const data = await response.json();
+    console.log("Se encontró la estadía:", data);
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error("Error buscando estadía: " + error);
     return null;
@@ -70,17 +72,21 @@ export async function buscarAlojados(
     );
 
     if (!response.ok) {
-      console.log("Ocupantes vacío");
+      console.log("Ocupantes vacío o error");
       return [];
     }
-    console.log("OCUPANTES: " + response.json());
-    return await response.json();
+
+    const data = await response.json();
+    console.log("OCUPANTES:", data);
+
+    return data;
   } catch (error) {
     console.error("Error buscando alojados: " + error);
     return [];
   }
 }
 
+// DETALLE HUESPED COMPLETO
 export async function obtenerDatosHuesped(
   nroDoc: string,
   tipoDoc: string
