@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ddb.deso.almacenamiento.DAO.DatosCheckOutDAO;
 import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
@@ -368,54 +369,36 @@ public class GestorAlojamiento {
         return retornoEncontrados;
     }
 
-    public List<DatosCheckOutDTO> generarCheckOut(List<CriteriosBusq> criteriosBusq){
-
-        if(criteriosBusq == null){return null;}
-
-        List<DatosCheckOutDTO> listaRetorno = new ArrayList<>();
-
-        criteriosBusq.forEach(crit -> {
-            DatosCheckOutDTO dtoCO = null;
-            try{
-                dtoCO=generarCheckOut(crit);
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-            if(dtoCO != null) listaRetorno.add(dtoCO);
-        });
-
-        return listaRetorno;
-    }
-
-    public DatosCheckOutDTO generarCheckOut(CriteriosBusq criteriosBusq){
+    public DatosCheckOutDTO generarCheckOut(List<CriteriosBusq> criteriosBusq){
 
         if(criteriosBusq == null){
             throw new AlojadoInvalidoException("Criterio de busqueda nulo");
         }
 
-        if(criteriosBusq.getNroDoc() == null || criteriosBusq.getNroDoc().isEmpty()){
-            throw new AlojadoInvalidoException("Numero de documento nulo");
-        }
-
-        if(criteriosBusq.getTipoDoc() == null){
-            throw new AlojadoInvalidoException("Tipo de documento nulo");
-        }
-
         DatosCheckOut cout = new DatosCheckOut(LocalDateTime.now());
-        cout.setFecha_hora_out(LocalDateTime.now());
+        for(var alojado : criteriosBusq) {
+            if(alojado == null)continue;
 
-        var alojado = alojadoDAO.buscarPorDNI(criteriosBusq.getNroDoc(),criteriosBusq.getTipoDoc());
+            if (alojado.getNroDoc() == null || alojado.getNroDoc().isEmpty()) {
+                continue;
+            }
 
-        if(alojado == null){
-            return null;
+            if (alojado.getTipoDoc() == null) {
+                continue;
+            }
+
+            cout.setFecha_hora_out(LocalDateTime.now());
+
+            var entidadAlojado = alojadoDAO.buscarPorDNI(alojado.getNroDoc(), alojado.getTipoDoc());
+
+            if (entidadAlojado == null) {
+                return null;
+            }
+
+            entidadAlojado.getDatos().nuevoCheckOut(cout);
         }
-
-        cout.setAlojado(alojado.getDatos());
-
-        alojado.getDatos().nuevoCheckOut(cout);
 
         return new DatosCheckOutDTO(cout);
-
     }
 
     /**

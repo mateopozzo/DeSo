@@ -5,6 +5,8 @@
 package ddb.deso.negocio.alojamiento;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.*;
@@ -38,12 +40,20 @@ public class DatosCheckIn {
      * El {@link DatosAlojado} asociado a este registro de Check-In.
      * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "checkin_alojados", // Nombre de la tabla intermedia
+            joinColumns = @JoinColumn(name = "id_check_in"), // FK hacia esta clase
+            inverseJoinColumns = { // FK hacia DatosAlojado (Clave Compuesta)
+                    @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
+                    @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
+            }
+    )
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
             @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
     })
-    private DatosAlojado alojado;
+    private List<DatosAlojado> alojado = new ArrayList<>();
 
     /**
      * Constructor para inicializar el registro de Check-In con la fecha y hora de entrada.

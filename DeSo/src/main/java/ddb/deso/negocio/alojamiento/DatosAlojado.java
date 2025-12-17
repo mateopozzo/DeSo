@@ -62,23 +62,13 @@ public class DatosAlojado {
     /**
      * Lista de registros de Check-In asociados a este alojado.
      */
-    @OneToMany(
-            mappedBy = "alojado",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
+    @ManyToMany(mappedBy = "alojado", fetch = FetchType.LAZY)
     private List<DatosCheckIn> checkIns;
 
     /**
      * Lista de registros de Check-Out asociados a este alojado.
      */
-    @OneToMany(
-            mappedBy = "alojado",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
+    @ManyToMany(mappedBy = "alojado", fetch = FetchType.LAZY)
     private List<DatosCheckOut> checkOuts;
 
 
@@ -138,26 +128,22 @@ public class DatosAlojado {
         return (this.idAlojado != null) ? this.idAlojado.getNroDoc() : null;
     }
 
-    /**
-     * Agrega un nuevo registro de Check-In a la lista de Check-Ins del alojado.
-     *
-     * @param check_in El objeto {@link DatosCheckIn} a agregar.
-     */
     public void nuevoCheckIn(DatosCheckIn check_in) {
-        if(checkIns==null)checkIns=new ArrayList<>();
-        checkIns.add(check_in);
+        if(this.checkIns == null) this.checkIns = new ArrayList<>();
+        this.checkIns.add(check_in);
+        // Es buena práctica agregar también al otro lado de la lista para consistencia en memoria
+        if(!check_in.getAlojado().contains(this)){
+            check_in.getAlojado().add(this);
+        }
     }
 
-    /**
-     * Agrega un nuevo registro de Check-Out a la lista de Check-Outs del alojado.
-     *
-     * @param check_out El objeto {@link DatosCheckOut} a agregar.
-     */
     public void nuevoCheckOut(DatosCheckOut check_out) {
-        if(checkOuts==null)checkOuts=new ArrayList<>();
-        checkOuts.add(check_out);
+        if(this.checkOuts == null) this.checkOuts = new ArrayList<>();
+        this.checkOuts.add(check_out);
+        if(!check_out.getAlojado().contains(this)){
+            check_out.getAlojado().add(this);
+        }
     }
-
     /**
      * Verifica si el alojado tiene registros de Check-In o Check-Out,
      * indicando si alguna vez ocupó una habitación.

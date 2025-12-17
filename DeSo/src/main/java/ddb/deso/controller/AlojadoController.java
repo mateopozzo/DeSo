@@ -187,8 +187,6 @@ public class AlojadoController {
         return ResponseEntity.ok(entidadRetorno);
     }
 
-
-
     /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
@@ -224,10 +222,10 @@ public class AlojadoController {
     }
 
     @PutMapping("/api/generar-check-out")
-    ResponseEntity<List<DatosCheckOutDTO>> generarCheckOutAlojado(@RequestBody List<CriteriosBusq> criteriosBusq){
+    ResponseEntity<DatosCheckOutDTO> generarCheckOutAlojado(@RequestBody List<CriteriosBusq> criteriosBusq){
 
         if(criteriosBusq == null){
-            return ResponseEntity.ok(List.of());
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.ok(gestorAlojamiento.generarCheckOut(criteriosBusq));
