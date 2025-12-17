@@ -52,7 +52,7 @@ export default function GrillaItemsFactura({
     return { subtotal, iva, total };
   }, [cobrarEstadia, serviciosSeleccionados, detalle]);
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       <div className="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
         <div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
@@ -75,7 +75,7 @@ export default function GrillaItemsFactura({
 
       <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 mb-6">
         <table className="w-full text-left text-sm">
-          <thead className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 uppercase">
+          <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-200 uppercase">
             <tr>
               <th className="p-3 text-center w-12">#</th>
               <th className="p-3">Concepto</th>
@@ -85,7 +85,7 @@ export default function GrillaItemsFactura({
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             <tr
               className={`cursor-pointer transition hover:bg-blue-50 dark:hover:bg-gray-700 ${
-                cobrarEstadia ? "bg-blue-50/50 dark:bg-gray-700/50" : ""
+                cobrarEstadia ? "bg-blue-50/50 dark:bg-gray-900/50" : ""
               }`}
               onClick={() => setCobrarEstadia(!cobrarEstadia)}
             >
@@ -110,7 +110,7 @@ export default function GrillaItemsFactura({
                 key={serv.idServicio}
                 className={`cursor-pointer transition hover:bg-blue-50 dark:hover:bg-gray-700 ${
                   serviciosSeleccionados.includes(serv.idServicio)
-                    ? "bg-blue-50/50 dark:bg-gray-700/50"
+                    ? "bg-blue-50/50 dark:bg-gray-900/50"
                     : ""
                 }`}
                 onClick={() => toggleServicio(serv.idServicio)}
@@ -150,7 +150,7 @@ export default function GrillaItemsFactura({
       <div className="flex justify-end gap-4 mt-6">
         <button
           onClick={onCancelar}
-          className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg border border-gray-300 transition"
+          className="px-4 py-2 text-gray-600 dark:text-white font-semibold hover:bg-red-500 rounded-lg border border-gray-300 transition hover:border-red-500"
         >
           Volver
         </button>

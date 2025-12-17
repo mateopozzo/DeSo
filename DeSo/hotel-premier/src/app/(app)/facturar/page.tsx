@@ -328,8 +328,10 @@ export default function Facturar() {
         />
       )}
       {paso === "GUARDANDO" && (
-        <div className="fixed inset-0 bg-white/50 dark:bg-white/20 flex items-center justify-center z-50">
-          <h2 className="text-2xl font-bold text-black">Guardando...</h2>
+        <div className="fixed inset-0 bg-white/50 dark:bg-white/20 dark:text-white flex items-center justify-center z-50">
+          <h2 className="text-5xl font-bold text-black dark:text-white">
+            Guardando...
+          </h2>
         </div>
       )}
       {/* PASO 4: EXITO */}
