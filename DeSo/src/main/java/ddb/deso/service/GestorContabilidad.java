@@ -10,6 +10,9 @@ import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.negocio.alojamiento.DatosCheckIn;
 import ddb.deso.service.excepciones.ResponsableMenorEdadExcepcion;
 
+import ddb.deso.service.strategias.EstrategiaGuardadoFactura;
+import ddb.deso.service.strategias.GuardarFacturaJSON;
+import ddb.deso.service.strategias.GuardarFacturaPDF;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,9 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 
 @Service
 public class GestorContabilidad {
@@ -29,6 +31,10 @@ public class GestorContabilidad {
     private ResponsablePagoDAO responsablePagoDAO;
     private HabitacionDAO habitacionDAO;
     private AlojadoDAO alojadoDAO;
+    Map<String, ? extends EstrategiaGuardadoFactura> estrategias = Map.of(
+        "pdf", new GuardarFacturaPDF(),
+        "json", new GuardarFacturaJSON()
+    );
 
     @Autowired
     public GestorContabilidad(EstadiaDAO estadiaDAO, FacturaDAO facturaDAO, ResponsablePagoDAO respDAO, HabitacionDAO habDAO,AlojadoDAO alojadoDAO) {
@@ -231,4 +237,20 @@ private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMeno
     public List<DatosCheckIn> listarIngresos() { return new ArrayList<>(); }
     public void generarNotaCredito() { }
     public void gestionarListado() { }
+
+    public void guardarFacturaSegunStrategy(FacturaDTO factura, String strat) {
+
+        if(estrategias == null || estrategias.isEmpty()){
+            estrategias = Map.of(
+                    "pdf", new GuardarFacturaPDF(),
+                    "json", new GuardarFacturaJSON()
+            );
+        }
+
+        try {
+            estrategias.get(strat).guardarFactura(factura);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

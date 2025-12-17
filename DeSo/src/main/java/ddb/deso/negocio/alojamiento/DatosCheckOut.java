@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,12 +42,20 @@ public class DatosCheckOut {
      * El {@link DatosAlojado} asociado a este registro de Check-Out.
      * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "checkout_alojados",
+            joinColumns = @JoinColumn(name = "id_check_out"),
+            inverseJoinColumns = {
+                    @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
+                    @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
+            }
+    )
     @JoinColumns({
             @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
             @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
     })
-    private DatosAlojado alojado;
+    private List<DatosAlojado> alojado = new ArrayList<>();
 
     public DatosCheckOut(LocalDateTime fecha_hora_out) {
         this.fecha_hora_out = fecha_hora_out;

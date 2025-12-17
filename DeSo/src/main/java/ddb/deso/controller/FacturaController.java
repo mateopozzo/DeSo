@@ -1,5 +1,6 @@
 package ddb.deso.controller;
 
+import org.hibernate.type.OrderedMapType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ddb.deso.service.GestorContabilidad; 
@@ -9,6 +10,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ddb.deso.negocio.habitaciones.Estadia;
 
 import java.time.LocalTime;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/api/facturacion")
@@ -17,7 +22,7 @@ public class FacturaController {
     @Autowired
     private GestorContabilidad gestorContabilidad;
 
-      @GetMapping("/habitacion/{nroHabitacion}/verificar-estadia")
+    @GetMapping("/habitacion/{nroHabitacion}/verificar-estadia")
     public ResponseEntity<EstadiaDTO> verificarEstadiaActiva(
             @PathVariable Long nroHabitacion,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaSalida) {
@@ -63,6 +68,18 @@ public class FacturaController {
             e.printStackTrace(); // Imprime el error en la consola del servidor
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("api/imprimir-factura")
+    public ResponseEntity<FacturaDTO> imprimirFactura(@RequestBody FacturaDTO factura, @RequestParam String strat){
+
+        if(factura == null || strat == null || strat.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
+
+        return ResponseEntity.ok(factura);
     }
 
   

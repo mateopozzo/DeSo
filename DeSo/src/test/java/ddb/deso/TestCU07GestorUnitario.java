@@ -1,13 +1,12 @@
 package ddb.deso;
 
 import ddb.deso.almacenamiento.DAO.*;
+import ddb.deso.almacenamiento.DTO.FacturaDTO;
 import ddb.deso.almacenamiento.DTO.GenerarFacturaRequestDTO;
-import ddb.deso.almacenamiento.DTO.ServicioDTO;
 import ddb.deso.negocio.TipoFactura;
 import ddb.deso.negocio.TipoHab;
 import ddb.deso.negocio.TipoServicio;
 import ddb.deso.negocio.alojamiento.*;
-import ddb.deso.negocio.contabilidad.Factura;
 import ddb.deso.negocio.contabilidad.ResponsablePago;
 import ddb.deso.negocio.habitaciones.Estadia;
 import ddb.deso.negocio.habitaciones.Habitacion;
@@ -24,13 +23,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -258,5 +254,29 @@ public class TestCU07GestorUnitario {
 
         assertEquals(TipoFactura.B, facturaDTO.getTipo_factura());
         assertEquals(0.0, facturaDTO.getImporte_iva()); // IVA 0 en B
+    }
+
+    @Test
+    public void generacionArchivoPDF_Factura(){
+        var fatura = instanciarFacturaHardCodeada();
+        gestorContabilidad.guardarFacturaSegunStrategy(fatura, "pdf");
+    }
+
+    @Test
+    public void generacionArchivoJSON_Factura(){
+        var fatura = instanciarFacturaHardCodeada();
+        gestorContabilidad.guardarFacturaSegunStrategy(fatura, "json");
+    }
+
+    private FacturaDTO instanciarFacturaHardCodeada(){
+        FacturaDTO fatura = new FacturaDTO();
+        fatura.setNum_factura(123456);
+        fatura.setFecha_factura(java.time.LocalDate.now());
+        fatura.setTipo_factura(ddb.deso.negocio.TipoFactura.B);
+        fatura.setDestinatario("Cliente de Prueba S.R.L.");
+        fatura.setImporte_neto(10000.0f);
+        fatura.setImporte_iva(2100.0f);
+        fatura.setImporte_total(12100.0f);
+        return fatura;
     }
 }
