@@ -6,6 +6,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,7 @@ import ddb.deso.almacenamiento.DAO.EstadiaDAO;
 import ddb.deso.almacenamiento.DAO.HabitacionDAO;
 import ddb.deso.almacenamiento.DAO.ReservaDAO;
 import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
+import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.negocio.EstadoHab;
 import ddb.deso.negocio.TipoHab;
 import ddb.deso.negocio.habitaciones.Estadia;
@@ -187,4 +189,50 @@ public class TestCU05 {
         assertEquals("Perez", dto.getApellido());
         assertEquals(LocalDate.parse("2026-01-16"), dto.getFecha_inicio());
     }
+
+    @Test
+    void listarReservas_ok_devuelveDisponibilidades() {
+        Reserva r = new Reserva(
+                LocalDate.parse("2026-01-10"),
+                LocalDate.parse("2026-01-12"),
+                "Reservado",
+                "Juan",
+                "Perez",
+                "123"
+        );
+
+        Habitacion h = new Habitacion(TipoHab.DOBLEESTANDAR, EstadoHab.DISPONIBLE, 100, 2);
+        h.setNroHab(101L);
+        r.setListaHabitaciones(List.of(h));
+
+        when(reservaDAO.listar()).thenReturn(List.of(r));
+
+        var out = gestorHabitacion.listarReservas();
+
+        assertNotNull(out);
+        assertEquals(1, out.size());
+        assertEquals(101L, out.get(0).getIdHabitacion());
+    }
+
+    @Test
+    void ocuparHabitacion_alojadoInexistente_lanzaExcepcion() {
+        var criterios = new ddb.deso.almacenamiento.DTO.CriteriosBusq();
+        criterios.setNroDoc("123");
+        criterios.setTipoDoc(ddb.deso.negocio.TipoDoc.DNI);
+
+        when(alojadoDAO.buscarAlojado(any(CriteriosBusq.class))).thenReturn(List.of());
+
+        assertThrows(
+                ddb.deso.service.excepciones.AlojadoInvalidoException.class,
+                () -> gestorHabitacion.ocuparHabitacion(
+                        101L,
+                        1L,
+                        criterios,
+                        List.of(),
+                        LocalDate.now(),
+                        LocalDate.now().plusDays(1)
+                )
+        );
+    }
+
 }
