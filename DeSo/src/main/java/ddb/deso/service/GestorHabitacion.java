@@ -7,26 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ddb.deso.almacenamiento.DAO.*;
+import ddb.deso.almacenamiento.DTO.*;
+import ddb.deso.negocio.alojamiento.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ddb.deso.almacenamiento.DAO.AlojadoDAO;
-import ddb.deso.almacenamiento.DAO.DatosCheckInDAO;
-import ddb.deso.almacenamiento.DAO.EstadiaDAO;
-import ddb.deso.almacenamiento.DAO.HabitacionDAO;
-import ddb.deso.almacenamiento.DAO.ReservaDAO;
-import ddb.deso.almacenamiento.DTO.ConsultarReservasDTO;
-import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.almacenamiento.DTO.DisponibilidadDTO;
-import ddb.deso.almacenamiento.DTO.HabitacionDTO;
-import ddb.deso.almacenamiento.DTO.HabitacionReservaDTO;
-import ddb.deso.almacenamiento.DTO.ReservaDTO;
-import ddb.deso.almacenamiento.DTO.ReservaGrillaDTO;
 import ddb.deso.negocio.EstadoHab;
-import ddb.deso.negocio.alojamiento.Alojado;
-import ddb.deso.negocio.alojamiento.DatosCheckIn;
-import ddb.deso.negocio.alojamiento.Invitado;
 import ddb.deso.negocio.habitaciones.Estadia;
 import ddb.deso.negocio.habitaciones.Habitacion;
 import ddb.deso.negocio.habitaciones.Reserva;
@@ -45,16 +33,17 @@ public class GestorHabitacion {
     private EstadiaDAO estadiaDAO;
     private AlojadoDAO alojadoDAO;
     private DatosCheckInDAO checkInDAO;
-    private GestorAlojamiento gestorAlojamiento;
+    private DatosCheckOutDAO checkOutDAO;
 
 
     @Autowired
-    public GestorHabitacion(ReservaDAO reservaDAO, HabitacionDAO habitacionDAO, EstadiaDAO estadiaDAO, AlojadoDAO alojadoDAO, DatosCheckInDAO checkInDAO) {
+    public GestorHabitacion(ReservaDAO reservaDAO, HabitacionDAO habitacionDAO, EstadiaDAO estadiaDAO, AlojadoDAO alojadoDAO, DatosCheckInDAO checkInDAO, DatosCheckOutDAO checkOutDAO) {
         this.reservaDAO = reservaDAO;
         this.habitacionDAO = habitacionDAO;
         this.estadiaDAO = estadiaDAO;
         this.alojadoDAO = alojadoDAO;
         this.checkInDAO = checkInDAO;
+        this.checkOutDAO=  checkOutDAO;
     }
 
     @Autowired
@@ -427,6 +416,20 @@ public class GestorHabitacion {
 
         reserva.setEstado("Cancelada");
         reservaDAO.actualizar(reserva);
+    }
+
+    public void guardarDatosCheckOut(DatosCheckOutDTO dto) {
+        if(dto == null)return;
+
+        List<DatosAlojado> listaAlojados = new ArrayList<>();
+        for(int i=0;i<dto.getNroDoc().size();i++){
+            listaAlojados.add(alojadoDAO.buscarPorDNI(
+                    dto.getNroDoc().get(i),
+                    dto.getTipoDoc().get(i)
+            ).getDatos());
+        }
+
+        checkOutDAO.crearDatosCheckOut(new DatosCheckOut(dto, listaAlojados));
     }
 
 }

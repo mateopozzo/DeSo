@@ -7,14 +7,12 @@ import java.util.List;
 
 import ddb.deso.almacenamiento.DAO.DatosCheckOutDAO;
 import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
+import ddb.deso.almacenamiento.DTO.PersonaJuridicaDTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.almacenamiento.DAO.AlojadoDAO;
 import ddb.deso.almacenamiento.DTO.AlojadoDTO;
-import ddb.deso.negocio.alojamiento.Alojado;
+import ddb.deso.negocio.alojamiento.*;
 import ddb.deso.almacenamiento.DTO.CriteriosBusq;
-import ddb.deso.negocio.alojamiento.DatosCheckOut;
-import ddb.deso.negocio.alojamiento.FactoryAlojado;
-import ddb.deso.negocio.alojamiento.Huesped;
 import ddb.deso.service.enumeradores.ResumenHistorialHuesped;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
@@ -444,19 +442,29 @@ public class GestorAlojamiento {
         return listaRetorno;
     }
 
-    public CriteriosBusq buscarCriteriosAlojadoPorCuit(String CUIT){
+    public PersonaJuridicaDTO buscarCriteriosAlojadoPorCuit(String CUIT){
         if(CUIT == null || CUIT.isEmpty()) return null;
 
-        Alojado entidadRetorno = alojadoDAO.buscarAlojado(CUIT);
+        Alojado entidadAbstracta = alojadoDAO.buscarAlojado(CUIT);
+        Huesped entidadConcreta = null;
 
-        if(entidadRetorno == null) return null;
+        if(entidadAbstracta == null) return null;
 
-        if(entidadRetorno.getDatos().getDatos_personales().getCUIT() == null
-                || entidadRetorno.getDatos().getDatos_personales().getCUIT().isEmpty()) return null;
+        if(entidadAbstracta.getDatos().getDatos_personales().getCUIT() == null
+                || entidadAbstracta.getDatos().getDatos_personales().getCUIT().isEmpty()) return null;
 
-        if(!entidadRetorno.getDatos().getDatos_personales().getCUIT().equals(CUIT)) return null;
+        if(!entidadAbstracta.getDatos().getDatos_personales().getCUIT().equals(CUIT)) return null;
 
-        return new CriteriosBusq(entidadRetorno);
+        if(entidadAbstracta instanceof Invitado){
+            var tipoDoc = entidadAbstracta.getId().getTipoDoc();
+            var nroDoc = entidadAbstracta.getId().getNroDoc();
+            alojadoDAO.promoverAHuesped(nroDoc, tipoDoc.toString());
+            entidadConcreta=(Huesped)alojadoDAO.buscarPorDNI(nroDoc,tipoDoc);
+        } else {
+            entidadConcreta=(Huesped)entidadAbstracta;
+        }
+
+        return new PersonaJuridicaDTO(entidadConcreta);
     }
 }
 

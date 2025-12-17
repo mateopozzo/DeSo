@@ -1,12 +1,10 @@
 package ddb.deso.controller;
 
-import ddb.deso.almacenamiento.DTO.ActualizarAlojadoDTO;
-import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
+import ddb.deso.almacenamiento.DTO.*;
 import ddb.deso.controller.enumeradores.BajaHuesped;
 import ddb.deso.negocio.TipoDoc;
-import ddb.deso.almacenamiento.DTO.CriteriosBusq;
 import ddb.deso.service.GestorAlojamiento;
-import ddb.deso.almacenamiento.DTO.AlojadoDTO;
+import ddb.deso.service.GestorHabitacion;
 import ddb.deso.service.excepciones.AlojadoInvalidoException;
 import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadoPreExistenteException;
@@ -26,13 +24,15 @@ import java.util.List;
 public class AlojadoController {
 
     private final GestorAlojamiento gestorAlojamiento;
+    private final GestorHabitacion gestorHabitacion;
 
     /**
      * Constructor para la Inyección de Dependencias.
      * Spring inyectará automáticamente el Bean de GestorAlojamiento.
      */
-    public AlojadoController(GestorAlojamiento gestorAlojamiento) {
+    public AlojadoController(GestorAlojamiento gestorAlojamiento, GestorHabitacion gestorHabitacion) {
         this.gestorAlojamiento = gestorAlojamiento;
+        this.gestorHabitacion = gestorHabitacion;
     }
 
     /**
@@ -176,13 +176,13 @@ public class AlojadoController {
         return ResponseEntity.ok(gestorAlojamiento.buscarCriteriosALojadoDeEstadia(idEstadia));
     }
 
-    @GetMapping("api/buscar-huesped-cuit")
-    private ResponseEntity<CriteriosBusq> obtenerHuespedesSegunCUIT(@RequestParam String CUIT){
-        if(CUIT == null || CUIT.isEmpty()){
+    @GetMapping("api/buscar-tercero")
+    private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
+        if(cuit == null || cuit.isEmpty()){
             return ResponseEntity.ok().build();
         }
 
-        CriteriosBusq entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(CUIT);
+        PersonaJuridicaDTO entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(cuit);
 
         return ResponseEntity.ok(entidadRetorno);
     }
@@ -228,7 +228,11 @@ public class AlojadoController {
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.ok(gestorAlojamiento.generarCheckOut(criteriosBusq));
+        var cout = gestorAlojamiento.generarCheckOut(criteriosBusq);
+        gestorHabitacion.guardarDatosCheckOut(cout);
+
+        return ResponseEntity.ok().body(cout);
+
     }
 
     @DeleteMapping("api/eliminar-huesped")
@@ -261,6 +265,7 @@ public class AlojadoController {
         if(a.getNroDoc()==null || a.getNroDoc().isEmpty())return false;
         return true;
     }
+
 
     //memo
     // @PutMapping    ->    modificar

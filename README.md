@@ -110,8 +110,6 @@ _Cabe mencionar que al momento de entrega de este trabajo, la base de datos ya s
 
 ## Patrones implementados
 
-## Patrones implementados
-
 | Patrón        | Nro de caso de uso | Nombre de caso de uso      |
 | ------------- | ------------------ | -------------------------- |
 | **DAO**       | `1, 2, 9, 10, 11`  | Todos                      |
