@@ -1,7 +1,10 @@
+-- Permitir consulta con tildes --
+
+CREATE EXTENSION IF NOT EXISTS unaccent;
 
 -- cargar datos alojados --
 
-INSERT INTO datos_alojado (nro_doc, tipo_doc, apellido, nombre, fechanac, CUIT, posicion_iva, telefono, email, ocupacion, nacionalidad, pais, prov, localidad, cod_post, calle, nro_calle, depto, piso) VALUES
+INSERT INTO datos_alojado(nro_doc, tipo_doc, apellido, nombre, fechanac, CUIT, posicion_iva, telefono, email, ocupacion, nacionalidad, pais, prov, localidad, cod_post, calle, nro_calle, depto, piso) VALUES
 ('28123456', 'DNI', 'Gómez', 'Ana María', '1980-05-15', '20281234567', 'consumidor-final', '3425550001', 'ana.gomez@mail.com', 'Comerciante', 'ARGENTINA', 'ARGENTINA', 'SANTA FE', 'Rosario', '2000', 'Bv. Oroño', '1234', 'ROSARIO', NULL),
 ('35987654', 'DNI', 'Pérez', 'Juan Carlos', '1995-10-22', '20359876547', 'consumidor-final', '3415550002', NULL, 'Abogado', 'ARGENTINA', 'ARGENTINA', 'BUENOS AIRES', 'La Plata', '1900', 'Calle 50', '585', 'LA PLATA', '3'),
 ('40543210', 'DNI', 'Rodríguez', 'Laura Sofía', '2000-02-01', NULL, 'consumidor-final', '3515550003', 'lrodriguez@mail.com', 'Estudiante', 'ARGENTINA', 'ARGENTINA', 'CÓRDOBA', 'Córdoba', '5000', 'Av. Vélez Sársfield', '300', 'CAPITAL', '10'),
@@ -43,14 +46,14 @@ INSERT INTO alojado (tipo_alojado, tipo_doc, nro_doc, razon_social) VALUES
 ('Invitado', 'LE', '05112233', NULL),
 ('Huesped', 'DNI', '32789012', NULL),
 ('Huesped', 'DNI', '41345678', NULL),
-('Invitado', 'LC', '10456789', NULL),
+('Invitado', 'LC', '40543210', NULL),
 ('Huesped', 'DNI', '37654321', NULL),
 ('Invitado', 'PASAPORTE', 'CHL56789', 'Gira Sudamericana'),
 ('Huesped', 'DNI', '30901234', NULL),
 ('Invitado', 'DNI', '25876543', NULL),
 ('Huesped', 'DNI', '42123456', NULL),
 ('Invitado', 'PASAPORTE', 'URY00112', 'Congreso IT Montevideo'),
-('Huesped', 'LE', '08234567', NULL),
+('Huesped', 'LE', '40543210', NULL),
 ('Invitado', 'DNI', '33890123', NULL),
 ('Huesped', 'DNI', '43456789', NULL),
 ('Invitado', 'LC', '12567890', NULL),
@@ -67,18 +70,6 @@ INSERT INTO alojado (tipo_alojado, tipo_doc, nro_doc, razon_social) VALUES
 ('Huesped', 'DNI', '39221100', NULL),
 ('Invitado', 'PASAPORTE', 'MEX43210', 'Equipo Gastronómico');
 
-
-select * from check_in
-select * from alojado_lista_estadias
-select * from alojado_lista_reservas
-select * from estadia
-select * from estadia_lista_habitaciones
-select * from estadia_lista_servicios
-select * from habitacion
-select * from reserva
-select * from reserva_lista_habitaciones
-select * from servicio
-
 -- cargar habitaciones --
 
 INSERT INTO habitacion (nro_hab, capacidad, estado_hab, tarifa, tipo_hab) VALUES
@@ -91,17 +82,94 @@ INSERT INTO habitacion (nro_hab, capacidad, estado_hab, tarifa, tipo_hab) VALUES
 (301, 2, 0, 128600.00, 4),
 (302, 2, 0, 128600.00, 4);
 
--- Permitir consulta con tildes --
+-- Crear reservas -- 
 
-CREATE EXTENSION IF NOT EXISTS unaccent;
+insert into reserva (fecha_inicio, fecha_fin, id_reserva, nombre, apellido, estado, telefono) values
+('2025-12-15', '2025-12-18', 1, 'Lucia', 'Zárate', 'Reservado', '12345678'),
+('2025-12-20', '2025-12-21', 2, 'Mauro', 'Zárate', 'Reservado', '12345679'),
+('2025-12-17', '2025-12-18', 3, 'Ramiro', 'Pargi', 'Reservado', '54366542334'),
+('2025-12-18', '2025-12-20', 4, 'Matías', 'Brunson', 'Reservado', '13546434'),
+('2025-12-23', '2026-01-1', 5, 'Mauro', 'Magaldi', 'Cancelada', '345666666'),
+('2025-12-30', '2026-01-15', 6, 'Aureliano', 'Buendía', 'Reservado', '23452');
 
+-- link reservas con habitaciones --
 
+insert into reserva_lista_habitaciones (reserva_id_reserva, lista_habitaciones_nro_hab) values
+(1, 101),
+(2, 202),
+(3, 201),
+(4, 301),
+(5, 202),
+(6, 102);
 
+-- creacion de personas juridicas --
 
+insert into responsable_de_pago (cuit, telefono, calle, cod_post, depto, localidad, nro_calle, pais, piso, prov, razon_social) values
+(30432543783, '38475930', 'Juan de garay', 3000, 'Capital', 'San Justo', 3243, 'Argentina', null, null, 'Cooperativa IAM'),
+(34337843989, '4564434', 'Estanislao Lopez', 3000, 'Almirante Brown', 'Taco Pozo', '2433', 'Argentina', null, null, 'Inmobiliaria Repique'),
+(33337678743, '35145645', '9 de Julio', 5000, NULL, 'Córdoba', 120, 'Argentina', NULL, 'Córdoba', 'Logística del Centro S.A.'),
+(30403948383, '26456890', 'San Martín', 5500, 'A', 'Mendoza', 850, 'Argentina', '1', 'Mendoza', 'Viñedos del Sol'),
+(33234352896, '4538844', 'Rivadavia', 4000, NULL, 'S.M. de Tucumán', 2100, 'Argentina', NULL, 'Tucumán', 'Azucarera del Norte'),
+(30229834580, '3456345', 'Calle 50', 1900, '4', 'La Plata', 543, 'Argentina', 'C', 'Buenos Aires', 'Servicios La Plata'),
+(33469834894, '3456434', 'Avenida Argentina', 8300, NULL, 'Neuquén', 1540, 'Argentina', NULL, 'Neuquén', 'Patagonia Energía S.R.L.');
 
+-- Inserta check-in --
 
+insert into check_in (fecha_hora_in, id_check_in) values
+('2025-11-25', 1),
+('2025-12-01', 2),
+('2025-12-15', 3),
+('2025-12-17', 4);
 
+-- Creacion de check outs --
 
+insert into check_out (fecha_hora_out, id_check_out) values
+('2025-12-05', 1);
 
+-- creacion de estadias --
 
+insert into estadia (fecha_inicio, fecha_fin, datos_check_in_id_check_in, datos_check_out_id_check_out, habitacion_nro_hab, id_estadia, reserva_id_reserva) values
+('2025-11-25', '2025-12-05', 1, 1, 101, 1, null),
+('2025-12-01', '2025-12-19', 2, null, 302, 2, null),
+('2025-12-15', '2025-12-18', 3, null, 201, 3, 1),
+('2025-12-17', '2025-12-18', 4, null, 101, 4, 3);
 
+-- Agrega servicios --
+
+insert into servicio (tipo_servicio,id_servicio) values
+(0, 0),
+(1, 1),
+(2,2);
+
+-- Agrega servicios a estadias creadas --
+
+insert into estadia_lista_servicios (estadia_id_estadia, lista_servicios_id_servicio) values 
+(3,0),
+(3,2),
+(4,0),
+(2,1);
+
+-- Linkea alojados a las estadias --
+
+insert into alojado_lista_estadias (lista_estadias_id_estadia, alojado_tipo_doc, alojado_nro_doc) values
+(1, 'PASAPORTE','P9012345'),
+(2, 'DNI', '44887766'),
+(2, 'DNI', '31112233'),
+(3, 'DNI', '25876543'),
+(3, 'DNI', '42123456'),
+(4, 'DNI', '28123456');
+
+-- Linkeo entre check ins y alojados -- 
+
+insert into check_in_alojado (check_ins_id_check_in, alojado_tipo_doc, alojado_nro_doc) values
+(1, 'PASAPORTE','P9012345'),
+(2, 'DNI', '44887766'),
+(2, 'DNI', '31112233'),
+(3, 'DNI', '25876543'),
+(3, 'DNI', '42123456'),
+(4, 'DNI', '28123456');
+
+-- Linkeo entre check outs y alojados -- 
+
+insert into check_out_alojado(check_outs_id_check_out, alojado_tipo_doc, alojado_nro_doc) values
+(1, 'PASAPORTE','P9012345');

@@ -3,6 +3,7 @@ package ddb.deso.almacenamiento.DTO;
 import ddb.deso.negocio.TipoDoc;
 import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class DatosCheckOutDTO {
     /*  Getters y setters   */
     LocalDateTime fecha_hora_out;

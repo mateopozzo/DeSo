@@ -64,6 +64,40 @@ public class TestCU04GestoresUnitario {
         return List.of(estadia);
     }
 
+    @Test
+    public void crearReserva_Validaciones_FechasYDatos() {
+        ReservaDTO dto = new ReservaDTO();
+        dto.setFecha_inicio(LocalDate.now().plusDays(5));
+        dto.setFecha_fin(LocalDate.now().plusDays(2)); // Fechas invertidas
+
+        // Caso: Fechas invertidas
+        assertThrows(ReservaInvalidaException.class, () -> gestorHabitacion.crearReserva(dto, List.of(101L)));
+
+        // Caso: Nombre vacío
+        dto.setFecha_fin(LocalDate.now().plusDays(10));
+        dto.setNombre("");
+        dto.setApellido("Perez");
+        dto.setTelefono("123");
+        assertThrows(ReservaInvalidaException.class, () -> gestorHabitacion.crearReserva(dto, List.of(101L)));
+
+        // Caso: Lista de habitaciones nula
+        dto.setNombre("Juan");
+        assertThrows(HabitacionInexistenteException.class, () -> gestorHabitacion.crearReserva(dto, null));
+    }
+
+    @Test
+    public void crearReserva_HabitacionOcupadaPorEstadia() {
+        ReservaDTO dto = convertirReservaADTO(crearReservaValida());
+        Habitacion hab = new Habitacion();
+        hab.setNroHab(101L);
+
+        // Simulamos que la habitación ya tiene una estadía en ese rango
+        when(habitacionDAO.buscarPorNumero(101L)).thenReturn(hab);
+        when(estadiaDAO.listarPorFecha(any(), any())).thenReturn(crearEstadiaConflictiva());
+
+        assertThrows(ReservaInvalidaException.class, () -> gestorHabitacion.crearReserva(dto, List.of(101L)));
+    }
+
     private List<Habitacion> crearListaHabitaciones() {
         Habitacion h1 = new Habitacion(TipoHab.DOBLEESTANDAR, EstadoHab.DISPONIBLE,1,2), h2 = new Habitacion(TipoHab.DOBLEESTANDAR,EstadoHab.DISPONIBLE,1,2);
         h1.setNroHab(101L);
