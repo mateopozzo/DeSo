@@ -84,8 +84,6 @@ public class FacturaController {
             return ResponseEntity.ok().build();
         }
 
-        System.out.println("estoy en obtenerHuespedesSegunCUIT");
-
         PersonaJuridicaDTO entidadRetorno = gestorContabilidad.buscarRespPago(cuit);
 
         return ResponseEntity.ok(entidadRetorno);

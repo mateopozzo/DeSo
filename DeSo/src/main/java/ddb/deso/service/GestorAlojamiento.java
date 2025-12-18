@@ -458,53 +458,6 @@ public class GestorAlojamiento {
         return listaRetorno;
     }
 
-    public PersonaJuridicaDTO buscarCriteriosAlojadoPorCuit(String CUIT) {
-        if (CUIT == null || CUIT.isEmpty()) return null;
 
-        String cuitLimpio = CUIT.replace("-", "").trim();
-
-        try {
-            Long cuitNumerico = Long.parseLong(cuitLimpio);
-            ResponsablePago responsableEmpresa = responsablePagoRepository.findByCuit(cuitNumerico);
-
-            if (responsableEmpresa != null) {
-                return new PersonaJuridicaDTO(responsableEmpresa);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Error en formato de cuit");
-        }
-
-        Alojado entidadAbstracta = alojadoDAO.buscarAlojado(CUIT);
-
-        if (entidadAbstracta == null) return null;
-
-        if (entidadAbstracta.getDatos() == null ||
-                entidadAbstracta.getDatos().getDatos_personales() == null ||
-                entidadAbstracta.getDatos().getDatos_personales().getCUIT() == null) {
-            return null;
-        }
-
-        if (!entidadAbstracta.getDatos().getDatos_personales().getCUIT().equals(CUIT)) {
-            return null;
-        }
-
-        if (entidadAbstracta instanceof Invitado) {
-            var tipoDoc = entidadAbstracta.getId().getTipoDoc();
-            var nroDoc = entidadAbstracta.getId().getNroDoc();
-
-            alojadoDAO.promoverAHuesped(nroDoc, tipoDoc.toString());
-
-            entidadAbstracta = alojadoDAO.buscarPorDNI(nroDoc, tipoDoc);
-        }
-
-
-        String nombreCompleto = entidadAbstracta.getDatos().getDatos_personales().getApellido() +
-                ", " +
-                entidadAbstracta.getDatos().getDatos_personales().getNombre();
-
-        String cuitHuesped = entidadAbstracta.getDatos().getDatos_personales().getCUIT();
-
-        return new PersonaJuridicaDTO(nombreCompleto, cuitHuesped, "HUESPED");
-    }
 }
 

@@ -49,8 +49,8 @@ public class TestCU07GestorUnitario {
         return h;
     }
 
-   @Test
-public void generarFactura_FacturaA_Exito() throws Exception {
+    @Test
+    public void generarFactura_FacturaA_Exito() throws Exception {
     // 1. Datos de entrada
     Long idRespLong = 20304050607L;
     String idRespStr = "20304050607";
