@@ -121,7 +121,7 @@ export async function buscarTercero(cuit: string): Promise<PersonaJuridica> {
   console.log("Pidiendo razón social al back para CUIT:", cuit);
   try {
     const response = await fetch(
-      `${PUERTO}/buscar-tercero?${params.toString()}`,
+      `/api/facturacion/buscar-tercero?${params.toString()}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },

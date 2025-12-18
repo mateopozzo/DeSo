@@ -73,6 +73,25 @@ public class FacturaController {
     }
 
     /**
+     * Busca en la base de datos una persona juridica que coincida con el CUIT provisto
+     *
+     * @param cuit: CUIT del la persona juridica
+     * @return
+     */
+    @GetMapping("/buscar-tercero")
+    private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
+        if(cuit == null || cuit.isEmpty()){
+            return ResponseEntity.ok().build();
+        }
+
+        System.out.println("estoy en obtenerHuespedesSegunCUIT");
+
+        PersonaJuridicaDTO entidadRetorno = gestorContabilidad.buscarRespPago(cuit);
+
+        return ResponseEntity.ok(entidadRetorno);
+    }
+
+    /**
      * ENDPOINT -> /api/facturacion/generar
      * Genera el bruto de la factura
      * @param request

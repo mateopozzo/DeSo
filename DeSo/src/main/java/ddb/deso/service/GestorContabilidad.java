@@ -84,6 +84,13 @@ public class GestorContabilidad {
         return estadiaActual;
     }
 
+    public PersonaJuridicaDTO buscarRespPago(String cuit){
+        var r = responsablePagoDAO.read(Long.parseLong(cuit));
+        if(r==null)return null;
+        var p = new PersonaJuridicaDTO(cuit, r.getRazonSocial());
+        return p;
+    }
+
 
     /**
      * @param nroHabitacion : Numero de habitacion a detallar
@@ -301,9 +308,7 @@ public class GestorContabilidad {
             default: return 0.0;
         }
     }
-    
-    // Métodos placeholder
-    public ResponsablePago buscarRespPago() { return null; }
+
     public boolean ingresarPago() { return false; }
     public Pago listarCheques() { return null; }
     public List<DatosCheckIn> listarIngresos() { return new ArrayList<>(); }

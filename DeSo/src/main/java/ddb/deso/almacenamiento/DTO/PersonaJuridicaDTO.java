@@ -21,4 +21,9 @@ public class PersonaJuridicaDTO {
         this.razonSoc = (a.getRazon_social() == null ? "" : a.getRazon_social());
         this.cuit = a.getDatos().getDatos_personales().getCUIT();
     }
+
+    public PersonaJuridicaDTO(String cuit, String razonSocial) {
+        this.cuit = cuit.toString();
+        this.razonSoc = razonSocial;
+    }
 }
