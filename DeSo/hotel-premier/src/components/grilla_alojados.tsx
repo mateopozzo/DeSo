@@ -53,6 +53,7 @@ export default function GrillaAlojados({
   };
 
   const buscarCuit = async () => {
+    console.log("cuit: " + cuit);
     if (!cuit) return;
     setBuscando(true);
     setErrorTercero(null);
@@ -75,6 +76,7 @@ export default function GrillaAlojados({
   };
 
   const confirmarTercero = () => {
+    console.log("Tercero encontrado: " + terceroEncontrado);
     if (terceroEncontrado && onSeleccionarResponsable && onAvanzar) {
       onSeleccionarResponsable(terceroEncontrado);
       onAvanzar();

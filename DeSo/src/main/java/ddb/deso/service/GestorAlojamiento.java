@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddb.deso.almacenamiento.DAO.DatosCheckOutDAO;
 import ddb.deso.almacenamiento.DTO.DatosCheckOutDTO;
 import ddb.deso.almacenamiento.DTO.PersonaJuridicaDTO;
 import ddb.deso.negocio.TipoDoc;
@@ -19,20 +18,23 @@ import ddb.deso.service.excepciones.AlojadoNoEliminableException;
 import ddb.deso.service.excepciones.AlojadoPreExistenteException;
 import ddb.deso.service.excepciones.AlojadosSinCoincidenciasException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ddb.deso.repository.ResponsablePagoRepository;
+import ddb.deso.negocio.contabilidad.ResponsablePago;
 
 @Service
 public class GestorAlojamiento {
     private final AlojadoDAO alojadoDAO;
+    private final ResponsablePagoRepository responsablePagoRepository;
 
     /**
      * Constructor para la inyección de dependencias.
      * @param alojadoDAO Implementación del DAO para acceso a datos de Alojados.
      */
     @Autowired
-    public GestorAlojamiento(AlojadoDAO alojadoDAO) {
+    public GestorAlojamiento(AlojadoDAO alojadoDAO, ResponsablePagoRepository responsablePagoRepository) {
         this.alojadoDAO = alojadoDAO;
+        this.responsablePagoRepository = responsablePagoRepository; // <--- Inyección
     }
 
     /**
@@ -456,29 +458,53 @@ public class GestorAlojamiento {
         return listaRetorno;
     }
 
-    public PersonaJuridicaDTO buscarCriteriosAlojadoPorCuit(String CUIT){
-        if(CUIT == null || CUIT.isEmpty()) return null;
+    public PersonaJuridicaDTO buscarCriteriosAlojadoPorCuit(String CUIT) {
+        if (CUIT == null || CUIT.isEmpty()) return null;
 
-        Alojado entidadAbstracta = alojadoDAO.buscarAlojado(CUIT);
-        Huesped entidadConcreta = null;
+        String cuitLimpio = CUIT.replace("-", "").trim();
 
-        if(entidadAbstracta == null) return null;
+        try {
+            Long cuitNumerico = Long.parseLong(cuitLimpio);
+            ResponsablePago responsableEmpresa = responsablePagoRepository.findByCuit(cuitNumerico);
 
-        if(entidadAbstracta.getDatos().getDatos_personales().getCUIT() == null
-                || entidadAbstracta.getDatos().getDatos_personales().getCUIT().isEmpty()) return null;
-
-        if(!entidadAbstracta.getDatos().getDatos_personales().getCUIT().equals(CUIT)) return null;
-
-        if(entidadAbstracta instanceof Invitado){
-            var tipoDoc = entidadAbstracta.getId().getTipoDoc();
-            var nroDoc = entidadAbstracta.getId().getNroDoc();
-            alojadoDAO.promoverAHuesped(nroDoc, tipoDoc.toString());
-            entidadConcreta=(Huesped)alojadoDAO.buscarPorDNI(nroDoc,tipoDoc);
-        } else {
-            entidadConcreta=(Huesped)entidadAbstracta;
+            if (responsableEmpresa != null) {
+                return new PersonaJuridicaDTO(responsableEmpresa);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error en formato de cuit");
         }
 
-        return new PersonaJuridicaDTO(entidadConcreta);
+        Alojado entidadAbstracta = alojadoDAO.buscarAlojado(CUIT);
+
+        if (entidadAbstracta == null) return null;
+
+        if (entidadAbstracta.getDatos() == null ||
+                entidadAbstracta.getDatos().getDatos_personales() == null ||
+                entidadAbstracta.getDatos().getDatos_personales().getCUIT() == null) {
+            return null;
+        }
+
+        if (!entidadAbstracta.getDatos().getDatos_personales().getCUIT().equals(CUIT)) {
+            return null;
+        }
+
+        if (entidadAbstracta instanceof Invitado) {
+            var tipoDoc = entidadAbstracta.getId().getTipoDoc();
+            var nroDoc = entidadAbstracta.getId().getNroDoc();
+
+            alojadoDAO.promoverAHuesped(nroDoc, tipoDoc.toString());
+
+            entidadAbstracta = alojadoDAO.buscarPorDNI(nroDoc, tipoDoc);
+        }
+
+
+        String nombreCompleto = entidadAbstracta.getDatos().getDatos_personales().getApellido() +
+                ", " +
+                entidadAbstracta.getDatos().getDatos_personales().getNombre();
+
+        String cuitHuesped = entidadAbstracta.getDatos().getDatos_personales().getCUIT();
+
+        return new PersonaJuridicaDTO(nombreCompleto, cuitHuesped, "HUESPED");
     }
 }
 
