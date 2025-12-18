@@ -185,23 +185,6 @@ public class AlojadoController {
     }
 
     /**
-     * Busca en la base de datos una persona juridica que coincida con el CUIT provisto
-     *
-     * @param cuit: CUIT del la persona juridica
-     * @return
-     */
-    @GetMapping("api/buscar-tercero")
-    private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
-        if(cuit == null || cuit.isEmpty()){
-            return ResponseEntity.ok().build();
-        }
-
-        PersonaJuridicaDTO entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(cuit);
-
-        return ResponseEntity.ok(entidadRetorno);
-    }
-
-    /**
      * ENDPOINT para la actualizacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
      *
      * @return {@link AlojadoDTO} con datos que estan en la base

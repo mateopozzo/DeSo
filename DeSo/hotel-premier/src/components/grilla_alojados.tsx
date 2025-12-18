@@ -15,7 +15,7 @@ interface AlojadosProps {
   horaCheckout: string;
   alojadosDTO: CriteriosBusq[];
   onSeleccionarResponsable?: (responsable: ResponsablePago) => void;
-  onAvanzar?: () => void;
+  onAvanzar?: (responsable?: ResponsablePago) => void;
 }
 
 export default function GrillaAlojados({
@@ -53,6 +53,7 @@ export default function GrillaAlojados({
   };
 
   const buscarCuit = async () => {
+    console.log("cuit: " + cuit);
     if (!cuit) return;
     setBuscando(true);
     setErrorTercero(null);
@@ -75,9 +76,11 @@ export default function GrillaAlojados({
   };
 
   const confirmarTercero = () => {
+    console.log("Tercero encontrado: ", terceroEncontrado);
+
     if (terceroEncontrado && onSeleccionarResponsable && onAvanzar) {
       onSeleccionarResponsable(terceroEncontrado);
-      onAvanzar();
+      onAvanzar(terceroEncontrado);
     }
   };
 
@@ -175,7 +178,7 @@ export default function GrillaAlojados({
 
           <button
             disabled={seleccionadoIndex === null}
-            onClick={onAvanzar}
+            onClick={() => onAvanzar && onAvanzar()}
             className={`px-6 py-2 rounded-xl font-bold shadow-md transition-all m-4 ${
               seleccionadoIndex === null
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
