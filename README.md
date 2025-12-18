@@ -112,7 +112,7 @@ _Cabe mencionar que al momento de entrega de este trabajo, la base de datos ya s
 
 | Patrón        | Nro de caso de uso | Nombre de caso de uso      |
 | ------------- | ------------------ | -------------------------- |
-| **DAO**       | `1, 2, 9, 10, 11`  | Todos                      |
+| **DAO**       | `2, 4, 5, 6, 7, 10, 11`  | Todos                      |
 | **Singleton** | `1`                | Login                      |
 | **Factory**   | `9`                | Dar de alta huésped        |
 | **Generics**  | `1, 2, 9, 10, 11`  | Todos (ManejadorJSON.java) |
