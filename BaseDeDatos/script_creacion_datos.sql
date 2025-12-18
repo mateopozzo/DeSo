@@ -84,13 +84,13 @@ INSERT INTO habitacion (nro_hab, capacidad, estado_hab, tarifa, tipo_hab) VALUES
 
 -- Crear reservas -- 
 
-insert into reserva (fecha_inicio, fecha_fin, id_reserva, nombre, apellido, estado, telefono) values
-('2025-12-15', '2025-12-18', 1, 'Lucia', 'Zárate', 'Reservado', '12345678'),
-('2025-12-20', '2025-12-21', 2, 'Mauro', 'Zárate', 'Reservado', '12345679'),
-('2025-12-17', '2025-12-18', 3, 'Ramiro', 'Pargi', 'Reservado', '54366542334'),
-('2025-12-18', '2025-12-20', 4, 'Matías', 'Brunson', 'Reservado', '13546434'),
-('2025-12-23', '2026-01-1', 5, 'Mauro', 'Magaldi', 'Cancelada', '345666666'),
-('2025-12-30', '2026-01-15', 6, 'Aureliano', 'Buendía', 'Reservado', '23452');
+insert into reserva (fecha_inicio, fecha_fin, nombre, apellido, estado, telefono) values
+('2025-12-15', '2025-12-18', 'Lucia', 'Zárate', 'Reservado', '12345678'),
+('2025-12-20', '2025-12-21', 'Mauro', 'Zárate', 'Reservado', '12345679'),
+('2025-12-17', '2025-12-18', 'Ramiro', 'Pargi', 'Reservado', '54366542334'),
+('2025-12-18', '2025-12-20', 'Matías', 'Brunson', 'Reservado', '13546434'),
+('2025-12-23', '2026-01-1', 'Mauro', 'Magaldi', 'Cancelada', '345666666'),
+('2025-12-30', '2026-01-15', 'Aureliano', 'Buendía', 'Reservado', '23452');
 
 -- link reservas con habitaciones --
 
@@ -115,39 +115,39 @@ insert into responsable_de_pago (cuit, telefono, calle, cod_post, depto, localid
 
 -- Inserta check-in --
 
-insert into check_in (fecha_hora_in, id_check_in) values
-('2025-11-25', 1),
-('2025-12-01', 2),
-('2025-12-15', 3),
-('2025-12-17', 4);
+insert into check_in (fecha_hora_in) values
+('2025-11-25'),
+('2025-12-01'),
+('2025-12-15'),
+('2025-12-17');
 
 -- Creacion de check outs --
 
-insert into check_out (fecha_hora_out, id_check_out) values
-('2025-12-05', 1);
+insert into check_out (fecha_hora_out) values
+('2025-12-05');
 
 -- creacion de estadias --
 
-insert into estadia (fecha_inicio, fecha_fin, datos_check_in_id_check_in, datos_check_out_id_check_out, habitacion_nro_hab, id_estadia, reserva_id_reserva) values
-('2025-11-25', '2025-12-05', 1, 1, 101, 1, null),
-('2025-12-01', '2025-12-19', 2, null, 302, 2, null),
-('2025-12-15', '2025-12-18', 3, null, 201, 3, 1),
-('2025-12-17', '2025-12-18', 4, null, 101, 4, 3);
+insert into estadia (fecha_inicio, fecha_fin, datos_check_in_id_check_in, datos_check_out_id_check_out, habitacion_nro_hab, reserva_id_reserva) values
+('2025-11-25', '2025-12-05', 1, 1, 101,  null),
+('2025-12-01', '2025-12-19', 2, null, 302, null),
+('2025-12-15', '2025-12-18', 3, null, 201, 1),
+('2025-12-17', '2025-12-18', 4, null, 101, 3);
 
 -- Agrega servicios --
 
-insert into servicio (tipo_servicio,id_servicio) values
-(0, 0),
-(1, 1),
-(2,2);
+insert into servicio (tipo_servicio) values
+(0),
+(1),
+(2);
 
 -- Agrega servicios a estadias creadas --
 
 insert into estadia_lista_servicios (estadia_id_estadia, lista_servicios_id_servicio) values 
-(3,0),
-(3,2),
-(4,0),
-(2,1);
+(3,1),
+(3,3),
+(4,1),
+(2,2);
 
 -- Linkea alojados a las estadias --
 
