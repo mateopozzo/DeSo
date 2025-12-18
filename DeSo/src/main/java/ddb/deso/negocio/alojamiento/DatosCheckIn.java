@@ -41,14 +41,6 @@ public class DatosCheckIn {
      * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
      */
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "checkin_alojados", // Nombre de la tabla intermedia
-            joinColumns = @JoinColumn(name = "id_check_in"), // FK hacia esta clase
-            inverseJoinColumns = { // FK hacia DatosAlojado (Clave Compuesta)
-                    @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
-                    @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
-            }
-    )
     private List<DatosAlojado> alojado = new ArrayList<>();
 
     /**

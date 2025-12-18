@@ -44,14 +44,6 @@ public class DatosCheckOut {
      * Se mapea usando las columnas de la clave compuesta (nro_doc, tipo_doc).
      */
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "checkout_alojados",
-            joinColumns = @JoinColumn(name = "id_check_out"),
-            inverseJoinColumns = {
-                    @JoinColumn(name = "nro_doc", referencedColumnName = "nro_doc"),
-                    @JoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
-            }
-    )
     private List<DatosAlojado> alojado = new ArrayList<>();
 
     public DatosCheckOut(LocalDateTime fecha_hora_out) {
