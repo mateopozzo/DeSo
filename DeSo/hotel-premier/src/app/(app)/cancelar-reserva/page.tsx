@@ -48,7 +48,7 @@ export default function CancelarReserva() {
     if (!confirm(`¿Eliminar ${seleccionadas.size} reservas?`)) return;
 
     setLoading(true);
-    const ids = Array.from(seleccionadas.keys()); // Obtenemos las claves (IDs)
+    const ids = Array.from(seleccionadas.keys());
 
     for (const id of ids) {
       await cancelarReserva(id);
@@ -60,6 +60,13 @@ export default function CancelarReserva() {
 
     setSeleccionadas(new Map());
     setLoading(false);
+    const confirmar = confirm(
+      "Reservas cancelada/s \n\n PRESIONE ACEPTAR PARA CONTINUAR"
+    );
+
+    if (confirmar) {
+      router.push("/home");
+    } else return;
   };
 
   const handleChange = (
@@ -223,7 +230,7 @@ export default function CancelarReserva() {
               onClick={handleCancelarMasivo}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-md"
             >
-              Cancelar Reservaci{seleccionadas.size > 1 ? "ones" : "ón "} (
+              Cancelar reserva{seleccionadas.size > 1 ? "s" : ""} (
               {seleccionadas.size})
             </button>
           </div>
