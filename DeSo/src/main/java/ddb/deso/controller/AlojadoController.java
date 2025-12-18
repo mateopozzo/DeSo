@@ -193,10 +193,14 @@ public class AlojadoController {
     @GetMapping("api/buscar-tercero")
     private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
         if(cuit == null || cuit.isEmpty()){
-            return ResponseEntity.ok().build();
+            return ResponseEntity.badRequest().build();
         }
 
         PersonaJuridicaDTO entidadRetorno = gestorAlojamiento.buscarCriteriosAlojadoPorCuit(cuit);
+
+        if (entidadRetorno == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok(entidadRetorno);
     }

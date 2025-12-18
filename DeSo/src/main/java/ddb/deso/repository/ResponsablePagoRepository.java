@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResponsablePagoRepository extends JpaRepository<ResponsablePago, Long> {
-    
+    ResponsablePago findByCuit(Long cuit);
 }
