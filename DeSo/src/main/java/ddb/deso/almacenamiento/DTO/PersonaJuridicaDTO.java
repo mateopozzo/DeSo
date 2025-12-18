@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+/**
+ * DTO de persona juridica, utilizado en CU07 cuando se cobra a un tercero
+ */
 @NoArgsConstructor
 @Getter
 @Setter

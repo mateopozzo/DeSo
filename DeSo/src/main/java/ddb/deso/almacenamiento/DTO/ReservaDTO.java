@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+
+/**
+ * DTO que contiene la informacion de una {@link ddb.deso.negocio.habitaciones.Reserva}
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -9,13 +9,32 @@ import ddb.deso.negocio.habitaciones.Servicio;
 import java.util.List;
 
 /**
+ * Interfaz de Acceso a Datos (DAO) para la entidad Servicio.
  *
- * @author mat
  */
 public interface ServicioDAO {
+
+    /**
+     * Almacena un registro nuevo de una entidad de {@link Servicio}
+     * @param servicio : Entidad de servicio creada
+     */
     void crear(Servicio servicio);
-    void crear(TipoServicio tipoServicio);
+
+    /**
+     * Actualiza un registro presernte en el sistema de persistencia de {@link Servicio}
+     * @param servicio : Entidad de servicio creada
+     */
     void actualizar(Servicio servicio);
+
+    /**
+     * Elimina un registro presernte en el sistema de persistencia de {@link Servicio}
+     * @param servicio : Entidad de servicio creada
+     */
     void eliminar(Servicio servicio);
+
+    /**
+     * Recupera todas las entradas de {@link Servicio} persistidas
+     * @return : una lista de {@link Servicio} con todos los servicios que presta el hotel
+     */
     List<Servicio> listar();
 }

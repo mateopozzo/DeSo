@@ -43,8 +43,20 @@ public interface AlojadoDAO {
      */
     List<Alojado> buscarAlojado(CriteriosBusq criterios);
 
+    /**
+     * Recupera una lista de alojados que ocuparon una estadia
+     *
+     * @param idEstadia
+     * @return
+     */
     List<Alojado> buscarAlojado(long idEstadia);
 
+    /**
+     * Recupera un alojado según CUIT
+     *
+     * @param CUIT
+     * @return
+     */
     Alojado buscarAlojado(String CUIT);
 
     /**

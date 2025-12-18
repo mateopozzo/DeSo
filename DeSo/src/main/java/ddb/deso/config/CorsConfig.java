@@ -4,6 +4,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+/**
+ * Clase correctora de Requests POSTS con header
+ * <p>
+ *     Al enviar un post con cabecera se envía primero options, se atrapa el options para que llegue el siguiente request
+ * </p>
+ */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 

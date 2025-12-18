@@ -266,13 +266,14 @@ public class GestorHabitacion {
 
         // crear check in
         DatosCheckIn checkIn = new DatosCheckIn(fechaInicio);
-        checkIn.setAlojado(List.of(huesped.getDatos()));
-        huesped.getDatos().nuevoCheckIn(checkIn);
-
         checkInDAO.crearDatosCheckIn(checkIn);
 
+        DatosAlojado datosHuesped = huesped.getDatos();
+        huesped.getDatos().nuevoCheckIn(checkIn);
+
         for(var id : alojados) {
-            id.getDatos().nuevoCheckIn(checkIn);
+            DatosAlojado datosInvitado = id.getDatos();
+            datosInvitado.nuevoCheckIn(checkIn);
         }
 
         Reserva reserva = reservaDAO.buscarPorID(idReserva);

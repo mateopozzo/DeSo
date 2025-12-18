@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- *
- * @author mat
- */
+ * Representa los datos que contiene una {@link ddb.deso.negocio.contabilidad.Factura} en el sistema
+ * DTO utilizado en CU07 para la transferencia de datos plana entre el Front y el Back
+ * */
 @Getter
 @Setter
 public class FacturaDTO {

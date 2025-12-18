@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * Data transfer object de {@link ddb.deso.negocio.habitaciones.Habitacion}
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

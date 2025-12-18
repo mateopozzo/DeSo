@@ -27,15 +27,16 @@ public class DatosCheckInDAOJPA implements DatosCheckInDAO {
         checkInRepository.save(datosCheckIn);
     }
 
+    /** No implementado */
     @Override
     public void actualizarDatosCheckIn(DatosCheckIn datosCheckInPre, DatosCheckIn datosCheckIn) {
 
     }
-
+    /** No implementado */
     @Override
     public void eliminarDatosCheckIn(DatosCheckIn datosCheckIn) {
     }
-
+    /** No implementado */
     @Override
     public List<DatosCheckIn> listarDatosCheckIn() {
         return checkInRepository.findAll();

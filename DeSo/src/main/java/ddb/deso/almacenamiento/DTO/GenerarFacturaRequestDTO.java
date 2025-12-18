@@ -8,6 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder; 
 import java.util.List;
 
+
+/**
+ * Contiene los datos necesarios para poder generar una factura
+ */
 @Getter
 @Setter
 @NoArgsConstructor

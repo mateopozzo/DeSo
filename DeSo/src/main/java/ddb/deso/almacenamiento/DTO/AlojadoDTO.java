@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * DTO aplanado para entidad Alojado
- * * <p>Esta clase se utiliza para transferir datos de un objeto {@code Alojado}
- * (que puede ser un {@code Huesped} o un {@code Invitado}) de forma simplificada y aplanada.
+ * Utilizado en CU02, CU04, CU10, CU11
+ * * <p>Esta clase se utiliza para transferir datos de un objeto {@link Alojado}
+ * (que puede ser un {@link ddb.deso.negocio.alojamiento.Huesped} o un {@link ddb.deso.negocio.alojamiento.Invitado}) de forma simplificada y aplanada.
  * Consolida la información de contacto, residencia, personal y de registro
  * (check-in/check-out) en una única estructura, ignorando las jerarquías internas
  * del objeto de dominio.</p>
@@ -57,10 +57,10 @@ public class AlojadoDTO {
     private List<DatosCheckOut> id_check_out;
 
     /**
-     * Constructor que inicializa el DTO a partir de una instancia concreta de {@code Alojado}.
+     * Constructor que inicializa el DTO a partir de una instancia concreta de {@link Alojado}.
      * * <p>Copia todos los datos de contacto, residencia, personales y de registro
-     * (check-in/check-out) desde el objeto de dominio {@code Alojado} de origen.</p>
-     * * @param i Cualquier instancia concreta de {@code Alojado} ({@code Huesped} o {@code Invitado}).
+     * (check-in/check-out) desde el objeto de dominio {@link Alojado} de origen.</p>
+     * * @param i Cualquier instancia concreta de {@link Alojado}.
      */
     public AlojadoDTO(Alojado i) {
         // Datos Personales
@@ -134,7 +134,10 @@ public class AlojadoDTO {
         return this.tipoDoc == other.tipoDoc;
     }
 
-
+    /**
+     * Realiza una verificacion de los atributos obligatorios en el sistema
+     * @return : {@code false} si {@code this} tiene algun campo obligatorio nulo o vacio, {@code true} de otra forma
+     */
     public boolean verificarCamposObligatorios(){
         return  this.getNombre() != null          && !this.getNombre().isEmpty()        &&
                 this.getApellido() != null        && !this.getApellido().isEmpty()      &&
