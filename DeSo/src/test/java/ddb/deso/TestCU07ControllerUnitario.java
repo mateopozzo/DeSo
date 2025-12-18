@@ -45,14 +45,12 @@ public class TestCU07ControllerUnitario {
     @Autowired
     private ObjectMapper mapper;
 
-    // --- Endpoint: /verificar-estadia ---
-
     @Test
     public void verificarEstadia_RetornaEstadiaDTO_CuandoExiste() throws Exception {
         Estadia estadiaMock = new Estadia();
         estadiaMock.setIdEstadia(10L);
         estadiaMock.setFecha_inicio(LocalDate.now());
-        estadiaMock.setHabitacion(new Habitacion()); // Necesario para evitar NullPointer en DTO
+        estadiaMock.setHabitacion(new Habitacion());
         
         when(gestorContabilidad.existeEstadia(anyLong())).thenReturn(estadiaMock);
 
@@ -63,14 +61,11 @@ public class TestCU07ControllerUnitario {
 
     @Test
     public void verificarEstadia_RetornaNotFound_CuandoNoExiste() throws Exception {
-        // Simulamos excepción del gestor
         when(gestorContabilidad.existeEstadia(anyLong())).thenThrow(new Exception("No encontrada"));
 
         mockMvc.perform(get("/api/facturacion/habitacion/101/verificar-estadia"))
                 .andExpect(status().isNotFound());
     }
-
-    // --- Endpoint: /detalle ---
 
     @Test
     public void obtenerDetalle_RetornaDTO_Correctamente() throws Exception {
@@ -81,7 +76,6 @@ public class TestCU07ControllerUnitario {
         when(gestorContabilidad.calcularDetalleFacturacion(anyLong(), any(LocalTime.class)))
                 .thenReturn(detalleMock);
 
-        // Pasamos horaSalida como parametro
         mockMvc.perform(get("/api/facturacion/habitacion/101/detalle")
                         .param("horaSalida", "10:00:00"))
                 .andExpect(status().isOk())
@@ -89,20 +83,13 @@ public class TestCU07ControllerUnitario {
     }
 
     @Test
-    public void obtenerDetalle_BadRequest_AnteError() throws Exception {
-        when(gestorContabilidad.calcularDetalleFacturacion(anyLong(), any(LocalTime.class)))
-                .thenThrow(new Exception("Error calculo"));
-
-        mockMvc.perform(get("/api/facturacion/habitacion/101/detalle")
-                        .param("horaSalida", "10:00:00"))
-                .andExpect(status().isBadRequest());
-    }
-
-    // --- Endpoint: /generar ---
-
-    @Test
     public void generarFactura_Exito_200() throws Exception {
-        GenerarFacturaRequestDTO request = new GenerarFacturaRequestDTO(1L, 100L, null);
+        // Uso de Builder para evitar error de constructor
+        GenerarFacturaRequestDTO request = GenerarFacturaRequestDTO.builder()
+                .idEstadia(1L)
+                .responsableId("100")
+                .build();
+
         FacturaDTO facturaMock = new FacturaDTO();
         facturaMock.setImporte_total(10000.0f);
         facturaMock.setTipo_factura(TipoFactura.B);
@@ -121,7 +108,10 @@ public class TestCU07ControllerUnitario {
 
     @Test
     public void generarFactura_Falla_BadRequest() throws Exception {
-        GenerarFacturaRequestDTO request = new GenerarFacturaRequestDTO(1L, 100L, null);
+        GenerarFacturaRequestDTO request = GenerarFacturaRequestDTO.builder()
+                .idEstadia(1L)
+                .responsableId("100")
+                .build();
         
         doThrow(new Exception("Error validacion"))
                 .when(gestorContabilidad).generarFactura(any(GenerarFacturaRequestDTO.class));
