@@ -1,44 +1,25 @@
 package ddb.deso.almacenamiento.DTO;
 
+import ddb.deso.negocio.TipoFactura;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GenerarFacturaRequestDTO {
 
     private Long idEstadia;
-    private Long idResponsable;
-    // Lista de IDs de servicios específicos a facturar (opcional, si null se factura todo)
-    private List<Long> idsServicios;
+    private TipoFactura tipoFactura;
+    private String destinatario;
+    private boolean cobrarAlojamiento;
 
-    public GenerarFacturaRequestDTO() {
-    }
+    private List<Long> idsConsumosAIncluir;
 
-    public GenerarFacturaRequestDTO(Long idEstadia, Long idResponsable, List<Long> idsServicios) {
-        this.idEstadia = idEstadia;
-        this.idResponsable = idResponsable;
-        this.idsServicios = idsServicios;
-    }
-
-    public Long getIdEstadia() {
-        return idEstadia;
-    }
-
-    public void setIdEstadia(Long idEstadia) {
-        this.idEstadia = idEstadia;
-    }
-
-    public Long getIdResponsable() {
-        return idResponsable;
-    }
-
-    public void setIdResponsable(Long idResponsable) {
-        this.idResponsable = idResponsable;
-    }
-
-    public List<Long> getIdsServicios() {
-        return idsServicios;
-    }
-
-    public void setIdsServicios(List<Long> idsServicios) {
-        this.idsServicios = idsServicios;
-    }
+    private String responsableId;
+    private String responsableTipo;
 }

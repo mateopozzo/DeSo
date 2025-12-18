@@ -8,6 +8,7 @@ import {
   generarFacturaFinal,
   verificarEstadia,
   obtenerDatosHuesped,
+  descargarFacturaPDF,
 } from "@/services/facturar.service";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
@@ -36,8 +37,10 @@ export default function Facturar() {
 
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
   const [listaAlojados, setListaAlojados] = useState<CriteriosBusq[]>([]);
-  const [responsableSeleccionado, setResponsableSeleccionado] =
-    useState<ResponsablePago | null>(null);
+  const [facturaGenerada, setFacturaGenerada] = useState<any>(null);
+  const [responsableSeleccionado, setResponsableSeleccionado] = useState<
+    ResponsablePago | AlojadoDTO | null
+  >(null);
   const [detalleFactura, setDetalleFactura] =
     useState<DetalleFacturaDTO | null>(null);
 
@@ -104,19 +107,10 @@ export default function Facturar() {
         estadia_existe = true;
         console.log(`Response ${response}`);
 
-        setIdEst(response.idEstadia.toString());
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error al traer los alojados.");
-    }
+        const idEstadia = response.idEstadia.toString();
+        setIdEst(idEstadia);
 
-    if (estadia_existe) {
-      try {
-        // LLAMADA A BACK: obtengo los alojados de una estadía
-        const resp = await buscarAlojados(id_est);
-        // if id hab existe pero lista retorna vacía, entonces no esta ocupada throw error hab no ocupada
-
+        const resp = await buscarAlojados(idEstadia);
         if (!resp || resp.length === 0) {
           setError("La habitación no está ocupada actualmente.");
           return;
@@ -125,10 +119,10 @@ export default function Facturar() {
 
         setListaAlojados(resp);
         setPaso("GRILLA");
-      } catch (e) {
-        console.error(e);
-        setError("Error al traer los alojados.");
       }
+    } catch (err) {
+      console.error(err);
+      setError("Error al traer los alojados.");
     }
   };
 
@@ -147,7 +141,9 @@ export default function Facturar() {
     }
   };
 
-  const handleSeleccionResponsable = (alojado: ResponsablePago) => {
+  const handleSeleccionResponsable = (
+    alojado: ResponsablePago | AlojadoDTO
+  ) => {
     console.log("Responsable seleccionado:", alojado);
     setResponsableSeleccionado(alojado);
     setError(null);
@@ -173,15 +169,17 @@ export default function Facturar() {
 
       if (!esMayorDeEdad(huespedCompleto.fechanac)) {
         setError(
-          `El huésped ${responsableSeleccionado.nombre} es menor de edad. Seleccione un adulto o facture a tercero.`
+          `El huésped ${responsableSeleccionado.nombre} no es mayor de edad. Por favor, seleccione otro.`
         );
         return;
       }
 
+      setResponsableSeleccionado(huespedCompleto);
+
       cargarConsumos();
     } catch (err) {
       console.error(err);
-      setError("Error al verificar los datos del huésped. Intente nuevamente.");
+      setError("Error al verificar los datos del huésped");
     }
   };
 
@@ -191,6 +189,12 @@ export default function Facturar() {
   }) => {
     if (!detalleFactura || !responsableSeleccionado) return;
 
+    if (!responsableSeleccionado.cuit) {
+      setError(
+        "El responsable seleccionado no tiene CUIT cargado en el sistema."
+      );
+      return;
+    }
     setPaso("GUARDANDO");
 
     const destinatarioNombre =
@@ -206,19 +210,33 @@ export default function Facturar() {
       idsConsumosAIncluir: datosCobro.idsServicios,
       responsableTipo:
         "razonSoc" in responsableSeleccionado ? "TERCERO" : "HUESPED",
-      responsableId:
-        "razonSoc" in responsableSeleccionado
-          ? responsableSeleccionado.cuit
-          : responsableSeleccionado.nroDoc,
+      responsableId: responsableSeleccionado.cuit,
     };
 
+    console.log(payload);
+
     try {
-      await generarFacturaFinal(payload as any);
+      const factura = await generarFacturaFinal(payload as any);
+      setFacturaGenerada(factura);
+      await descargarPDF(factura);
       setPaso("EXITO");
     } catch (err) {
       setError("Error al generar la factura.");
       setPaso("COBRANDO");
     }
+  };
+
+  const descargarPDF = async (factura: any) => {
+    const blob = await descargarFacturaPDF(factura);
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `factura_${factura.num_factura}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
   };
 
   return (

@@ -34,10 +34,12 @@ export interface CriteriosBusq {
   apellido: string;
   tipoDoc: string;
   nroDoc: string;
+  cuit?: string;
 }
 
 export interface AlojadoDTO extends CriteriosBusq {
   fechanac: string;
+  cuit?: string;
 }
 
 export interface FacturaDTO {

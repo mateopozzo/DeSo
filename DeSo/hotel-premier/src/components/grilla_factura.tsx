@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 
 interface Props {
@@ -18,9 +18,10 @@ export default function GrillaItemsFactura({
   onCancelar,
 }: Props) {
   const [cobrarEstadia, setCobrarEstadia] = useState(true);
+
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<
     number[]
-  >(detalle.consumos.map((s) => s.idServicio));
+  >(detalle?.consumos?.map((s) => s.idServicio) || []);
 
   // estado local para el tipo de factura seleccionado (no mutamos la prop)
   const [tipoFac, setTipoFac] = useState<string>(

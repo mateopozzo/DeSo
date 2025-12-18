@@ -4,6 +4,6 @@ import ddb.deso.almacenamiento.DTO.FacturaDTO;
 
 public interface EstrategiaGuardadoFactura {
 
-    public void guardarFactura(FacturaDTO factura);
+    byte[] guardarFactura(FacturaDTO factura);
 
 }

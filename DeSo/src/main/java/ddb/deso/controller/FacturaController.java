@@ -62,6 +62,7 @@ public class FacturaController {
     @PostMapping("/generar")
     public ResponseEntity<FacturaDTO> generarFactura(@RequestBody GenerarFacturaRequestDTO request) {
         try {
+            System.out.println("IDS CONSUMOS: " + request.getIdsConsumosAIncluir());
             FacturaDTO factura = gestorContabilidad.generarFactura(request);
             return ResponseEntity.ok(factura);
         } catch (Exception e) {
@@ -70,16 +71,17 @@ public class FacturaController {
         }
     }
 
-    @PostMapping("api/imprimir-factura")
-    public ResponseEntity<FacturaDTO> imprimirFactura(@RequestBody FacturaDTO factura, @RequestParam String strat){
+    @PostMapping("/imprimir-factura")
+    public ResponseEntity<byte[]> imprimirFactura(
+            @RequestBody FacturaDTO factura,
+            @RequestParam String strat
+    ) {
+        byte[] pdf = gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
 
-        if(factura == null || strat == null || strat.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
-
-        gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
-
-        return ResponseEntity.ok(factura);
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=factura.pdf")
+                .header("Content-Type", "application/pdf")
+                .body(pdf);
     }
 
   
