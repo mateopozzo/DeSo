@@ -2,6 +2,9 @@ package ddb.deso.almacenamiento.DTO;
 
 import ddb.deso.negocio.TipoServicio;
 
+/**
+ * Clase de transferencia de datos de tipo {@link ddb.deso.negocio.habitaciones.Servicio}
+ */
 public class ServicioDTO {
     
     private Long idServicio;

@@ -36,18 +36,12 @@ public class AlojadoController {
     }
 
     /**
-     * Endpoint para CREAR un nuevo alojado (Huésped o Invitado).
+     * Endpoint para crear un nuevo alojado (Huésped o Invitado).
      * Escucha peticiones POST en /api/huesped.
      *
      * @param alojadoDTO Los datos del nuevo alojado (vienen en el body del POST en formato JSON).
      * @param force (Opcional) Booleano para forzar la creación incluso si hay validaciones no críticas (por defecto false).
-     * @return {@link ResponseEntity} con:
-     * <ul>
-     * <li>201 CREATED: Si se creó exitosamente.</li>
-     * <li>400 BAD REQUEST: Si el body es nulo, faltan campos o el alojado es inválido.</li>
-     * <li>409 CONFLICT: Si el documento ya existe (y no se usó force).</li>
-     * <li>500 INTERNAL SERVER ERROR: Para errores no previstos.</li>
-     * </ul>
+     * @return {@link ResponseEntity} con body {@link String} que devuelve tipo de error
      */
     @PostMapping("/api/huesped")
     public ResponseEntity<String> crearAlojado(@RequestBody AlojadoDTO alojadoDTO, @RequestParam(required = false, defaultValue = "false") boolean force) {
@@ -83,13 +77,13 @@ public class AlojadoController {
             return ResponseEntity.internalServerError().body("Error de aplicacion" + e.getMessage());
         }
 
-        // EXITO
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
-     * Endpoint para obtener los datos del alojado que el usuario elige para modificar
-     *
+     * Endpoint para obtener los datos del {@link ddb.deso.negocio.alojamiento.Alojado} que el usuario elige para modificar
+     * @param nroDoc : Numero de documento del alojado a buscar
+     * @param tipoDocStr : String del tipo de documento del alojado a buscar
      * @return
      */
     @GetMapping("api/obtener-atributos-huesped")
@@ -146,7 +140,15 @@ public class AlojadoController {
         return ResponseEntity.ok(alojadosEncontrados);
     }
 
-
+    /**
+     * Busca solo huéspedes que cumplan con los criterios especificados.
+     *
+     * @param apellido Filtro por apellido (opcional).
+     * @param nombre Filtro por nombre (opcional).
+     * @param tipoDoc Filtro por tipo de documento (opcional).
+     * @param nroDoc Filtro por número de documento (opcional).
+     * @return Lista de {@link CriteriosBusq} con los huéspedes encontrados o lista vacía si no hay coincidencias.
+     */
     @GetMapping("/api/buscar-huesped")
     private ResponseEntity<List <CriteriosBusq>> obtenerHuespedes(
             @RequestParam(required = false) String apellido,
@@ -171,11 +173,23 @@ public class AlojadoController {
         return ResponseEntity.ok(huespedesEncontrados);
     }
 
+    /**
+     * Busca alojados (invitados o huéspedes) que hayan participado de la estadía.
+     *
+     * @param idEstadia id de la estadía que se desea operar
+     * @return Lista de {@link CriteriosBusq} con los alojados encontrados o lista vacía si no hay coincidencias.
+     */
     @GetMapping("api/buscar-huespedes-de-estadia")
     private ResponseEntity<List<CriteriosBusq>> obtenerHuespedesDeEstadia(@RequestParam long idEstadia){
         return ResponseEntity.ok(gestorAlojamiento.buscarCriteriosALojadoDeEstadia(idEstadia));
     }
 
+    /**
+     * Busca en la base de datos una persona juridica que coincida con el CUIT provisto
+     *
+     * @param cuit: CUIT del la persona juridica
+     * @return
+     */
     @GetMapping("api/buscar-tercero")
     private ResponseEntity<PersonaJuridicaDTO> obtenerHuespedesSegunCUIT(@RequestParam String cuit){
         if(cuit == null || cuit.isEmpty()){
@@ -235,6 +249,11 @@ public class AlojadoController {
 
     }
 
+    /**
+     * ENDPOINT para la eliminacion de los datos de una entidad {@link ddb.deso.negocio.alojamiento.Alojado}
+     *
+     * @return {@link BajaHuesped} con el estado final de la operacion
+     */
     @DeleteMapping("api/eliminar-huesped")
     ResponseEntity<BajaHuesped> darDeBajaAlojado(@RequestBody AlojadoDTO dtoAlojadoPorEliminar){
 
@@ -243,7 +262,7 @@ public class AlojadoController {
         }
 
         try{
-                gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
+            gestorAlojamiento.eliminarAlojado(dtoAlojadoPorEliminar);
         } catch (AlojadoNoEliminableException e){
             return ResponseEntity.ok(BajaHuesped.OPERACION_PROHIBIDA);
         } catch (Exception e){
@@ -253,19 +272,17 @@ public class AlojadoController {
         return ResponseEntity.ok(BajaHuesped.DADO_DE_BAJA);
     }
 
-    private boolean identidadValida(CriteriosBusq c){
-        if(c==null)return false;
-        if(c.getTipoDoc()==null)return false;
-        if(c.getNroDoc()==null || c.getNroDoc().isEmpty())return false;
-        return true;
-    }
+    /**
+     * Metodo para verificar la validez de la entidad pasada.
+     * @param a
+     * @return {@code false} si el tipo de documento o el numero es nulo o vacío, {@code true} de lo contrario
+     */
     private boolean identidadValida(AlojadoDTO a){
         if(a==null)return false;
         if(a.getTipoDoc()==null)return false;
         if(a.getNroDoc()==null || a.getNroDoc().isEmpty())return false;
         return true;
     }
-
 
     //memo
     // @PutMapping    ->    modificar

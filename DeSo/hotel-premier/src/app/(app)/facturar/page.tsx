@@ -8,17 +8,18 @@ import {
   generarFacturaFinal,
   verificarEstadia,
   obtenerDatosHuesped,
+  descargarFactura,
 } from "@/services/facturar.service";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
 import { pedirHabs, Habitacion } from "../../../services/habitaciones.service";
 import GrillaItemsFactura from "@/components/grilla_factura";
-
+const hoy = new Date();
 // revisar de donde sacar que es mayor
 const esMayorDeEdad = (fechaNacStr: string): boolean => {
   if (!fechaNacStr) return false;
   const nacimiento = new Date(fechaNacStr);
-  const hoy = new Date();
+
   let edad = hoy.getFullYear() - nacimiento.getFullYear();
   const m = hoy.getMonth() - nacimiento.getMonth();
   if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
@@ -36,8 +37,10 @@ export default function Facturar() {
 
   const [listaHabitaciones, setListaHabitaciones] = useState<Habitacion[]>([]);
   const [listaAlojados, setListaAlojados] = useState<CriteriosBusq[]>([]);
-  const [responsableSeleccionado, setResponsableSeleccionado] =
-    useState<ResponsablePago | null>(null);
+  const [facturaGenerada, setFacturaGenerada] = useState<any>(null);
+  const [responsableSeleccionado, setResponsableSeleccionado] = useState<
+    ResponsablePago | AlojadoDTO | null
+  >(null);
   const [detalleFactura, setDetalleFactura] =
     useState<DetalleFacturaDTO | null>(null);
 
@@ -104,19 +107,10 @@ export default function Facturar() {
         estadia_existe = true;
         console.log(`Response ${response}`);
 
-        setIdEst(response.idEstadia.toString());
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error al traer los alojados.");
-    }
+        const idEstadia = response.idEstadia.toString();
+        setIdEst(idEstadia);
 
-    if (estadia_existe) {
-      try {
-        // LLAMADA A BACK: obtengo los alojados de una estadía
-        const resp = await buscarAlojados(id_est);
-        // if id hab existe pero lista retorna vacía, entonces no esta ocupada throw error hab no ocupada
-
+        const resp = await buscarAlojados(idEstadia);
         if (!resp || resp.length === 0) {
           setError("La habitación no está ocupada actualmente.");
           return;
@@ -125,10 +119,10 @@ export default function Facturar() {
 
         setListaAlojados(resp);
         setPaso("GRILLA");
-      } catch (e) {
-        console.error(e);
-        setError("Error al traer los alojados.");
       }
+    } catch (err) {
+      console.error(err);
+      setError("Error al traer los alojados.");
     }
   };
 
@@ -147,7 +141,9 @@ export default function Facturar() {
     }
   };
 
-  const handleSeleccionResponsable = (alojado: ResponsablePago) => {
+  const handleSeleccionResponsable = (
+    alojado: ResponsablePago | AlojadoDTO
+  ) => {
     console.log("Responsable seleccionado:", alojado);
     setResponsableSeleccionado(alojado);
     setError(null);
@@ -173,24 +169,33 @@ export default function Facturar() {
 
       if (!esMayorDeEdad(huespedCompleto.fechanac)) {
         setError(
-          `El huésped ${responsableSeleccionado.nombre} es menor de edad. Seleccione un adulto o facture a tercero.`
+          `El huésped ${responsableSeleccionado.nombre} no es mayor de edad. Por favor, seleccione otro.`
         );
         return;
       }
 
+      setResponsableSeleccionado(huespedCompleto);
+
       cargarConsumos();
     } catch (err) {
       console.error(err);
-      setError("Error al verificar los datos del huésped. Intente nuevamente.");
+      setError("Error al verificar los datos del huésped");
     }
   };
 
   const confirmarFactura = async (datosCobro: {
     cobrarEstadia: boolean;
     idsServicios: number[];
+    strat: string;
   }) => {
     if (!detalleFactura || !responsableSeleccionado) return;
 
+    if (!responsableSeleccionado.cuit) {
+      setError(
+        "El responsable seleccionado no tiene CUIT cargado en el sistema."
+      );
+      return;
+    }
     setPaso("GUARDANDO");
 
     const destinatarioNombre =
@@ -206,18 +211,39 @@ export default function Facturar() {
       idsConsumosAIncluir: datosCobro.idsServicios,
       responsableTipo:
         "razonSoc" in responsableSeleccionado ? "TERCERO" : "HUESPED",
-      responsableId:
-        "razonSoc" in responsableSeleccionado
-          ? responsableSeleccionado.cuit
-          : responsableSeleccionado.nroDoc,
+      responsableId: responsableSeleccionado.cuit,
     };
 
+    console.log(payload);
+
     try {
-      await generarFacturaFinal(payload as any);
+      const factura = await generarFacturaFinal(payload as any);
+      setFacturaGenerada(factura);
+      await descargarPDF(factura, datosCobro.strat);
       setPaso("EXITO");
     } catch (err) {
       setError("Error al generar la factura.");
       setPaso("COBRANDO");
+    }
+  };
+
+  const descargarPDF = async (factura: any, strat: string) => {
+    try {
+      const blob = await descargarFactura(factura, strat);
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+
+      const extension = strat === "json" ? "json" : "pdf";
+      a.download = `factura_${hoy.getFullYear()}-${hoy.getMonth()}-${hoy.getDay()}.${extension}`;
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error en descarga", error);
     }
   };
 
@@ -243,8 +269,9 @@ export default function Facturar() {
           "La factura se descargará en breve con el formato elegido."}
       </p>
       {/* errores */}
+
       {error && (
-        <div className="bg-red-600 text-white p-4 rounded-xl mb-6 font-bold shadow-md">
+        <div className="bg-[#914d45] text-white p-3 mb-4 rounded-lg font-semibold">
           {error}
         </div>
       )}
@@ -336,13 +363,20 @@ export default function Facturar() {
       )}
       {/* PASO 4: EXITO */}
       {paso === "EXITO" && (
-        <div className="text-center py-20">
-          <h2 className="text-3xl text-green-600 font-bold mb-4">
-            Operación Exitosa
+        <div className="flex flex-col items-center justify-center py-20">
+          <img
+            src="success.svg"
+            alt="Éxito"
+            className="dark:invert"
+            width={90}
+            height={90}
+          />
+          <h2 className="text-3xl dark:text-white font-bold mb-4">
+            Factura creada con éxito
           </h2>
           <button
             onClick={() => router.push("/home")}
-            className="bg-blue-600 text-white px-6 py-2 rounded"
+            className="dark:bg-gray-950 font-semibold border dark:border-white rounded-xl text-white px-6 py-2 cursor-pointer hover:bg-green-600 hover:border-green-600"
           >
             Volver al inicio
           </button>

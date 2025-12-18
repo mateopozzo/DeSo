@@ -21,7 +21,8 @@ const MENU_ITEMS: opciones[] = [
     width: 40,
     options: [
       { label: "Dar alta de huésped", href: "/alta-huesped" },
-      { label: "Ocupar habitación", href: "/ocupar-hab" },
+      { label: "Dar de baja huésped", href: "/buscar-huesped" },
+      { label: "Buscar huésped", href: "/buscar-huesped" },
     ],
   },
   {
@@ -29,14 +30,18 @@ const MENU_ITEMS: opciones[] = [
     icon: "/reserva.svg",
     alt: "Reservas",
     width: 40,
-    options: [{ label: "Reservar habitación", href: "/reservar-hab" }],
+    options: [
+      { label: "Reservar habitación", href: "/reservar-hab" },
+      { label: "Cancelar reserva", href: "/cancelar-reserva" },
+      { label: "Ocupar habitación", href: "/ocupar-hab" },
+    ],
   },
   {
     id: "facturacion",
     icon: "/fac.svg",
     alt: "Facturación",
     width: 50,
-    options: [{ label: "Generar factura", href: "/home" }],
+    options: [{ label: "Generar factura", href: "/facturar" }],
   },
 ];
 

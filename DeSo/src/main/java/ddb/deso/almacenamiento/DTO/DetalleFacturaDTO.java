@@ -4,6 +4,10 @@ import ddb.deso.negocio.TipoFactura;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Representa los datos necesarios para el calculo de la factura
+ * DTO utilizado en CU07 para la transferencia de datos plana entre el Front y el Back
+ * */
 public class DetalleFacturaDTO {
 
     // Identificador de la estadía que se está facturando

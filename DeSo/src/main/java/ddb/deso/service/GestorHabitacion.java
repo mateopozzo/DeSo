@@ -24,6 +24,9 @@ import ddb.deso.service.excepciones.HabitacionInexistenteException;
 import ddb.deso.service.excepciones.ReservaInexistenteException;
 import ddb.deso.service.excepciones.ReservaInvalidaException;
 
+/**
+ * Gestor de capa service. Encargado de la gestión de casos de uso referidos a reservas y estadias
+ */
 @Service
 @Transactional
 public class GestorHabitacion {
@@ -71,6 +74,11 @@ public class GestorHabitacion {
         this.checkInDAO = checkInDAO;
     }
 
+    /**
+     * Recupera la totalidad de las habitaciones registradas en el sistema.
+     *
+     * @return Lista de {@link HabitacionDTO} o una lista vacía si no hay registros.
+     */
     public List<HabitacionDTO> listarHabitaciones(){
         var listaHabitaciones = habitacionDAO.listar();
 
@@ -89,6 +97,12 @@ public class GestorHabitacion {
 
     }
 
+
+    /**
+     * Obtiene las reservas existentes y las transforma en una estructura de disponibilidad.
+     *
+     * @return Lista de {@link DisponibilidadDTO} representando los bloqueos de habitaciones por reservas.
+     */
     public List<DisponibilidadDTO> listarReservas() {
 
         var reservas = reservaDAO.listar();
@@ -103,6 +117,17 @@ public class GestorHabitacion {
 
     }
 
+    /**
+     * Recupera las reservas activas dentro de un rango de fechas específico.
+     * <p>
+     * Filtra aquellas reservas cuyo estado sea "Cancelada" y aplana la estructura
+     * para retornar la disponibilidad por habitación.
+     * </p>
+     *
+     * @param fechaInicio Inicio del rango de búsqueda.
+     * @param fechaFin    Fin del rango de búsqueda.
+     * @return Lista de {@link DisponibilidadDTO} de las reservas válidas en el periodo.
+     */
     public List<DisponibilidadDTO> listarReservas(LocalDate fechaInicio, LocalDate fechaFin) {
 
         var reservas = reservaDAO.listarPorFecha(fechaInicio, fechaFin);
@@ -119,6 +144,11 @@ public class GestorHabitacion {
         return disponibilidadesEnFecha;
     }
 
+    /**
+     * Obtiene el histórico completo de estadías registradas.
+     *
+     * @return Lista de {@link DisponibilidadDTO} representando la ocupación real histórica.
+     */
     public List<DisponibilidadDTO> listarEstadias() {
 
         var estadias = estadiaDAO.listar();
@@ -132,6 +162,13 @@ public class GestorHabitacion {
 
     }
 
+    /**
+     * Obtiene las estadías registradas dentro de un rango de fechas.
+     *
+     * @param fechaInicio Inicio del rango de búsqueda.
+     * @param fechaFin    Fin del rango de búsqueda.
+     * @return Lista de {@link DisponibilidadDTO} en el periodo solicitado.
+     */
     public List<DisponibilidadDTO> listarEstadias(LocalDate fechaInicio, LocalDate fechaFin){
 
         var estadias = estadiaDAO.listarPorFecha(fechaInicio, fechaFin);
@@ -146,6 +183,18 @@ public class GestorHabitacion {
     }
 
 
+    /**
+     * Orquestador para la creación y persistencia de una nueva reserva.
+     * <p>
+     * Realiza validaciones de integridad de datos y verifica la disponibilidad de
+     * las habitaciones solicitadas contra las estadías y reservas existentes para evitar <i>overbooking</i>.
+     * </p>
+     *
+     * @param reservaDTO          Datos de la reserva a crear.
+     * @param listaIDHabitaciones Lista de identificadores de las habitaciones a reservar.
+     * @throws ReservaInvalidaException       Si los datos son inconsistentes (fechas, nulos) o las habitaciones no están disponibles.
+     * @throws HabitacionInexistenteException Si algún ID de habitación no existe.
+     */
     public void crearReserva(ReservaDTO reservaDTO, List<Long> listaIDHabitaciones) {
 
         if(reservaDTO == null){
@@ -216,7 +265,26 @@ public class GestorHabitacion {
 
     }
 
-
+    /**
+     * Ejecuta la lógica de negocio para el <i>Check-In</i> y ocupación efectiva de una habitación.
+     * <p>
+     * Se encarga de:
+     * <ul>
+     * <li>Validar y recuperar al huésped principal (promoviéndolo de Invitado a Huésped si es necesario).</li>
+     * <li>Registrar los datos de Check-In y asociarlos a todos los alojados.</li>
+     * <li>Generar y persistir la entidad {@link Estadia} vinculada a la reserva y habitación.</li>
+     * </ul>
+     * </p>
+     *
+     * @param IDHabitacion       Identificador de la habitación a ocupar.
+     * @param idReserva          Identificador de la reserva asociada.
+     * @param criteriosHuesped   Criterios de búsqueda para el responsable (huésped).
+     * @param criteriosinvitados Lista de criterios para buscar a los acompañantes.
+     * @param fechaInicio        Fecha de inicio de la ocupación.
+     * @param fechaFin           Fecha de fin de la ocupación.
+     * @throws AlojadoInvalidoException       Si los alojados no existen o hay ambigüedad en la búsqueda.
+     * @throws HabitacionInexistenteException Si la habitación no existe.
+     */
     public void ocuparHabitacion(Long IDHabitacion, Long idReserva, CriteriosBusq criteriosHuesped, List<CriteriosBusq> criteriosinvitados, LocalDate fechaInicio, LocalDate fechaFin ) {
 
         // busqueda del encargado
@@ -266,13 +334,14 @@ public class GestorHabitacion {
 
         // crear check in
         DatosCheckIn checkIn = new DatosCheckIn(fechaInicio);
-        checkIn.setAlojado(List.of(huesped.getDatos()));
-        huesped.getDatos().nuevoCheckIn(checkIn);
-
         checkInDAO.crearDatosCheckIn(checkIn);
 
+        DatosAlojado datosHuesped = huesped.getDatos();
+        huesped.getDatos().nuevoCheckIn(checkIn);
+
         for(var id : alojados) {
-            id.getDatos().nuevoCheckIn(checkIn);
+            DatosAlojado datosInvitado = id.getDatos();
+            datosInvitado.nuevoCheckIn(checkIn);
         }
 
         Reserva reserva = reservaDAO.buscarPorID(idReserva);
@@ -292,6 +361,13 @@ public class GestorHabitacion {
         huesped.nuevaEstadia(estadia);
     }
 
+    /**
+     * Método auxiliar para transformar una Reserva y sus habitaciones asociadas
+     * en una lista plana de objetos de disponibilidad.
+     *
+     * @param reserva La entidad de reserva a procesar.
+     * @return Lista de DTOs con la información de ocupación proyectada.
+     */
     private List<DisponibilidadDTO> listarDisponibilidadesPorReserva(Reserva reserva){
         var iteradorHabitaciones = reserva.getListaHabitaciones().iterator();
         List<DisponibilidadDTO> listaDisponibilidades = new ArrayList<>();
@@ -310,6 +386,12 @@ public class GestorHabitacion {
         }
         return listaDisponibilidades;
     }
+
+    /**
+     * Método encargado de recolectar reservas hechas en un rango de fechas de interés
+     * @param rango : entidad {@link ConsultarReservasDTO} con las fechas de consulta
+     * @return : Lista de {@link ReservaDTO}
+     */
     @Transactional(readOnly = true)
     public Collection<ReservaDTO> consultarReservas(ConsultarReservasDTO rango) {
 

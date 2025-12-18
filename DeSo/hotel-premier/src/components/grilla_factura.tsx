@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   onConfirmar: (payload: {
     cobrarEstadia: boolean;
     idsServicios: number[];
+    strat: string;
   }) => void;
   onCancelar: () => void;
 }
@@ -18,9 +19,18 @@ export default function GrillaItemsFactura({
   onCancelar,
 }: Props) {
   const [cobrarEstadia, setCobrarEstadia] = useState(true);
+
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<
     number[]
-  >(detalle.consumos.map((s) => s.idServicio));
+  >(detalle?.consumos?.map((s) => s.idServicio) || []);
+
+  const [formatoDescarga, setFormatoDescarga] = useState<string>("pdf");
+
+  // estado local para el tipo de factura seleccionado (no mutamos la prop)
+  const [tipoFac, setTipoFac] = useState<string>(
+    detalle.tipoFacturaSugerida || "B"
+  );
+  const [facturaDistinta, setFacturaDistinta] = useState<boolean>(false);
 
   const toggleServicio = (id: number) => {
     setServiciosSeleccionados((prev) =>
@@ -39,8 +49,8 @@ export default function GrillaItemsFactura({
     let iva = 0;
     let total = subtotal;
 
-    // solo calcular si es A
-    if (detalle.tipoFacturaSugerida === "A") {
+    // solo calcular si es A (usando el tipo seleccionado)
+    if (tipoFac === "A") {
       iva = subtotal * 0.21;
       total = subtotal + iva;
     } else {
@@ -50,13 +60,65 @@ export default function GrillaItemsFactura({
     }
 
     return { subtotal, iva, total };
-  }, [cobrarEstadia, serviciosSeleccionados, detalle]);
+  }, [cobrarEstadia, serviciosSeleccionados, detalle, tipoFac]);
+
+  const cambiarTipo = (nuevoTipo: string) => {
+    setTipoFac(nuevoTipo);
+    if (nuevoTipo === detalle.tipoFacturaSugerida) {
+      setFacturaDistinta(false);
+      return;
+    }
+
+    switch (nuevoTipo) {
+      case "A":
+        break;
+      case "B":
+        break;
+      case "C":
+        break;
+      case "E":
+        break;
+      default:
+        setTipoFac("B");
+        break;
+    }
+
+    setFacturaDistinta(true);
+  };
   return (
-    <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+      <div className="flex flex-row justify-between mb-8">
+        <div className="flex flex-col">
+          <h2 className="text-xl dark:text-white text-black font-semibold">
+            Seleccione el tipo de factura a generar
+          </h2>
+          <p className="text-sm text-gray-500">
+            Le recomendamos utilizar el tipo de factura sugerido, ya que este se
+            basa en la condición tributaria del destinatario.
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-2 text-gray-700 dark:text-gray-400 uppercase text-xs">
+            Tipo de factura
+          </label>
+          <select
+            name="tipoFac"
+            value={tipoFac}
+            onChange={(e) => cambiarTipo(e.target.value)}
+            className="py-1 px-2 text-center border border-blue-600 rounded-lg bg-[#f5f7fa] dark:bg-gray-950 dark:text-white"
+          >
+            <option value="B">B</option>
+            <option value="A">A</option>
+            <option value="C">C</option>
+            <option value="E">E</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
         <div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-            Detalle de Consumos
+            Detalle de consumos
           </h3>
           <p className="text-sm text-gray-500">
             Facturar a:{" "}
@@ -65,10 +127,31 @@ export default function GrillaItemsFactura({
             </span>
           </p>
         </div>
-        <div className="text-right">
-          <span className="text-xs uppercase text-gray-400">Tipo Sugerido</span>
-          <div className="text-2xl font-bold text-blue-500 border-2 border-blue-500 px-3 rounded inline-block ml-2">
-            {detalle.tipoFacturaSugerida}
+        <div className="text-right flex flex-col">
+          <div>
+            <span className="text-xs uppercase text-gray-400">
+              Tipo sugerido
+            </span>
+            <div
+              className={`mb-4 text-2xl font-bold border-2 px-3 rounded inline-block ml-2 ${
+                facturaDistinta
+                  ? "text-gray-400 dark:text-gray-600 border-gray-300 dark:border-gray-600"
+                  : "text-blue-500 border-blue-500"
+              }`}
+            >
+              {detalle.tipoFacturaSugerida}
+            </div>
+
+            {facturaDistinta && (
+              <div className="text-right">
+                <span className="text-xs uppercase text-gray-400">
+                  Tipo seleccionado
+                </span>
+                <div className="text-2xl font-bold text-green-400 border-2 border-green-400 px-3 rounded inline-block ml-2">
+                  {tipoFac}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -147,22 +230,41 @@ export default function GrillaItemsFactura({
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 mt-6">
-        <button
-          onClick={onCancelar}
-          className="px-4 py-2 text-gray-600 dark:text-white font-semibold hover:bg-red-500 rounded-lg border border-gray-300 transition hover:border-red-500"
-        >
-          Volver
-        </button>
-        <button
-          disabled={!cobrarEstadia && serviciosSeleccionados.length === 0}
-          onClick={() =>
-            onConfirmar({ cobrarEstadia, idsServicios: serviciosSeleccionados })
-          }
-          className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-lg transition"
-        >
-          Confirmar factura
-        </button>
+      <div className="flex justify-between gap-4 mt-6">
+        <div className="flex flex-col items-center justify-center">
+          <label className="text-sm text-gray-500 mb-2">
+            Formato de descarga
+          </label>
+          <select
+            value={formatoDescarga}
+            onChange={(e) => setFormatoDescarga(e.target.value)}
+            className="px-6 py-2 border border-gray-300 rounded-lg text-sm bg-white dark:bg-gray-950 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+          >
+            <option value="pdf">PDF</option>
+            <option value="json">JSON</option>
+          </select>
+        </div>
+        <div className="flex flex-row items-end gap-4">
+          <button
+            onClick={onCancelar}
+            className="px-6 py-2 text-gray-600 dark:text-white font-semibold hover:bg-red-500 rounded-lg border border-gray-300 transition hover:border-red-500"
+          >
+            Volver
+          </button>
+          <button
+            disabled={!cobrarEstadia && serviciosSeleccionados.length === 0}
+            onClick={() =>
+              onConfirmar({
+                cobrarEstadia,
+                idsServicios: serviciosSeleccionados,
+                strat: formatoDescarga,
+              })
+            }
+            className="px-6 py-2 border border-green-600 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-lg transition"
+          >
+            Confirmar factura
+          </button>
+        </div>
       </div>
     </div>
   );

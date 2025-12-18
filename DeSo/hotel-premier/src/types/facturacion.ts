@@ -14,7 +14,7 @@ export interface DetalleFacturaDTO {
   costoEstadia: number;
   consumos: ServicioDTO[];
   montoTotal: number;
-  tipoFacturaSugerida: "A" | "B" | "C";
+  tipoFacturaSugerida: "A" | "B" | "C" | "E";
 }
 
 // POST a generar GenerarFacturaRequestDTO
@@ -34,10 +34,12 @@ export interface CriteriosBusq {
   apellido: string;
   tipoDoc: string;
   nroDoc: string;
+  cuit?: string;
 }
 
 export interface AlojadoDTO extends CriteriosBusq {
   fechanac: string;
+  cuit?: string;
 }
 
 export interface FacturaDTO {

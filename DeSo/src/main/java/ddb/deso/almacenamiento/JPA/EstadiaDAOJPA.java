@@ -31,11 +31,12 @@ public class EstadiaDAOJPA implements EstadiaDAO {
         estadiaRepository.save(estadia);
     }
 
+    /** No implementado */
     @Override
     public void actualizar(Estadia estadia) {
 
     }
-
+    /** No implementado */
     @Override
     public void eliminar(Estadia estadia) {
 
@@ -65,11 +66,13 @@ public class EstadiaDAOJPA implements EstadiaDAO {
                 .collect(Collectors.toList());
     }
 
+    /** No implementado */
     @Override
     public List<Estadia> listarPorHuesped(Huesped huesped) {
         return List.of();
     }
 
+    /** No implementado */
     @Override
     public List<Estadia> listarPorFechayHuesped(LocalDate fecha, Huesped huesped) {
         return List.of();

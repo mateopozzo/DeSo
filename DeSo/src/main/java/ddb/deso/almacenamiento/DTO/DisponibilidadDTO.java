@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 /**
- * DTO destinado a la comunicación de reservas y estadias en su rango de fecha
+ * DTO destinado a la comunicación de {@link ddb.deso.negocio.habitaciones.Reserva} o {@link Estadia} en su rango de fecha
  */
 @Getter
 @Setter
@@ -26,9 +26,9 @@ public class DisponibilidadDTO {
         this.estado = EstadoHab.OCUPADA;
     }
 
-    TipoHab tipo;
-    Long idHabitacion;
-    LocalDate fecha_inicio;
-    LocalDate fecha_fin;
-    EstadoHab estado;
+    TipoHab tipo;   // tipo de habitacion
+    Long idHabitacion; // id unico de la habitacion
+    LocalDate fecha_inicio; // fecha de inicio de la estadia/reserva
+    LocalDate fecha_fin; // fecha de fin
+    EstadoHab estado; // estadodo en el que se encuentra la habitacion en el rango de fechas
 }

@@ -9,6 +9,7 @@ import {
 
 export default function buscarHuesped() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   const form_limpio = {
     apellido: "",
@@ -32,6 +33,7 @@ export default function buscarHuesped() {
   };
 
   const enviarDatos = async () => {
+    setError(null);
     const dataDTO: CriteriosBusq = {
       apellido: formData.apellido,
       nombre: formData.nombre,
@@ -49,10 +51,6 @@ export default function buscarHuesped() {
       setResultados(datos);
       setBusquedaRealizada(true);
       setLoading(false);
-
-      if (datos.length === 0) {
-        router.push("/alta-huesped");
-      }
     } catch (err) {
       alert("Error al conectarse al servidor");
       setLoading(false);
@@ -63,11 +61,49 @@ export default function buscarHuesped() {
   // cuando se presione enviar, se forma objeto, se envia a back, se procesa response
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+
+    const camposSoloLetras = [
+      { key: "apellido", etiq: "apellido" },
+      { key: "nombre", etiq: "nombre" },
+    ];
+
+    let errores_regex: string[] = [];
+    let primera_key_error: string | null = null;
+
+    for (const campo of camposSoloLetras) {
+      const valor = formData[campo.key as keyof typeof formData];
+      // test true si cumple el regex
+      if (valor && !soloLetrasRegex.test(valor.toString())) {
+        errores_regex.push(campo.etiq);
+        // si es el primer error lo guardo para hacer focus
+        if (!primera_key_error) {
+          primera_key_error = campo.key;
+        }
+      }
+    }
+
+    if (errores_regex.length > 0) {
+      const lista = errores_regex.join(", ");
+      setError(`Los siguientes campos solo permiten letras: ${lista}.`);
+
+      if (primera_key_error) {
+        const inputElement = document.querySelector<HTMLInputElement>(
+          `input[name="${primera_key_error}"]`
+        );
+        if (inputElement) inputElement.focus();
+      }
+      return;
+    }
+
     await enviarDatos();
   };
 
   const handleSeleccionar = (huesped: ResultadoBusq) => {
-    router.push(`/gestionar-huesped/?tipoDoc=${huesped.tipoDoc}&nroDoc=${huesped.nroDoc}&nombre=${huesped.nombre}&apellido=${huesped.apellido}`);
+    router.push(
+      `/gestionar-huesped/?tipoDoc=${huesped.tipoDoc}&nroDoc=${huesped.nroDoc}&nombre=${huesped.nombre}&apellido=${huesped.apellido}`
+    );
   };
 
   return (
@@ -75,6 +111,12 @@ export default function buscarHuesped() {
       <h1 className="text-[#141414] dark:text-white  mb-8 text-5xl font-bold pb-2">
         Buscar huésped
       </h1>
+
+      {error && (
+        <div className="bg-[#914d45] text-white p-3 mb-4 rounded-lg font-semibold">
+          {error}
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit}
@@ -86,7 +128,7 @@ export default function buscarHuesped() {
           value={formData.apellido}
           onChange={handleChange}
           placeholder="Doe"
-          maxLength={50}
+          maxLength="50"
           type="text"
         />
         <InputGroup
@@ -96,7 +138,7 @@ export default function buscarHuesped() {
           onChange={handleChange}
           placeholder="John"
           type="text"
-          maxLength={50}
+          maxLength="50"
         />
         <div className="flex flex-col  dark:text-white">
           <label className="mb-2 font-semibold text-[#141414]  dark:text-white">
@@ -124,7 +166,7 @@ export default function buscarHuesped() {
           onChange={handleChange}
           placeholder="Sin guiones ni puntos"
           type="text"
-          maxLength={20}
+          maxLength="20"
         />
         <div className="flex flex-col lg:flex-row  justify-center gap-4 mt-8 col-span-4">
           <button
@@ -142,42 +184,39 @@ export default function buscarHuesped() {
             {loading ? "Buscando huéspedes" : "Buscar"}
           </button>
         </div>
-        {/* FIN DE BOTONES */}
-        {/* FIN DEL FORM */}
       </form>
 
-      {/* INICIO RESULTADOS */}
       {busquedaRealizada && (
         <div className="w-full mt-8 animate-fade-in-up">
           <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-800">
             Resultados de la búsqueda
           </h2>
 
-          <div className="rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden bg-white dark:bg-gray-950">
-            <div className="overflow-y-auto max-h-[600px]">
-              <table className="w-full text-left text-sm border-collapse">
-                <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 uppercase font-semibold sticky top-0 z-10 shadow-sm">
-                  <tr>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Apellido
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Nombre
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Tipo de documento
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
-                      Nro. de documento
-                    </th>
-                    <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-center">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                  {resultados.length > 0 ? (
-                    resultados.map((huesped, index) => (
+          {resultados.length > 0 ? (
+            <div className="rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden bg-white dark:bg-gray-950">
+              <div className="overflow-y-auto max-h-[600px]">
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 uppercase font-semibold sticky top-0 z-10 shadow-sm">
+                    <tr>
+                      <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
+                        Apellido
+                      </th>
+                      <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
+                        Nombre
+                      </th>
+                      <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
+                        Tipo de documento
+                      </th>
+                      <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900">
+                        Nro. de documento
+                      </th>
+                      <th className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-center">
+                        Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                    {resultados.map((huesped, index) => (
                       <tr
                         key={index}
                         className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group"
@@ -205,17 +244,25 @@ export default function buscarHuesped() {
                           </button>
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <p>
-                      No se encontraron coincidencias. Ejecutando modificar
-                      huesped.
-                    </p>
-                  )}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900/50">
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-4 text-center">
+                No se encontró ningún huésped con esos datos. <br />
+                ¿Deseas intentar una nueva búsqueda o registrar uno nuevo?
+              </p>
+              <button
+                onClick={() => router.push("/alta-huesped")}
+                className="cursor-pointer px-6 py-3 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655] shadow-lg"
+              >
+                + Crear nuevo huésped
+              </button>
+            </div>
+          )}
         </div>
       )}
       {/* FIN RESULTADOS */}
@@ -230,6 +277,7 @@ const InputGroup = ({
   onChange,
   type = "text",
   placeholder = "",
+  maxLength = "255",
 }: any) => (
   <div className="flex flex-col dark:bg-gray-950 dark:text-white">
     <label className="mb-2 font-semibold text-[#141414] dark:bg-gray-950 dark:text-white">
@@ -241,6 +289,7 @@ const InputGroup = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      maxLength={maxLength}
       className="p-2.5 border border-[#ddd] rounded-xl dark:bg-gray-950 dark:text-white focus:outline-none focus:border-[#9ca9be] focus:ring-2 focus:ring-[#4a6491]/20"
     />
   </div>

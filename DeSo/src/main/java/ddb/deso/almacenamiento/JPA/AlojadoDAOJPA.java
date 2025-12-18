@@ -232,6 +232,11 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         return alojadoRepository.findAlojadosByEstadiaId(idEstadia);
     }
 
+    /**
+     *
+     * @param CUIT : CUIT del alojado a hallar
+     * @return
+     */
     public Alojado buscarAlojado(String CUIT){
         if(CUIT == null || CUIT.isEmpty()) return null;
         return alojadoRepository.findByCuit(CUIT);
@@ -250,11 +255,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         return Normalizer.normalize(cadena, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
-    private boolean no_es_vacio (String contenido){
-        boolean flag = (contenido==null || contenido.isEmpty());
-        return !flag;
-    }
-
     /**
      * Actualiza todos los atributos del alojadoPre, uno a uno
      * @param alojadoPre
@@ -264,8 +264,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
         if(alojadoPre.getId().equals(alojadoNuevo.getId())){
             // Actualiza los datos del alojadoPre, repository se encarga de actualizar
             // NO VERIFICA campos obligatorios, responsabilidad de front + controller + service
-
-            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
 
             // Datos personales uno a uno para no pisar dni
             alojadoPre.getDatos().getDatos_personales()
@@ -294,8 +292,6 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             alojadoPre.getDatos().getDatos_residencia().setProv(alojadoNuevo.getDatos().getDatos_residencia().getProv());
 
             //datos contacto
-            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
-            System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASDFASDFASDF");
             System.out.println(alojadoPre.getDatos().getDatos_contacto().getTelefono());
             alojadoPre.getDatos().getDatos_contacto().setEmail(alojadoNuevo.getDatos().getDatos_contacto().getEmail());
             alojadoPre.getDatos().getDatos_contacto().setTelefono(alojadoNuevo.getDatos().getDatos_contacto().getTelefono());
@@ -305,7 +301,7 @@ public class AlojadoDAOJPA implements AlojadoDAO {
             alojadoRepository.save(alojadoPre);
             alojadoRepository.flush();
         } else {
-            // Como se modifica la clave primaria, es mas robusto borrar antiguo y guardar nuevo
+            // Como se modifica la clave primaria, es mas robusto borrar antiguo y guardar nuevo en JPA
             eliminarAlojado(alojadoPre);
             crearAlojado(alojadoNuevo);
         }

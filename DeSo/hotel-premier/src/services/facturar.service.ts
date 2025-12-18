@@ -8,6 +8,7 @@ import {
   PersonaJuridica,
   EstadiaDTO,
   AlojadoDTO,
+  FacturaDTO,
 } from "@/types/facturacion";
 
 const PUERTO = "http://localhost:8080/api";
@@ -177,4 +178,22 @@ export async function generarFacturaFinal(request: GenerarFacturaRequestDTO) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function descargarFactura(factura: FacturaDTO, strat: string) {
+  const response = await fetch(
+    `http://localhost:8080/api/facturacion/imprimir-factura?strat=${strat}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(factura),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error descargando factura");
+  }
+
+  const blob = await response.blob();
+  return blob;
 }

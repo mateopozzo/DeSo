@@ -22,6 +22,14 @@ public class FacturaController {
     @Autowired
     private GestorContabilidad gestorContabilidad;
 
+
+    /**
+     * ENDPOINT -> /api/facturacion/habitacion/{nroHabitacion}/verificar-estadia
+     * Verifica si existe alguna {@link Estadia} activa en disponible para generar la factura dado los parametros del metodo
+     * @param nroHabitacion : Numero de habitacion que se va a cobrar
+     * @param horaSalida : Hora de salida de la habitacion
+     * @return
+     */
     @GetMapping("/habitacion/{nroHabitacion}/verificar-estadia")
     public ResponseEntity<EstadiaDTO> verificarEstadiaActiva(
             @PathVariable Long nroHabitacion,
@@ -42,14 +50,20 @@ public class FacturaController {
             return ResponseEntity.notFound().build();
         }
     }
-    // Paso 1: Pre-visualización (No se usa generalmente pero lo dejo por las dudas)
+
+    /**
+     * ENDPOINT -> /api/facturacion/habitacion/{nroHabitacion}/detalle
+     * para calcular detalle de factura para una habitacion
+     * @param nroHabitacion : Habitacion a facturar
+     * @param horaSalida : Horario de salida de los huespedes
+     * @return : {@link DetalleFacturaDTO} con datos cargados, o null frente a badRequest
+     */
     @GetMapping("/habitacion/{nroHabitacion}/detalle")
     public ResponseEntity<DetalleFacturaDTO> obtenerDetalleFacturacion(
             @PathVariable Long nroHabitacion,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaSalida) {
         
         try {
-            // Llama al método del gestor para obtener los cálculos previos
             DetalleFacturaDTO detalle = gestorContabilidad.calcularDetalleFacturacion(nroHabitacion, horaSalida);
             return ResponseEntity.ok(detalle);
         } catch (Exception e) {
@@ -58,10 +72,16 @@ public class FacturaController {
         }
     }
 
-    // Paso 2: Generar la factura
+    /**
+     * ENDPOINT -> /api/facturacion/generar
+     * Genera el bruto de la factura
+     * @param request
+     * @return
+     */
     @PostMapping("/generar")
     public ResponseEntity<FacturaDTO> generarFactura(@RequestBody GenerarFacturaRequestDTO request) {
         try {
+            System.out.println("IDS CONSUMOS: " + request.getIdsConsumosAIncluir());
             FacturaDTO factura = gestorContabilidad.generarFactura(request);
             return ResponseEntity.ok(factura);
         } catch (Exception e) {
@@ -70,17 +90,37 @@ public class FacturaController {
         }
     }
 
-    @PostMapping("api/imprimir-factura")
-    public ResponseEntity<FacturaDTO> imprimirFactura(@RequestBody FacturaDTO factura, @RequestParam String strat){
+    /**
+     * ENDPOINT -> /api/facturacion/imprimir-factura
+     * Genera un archivo que se puede imprimir y se guarda en DeSo/data/facturas/factura{id}.{extension}
+     * @param factura : Factura a generar
+     * @param strat : Estrategia de generacion de archivo, sigue patron Strategy. Estrategias disponibles "pdf", "json"
+     * @return
+     */
+    @PostMapping("/imprimir-factura")
+    public ResponseEntity<byte[]> imprimirFactura(
+            @RequestBody FacturaDTO factura,
+            @RequestParam String strat
+    ) {
+        byte[] data = gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
 
-        if(factura == null || strat == null || strat.isEmpty()){
-            return ResponseEntity.badRequest().build();
+        String nombre;
+        String tipo;
+
+        if ("json".equalsIgnoreCase(strat)) {
+            nombre = "factura.json";
+            tipo = "application/json";
+        } else if ("pdf".equalsIgnoreCase(strat)) {
+            nombre = "factura.pdf";
+            tipo = "application/pdf";
+        } else {
+            throw new IllegalArgumentException("Formato erróneo: " + strat);
         }
 
-        gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
-
-        return ResponseEntity.ok(factura);
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=" + nombre)
+                .header("Content-Type", tipo)
+                .body(data);
     }
-
   
 }

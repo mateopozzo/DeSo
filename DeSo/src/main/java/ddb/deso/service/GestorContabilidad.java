@@ -11,9 +11,9 @@ import ddb.deso.negocio.alojamiento.DatosCheckIn;
 import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import ddb.deso.service.excepciones.ResponsableMenorEdadExcepcion;
 
-import ddb.deso.service.strategias.EstrategiaGuardadoFactura;
-import ddb.deso.service.strategias.GuardarFacturaJSON;
-import ddb.deso.service.strategias.GuardarFacturaPDF;
+import ddb.deso.service.estrategias.EstrategiaGuardadoFactura;
+import ddb.deso.service.estrategias.GuardarFacturaJSON;
+import ddb.deso.service.estrategias.GuardarFacturaPDF;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,8 +23,10 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.function.Consumer;
 
+/**
+ * Gestor encargado de manerjar entidades referidas a la facturacion del hotel
+ */
 @Service
 public class GestorContabilidad {
 
@@ -33,10 +35,15 @@ public class GestorContabilidad {
     private ResponsablePagoDAO responsablePagoDAO;
     private HabitacionDAO habitacionDAO;
     private AlojadoDAO alojadoDAO;
+
+    /**
+     * Estructura que apunta a las estrategias de guardado disponibles
+     */
     Map<String, ? extends EstrategiaGuardadoFactura> estrategias = Map.of(
         "pdf", new GuardarFacturaPDF(),
         "json", new GuardarFacturaJSON()
     );
+
 
     @Autowired
     public GestorContabilidad(EstadiaDAO estadiaDAO, FacturaDAO facturaDAO, ResponsablePagoDAO respDAO, HabitacionDAO habDAO,AlojadoDAO alojadoDAO) {
@@ -46,9 +53,13 @@ public class GestorContabilidad {
         this.habitacionDAO = habDAO;
         this.alojadoDAO= alojadoDAO;
     }
-    
-    //saco horaSalida porque no es necesario para buscar la estadia ahora
 
+    /**
+     * Funcion para consultar la existencia de alguna estadia facturable con numero de habitacion dado
+     * @param nroHabitacion : Numero de habitacion a facturar
+     * @return entidad de {@link Estadia} facturable, no culminada
+     * @throws Exception
+     */
     public Estadia existeEstadia(Long nroHabitacion)throws Exception {
         
         Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
@@ -70,22 +81,22 @@ public class GestorContabilidad {
         if (estadiaActual == null) throw new Exception("No hay estadía activa para esta habitación");
        
     
-        return estadiaActual;//se necesita la entidad para otra funcion, en otro lugar
-                                //convierte a dto
+        return estadiaActual;
     }
 
 
-    
+    /**
+     * @param nroHabitacion : Numero de habitacion a detallar
+     * @param horaSalida : Hora de salida de alojados
+     * @return : entidad {@link DetalleFacturaDTO} con precios a pagar
+     * @throws Exception
+     */
     public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
-        // Busca la estadía activa (filtros estrictos)
         Estadia estadiaActual = existeEstadia(nroHabitacion);
-        
-        // Delega el cálculo matemático al nuevo método privado
-        return calcularMontos(estadiaActual, horaSalida);
+        return calcularMontos(estadiaActual, null, true, horaSalida);
     }
 
-    // 2. NUEVO MÉTODO PRIVADO (Solo matemática, sin búsquedas)
-    private DetalleFacturaDTO calcularMontos(Estadia estadia, LocalTime horaSalida) {
+    private DetalleFacturaDTO calcularMontos(Estadia estadia, List<Long> idsConsumosAIncluir,boolean cobrarAlojamiento, LocalTime horaSalida) {
         Habitacion hab = estadia.getHabitacion();
         LocalDate inicio = estadia.getFecha_inicio();
         LocalDate fin = estadia.getFecha_fin();
@@ -96,33 +107,40 @@ public class GestorContabilidad {
 
         long dias = ChronoUnit.DAYS.between(inicio, fin);
 
-        // Ajuste de días
-        if (dias == 0) dias = 1; 
+        if (dias == 0) dias = 1;
 
-        double precioNoche = hab.getTarifa(); 
-        double costoEstadia = dias * precioNoche;
+        double precioNoche = hab.getTarifa();
+        double costoEstadia = 0.0;
 
-        // Lógica de Late Check-Out
-        if (horaSalida.isAfter(LocalTime.of(11, 0)) && horaSalida.isBefore(LocalTime.of(18, 0))) {
-            costoEstadia += (precioNoche * 0.5); 
-        } else if (horaSalida.isAfter(LocalTime.of(18, 0))) {
-            costoEstadia += precioNoche; 
+        if (cobrarAlojamiento) {
+            costoEstadia = dias * precioNoche;
+
+            // late check out solo si cobrarAlojamiento true
+            if (horaSalida.isAfter(LocalTime.of(11, 0)) && horaSalida.isBefore(LocalTime.of(18, 0))) {
+                costoEstadia += (precioNoche * 0.5);
+            } else if (horaSalida.isAfter(LocalTime.of(18, 0))) {
+                costoEstadia += precioNoche;
+            }
         }
 
-        // Servicios
         List<Servicio> serviciosEntity = estadia.getListaServicios();
         List<ServicioDTO> serviciosDTO = new ArrayList<>();
         double totalServicios = 0.0;
 
         if (serviciosEntity != null) {
             for (Servicio s : serviciosEntity) {
-                double precio = calcularPrecioServicio(s.getTipo_servicio());
-                ServicioDTO dto = new ServicioDTO();
-                dto.setIdServicio(s.getIdServicio());
-                dto.setTipoServicio(s.getTipo_servicio());
-                dto.setPrecio(precio); 
-                serviciosDTO.add(dto);
-                totalServicios += precio;
+                if (idsConsumosAIncluir == null || idsConsumosAIncluir.contains(s.getIdServicio())) {
+
+                    double precio = calcularPrecioServicio(s.getTipo_servicio());
+
+                    ServicioDTO dto = new ServicioDTO();
+                    dto.setIdServicio(s.getIdServicio());
+                    dto.setTipoServicio(s.getTipo_servicio());
+                    dto.setPrecio(precio);
+
+                    serviciosDTO.add(dto);
+                    totalServicios += precio;
+                }
             }
         }
 
@@ -138,41 +156,78 @@ public class GestorContabilidad {
         );
     }
 
-    // 3. MODIFICAR GENERAR FACTURA 
+    /**
+     * Creacion de un responsable de pago si no existe
+     * @param request : Entidad {@link GenerarFacturaRequestDTO} con los campos necesarios para crear al responsable
+     * @return
+     * @throws Exception
+     */
+    private ResponsablePago crearResponsableDesdeRequest(GenerarFacturaRequestDTO request) throws Exception {
+
+        ResponsablePago nuevo = new ResponsablePago();
+
+        nuevo.setCuit(Long.parseLong(request.getResponsableId()));
+        nuevo.setRazonSocial(request.getDestinatario());
+
+        return nuevo;
+    }
+
+    /**
+     * Genera una factura linkeando la estadía, el responsable del pagoy agregando check out a los Alojados que participaron en la estadia
+     * Por defecto el tipo de factura generada es B, en caso de factura A se recalcula el precio segun IVA
+     * @param request : Objeto con datos necesarios para poder generar la factura
+     * @return
+     * @throws Exception
+     */
     public FacturaDTO generarFactura(GenerarFacturaRequestDTO request) throws Exception {
-        
+        // id estadia
         Long idEstadia = request.getIdEstadia();
-        Long idResponsable = request.getIdResponsable();
+        // id responsable
+        long idResponsable;
+        try {
+            idResponsable = Long.parseLong(request.getResponsableId());
+        } catch (NumberFormatException e) {
+            throw new Exception("ID de responsable inválido");
+        }
 
-        validarEdadResponsable(idResponsable);
-
-        Estadia estadia = estadiaDAO.read(idEstadia); 
+        Estadia estadia = estadiaDAO.read(idEstadia);
         ResponsablePago responsable = responsablePagoDAO.read(idResponsable);
 
-        if (estadia == null || responsable == null) throw new Exception("Datos inválidos");
+        if (estadia == null) {
+            throw new Exception("Estadía inválida");
+        }
 
-       
+        if (responsable == null) {
+            responsable = crearResponsableDesdeRequest(request);
+        }
+
         Factura nuevaFactura = new Factura();
-        nuevaFactura.setFecha_factura(LocalDate.now()); 
+        nuevaFactura.setFecha_factura(LocalDate.now());
         nuevaFactura.setDestinatario(responsable.getRazonSocial());
-        TipoFactura tipo = (responsable.getCuit() != null && responsable.getCuit() > 0) ? TipoFactura.A : TipoFactura.B;
-        nuevaFactura.setTipo_factura(tipo); 
 
-        
+        TipoFactura tipo = (request.getTipoFactura() != null) ?
+                TipoFactura.valueOf(String.valueOf(request.getTipoFactura())) :
+                TipoFactura.B;
+
+        nuevaFactura.setTipo_factura(tipo);
+
         LocalTime hora_checkout;
         if (estadia.getDatosCheckOut() != null) {
             hora_checkout = estadia.getDatosCheckOut().getFecha_hora_out().toLocalTime();
         } else {
             hora_checkout = LocalTime.now();
         }
-        
-        DetalleFacturaDTO detalle = calcularMontos(estadia, hora_checkout);
-        // -------------------------
+
+        DetalleFacturaDTO detalle = calcularMontos(
+                estadia,
+                request.getIdsConsumosAIncluir(),
+                request.isCobrarAlojamiento(),
+                hora_checkout
+        );
 
         float total = detalle.getMontoTotal().floatValue();
         nuevaFactura.setImporte_total(total);
-        
-        // ... (Cálculo de IVA y Guardado ) ...
+
         if (tipo == TipoFactura.A) {
             float neto = (float) (total / 1.21);
             float iva = total - neto;
@@ -186,11 +241,16 @@ public class GestorContabilidad {
         FacturaDTO facturaParaGuardar = new FacturaDTO(nuevaFactura);
         facturaDAO.crearFactura(facturaParaGuardar);
 
-        return facturaParaGuardar; 
+        return facturaParaGuardar;
     }
 
 
-private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMenorEdadExcepcion {
+    /**
+     * Verifica que el responsable del pago sea mayor de edad
+     * @param cuitResponsable
+     * @throws ResponsableMenorEdadExcepcion
+     */
+    private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMenorEdadExcepcion {
         // Listar todos los alojados
         List<Alojado> alojados = alojadoDAO.listarAlojados();
         
@@ -228,6 +288,10 @@ private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMeno
         }
     }
 
+    /**
+     * @param tipo : Tipo de servicio tomado por huesped
+     * @return
+     */
     private double calcularPrecioServicio(TipoServicio tipo) {
         if (tipo == null) return 0.0;
         switch (tipo) {
@@ -246,19 +310,14 @@ private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMeno
     public void generarNotaCredito() { }
     public void gestionarListado() { }
 
-    public void guardarFacturaSegunStrategy(FacturaDTO factura, String strat) {
-
-        if(estrategias == null || estrategias.isEmpty()){
-            estrategias = Map.of(
-                    "pdf", new GuardarFacturaPDF(),
-                    "json", new GuardarFacturaJSON()
-            );
-        }
-
-        try {
-            estrategias.get(strat).guardarFactura(factura);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    /**
+     * Funcion que llama al patron Strategy adecuado según la estrategia de guardado que se desea aplicar
+     *
+     * @param factura : Factura para generar informe
+     * @param strat : Estrategia de generacion de archivo
+     * @return arreglo con los datos generados
+     */
+    public byte[] guardarFacturaSegunStrategy(FacturaDTO factura, String strat) {
+        return estrategias.get(strat).guardarFactura(factura);
     }
 }
