@@ -180,9 +180,9 @@ export async function generarFacturaFinal(request: GenerarFacturaRequestDTO) {
   }
 }
 
-export async function descargarFacturaPDF(factura: FacturaDTO) {
+export async function descargarFactura(factura: FacturaDTO, strat: string) {
   const response = await fetch(
-    "http://localhost:8080/api/facturacion/imprimir-factura?strat=pdf",
+    `http://localhost:8080/api/facturacion/imprimir-factura?strat=${strat}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
