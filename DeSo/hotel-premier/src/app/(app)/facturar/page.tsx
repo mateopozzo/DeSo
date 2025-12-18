@@ -149,33 +149,40 @@ export default function Facturar() {
     setError(null);
   };
 
-  const avanzarAFacturacion = async () => {
-    if (!responsableSeleccionado) {
+  const avanzarAFacturacion = async (responsableDirecto?: ResponsablePago) => {
+    const responsableActual = responsableDirecto || responsableSeleccionado;
+
+    if (!responsableActual) {
       setError("Debe seleccionar un responsable.");
       return;
     }
 
-    if ("razonSoc" in responsableSeleccionado) {
+    if (responsableDirecto) {
+      setResponsableSeleccionado(responsableDirecto);
+    }
+
+    if ("razonSoc" in responsableActual) {
       setPaso("CARGANDO_CONSUMOS");
       cargarConsumos();
       return;
     }
 
     try {
+      const huesped = responsableActual as CriteriosBusq;
+
       const huespedCompleto = await obtenerDatosHuesped(
-        responsableSeleccionado.nroDoc,
-        responsableSeleccionado.tipoDoc || "DNI"
+        huesped.nroDoc,
+        huesped.tipoDoc || "DNI"
       );
 
       if (!esMayorDeEdad(huespedCompleto.fechanac)) {
         setError(
-          `El huésped ${responsableSeleccionado.nombre} no es mayor de edad. Por favor, seleccione otro.`
+          `El huésped ${huesped.nombre} no es mayor de edad. Por favor, seleccione otro.`
         );
         return;
       }
 
       setResponsableSeleccionado(huespedCompleto);
-
       cargarConsumos();
     } catch (err) {
       console.error(err);
