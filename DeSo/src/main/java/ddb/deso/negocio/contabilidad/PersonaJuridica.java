@@ -1,4 +1,4 @@
-package ddb.deso.almacenamiento.DTO;
+package ddb.deso.negocio.contabilidad;
 
 import ddb.deso.negocio.alojamiento.Alojado;
 import ddb.deso.negocio.alojamiento.Huesped;
