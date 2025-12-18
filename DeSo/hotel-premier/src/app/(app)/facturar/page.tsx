@@ -269,8 +269,9 @@ export default function Facturar() {
           "La factura se descargará en breve con el formato elegido."}
       </p>
       {/* errores */}
+
       {error && (
-        <div className="bg-red-600 text-white p-4 rounded-xl mb-6 font-bold shadow-md">
+        <div className="bg-[#914d45] text-white p-3 mb-4 rounded-lg font-semibold">
           {error}
         </div>
       )}

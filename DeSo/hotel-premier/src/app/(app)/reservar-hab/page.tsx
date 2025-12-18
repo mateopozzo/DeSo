@@ -175,7 +175,7 @@ export default function ReservarHab() {
       </div>
 
       {error && (
-        <div className="bg-red-600 text-white p-4 rounded-xl mb-6 font-bold shadow-md">
+        <div className="bg-[#914d45] text-white p-3 mb-4 rounded-lg font-semibold">
           {error}
         </div>
       )}
@@ -288,7 +288,7 @@ export default function ReservarHab() {
                   value={telefono}
                   maxLength={20}
                   onChange={(e) => {
-                    const inpu : string = e.target.value;
+                    const inpu: string = e.target.value;
                     const reval = inpu.replace(/(?!^\+)\D/g, "");
                     setTelefono(reval);
                   }}
@@ -328,13 +328,17 @@ export default function ReservarHab() {
 
       {paso === "EXITO" && (
         <div className="flex flex-col items-center justify-center py-20 animate-scale-in">
-          <div className="bg-green-100 text-green-600 p-6 rounded-full text-6xl mb-6 shadow-inner">
-            ✓
-          </div>
+          <img
+            src="success.svg"
+            alt="Éxito"
+            className="dark:invert"
+            width={90}
+            height={90}
+          />
           <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
             Reserva creada con éxito
           </h2>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-row items-center justify-center">
             <button
               onClick={() => {
                 setPaso("GRILLA");
@@ -344,13 +348,13 @@ export default function ReservarHab() {
                 setSeleccion(null);
                 buscarDisponibilidad();
               }}
-              className="px-8 py-3 rounded-xl font-bold bg-[#f5f7fa] dark:bg-gray-950 text-white hover:bg-black shadow-lg transition"
+              className="px-8 py-2 cursor-pointer rounded-xl font-bold bg-[#f5f7fa] border dark:bg-gray-950 dark:border-white text-white hover:bg-[#10b655] hover:border-[#10b655] shadow-lg transition"
             >
               Hacer otra reserva
             </button>
             <button
               onClick={() => router.push("/home")}
-              className="px-8 py-3 rounded-xl font-bold border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition"
+              className="cursor-pointer px-8 py-2 rounded-xl font-bold transition duration-300 bg-[#52a173] text-white hover:bg-[#10b655]"
             >
               Ir al inicio
             </button>

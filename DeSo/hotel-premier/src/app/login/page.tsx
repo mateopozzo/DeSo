@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[calc(100vh-2rem)] flex items-center justify-center">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-6 shadow-sm">
+      <div className="w-full p-12 max-w-md rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm">
         <div className="flex justify-center items-center mb-4">
           <img
             src="/ICON-LOGO-LIGHT.svg"

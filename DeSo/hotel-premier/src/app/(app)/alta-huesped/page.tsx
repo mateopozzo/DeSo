@@ -41,9 +41,12 @@ export default function AltaHuesped() {
   };
 
   const handleChangeFono = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value.replace(/(?!^\+)\D/g, "") });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value.replace(/(?!^\+)\D/g, ""),
+    });
   };
 
   const enviarDatos = async (forzar: boolean = false) => {
@@ -143,6 +146,47 @@ export default function AltaHuesped() {
       return;
     }
 
+    const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+
+    const camposSoloLetras = [
+      { key: "apellido", etiq: "apellido" },
+      { key: "nombre", etiq: "nombre" },
+      { key: "nacionalidad", etiq: "nacionalidad" },
+      { key: "calle", etiq: "calle" },
+      { key: "paisResidencia", etiq: "país" },
+      { key: "provincia", etiq: "provincia" },
+      { key: "localidad", etiq: "localidad" },
+      { key: "ocupacion", etiq: "ocupación" },
+    ];
+
+    let errores_regex: string[] = [];
+    let primera_key_error: string | null = null;
+
+    for (const campo of camposSoloLetras) {
+      const valor = formData[campo.key as keyof typeof formData];
+      // test true si cumple el regex
+      if (valor && !soloLetrasRegex.test(valor.toString())) {
+        errores_regex.push(campo.etiq);
+        // si es el primer error lo guardo para hacer focus
+        if (!primera_key_error) {
+          primera_key_error = campo.key;
+        }
+      }
+    }
+
+    if (errores_regex.length > 0) {
+      const lista = errores_regex.join(", ");
+      setError(`Los siguientes campos solo permiten letras: ${lista}.`);
+
+      if (primera_key_error) {
+        const inputElement = document.querySelector<HTMLInputElement>(
+          `input[name="${primera_key_error}"]`
+        );
+        if (inputElement) inputElement.focus();
+      }
+      return;
+    }
+
     await enviarDatos(false);
   };
 
@@ -155,7 +199,7 @@ export default function AltaHuesped() {
 
       {/* INICIO DEL FORM */}
       {error && (
-        <div className="bg-[#914d45] text-white p-2 mb-4 rounded font-semibold">
+        <div className="bg-[#914d45] text-white p-3 mb-4 rounded-lg font-semibold">
           {error}
         </div>
       )}
