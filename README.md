@@ -125,3 +125,5 @@ _Singleton_ (login) donde nos aseguramos de que la instancia de autenticación s
 _Factory_ (Alojado, Invitado, Huesped) donde el patrón se utiliza para crear un invitado (alojado que no puede ser responsable de habitación) o un huésped (alojado que es responsable de habitación y tiene CUIT)
 
 _Strategy_ (Factura) donde el patrón nos permite separar la lógica de guardar una factura de la lógica de _cómo_ hacerlo. Cumple con el principio open/closed de SOLID. Permite cambiar el tipo de exportación en tiempo de ejecución.
+
+_Generics_ (ManejadorJSON) clase genérica que abstrae la capa de manejo de json de la especificidad del tipo de clase a operar.
