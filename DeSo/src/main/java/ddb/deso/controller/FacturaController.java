@@ -76,13 +76,25 @@ public class FacturaController {
             @RequestBody FacturaDTO factura,
             @RequestParam String strat
     ) {
-        byte[] pdf = gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
+        byte[] data = gestorContabilidad.guardarFacturaSegunStrategy(factura, strat);
+
+        String nombre;
+        String tipo;
+
+        if ("json".equalsIgnoreCase(strat)) {
+            nombre = "factura.json";
+            tipo = "application/json";
+        } else if ("pdf".equalsIgnoreCase(strat)) {
+            nombre = "factura.pdf";
+            tipo = "application/pdf";
+        } else {
+            throw new IllegalArgumentException("Formato erróneo: " + strat);
+        }
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=factura.pdf")
-                .header("Content-Type", "application/pdf")
-                .body(pdf);
+                .header("Content-Disposition", "attachment; filename=" + nombre)
+                .header("Content-Type", tipo)
+                .body(data);
     }
-
   
 }

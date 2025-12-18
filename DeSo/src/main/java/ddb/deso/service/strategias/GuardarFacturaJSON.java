@@ -1,20 +1,19 @@
 package ddb.deso.service.strategias;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import ddb.deso.almacenamiento.DTO.FacturaDTO;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor
 public class GuardarFacturaJSON implements EstrategiaGuardadoFactura {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @Override
     public byte[] guardarFactura(FacturaDTO factura) {
