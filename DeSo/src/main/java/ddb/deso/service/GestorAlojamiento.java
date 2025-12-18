@@ -157,6 +157,20 @@ public class GestorAlojamiento {
         var alojadoOriginal = FactoryAlojado.createFromDTO(dtoAlojadoOriginal);
         var alojadoModificado = FactoryAlojado.createFromDTO(dtoAlojadoModificado);
 
+        if(!alojadoOriginal.getDatos().getNroDoc().equals(alojadoModificado.getDatos().getNroDoc()) || !alojadoOriginal.getDatos().getTipoDoc().equals(alojadoModificado.getDatos().getTipoDoc())){
+            if(alojadoOriginal.getDatos().getCheckIns()!=null)
+                for(var ci : alojadoOriginal.getDatos().getCheckIns()){
+                    alojadoOriginal.getDatos().nuevoCheckIn(ci);
+                }
+        }
+
+        if(!alojadoOriginal.getDatos().getNroDoc().equals(alojadoModificado.getDatos().getNroDoc()) || !alojadoOriginal.getDatos().getTipoDoc().equals(alojadoModificado.getDatos().getTipoDoc())){
+            if(alojadoOriginal.getDatos().getCheckIns()!=null)
+                for(var co : alojadoOriginal.getDatos().getCheckOuts()){
+                    alojadoOriginal.getDatos().nuevoCheckOut(co);
+                }
+        }
+
         alojadoDAO.actualizarAlojado(alojadoOriginal, alojadoModificado);
 
         {// check de modificacion
