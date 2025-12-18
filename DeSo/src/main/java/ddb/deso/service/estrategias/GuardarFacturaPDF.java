@@ -1,17 +1,14 @@
-package ddb.deso.service.strategias;
+package ddb.deso.service.estrategias;
 
 import ddb.deso.almacenamiento.DTO.FacturaDTO;
 import lombok.NoArgsConstructor;
 
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
-import java.io.FileNotFoundException;
 import java.io.ByteArrayOutputStream;
 
-import java.io.IOException;
 @NoArgsConstructor
 public class GuardarFacturaPDF implements EstrategiaGuardadoFactura {
 

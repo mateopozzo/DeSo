@@ -11,9 +11,9 @@ import ddb.deso.negocio.alojamiento.DatosCheckIn;
 import ddb.deso.negocio.alojamiento.DatosCheckOut;
 import ddb.deso.service.excepciones.ResponsableMenorEdadExcepcion;
 
-import ddb.deso.service.strategias.EstrategiaGuardadoFactura;
-import ddb.deso.service.strategias.GuardarFacturaJSON;
-import ddb.deso.service.strategias.GuardarFacturaPDF;
+import ddb.deso.service.estrategias.EstrategiaGuardadoFactura;
+import ddb.deso.service.estrategias.GuardarFacturaJSON;
+import ddb.deso.service.estrategias.GuardarFacturaPDF;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,8 +23,10 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.function.Consumer;
 
+/**
+ * Gestor encargado de manerjar entidades referidas a la facturacion del hotel
+ */
 @Service
 public class GestorContabilidad {
 
@@ -33,10 +35,15 @@ public class GestorContabilidad {
     private ResponsablePagoDAO responsablePagoDAO;
     private HabitacionDAO habitacionDAO;
     private AlojadoDAO alojadoDAO;
+
+    /**
+     * Estructura que apunta a las estrategias de guardado disponibles
+     */
     Map<String, ? extends EstrategiaGuardadoFactura> estrategias = Map.of(
         "pdf", new GuardarFacturaPDF(),
         "json", new GuardarFacturaJSON()
     );
+
 
     @Autowired
     public GestorContabilidad(EstadiaDAO estadiaDAO, FacturaDAO facturaDAO, ResponsablePagoDAO respDAO, HabitacionDAO habDAO,AlojadoDAO alojadoDAO) {
@@ -47,6 +54,12 @@ public class GestorContabilidad {
         this.alojadoDAO= alojadoDAO;
     }
 
+    /**
+     * Funcion para consultar la existencia de alguna estadia facturable con numero de habitacion dado
+     * @param nroHabitacion : Numero de habitacion a facturar
+     * @return entidad de {@link Estadia} facturable, no culminada
+     * @throws Exception
+     */
     public Estadia existeEstadia(Long nroHabitacion)throws Exception {
         
         Habitacion hab = habitacionDAO.buscarPorNumero(nroHabitacion); 
@@ -72,7 +85,12 @@ public class GestorContabilidad {
     }
 
 
-    
+    /**
+     * @param nroHabitacion : Numero de habitacion a detallar
+     * @param horaSalida : Hora de salida de alojados
+     * @return : entidad {@link DetalleFacturaDTO} con precios a pagar
+     * @throws Exception
+     */
     public DetalleFacturaDTO calcularDetalleFacturacion(Long nroHabitacion, LocalTime horaSalida) throws Exception {
         Estadia estadiaActual = existeEstadia(nroHabitacion);
         return calcularMontos(estadiaActual, null, true, horaSalida);
@@ -138,6 +156,12 @@ public class GestorContabilidad {
         );
     }
 
+    /**
+     * Creacion de un responsable de pago si no existe
+     * @param request : Entidad {@link GenerarFacturaRequestDTO} con los campos necesarios para crear al responsable
+     * @return
+     * @throws Exception
+     */
     private ResponsablePago crearResponsableDesdeRequest(GenerarFacturaRequestDTO request) throws Exception {
 
         ResponsablePago nuevo = new ResponsablePago();
@@ -148,7 +172,13 @@ public class GestorContabilidad {
         return nuevo;
     }
 
-    // 3. MODIFICAR GENERAR FACTURA 
+    /**
+     * Genera una factura linkeando la estadía, el responsable del pagoy agregando check out a los Alojados que participaron en la estadia
+     * Por defecto el tipo de factura generada es B, en caso de factura A se recalcula el precio segun IVA
+     * @param request : Objeto con datos necesarios para poder generar la factura
+     * @return
+     * @throws Exception
+     */
     public FacturaDTO generarFactura(GenerarFacturaRequestDTO request) throws Exception {
         // id estadia
         Long idEstadia = request.getIdEstadia();
@@ -215,7 +245,12 @@ public class GestorContabilidad {
     }
 
 
-private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMenorEdadExcepcion {
+    /**
+     * Verifica que el responsable del pago sea mayor de edad
+     * @param cuitResponsable
+     * @throws ResponsableMenorEdadExcepcion
+     */
+    private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMenorEdadExcepcion {
         // Listar todos los alojados
         List<Alojado> alojados = alojadoDAO.listarAlojados();
         
@@ -253,6 +288,10 @@ private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMeno
         }
     }
 
+    /**
+     * @param tipo : Tipo de servicio tomado por huesped
+     * @return
+     */
     private double calcularPrecioServicio(TipoServicio tipo) {
         if (tipo == null) return 0.0;
         switch (tipo) {
@@ -271,6 +310,13 @@ private void validarEdadResponsable(Long cuitResponsable) throws ResponsableMeno
     public void generarNotaCredito() { }
     public void gestionarListado() { }
 
+    /**
+     * Funcion que llama al patron Strategy adecuado según la estrategia de guardado que se desea aplicar
+     *
+     * @param factura : Factura para generar informe
+     * @param strat : Estrategia de generacion de archivo
+     * @return arreglo con los datos generados
+     */
     public byte[] guardarFacturaSegunStrategy(FacturaDTO factura, String strat) {
         return estrategias.get(strat).guardarFactura(factura);
     }

@@ -173,3 +173,9 @@ insert into check_in_alojado (check_ins_id_check_in, alojado_tipo_doc, alojado_n
 
 insert into check_out_alojado(check_outs_id_check_out, alojado_tipo_doc, alojado_nro_doc) values
 (1, 'PASAPORTE','P9012345');
+
+-- Creacion de usuarios del sistema para logearse --
+
+insert into usuarios (nombre, contrasenia, permisos) values
+('conserje', 'conserje123', 15);
+
