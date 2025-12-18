@@ -8,18 +8,18 @@ import {
   generarFacturaFinal,
   verificarEstadia,
   obtenerDatosHuesped,
-  descargarFacturaPDF,
+  descargarFactura,
 } from "@/services/facturar.service";
 import { DetalleFacturaDTO } from "@/types/facturacion";
 import GrillaAlojados, { ResponsablePago } from "@/components/grilla_alojados";
 import { pedirHabs, Habitacion } from "../../../services/habitaciones.service";
 import GrillaItemsFactura from "@/components/grilla_factura";
-
+const hoy = new Date();
 // revisar de donde sacar que es mayor
 const esMayorDeEdad = (fechaNacStr: string): boolean => {
   if (!fechaNacStr) return false;
   const nacimiento = new Date(fechaNacStr);
-  const hoy = new Date();
+
   let edad = hoy.getFullYear() - nacimiento.getFullYear();
   const m = hoy.getMonth() - nacimiento.getMonth();
   if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
@@ -186,6 +186,7 @@ export default function Facturar() {
   const confirmarFactura = async (datosCobro: {
     cobrarEstadia: boolean;
     idsServicios: number[];
+    strat: string;
   }) => {
     if (!detalleFactura || !responsableSeleccionado) return;
 
@@ -218,7 +219,7 @@ export default function Facturar() {
     try {
       const factura = await generarFacturaFinal(payload as any);
       setFacturaGenerada(factura);
-      await descargarPDF(factura);
+      await descargarPDF(factura, datosCobro.strat);
       setPaso("EXITO");
     } catch (err) {
       setError("Error al generar la factura.");
@@ -226,17 +227,24 @@ export default function Facturar() {
     }
   };
 
-  const descargarPDF = async (factura: any) => {
-    const blob = await descargarFacturaPDF(factura);
+  const descargarPDF = async (factura: any, strat: string) => {
+    try {
+      const blob = await descargarFactura(factura, strat);
 
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `factura_${factura.num_factura}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+
+      const extension = strat === "json" ? "json" : "pdf";
+      a.download = `factura_${hoy.getFullYear()}-${hoy.getMonth()}-${hoy.getDay()}.${extension}`;
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error en descarga", error);
+    }
   };
 
   return (
@@ -354,13 +362,20 @@ export default function Facturar() {
       )}
       {/* PASO 4: EXITO */}
       {paso === "EXITO" && (
-        <div className="text-center py-20">
-          <h2 className="text-3xl text-green-600 font-bold mb-4">
-            Operación Exitosa
+        <div className="flex flex-col items-center justify-center py-20">
+          <img
+            src="success.svg"
+            alt="Éxito"
+            className="dark:invert"
+            width={90}
+            height={90}
+          />
+          <h2 className="text-3xl dark:text-white font-bold mb-4">
+            Factura creada con éxito
           </h2>
           <button
             onClick={() => router.push("/home")}
-            className="bg-blue-600 text-white px-6 py-2 rounded"
+            className="dark:bg-gray-950 font-semibold border dark:border-white rounded-xl text-white px-6 py-2 cursor-pointer hover:bg-green-600 hover:border-green-600"
           >
             Volver al inicio
           </button>

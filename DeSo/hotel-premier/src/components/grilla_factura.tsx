@@ -7,6 +7,7 @@ interface Props {
   onConfirmar: (payload: {
     cobrarEstadia: boolean;
     idsServicios: number[];
+    strat: string;
   }) => void;
   onCancelar: () => void;
 }
@@ -22,6 +23,8 @@ export default function GrillaItemsFactura({
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<
     number[]
   >(detalle?.consumos?.map((s) => s.idServicio) || []);
+
+  const [formatoDescarga, setFormatoDescarga] = useState<string>("pdf");
 
   // estado local para el tipo de factura seleccionado (no mutamos la prop)
   const [tipoFac, setTipoFac] = useState<string>(
@@ -227,22 +230,41 @@ export default function GrillaItemsFactura({
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 mt-6">
-        <button
-          onClick={onCancelar}
-          className="px-4 py-2 text-gray-600 dark:text-white font-semibold hover:bg-red-500 rounded-lg border border-gray-300 transition hover:border-red-500"
-        >
-          Volver
-        </button>
-        <button
-          disabled={!cobrarEstadia && serviciosSeleccionados.length === 0}
-          onClick={() =>
-            onConfirmar({ cobrarEstadia, idsServicios: serviciosSeleccionados })
-          }
-          className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-lg transition"
-        >
-          Confirmar factura
-        </button>
+      <div className="flex justify-between gap-4 mt-6">
+        <div className="flex flex-col items-center justify-center">
+          <label className="text-sm text-gray-500 mb-2">
+            Formato de descarga
+          </label>
+          <select
+            value={formatoDescarga}
+            onChange={(e) => setFormatoDescarga(e.target.value)}
+            className="px-6 py-2 border border-gray-300 rounded-lg text-sm bg-white dark:bg-gray-950 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+          >
+            <option value="pdf">PDF</option>
+            <option value="json">JSON</option>
+          </select>
+        </div>
+        <div className="flex flex-row items-end gap-4">
+          <button
+            onClick={onCancelar}
+            className="px-6 py-2 text-gray-600 dark:text-white font-semibold hover:bg-red-500 rounded-lg border border-gray-300 transition hover:border-red-500"
+          >
+            Volver
+          </button>
+          <button
+            disabled={!cobrarEstadia && serviciosSeleccionados.length === 0}
+            onClick={() =>
+              onConfirmar({
+                cobrarEstadia,
+                idsServicios: serviciosSeleccionados,
+                strat: formatoDescarga,
+              })
+            }
+            className="px-6 py-2 border border-green-600 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-lg transition"
+          >
+            Confirmar factura
+          </button>
+        </div>
       </div>
     </div>
   );
