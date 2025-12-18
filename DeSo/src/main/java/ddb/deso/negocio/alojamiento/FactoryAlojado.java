@@ -98,10 +98,6 @@ public class FactoryAlojado {
             datos.getDatos_residencia().setCod_post(dto.getCodPost());
         }
 
-        // ==== Check-in / Check-out ====
-        datos.setCheckIns(dto.getId_check_in());
-        datos.setCheckOuts(dto.getId_check_out());
-
         Alojado ret;
         // Si tiene razón social, es huesped
         if (dto.getRazon_social() != null && !dto.getRazon_social().isEmpty()) {

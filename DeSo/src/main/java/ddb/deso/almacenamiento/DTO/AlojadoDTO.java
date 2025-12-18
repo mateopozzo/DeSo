@@ -13,6 +13,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * DTO aplanado para entidad Alojado
@@ -53,8 +54,8 @@ public class AlojadoDTO {
     // Si es huesped
     private String razon_social;
     // Check in y out
-    private List<DatosCheckIn> id_check_in;
-    private List<DatosCheckOut> id_check_out;
+    private List<Long> id_check_in;
+    private List<Long> id_check_out;
 
     /**
      * Constructor que inicializa el DTO a partir de una instancia concreta de {@link Alojado}.
@@ -89,8 +90,16 @@ public class AlojadoDTO {
         this.setCodPost(i.getDatos().getDatos_residencia().getCod_post());
 
         // ingreso/egreso
-        this.id_check_in=i.getDatos().getCheckIns();
-        this.id_check_out=i.getDatos().getCheckOuts();
+        if (i.getDatos().getCheckIns() != null) {
+            this.id_check_in = i.getDatos().getCheckIns().stream()
+                    .map(checkIn -> checkIn.getId()) // O el método que obtenga el ID
+                    .collect(Collectors.toList());
+        }
+        if (i.getDatos().getCheckOuts() != null) {
+            this.id_check_out = i.getDatos().getCheckOuts().stream()
+                    .map(checkOut -> checkOut.getId())
+                    .collect(Collectors.toList());
+        }
 
         // Completar datos segun instancia concreta\
         i.completarDTO(this);
